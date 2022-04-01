@@ -1,7 +1,6 @@
 #!/bin/sh
 
-env GDK_BACKEND=wayland \
-    MOZ_ENABLE_WAYLAND=1 \
+env MOZ_ENABLE_WAYLAND=1 \
     WLR_NO_HARDWARE_CURSORS=1 \
     QT_QPA_PLATFORM=wayland \
     sway --unsupported-gpu
