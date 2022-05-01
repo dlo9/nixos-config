@@ -56,9 +56,8 @@
   #boot.initrd.availableKernelModules = [ "iwlwifi" ];
   hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
-  #boot.kernelPackages = pkgs.linuxKernel.kernels.linux_zen;
   #boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages_5_17;
   environment.systemPackages = with pkgs; [
     starship
     zoxide
