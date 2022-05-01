@@ -9,27 +9,12 @@
   ];
 
   # Secrets
-  # This will add secrets.yml to the nix store
+  sops = {
+    defaultSopsFile = ../../secrets/secrets.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
-  # You can avoid this by adding a string to the full path instead, i.e.
-  # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
-  sops.defaultSopsFile = ../../secrets/secrets.yaml;
-
-  # This will automatically import SSH keys as age keys
-  sops.age.sshKeyPaths = [
-    "/etc/ssh/ssh_host_ed25519_key"
-    /home/david/.ssh/id_ed25519
-  ];
-
-  # This is using an age key that is expected to already be in the filesystem
-  #sops.age.keyFile = "/var/lib/sops-nix/key.txt";
-  sops.age.keyFile = "/home/david/.config/sops/age/keys.txt";
-
-  # This will generate a new key if the key specified above does not exist
-  #sops.age.generateKey = true;
-
-  # This is the actual specification of the secrets.
-  sops.secrets."wireless-env" = {};
+    secrets."wireless-env" = {};
+  };
 
   networking.enableIPv6 = false;
 
