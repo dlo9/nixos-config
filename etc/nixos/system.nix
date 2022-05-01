@@ -135,7 +135,8 @@
     autoUpgrade = {
       enable = true;
       allowReboot = true;
-      channel = https://nixos.org/channels/nixos-21.11-small;
+      flake = "github:NixOS/nixpkgs/nixos-21.11-small";
+      flags = [ "--update-input" "nixpkgs" "--commit-lock-file" ];
       dates = "Sat, 02:00";
     };
   };
