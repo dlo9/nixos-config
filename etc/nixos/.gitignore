@@ -1,2 +1,6 @@
+# Root configuration links
 /configuration.nix
 /hardware-configuration.nix
+
+# Temporary files
+*.swp
