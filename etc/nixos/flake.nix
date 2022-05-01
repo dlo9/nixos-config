@@ -1,8 +1,11 @@
 {
   inputs = {
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11-small";
-    #nixpkgs.url = "nixpkgs/3c0f57e36ed0cf9947281e3b31f1bebb7ce5d4a1";
+
+    # Something broke sleep between this commit and nixos-21.11-small
+    # https://github.com/NixOS/nixpkgs/commit/ccb90fb9e11
+    nixpkgs.url = "github:NixOS/nixpkgs/ccb90fb9e11";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11-small";
 
     sops-nix.url = github:Mic92/sops-nix;
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
