@@ -87,6 +87,9 @@
     firefox-wayland
     yadm
 
+    flavours
+    nodejs
+
     # sgdisk
     gptfdisk
 
