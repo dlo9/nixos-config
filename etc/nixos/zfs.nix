@@ -4,9 +4,15 @@
 let
   zfs-helper = pkgs.writeTextFile {
     name = "zfs-helper";
-	executable = true;
-	destination = "/bin/zfs-helper";
+    executable = true;
+    destination = "/bin/zfs-helper";
     text = builtins.readFile ./zfs-helper.sh;
+  };
+
+  zfs-helper-ssh-prompt = pkgs.writeTextFile {
+    name = "zfs-helper-ssh-prompt";
+    destination = "/root/.profile";
+    text = "zfs-helper onBootPrompt";
   };
 in {
   # TODO: Shouldn't be necessary when root is on ZFS
@@ -54,7 +60,7 @@ in {
   boot = {
     initrd.supportedFilesystems = [ "vfat" ];
     initrd.extraFiles = {
-      "/root/.profile".source = (builtins.toFile "profile" "zfs-helper onBootPrompt");
+      "/root/.profile".source = zfs-helper-ssh-prompt;
     };
 
     initrd.extraUtilsCommands = ''
