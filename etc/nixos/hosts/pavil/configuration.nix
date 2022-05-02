@@ -3,11 +3,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ../../system.nix
-    ../../polkit.nix
-  ];
-
   # Secrets
   sops = {
     defaultSopsFile = ../../secrets/secrets.yaml;

@@ -23,7 +23,15 @@
         ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-unstable ]; })
 
         ./configuration.nix
+        ./hardware-configuration.nix
+
         ./lib/printing.nix
+        ./lib/system.nix
+        ./lib/polkit.nix
+        ./lib/networking.nix
+        ./lib/zfs.nix
+
+        # Secrets management
         inputs.sops-nix.nixosModules.sops
       ];
     };
