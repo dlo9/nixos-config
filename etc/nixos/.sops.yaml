@@ -1,9 +1,11 @@
 keys:
   - &pavil_david age1q6zcqu38n2fmwhh2srld6qhuc83hsn9ltg7yues05hl24tvwrg0sctm3xg
   - &pavil_host_ssh age1543ydwy0amu0vcuq3wpnrh9lg0lcc795twpslx5p2u6uf76vcyhqfx5knl
+  - &bitwarden age10nwesuk0gr9nvfdcz3t4la6kp39cwrftn7z7chqyc4935gjjke7sa7hm7v
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
     - age:
       - *pavil_david
       - *pavil_host_ssh
+      - *bitwarden
