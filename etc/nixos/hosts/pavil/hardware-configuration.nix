@@ -21,19 +21,16 @@
   fileSystems."/home/david" =
     { device = "pool/home/david";
       fsType = "zfs";
-      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
   fileSystems."/root" =
     { device = "pool/home/root";
       fsType = "zfs";
-      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
   fileSystems."/home/david/Games" =
     { device = "pool/games";
       fsType = "zfs";
-      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
   fileSystems."/boot/efi" =
@@ -41,14 +38,9 @@
       fsType = "vfat";
     };
 
-  swapDevices = [ ];
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  #networking.useDHCP = lib.mkDefault false;
-  #networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }
+    ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
