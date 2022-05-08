@@ -77,6 +77,8 @@
     # NixOS secrets
     sops
     ssh-to-age
+
+    vscode-with-extensions
   ];
 
   fonts.fonts = with pkgs; [
