@@ -36,6 +36,26 @@
         inputs.sops-nix.nixosModules.sops
       ];
     };
+
+    nixosConfigurations.ace = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        # Overlays-module makes "pkgs.unstable" available in configuration.nix
+        ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-unstable ]; })
+
+        ./configuration.nix
+        ./hardware-configuration.nix
+
+        ./lib/printing.nix
+        ./lib/system.nix
+        ./lib/polkit.nix
+        ./lib/networking.nix
+        ./lib/zfs.nix
+
+        # Secrets management
+        inputs.sops-nix.nixosModules.sops
+      ];
+    };
   };
 }
 
