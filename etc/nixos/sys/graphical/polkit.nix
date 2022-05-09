@@ -3,13 +3,16 @@
 with lib;
 
 let
-  cfg = config.custom.polkit;
-in {
-  options.custom.polkit = {
-    enable = mkEnableOption "Polkit (a privilege-escalation tool)";
+  sysCfg = config.sys;
+  cfg = sysCfg.graphical.polkit;
+in
+{
+  options.sys.graphical.polkit = {
+    enable = mkEnableOption "Polkit (a privilege-escalation tool)" // { default = true; };
 
     user = mkOption {
       type = types.nonEmptyStr;
+      default = sysCfg.user;
       description = "The user for which polkit will be started when they login";
     };
 
@@ -21,7 +24,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (sysCfg.graphical.enable && cfg.enable) {
     environment.systemPackages = [ cfg.package ];
 
     system.activationScripts = {

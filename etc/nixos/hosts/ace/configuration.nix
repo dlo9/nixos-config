@@ -5,10 +5,8 @@
 {
   # Secrets
   sops = {
-    defaultSopsFile = ../../secrets/secrets.yaml;
-    age.keyFile = "/etc/nixos/key";
-    #age.sshKeyPaths = [ ];
-    #age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    defaultSopsFile = ../../secrets.yaml;
+    age.keyFile = "/root/.config/sops/age/keys.txt";
 
     secrets."wireless-env" = {};
   };
