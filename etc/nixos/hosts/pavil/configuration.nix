@@ -76,6 +76,7 @@
 
     # NixOS secrets
     sops
+    age
     ssh-to-age
 
     vscode-with-extensions
