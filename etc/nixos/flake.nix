@@ -38,13 +38,7 @@
           ./hardware/pavil.nix
 
           ({ config, ... }: {
-            # Should be random for each host to ensure pool doesn't replace root on a different host
-            # tr -dc 0-9a-f < /dev/urandom | head -c 8
-            networking = {
-              hostName = "pavil";
-              # substring 0 8 (hashString sha256 networking.hostName)
-              hostId = "fa305d4a";
-            };
+            networking.hostName = "pavil";
 
             boot.loader.grub.mirroredBoots = [
               { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
@@ -60,13 +54,7 @@
           ./hardware/ace.nix
 
           ({ config, ... }: {
-            # Should be random for each host to ensure pool doesn't replace root on a different host
-            # tr -dc 0-9a-f < /dev/urandom | head -c 8
-            networking = {
-              hostName = "ace";
-              # substring 0 8 (hashString sha256 networking.hostName)
-              hostId = "d83696f2";
-            };
+            networking.hostName = "ace";
 
             boot.loader.grub.mirroredBoots = [
               { devices = [ "/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
