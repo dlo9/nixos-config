@@ -32,8 +32,6 @@ in
     networking.hostId = mkDefault (substring 0 8 (builtins.hashString "sha256" config.networking.hostName));
 
     boot = {
-      # TODO: Shouldn't be necessary when root is on ZFS
-      supportedFilesystems = [ "zfs" ];
       zfs.devNodes = "/dev/disk/by-id";
 
       # Hibernation on ZFS can cause corruption
