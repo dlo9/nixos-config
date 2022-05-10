@@ -1,6 +1,5 @@
-# Root configuration links
-/configuration.nix
-/hardware-configuration.nix
+# Build result
+result
 
 # Temporary files
 *.swp
