@@ -9,74 +9,63 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, ... }@inputs:
     let
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable {
-          system = prev.system;
-          config.allowUnfree = true;
-        };
-      };
+      buildSystem = (hostName: system: modules:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
 
-      common-modules = [
-        # Include configuration for nixFlakes, or else everything breaks after switching
-        ./configuration.nix
+          modules = [
+            # Include configuration for nixFlakes, or else everything breaks after switching
+            ./configuration.nix
 
-        # Overlays-module makes "pkgs.unstable" available in configuration.nix
-        ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-unstable ]; })
+            # Overlays-module makes "pkgs.unstable" available in configuration.nix
+            ({ config, pkgs, ... }: {
+              nixpkgs.overlays = [
+                (final: prev: {
+                  unstable = import nixpkgs-unstable {
+                    system = prev.system;
+                    config.allowUnfree = true;
+                  };
+                })
+              ];
+            })
 
-        # Secrets management
-        inputs.sops-nix.nixosModules.sops
+            # Hardware config
+            ./hardware/${hostName}.nix
 
-        # Custom system modules
-        ./sys
-      ];
+            # Set hostname, so that it's not copied elsewhere
+            ({ config, ... }: { networking.hostName = hostName; })
+
+            # Secrets management
+            inputs.sops-nix.nixosModules.sops
+
+            # Custom system modules
+            ./sys
+          ] ++ modules;
+        }
+      );
     in
     {
-      nixosConfigurations.pavil = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = common-modules ++ [
-          # Hardware config
-          ./hardware/pavil.nix
-
+      nixosConfigurations = with nixpkgs.lib; {
+        pavil = buildSystem "pavil" "x86_64-linux" [
           ({ config, ... }: {
-            networking = {
-              hostName = "pavil";
-              interfaces.wlo1.useDHCP = true;
-            };
-
+            networking.interfaces.wlo1.useDHCP = true;
             boot.loader.grub.mirroredBoots = [
               { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
             ];
           })
         ];
-      };
 
-      nixosConfigurations.ace = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = common-modules ++ [
-          # Hardware config
-          ./hardware/ace.nix
-
+        ace = buildSystem "ace" "x86_64-linux" [
           ({ config, ... }: {
-            networking.hostName = "ace";
-
             boot.loader.grub.mirroredBoots = [
               { devices = [ "/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
             ];
           })
         ];
-      };
 
-      nixosConfigurations.cuttlefish = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = common-modules ++ [
-          # Hardware config
-          ./hardware/cuttlefish.nix
-
+        cuttlefish = buildSystem "cuttlefish" "x86_64-linux" [
           ({ config, ... }: {
-            networking = {
-              hostName = "cuttlefish";
-              interfaces.enp2s0.useDHCP = true;
-            };
+            networking.interfaces.enp2s0.useDHCP = true;
 
             # Must load network module on boot for SSH access
             # lspci -v | grep -iA8 'network\|ethernet'
