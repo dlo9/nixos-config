@@ -24,9 +24,11 @@ in
     ./zfs-mount-options.nix
   ];
 
-  options.sys.zfs = { };
+  options.sys.zfs = {
+    enable = mkEnableOption "ZFS tools" // { default = true; };
+  };
 
-  config = {
+  config = mkIf cfg.enable {
     # Derive `hostId`, which must be set for `zpool import`, from hostname
     # If instead it should be static for a host, then generate with `tr -dc 0-9a-f < /dev/urandom | head -c 8`
     networking.hostId = mkDefault (substring 0 8 (builtins.hashString "sha256" config.networking.hostName));
@@ -51,7 +53,7 @@ in
     ];
 
     # On safe shutdown, save key to file for reboot
-    # TODO: enable/disable
+    # TODO: enable/disable: https://discourse.nixos.org/t/using-mkif-with-nested-if/5221
     powerManagement.powerDownCommands = "zfs-helper onShutdown";
     systemd.services.zfs-helper-shutdown = {
       description = "Save ZFS keys on scheduled shutdown";

@@ -52,6 +52,8 @@
             boot.loader.grub.mirroredBoots = [
               { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
             ];
+
+            sys.kubernetes.enable = true;
           })
         ];
 
@@ -77,6 +79,22 @@
 
             # GPU
             services.xserver.videoDrivers = [ "nvidia" ];
+          })
+        ];
+
+        # Build the VM with:
+        # sudo nixos-rebuild --flake /etc/nixos#vm build-vm
+        vm = buildSystem "vm" "x86_64-linux" [
+          ({ config, ... }: {
+            sys = {
+              #graphical.enable = false;
+              #zfs.enable = false;
+              #boot.enable = false;
+              kubernetes.enable = true;
+              #maintenance.enable = false;
+              #secrets.enable = false;
+              #wireless.enable = false;
+            };
           })
         ];
       };

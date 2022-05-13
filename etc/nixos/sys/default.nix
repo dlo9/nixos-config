@@ -12,6 +12,7 @@ in
 
     ./boot.nix
     ./hardware.nix
+    ./kubernetes.nix
     ./maintenance.nix
     ./secrets.nix
     ./wireless.nix
