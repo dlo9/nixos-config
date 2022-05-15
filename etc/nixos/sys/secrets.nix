@@ -14,7 +14,8 @@ in
   config = mkIf cfg.enable {
     sops = {
       defaultSopsFile = ../secrets.yaml;
-      #age.keyFile = "/root/.config/sops/age/keys.txt";
+      # This file must be in the filesystems mounted within the initfs.
+      # I put it in the root filesystem since that's mounted first.
       age.keyFile = "/var/sops-age-keys.txt";
     };
   };
