@@ -6,15 +6,21 @@ age keys:
   - &pavil age1k7q7etwxmqdf59j47r58yyxx5ecjsjx9nkm8h4t4pggnd5arj9fqc4g23u
 
 creation_rules:
-  - path_regex: secrets.yaml
+  - path_regex: age-keys.yaml
+    unencrypted_regex: ^(meta|.*_unencrypted)$
+    key_groups:
+    - age:
+      - *bitwarden
+
+  - path_regex: secrets/shared.yaml
     unencrypted_regex: ^(meta|.*_unencrypted)$
     key_groups:
     - age:
       - *bitwarden
       - *pavil
 
-  - path_regex: age-keys.yaml
-    unencrypted_regex: ^(meta|.*_unencrypted)$
+  - path_regex: secrets/pavil.yaml
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
     key_groups:
     - age:
-      - *bitwarden
+      - *pavil
