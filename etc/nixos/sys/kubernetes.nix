@@ -72,21 +72,24 @@ in
       kubelet.extraOpts = "--fail-swap-on=false";
     };
 
-    networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
-    services.kubernetes.kubelet.cni.config = [{
-      name = "cuttlenet";
-      type = "flannel";
-      cniVersion = "0.3.1";
-      delegate = {
-        bridge = "cuttlenet";
-        isDefaultGateway = true;
-        hairpinMode = true;
-      };
-    }];
+    # Is this the magic right here?
+    #networking.firewall.enable = false;
 
-    services.flannel = {
-      iface = "cuttlenet";
-    };
+    # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
+    # services.kubernetes.kubelet.cni.config = [{
+    #   name = "cuttlenet";
+    #   type = "flannel";
+    #   cniVersion = "0.3.1";
+    #   delegate = {
+    #     bridge = "cuttlenet";
+    #     isDefaultGateway = true;
+    #     hairpinMode = true;
+    #   };
+    # }];
+
+    # services.flannel = {
+    #   iface = "cuttlenet";
+    # };
 
     # To see available snapshotters, run: `ctr plugins ls | grep io.containerd.snapshotter`
     #   - zfs: slow, clutters filesystem
