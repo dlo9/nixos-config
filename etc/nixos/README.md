@@ -23,8 +23,7 @@ TODO
 
 3. Generate a hardware configuration:
    ```sh
-   cd /etc/nixos
-   ./generate-hardware-config.sh
+   ./scripts/generate-hardware-config.sh
    git add .
    
    ```
