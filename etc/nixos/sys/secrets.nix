@@ -20,7 +20,7 @@ in
     hostSecretsFile = mkOption {
       type = path;
       # TODO: make this path <secrets>, or a cfg option
-      default = ../secrets/${cfg.hostname}.yaml;
+      default = ../secrets/hosts/${cfg.hostname}.yaml;
       description = "Host-specific secrets file";
     };
   };
