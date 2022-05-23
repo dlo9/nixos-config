@@ -303,6 +303,63 @@ in
           autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
         '';
       };
+
+      fish = {
+        enable = true;
+
+        # FUTURE: use pkgs.fishPlugins.foreign-env
+        # https://github.com/nix-community/home-manager/issues/2451
+        plugins = [
+          {
+            # Necessary for sourcing the POSIX shell script for base16-shell
+            name = "foreign-env";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "oh-my-fish";
+              repo = "plugin-foreign-env";
+              rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
+              sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
+            };
+          }
+        ];
+
+        interactiveShellInit = ''
+          zoxide init fish | source
+          starship init fish | source
+          
+          set -gx EDITOR vim
+          set -gx TZ America/Los_Angeles
+
+          # Theme
+          fenv "source ${config.scheme inputs.base16-shell}"
+        '';
+
+        functions = {
+          fish_user_key_bindings = ''
+            # Ctrl-Backspace
+            bind \e\[3^ kill-word
+
+            # Ctrl-Delete
+            bind \b backward-kill-word
+
+            # Delete 'Ctrl-D to exit' binding, which causes accidental terminal exit
+            # when ssh'd pagers hit EOF
+            # https://stackoverflow.com/questions/34216850/how-to-prevent-iterm2-from-closing-when-typing-ctrl-d-eof
+            # In bash, use:
+            # https://unix.stackexchange.com/questions/139115/disable-ctrl-d-window-close-in-terminator-terminal-emulator
+            bind --erase --preset \cd
+          '';
+
+          fork = ''
+            eval "$argv & disown > /dev/null"
+          '';
+
+          # TODO: pavil only
+          fix-hdmi-audio = ''
+            amixer -c 0 sset IEC958,1 unmute $argv
+          '';
+        };
+      };
     };
   };
 }

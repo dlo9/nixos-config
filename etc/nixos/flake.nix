@@ -25,10 +25,10 @@
 
     # Theme templates
     # https://github.com/chriskempson/base16#template-repositories
-    # base16-vim = {
-    #   url = github:chriskempson/base16-vim;
-    #   flake = false;
-    # };
+    base16-shell = {
+      url = github:chriskempson/base16-shell;
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
