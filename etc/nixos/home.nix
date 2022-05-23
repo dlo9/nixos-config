@@ -325,8 +325,7 @@ in
 
         interactiveShellInit = ''
           zoxide init fish | source
-          starship init fish | source
-          
+
           set -gx EDITOR vim
           set -gx TZ America/Los_Angeles
 
@@ -358,6 +357,22 @@ in
           fix-hdmi-audio = ''
             amixer -c 0 sset IEC958,1 unmute $argv
           '';
+        };
+      };
+
+      starship = {
+        enable = true;
+        enableFishIntegration = true;
+
+        # https://starship.rs/config
+        settings = {
+          line_break.disabled = true;
+          time.disabled = false;
+          cmd_duration.min_time = 1000;
+          status = {
+            disabled = false;
+            pipestatus = true;
+          };
         };
       };
     };
