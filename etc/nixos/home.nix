@@ -324,8 +324,6 @@ in
         ];
 
         interactiveShellInit = ''
-          zoxide init fish | source
-
           set -gx EDITOR vim
           set -gx TZ America/Los_Angeles
 
@@ -374,6 +372,11 @@ in
             pipestatus = true;
           };
         };
+      };
+
+      zoxide = {
+        enable = true;
+        enableFishIntegration = true;
       };
     };
   };
