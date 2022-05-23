@@ -2,36 +2,25 @@
 # - Manual: https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
 # - Config: https://rycee.gitlab.io/home-manager/options.html
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, sysCfg, ... }:
 
 with lib;
 with types;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.secrets;
-
-  tmux-themepack = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "tmux-themepack";
-    rtpFilePath = "themepack.tmux";
-    version = "unstable-2022-05-18";
-    src = pkgs.fetchFromGitHub {
-      owner = "jimeh";
-      repo = "tmux-themepack";
-      rev = "7c59902f64dcd7ea356e891274b21144d1ea5948";
-      # Generate with:
-      # nix-prefetch-url --unpack https://github.com/jimeh/tmux-themepack/archive/7c59902f64dcd7ea356e891274b21144d1ea5948.tar.gz
-      sha256 = "1kl93d0b28f4gn1knvbb248xw4vzb0f14hma9kba3blwn830d4bk";
-    };
-  };
+  cfg = config.home;
 in
 {
-  options.sys.secrets = {
+  imports = [ inputs.base16.homeManagerModule ];
+
+  options.home = {
     enable = mkEnableOption "user home management" // { default = true; };
     enableGui = mkEnableOption "graphical programs" // { default = true; };
   };
 
   config = mkIf cfg.enable {
+    scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";
+
     programs = {
       git = {
         enable = true;
@@ -46,7 +35,6 @@ in
       # TODO: only if GUI
       qutebrowser.enable = true;
 
-      # TODO: how to integrate with flavours?
       tmux = {
         enable = true;
         sensibleOnTop = true;
@@ -63,7 +51,7 @@ in
         # Spawn a new session when attaching and none exist
         newSession = true;
 
-        plugins = with pkgs; [
+        plugins = with pkgs; with sysCfg.pkgs; [
           {
             plugin = tmux-themepack;
             extraConfig = "set -g @themepack 'powerline/double/purple'";
@@ -83,33 +71,41 @@ in
       };
 
       vim = {
+        enable = true;
+
         settings = {
           background = "dark";
           backupdir = [ ];
           copyindent = true;
-          directory = "$HOME/.cache/vim/swap";
+          directory = [ "$HOME/.cache/vim/swap" ];
           hidden = true;
           number = true;
           relativenumber = true;
           shiftwidth = 2;
           smartcase = true;
           tabstop = 2;
-          undodir = "$HOME/.cache/vim/undo";
+          undodir = [ "$HOME/.cache/vim/undo" ];
         };
 
-        plugins = with pkgs.vimPlugins; [
+        plugins = with pkgs.vimPlugins; with sysCfg.pkgs; [
           # Statusline
           vim-airline
-          vim-airline-themes
 
           # Auto paste mode
           vim-bracketed-paste
+
+          # Autoindent
+          vim-yadi
 
           # Remove extra whitespace
           vim-strip-trailing-whitespace
 
           # Remember last place
           vim-lastplace
+
+          # Theme
+          base16-vim
+          vim-airline-themes
 
           # Autocomplete plugins
           coc-git
@@ -120,12 +116,9 @@ in
           coc-java
           coc-go
           coc-highlight
-
-          # TODO: missing
-          #timakro/vim-yadi  # Autoindent
-          #coc-rome  # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
-          #coc-sh
-          #coc-docker
+          coc-rome # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
+          coc-sh
+          coc-docker
         ];
 
         extraConfig = ''
@@ -133,16 +126,9 @@ in
           "" Theme ""
           """""""""""
 
-          " Other base16 theme options are in ~/.vim/plugin
           let base16colorspace=256
-
-          " Spelling
-          " Leader is `\`, so type `\+a` for spelling help
-          vmap <leader>a <Plug>(coc-codeaction-selected)
-          nmap <leader>a <Plug>(coc-codeaction-selected)
-
-          " Other base16 theme options are in ~/.vim/plugin
-          let base16colorspace=256
+          colorscheme base16-${config.scheme.slug}
+          let g:airline_theme='base16_${builtins.replaceStrings ["-"] ["_"] config.scheme.slug}'
 
           """""""""""""
           "" Airline ""
@@ -169,6 +155,11 @@ in
 
           " Use system clipboard
           set clipboard=unnamed
+
+          " Spelling
+          " Leader is `\`, so type `\+a` for spelling help
+          vmap <leader>a <Plug>(coc-codeaction-selected)
+          nmap <leader>a <Plug>(coc-codeaction-selected)
 
           """"""""
           "" UI ""

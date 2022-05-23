@@ -1,5 +1,41 @@
 {
   "nodes": {
+    "base16": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1651170200,
+        "narHash": "sha256-pg9dLMFpi068vY30tmPOI7JPoE/YdihVYR1QEgWMG/U=",
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "rev": "2aaa4ae5e646cc82ee036cd541ebc5e3c026e46a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "type": "github"
+      }
+    },
+    "base16-atelier": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1495956440,
+        "narHash": "sha256-tKOPV4uStfEM6xBa+3sOLtpkpi/ykEiLlybt+3g09WQ=",
+        "owner": "atelierbram",
+        "repo": "base16-atelier-schemes",
+        "rev": "212179fded98ecfa7d88ad7a756d81297a3371c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atelierbram",
+        "repo": "base16-atelier-schemes",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -54,6 +90,8 @@
     },
     "root": {
       "inputs": {
+        "base16": "base16",
+        "base16-atelier": "base16-atelier",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
