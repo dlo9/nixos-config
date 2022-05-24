@@ -21,6 +21,10 @@ in
   config = mkIf cfg.enable {
     scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";
 
+    home.sessionVariables = {
+      EDITOR = "${config.programs.vim.package}/bin/vim";
+    };
+
     programs = {
       git = {
         enable = true;
@@ -324,9 +328,6 @@ in
         ];
 
         interactiveShellInit = ''
-          set -gx EDITOR vim
-          set -gx TZ America/Los_Angeles
-
           # Theme
           fenv "source ${config.scheme inputs.base16-shell}"
         '';
