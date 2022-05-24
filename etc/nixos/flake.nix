@@ -29,6 +29,11 @@
       url = github:chriskempson/base16-shell;
       flake = false;
     };
+
+    base16-alacritty = {
+      url = github:aarowill/base16-alacritty;
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:

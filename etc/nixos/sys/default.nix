@@ -13,6 +13,7 @@ in
     ./boot.nix
     ./hardware.nix
     ./kubernetes.nix
+    ./lib.nix
     ./maintenance.nix
     ./pkgs.nix
     ./secrets.nix

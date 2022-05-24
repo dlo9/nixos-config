@@ -378,6 +378,27 @@ in
         enable = true;
         enableFishIntegration = true;
       };
+
+      alacritty = {
+        enable = true;
+        settings = {
+          window.opacity = 0.9;
+          decorations = "full";
+          font.normal.family = "DejaVuSansMono Nerd Font Mono";
+
+          save_to_clipboard = true;
+          cursor.style = {
+            shape = "Block";
+            blinking = "Always";
+            shell = {
+              program = config.programs.fish.package;
+              args = [ "--login" ];
+            };
+          };
+
+          mouse.hide_when_typing = false;
+        } // (sysCfg.lib.fromYAML (config.scheme inputs.base16-alacritty));
+      };
     };
   };
 }
