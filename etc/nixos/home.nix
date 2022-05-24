@@ -75,7 +75,7 @@ in
 
         settings = {
           background = "dark";
-          backupdir = [ ];
+          backupdir = [ "$HOME/.cache/vim/backup" ];
           copyindent = true;
           directory = [ "$HOME/.cache/vim/swap" ];
           hidden = true;
