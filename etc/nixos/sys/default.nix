@@ -41,6 +41,17 @@ in
 
     # Timezone
     time.timeZone = "America/Los_Angeles";
+    services.geoclue2 = {
+      enable = true;
+
+      appConfig = {
+        "redshift" = {
+          isAllowed = true;
+          isSystem = false;
+          users = [ "1000" ];
+        };
+      };
+    };
 
     # Main user
     users.users = {

@@ -400,6 +400,14 @@ in
         } // (sysCfg.lib.fromYAML (config.scheme inputs.base16-alacritty));
       };
     };
+
+    services = {
+      redshift = {
+        enable = true;
+        provider = "geoclue2";
+        package = pkgs.redshift-wlr;
+      };
+    };
   };
 }
 
