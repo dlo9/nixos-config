@@ -1,5 +1,7 @@
 {
   inputs = {
+    # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
+
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-21.11-small;
 
@@ -32,6 +34,34 @@
 
     base16-alacritty = {
       url = github:aarowill/base16-alacritty;
+      flake = false;
+    };
+
+    base16-mako = {
+      url = github:Eluminae/base16-mako;
+      flake = false;
+    };
+
+    base16-wofi = {
+      # https://hg.sr.ht/~scoopta/wofi
+      #url = git+https://hg.sr.ht/~scoopta/wofi;
+      #url = sourcehut:~scoopta/wofi?host=hg.sr.ht;
+      url = https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz;
+      flake = false;
+    };
+
+    base16-waybar = {
+      url = github:mnussbaum/base16-waybar;
+      flake = false;
+    };
+
+    base16-sway = {
+      url = github:rkubosz/base16-sway;
+      flake = false;
+    };
+
+    base16-gtk-flatcolor = {
+      url = github:Misterio77/base16-gtk-flatcolor;
       flake = false;
     };
   };

@@ -52,6 +52,38 @@
         "type": "github"
       }
     },
+    "base16-gtk-flatcolor": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1606080580,
+        "narHash": "sha256-jz7iJPaMjipBN6DJ8I8WUg4t+zfKK4Adh2ayOipy+Z8=",
+        "owner": "Misterio77",
+        "repo": "base16-gtk-flatcolor",
+        "rev": "2e19703f19feda5ecd95fc5fbd22e7548b489f13",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Misterio77",
+        "repo": "base16-gtk-flatcolor",
+        "type": "github"
+      }
+    },
+    "base16-mako": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1584466459,
+        "narHash": "sha256-83csG/gORJlPg9sOlOeWgAH9KYgt+cgrJJNXMuIaVBQ=",
+        "owner": "Eluminae",
+        "repo": "base16-mako",
+        "rev": "f46c99682c03d30f52436741f1902db36738bf06",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Eluminae",
+        "repo": "base16-mako",
+        "type": "github"
+      }
+    },
     "base16-shell": {
       "flake": false,
       "locked": {
@@ -66,6 +98,50 @@
         "owner": "chriskempson",
         "repo": "base16-shell",
         "type": "github"
+      }
+    },
+    "base16-sway": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630788154,
+        "narHash": "sha256-34KRsHvwdSMXOSWul/cNrzO3iawQ8DiMltcnkNi4OoE=",
+        "owner": "rkubosz",
+        "repo": "base16-sway",
+        "rev": "f8edbb746fe2962cfe73feca7023b9c1ae1e59eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rkubosz",
+        "repo": "base16-sway",
+        "type": "github"
+      }
+    },
+    "base16-waybar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1546831770,
+        "narHash": "sha256-ehb4CLLPJ/SjMz53/inuP9ine2CfIpexp2O1lVHihM0=",
+        "owner": "mnussbaum",
+        "repo": "base16-waybar",
+        "rev": "d2f943b1abb9c9f295e4c6760b7bdfc2125171d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mnussbaum",
+        "repo": "base16-waybar",
+        "type": "github"
+      }
+    },
+    "base16-wofi": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-eoeMPH+JQHfgW7hHmvRZSgmeeC6w0P3T6H297+VNTZ0=",
+        "type": "tarball",
+        "url": "https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz"
       }
     },
     "home-manager": {
@@ -141,7 +217,12 @@
         "base16": "base16",
         "base16-alacritty": "base16-alacritty",
         "base16-atelier": "base16-atelier",
+        "base16-gtk-flatcolor": "base16-gtk-flatcolor",
+        "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",
+        "base16-sway": "base16-sway",
+        "base16-waybar": "base16-waybar",
+        "base16-wofi": "base16-wofi",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
