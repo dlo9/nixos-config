@@ -43,10 +43,7 @@
     };
 
     base16-wofi = {
-      # https://hg.sr.ht/~scoopta/wofi
-      #url = git+https://hg.sr.ht/~scoopta/wofi;
-      #url = sourcehut:~scoopta/wofi?host=hg.sr.ht;
-      url = https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz;
+      url = https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz;
       flake = false;
     };
 

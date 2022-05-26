@@ -135,13 +135,13 @@
     "base16-wofi": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-eoeMPH+JQHfgW7hHmvRZSgmeeC6w0P3T6H297+VNTZ0=",
+        "narHash": "sha256-fwTzuQYD8Ue0DXtTua8ZwDjCdYZm0V5u8Oz/BY711gQ=",
         "type": "tarball",
-        "url": "https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz"
+        "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://hg.sr.ht/~scoopta/wofi/archive/v1.2.4.tar.gz"
+        "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
       }
     },
     "home-manager": {

@@ -12,7 +12,10 @@ in
   options.sys.lib = mkOption {
     description = "Library functions";
     type = types.attrsOf (types.functionTo types.anything);
-    default = {
+
+    default = rec {
+      fromYAMLString = yamlString: (fromYAML (builtins.toFile "from-yaml-string" yamlString));
+
       fromYAML = yamlFile: builtins.fromJSON (
         builtins.readFile (
           pkgs.runCommandNoCC "from-yaml"
