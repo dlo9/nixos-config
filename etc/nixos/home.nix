@@ -431,7 +431,6 @@ in
               program = config.programs.fish.package;
               args = [ "--login" ];
             };
-
           };
 
           mouse.hide_when_typing = false;
@@ -797,7 +796,82 @@ in
           }
         '';
       };
-      # sway = { }
+    };
+
+    xdg = {
+      enable = true;
+      configFile = {
+        ################
+        ##### Sway #####
+        ################
+
+        sway.source = ./home/sway;
+        swaylock.source = ./home/swaylock;
+
+        ################
+        ##### Wofi #####
+        ################
+
+        wofi = {
+          # Needs to be recursive so that styles below can be written
+          recursive = true;
+          source = ./home/wofi;
+        };
+
+        "wofi/style.css".text = ''
+          *{
+            font-family: DejaVuSansMono Nerd Font;
+            font-size: 14px;
+          }
+
+          window {
+            border: 1px solid;
+          }
+
+          #input {
+            margin-bottom: 15px;
+            padding:3px;
+            border-radius: 5px;
+            border:none;
+          }
+
+          #outer-box {
+            margin: 5px;
+            padding:15px;
+          }
+
+          #text {
+            padding: 5px;
+          }
+
+          ${builtins.readFile (config.scheme inputs.base16-wofi)}
+        '';
+
+        "wofi/style.widgets.css".text = ''
+          *{
+            font-family: DejaVuSansMono Nerd Font;
+            font-size: 14px;
+          }
+
+          #window {
+            border: 1px solid white;
+            margin: 0px 5px 0px 5px;
+          }
+
+          #outer-box {
+            margin: 5px;
+            padding:10px;
+            margin-top: -22px;
+          }
+
+          #text {
+            padding: 5px;
+            color: white;
+          }
+
+          ${builtins.readFile (config.scheme inputs.base16-wofi)}
+        '';
+      };
     };
 
     services = {
