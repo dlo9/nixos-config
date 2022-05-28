@@ -57,8 +57,15 @@ in
     scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";
     #scheme = "${inputs.base16-unclaimed}/apathy.yaml";
 
-    home.sessionVariables = {
-      EDITOR = "${config.programs.vim.package}/bin/vim";
+    home = {
+      sessionPath = [
+        "$HOME/.cargo/bin"
+        "$HOME/.local/bin"
+      ];
+
+      sessionVariables = {
+        EDITOR = "${config.programs.vim.package}/bin/vim";
+      };
     };
 
     programs = {
@@ -797,6 +804,17 @@ in
           }
         '';
       };
+
+      bottom = {
+        enable = true;
+
+        # https://github.com/ClementTsang/bottom/blob/master/sample_configs/default_config.toml
+        settings = {
+          flags = {
+            mem_as_value = true;
+          };
+        };
+      };
     };
 
     xdg = {
@@ -872,6 +890,109 @@ in
 
           ${builtins.readFile (config.scheme inputs.base16-wofi)}
         '';
+
+        ################
+        ##### Wrap #####
+        ################
+
+        "wrap.yaml" = {
+          onChange = ''
+            $HOME/.cargo/bin/wrap --alias
+          '';
+
+          text = ''
+            variables:
+              CUTTLEFISH_SSH_PORT: 32085
+              CUTTLEFISH_SSH_URL: ssh.sigpanic.com
+
+              DRYWELL_SSH_PORT: 57332
+              DRYWELL_SSH_URL: drywell.sigpanic.com
+
+            aliases:
+              - alias: drywell
+                program: ssh
+
+                keywords:
+                  - keys: [--local]
+                    values: [192.168.1.200]
+                  - keys: [--remote]
+                    values: [-p, $DRYWELL_SSH_PORT, $DRYWELL_SSH_URL]
+
+              - alias: cuttlefish
+                program: ssh
+
+                arguments:
+                  - key: -i
+                    value: ~/.ssh/archbook.id_rsa
+                    cleared-by: [-i]
+
+                keywords:
+                  - keys: [--local]
+                    values: [192.168.1.230]
+                  - keys: [--remote]
+                    values: [-p, $CUTTLEFISH_SSH_PORT, $CUTTLEFISH_SSH_URL]
+
+              # System yadm
+              # Clone via: syadm clone -w / <repo>
+              - alias: syadm
+                program: sudo
+
+                arguments:
+                  - key: /etc/yadm/data
+                  - key: --yadm-data
+                  - key: /etc/yadm/config
+                  - key: --yadm-dir
+                  - key: yadm
+                  - key: GIT_SSH_COMMAND=ssh -i $HOME/.ssh/id_rsa
+                  - key: HOME=$HOME
+
+              - alias: a
+                program: awk
+
+                keywords:
+                  - keys: [--unique, -u]
+                    values: ['!a[\$0]++']
+
+              - alias: maintain
+                program: sh
+
+                arguments:
+                  - key: -c
+
+                keywords:
+                  - keys: [--bg]
+                    values: ['killall swaybg; swaybg -i ~/.config/sway/wallpapers/spaceman.jpg &']
+
+              - alias: theme
+                program: sh
+
+                arguments:
+                  - key: -c
+
+                keywords:
+                  - keys: [--iterate]
+                    values:
+                      - |
+                        for theme in \$(flavours list | awk -v RS=' ' '!/-light/'); do
+                          echo \$theme
+                          flavours apply \$theme
+                          sleep 1
+                        done
+                  - keys: [--iterate-random]
+                    values:
+                      - |
+                        for theme in \$(flavours list | awk -v RS=' ' '!/-light/' | sort -R); do
+                          echo \$theme
+                          flavours apply \$theme
+                          sleep 1
+                        done
+                  - keys: [--apply]
+                    values: ['flavours apply \$(cat ~/.local/share/flavours/lastscheme)']
+                  - keys: [--show]
+                    values:
+                      - flavours info "\$(flavours current)" | awk '!a[\$0]++'
+          '';
+        };
       };
     };
 
@@ -930,7 +1051,7 @@ in
     };
 
     home.packages = with pkgs; [
-      lxappearance
+      sysCfg.pkgs.lxappearance-xwayland
     ];
 
     services = {

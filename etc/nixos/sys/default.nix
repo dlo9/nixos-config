@@ -111,7 +111,6 @@ in
       # clang # Not sure why I need this?
 
       # System utils
-      bottom
       lsof
       pciutils # lspci
       gptfdisk # Disk partitioning (sgdisk)

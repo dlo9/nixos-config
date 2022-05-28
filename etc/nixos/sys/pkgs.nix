@@ -102,13 +102,39 @@ in
         '';
 
         meta = with lib; {
-          description = "This is a simple gtk3 theme based on FlatColor by deviantfero";
+          description = "A simple gtk3 theme based on FlatColor by deviantfero";
           homepage = "https://github.com/jasperro/FlatColor";
           license = licenses.gpl3Only;
           platforms = platforms.unix;
           maintainers = [ dlo9 ];
         };
       };
+
+      # lxappearance is an x11 application, and crashes on wayland unless forced to use xwayland
+      lxappearance-xwayland = pkgs.runCommand "lxappearance"
+        {
+          buildInputs = [ pkgs.makeWrapper ];
+        } ''
+        mkdir "$out"
+        in="${pkgs.lxappearance}"
+
+        # Link every top-level folder from pkgs.lxappearance to our new target
+        ln -s "$in"/* "$out"
+
+        # Except the bin folder
+        rm "$out/bin"
+        mkdir "$out/bin"
+
+        # We create the bin folder ourselves and link every binary in it
+        ln -s "$in/bin/"* "$out/bin"
+
+        # Except the lxappearance binary
+        rm "$out/bin"/lxappearance
+
+        # Because we create this ourself, by creating a wrapper
+        makeWrapper "$in/bin/lxappearance" "$out/bin/lxappearance" \
+          --set-default GDK_BACKEND x11
+      '';
     };
   };
 }
