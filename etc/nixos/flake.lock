@@ -52,7 +52,7 @@
         "type": "github"
       }
     },
-    "base16-gtk-flatcolor": {
+    "base16-gtk": {
       "flake": false,
       "locked": {
         "lastModified": 1606080580,
@@ -113,6 +113,22 @@
       "original": {
         "owner": "rkubosz",
         "repo": "base16-sway",
+        "type": "github"
+      }
+    },
+    "base16-unclaimed": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1527170198,
+        "narHash": "sha256-YV2tgexpyeLqm6d8WaBwT9QPAHT/gxhiFpxQq03xdhA=",
+        "owner": "chriskempson",
+        "repo": "base16-unclaimed-schemes",
+        "rev": "d6b93456dc1012628faec572387814f59e0b854a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chriskempson",
+        "repo": "base16-unclaimed-schemes",
         "type": "github"
       }
     },
@@ -217,10 +233,11 @@
         "base16": "base16",
         "base16-alacritty": "base16-alacritty",
         "base16-atelier": "base16-atelier",
-        "base16-gtk-flatcolor": "base16-gtk-flatcolor",
+        "base16-gtk": "base16-gtk",
         "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",
         "base16-sway": "base16-sway",
+        "base16-unclaimed": "base16-unclaimed",
         "base16-waybar": "base16-waybar",
         "base16-wofi": "base16-wofi",
         "home-manager": "home-manager",

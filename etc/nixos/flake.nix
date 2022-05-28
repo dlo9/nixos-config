@@ -25,6 +25,11 @@
       flake = false;
     };
 
+    base16-unclaimed = {
+      url = github:chriskempson/base16-unclaimed-schemes;
+      flake = false;
+    };
+
     # Theme templates
     # https://github.com/chriskempson/base16#template-repositories
     base16-shell = {
@@ -57,7 +62,7 @@
       flake = false;
     };
 
-    base16-gtk-flatcolor = {
+    base16-gtk = {
       url = github:Misterio77/base16-gtk-flatcolor;
       flake = false;
     };

@@ -7,6 +7,13 @@ with lib;
 let
   sysCfg = config.sys;
   cfg = sysCfg.pkgs;
+
+  dlo9 = {
+    email = "if_coding@fastmail.com";
+    github = "dlo9";
+    githubId = 7187117;
+    name = "David Orchard";
+  };
 in
 {
   options.sys.pkgs = mkOption {
@@ -70,6 +77,36 @@ in
           repo = "tmux-themepack";
           rev = "7c59902f64dcd7ea356e891274b21144d1ea5948";
           sha256 = "1kl93d0b28f4gn1knvbb248xw4vzb0f14hma9kba3blwn830d4bk";
+        };
+      };
+
+      flatcolor-gtk-theme = pkgs.stdenv.mkDerivation {
+        pname = "flatcolor-gtk-theme";
+        version = "2022-05-28";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "jasperro";
+          repo = "FlatColor";
+          rev = "0a56c50e8c5e2ad35f6174c19a00e01b30874074";
+          sha256 = "0pv3fmvs8bfkn5fwyg9z8fszknmca4sjs3210k15lrrx75hngi1z";
+        };
+
+        installPhase = ''
+          rm .gitignore README.md
+          sed -i 's/Polar Night/FlatColor/' index.theme
+
+          mkdir -p $out/share/themes
+          cp -r . $out/share/themes/FlatColor
+
+          runHook postInstall
+        '';
+
+        meta = with lib; {
+          description = "This is a simple gtk3 theme based on FlatColor by deviantfero";
+          homepage = "https://github.com/jasperro/FlatColor";
+          license = licenses.gpl3Only;
+          platforms = platforms.unix;
+          maintainers = [ dlo9 ];
         };
       };
     };
