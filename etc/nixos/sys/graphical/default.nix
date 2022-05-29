@@ -77,18 +77,12 @@ in
 
     # Packages
     environment.systemPackages = with pkgs; [
-      # Terminal
-      #alacritty
-
       # System utils
       gparted # Partitioning
 
       # Web browsers
       qutebrowser
       firefox-wayland
-
-      # Development
-      vscode-with-extensions
     ];
 
     # Printing

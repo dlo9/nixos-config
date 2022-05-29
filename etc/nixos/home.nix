@@ -98,7 +98,7 @@ in
         # Spawn a new session when attaching and none exist
         newSession = true;
 
-        plugins = with pkgs; with sysCfg.pkgs; [
+        plugins = with pkgs.tmuxPlugins // sysCfg.pkgs.tmuxPlugins; [
           {
             plugin = tmux-themepack;
             extraConfig = "set -g @themepack 'powerline/double/purple'";
@@ -135,7 +135,7 @@ in
         };
 
 
-        plugins = with pkgs.vimPlugins; with sysCfg.pkgs; [
+        plugins = with pkgs.vimPlugins // sysCfg.pkgs.vimPlugins; [
           # Statusline
           vim-airline
 
@@ -451,12 +451,7 @@ in
         extraConfig = (builtins.readFile (config.scheme inputs.base16-mako));
       };
 
-      # Program launchers
-      # wofi = {
-      #   enable = true;
-      #   style = (builtins.readFile (config.scheme inputs.base16-wofi));
-      # };
-
+      # System bar
       waybar = {
         enable = true;
         settings = {
@@ -815,21 +810,34 @@ in
           };
         };
       };
+
+      vscode = {
+        enable = true;
+
+        # Necessary for extensions for now
+        # https://github.com/nix-community/home-manager/issues/2798
+        mutableExtensionsDir = false;
+
+        extensions = with pkgs.vscode-extensions // sysCfg.pkgs.vscode-extensions; [
+          shan.code-settings-sync
+          jnoortheen.nix-ide
+        ];
+      };
     };
 
     xdg = {
       enable = true;
       configFile = {
-        ################
-        ##### Sway #####
-        ################
+        #################################
+        ##### Sway (window manager) #####
+        #################################
 
         sway.source = ./home/sway;
         swaylock.source = ./home/swaylock;
 
-        ################
-        ##### Wofi #####
-        ################
+        ################################
+        ##### Wofi (notifications) #####
+        ################################
 
         wofi = {
           # Needs to be recursive so that styles below can be written
@@ -1050,8 +1058,13 @@ in
       };
     };
 
-    home.packages = with pkgs; [
-      sysCfg.pkgs.lxappearance-xwayland
+    home.packages = with pkgs // sysCfg.pkgs; [
+      # For debugging themes
+      lxappearance-xwayland
+
+      # So that links open in a browser when clicked from other applications
+      # (e.g. vscode)
+      xdg-utils
     ];
 
     services = {
