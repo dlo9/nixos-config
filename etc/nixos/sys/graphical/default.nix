@@ -48,6 +48,7 @@ in
 
         # Clipboard
         wl-clipboard
+        copyq
 
         # Notifications
         mako
@@ -62,6 +63,9 @@ in
         # Hardware controls
         brightnessctl
         pavucontrol
+
+        # Display management
+        wdisplays
       ];
     };
 
