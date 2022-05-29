@@ -821,7 +821,7 @@ in
 
         # Necessary for extensions for now
         # https://github.com/nix-community/home-manager/issues/2798
-        mutableExtensionsDir = false;
+        mutableExtensionsDir = true;
 
         extensions = with pkgs.vscode-extensions // sysCfg.pkgs.vscode-extensions; [
           shan.code-settings-sync
