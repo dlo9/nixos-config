@@ -643,7 +643,7 @@ in
             };
 
             "sway/workspaces" = {
-              all-outputs = true;
+              all-outputs = false;
               disable-markup = false;
               disable-scroll = true;
               format = "  {icon}  ";
