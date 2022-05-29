@@ -108,6 +108,7 @@ in
       # Development
       git
       cargo
+      qemu_kvm
       # clang # Not sure why I need this?
 
       # System utils
