@@ -5,7 +5,7 @@ indicator-caps-lock
 # datestr=%A
 image=$HOME/.config/sway/wallpapers/spaceman.jpg
 scaling=fill
-font=DejaVuSansMono Nerd Font
+font=NotoSansMono Nerd Font
 font-size=20
 
 # Ring

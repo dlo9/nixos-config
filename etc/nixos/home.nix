@@ -73,6 +73,9 @@ in
       };
     };
 
+    # Allow user-installed fonts
+    fonts.fontconfig.enable = true;
+
     programs = {
       git = {
         enable = true;
@@ -431,10 +434,15 @@ in
 
       alacritty = {
         enable = true;
+
+        # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
         settings = {
           window.opacity = 0.9;
           decorations = "full";
-          font.normal.family = "DejaVuSansMono Nerd Font Mono";
+          font = {
+            normal.family = "NotoSansMono Nerd Font";
+            #size = 11;
+          };
 
           save_to_clipboard = true;
           cursor.style = {
@@ -475,8 +483,8 @@ in
             };
 
             battery = {
-              format = "{icon}  {capacity}%";
-              format-charging = "  {capacity}%";
+              format = "{icon} {capacity}%";
+              format-charging = " {capacity}%";
               format-icons = [
                 ""
                 ""
@@ -485,7 +493,7 @@ in
                 ""
               ];
 
-              format-plugged = "  {capacity}%";
+              format-plugged = " {capacity}%";
               states = {
                 critical = 15;
                 warning = 30;
@@ -493,7 +501,7 @@ in
             };
 
             clock = {
-              format = "   {:%H:%M:%S}";
+              format = " {:%H:%M:%S}";
               format-alt = " {:%e %b %Y}";
               interval = 1;
               tooltip-format = "{:%H:%M:%S, %a, %B %d, %Y}";
@@ -646,7 +654,7 @@ in
               all-outputs = false;
               disable-markup = false;
               disable-scroll = true;
-              format = "  {icon}  ";
+              format = " {icon} ";
             };
 
             tray = {
@@ -668,7 +676,7 @@ in
           /**********************/
 
           * {
-            font-family: DejaVuSansMono Nerd Font;
+            font-family: NotoSansMono Nerd Font;
             font-size: 14px;
 
             /* Slanted */
@@ -694,7 +702,6 @@ in
           /************************/
           /***** Left modules *****/
           /************************/
-
 
           /* Use button padding instead of label */
           #workspaces label {
@@ -743,7 +750,6 @@ in
             margin-left: -0.5em;
             margin-right: 3em;
           }
-
 
           /*************************/
           /***** Right modules *****/
@@ -852,7 +858,7 @@ in
 
         "wofi/style.css".text = ''
           *{
-            font-family: DejaVuSansMono Nerd Font;
+            font-family: NotoSansMono Nerd Font;
             font-size: 14px;
           }
 
@@ -881,7 +887,7 @@ in
 
         "wofi/style.widgets.css".text = ''
           *{
-            font-family: DejaVuSansMono Nerd Font;
+            font-family: NotoSansMono Nerd Font;
             font-size: 14px;
           }
 
@@ -1084,4 +1090,3 @@ in
     };
   };
 }
-

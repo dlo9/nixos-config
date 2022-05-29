@@ -73,10 +73,14 @@ in
     hardware.pulseaudio.enable = true;
 
     # Fonts
-    # TODO: Use Noto/NotoEmoji?
     fonts.fonts = with pkgs; [
-      # Nerfonts is huge, so only install specific fonts
-      (nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
+      # Nerdfonts is huge, so only install specific fonts
+      # https://github.com/NixOS/nixpkgs/blob/nixos-21.11/pkgs/data/fonts/nerdfonts/shas.nix
+      (nerdfonts.override { fonts = [
+        #"DejaVuSansMono"
+        #"DroidSansMono"
+        "Noto" # If removed, add `noto-fonts-emoji` package to retain emoji support
+      ]; })
     ];
 
     # Packages
