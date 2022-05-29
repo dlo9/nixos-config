@@ -66,6 +66,11 @@ in
       sessionVariables = {
         EDITOR = "${config.programs.vim.package}/bin/vim";
       };
+
+      pointerCursor = {
+        name = "Numix-Cursor-Light";
+        package = pkgs.numix-cursor-theme;
+      };
     };
 
     programs = {
