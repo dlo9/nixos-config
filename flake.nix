@@ -133,8 +133,6 @@
             boot.loader.grub.mirroredBoots = [
               { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
             ];
-
-            sys.kubernetes.enable = true;
           })
         ];
 
@@ -160,6 +158,8 @@
 
             # GPU
             services.xserver.videoDrivers = [ "nvidia" ];
+
+            sys.kubernetes.enable = true;
           })
         ];
 
