@@ -148,8 +148,8 @@ in
         {
           buildInputs = [ pkgs.makeWrapper ];
         } ''
-        mkdir "$out"
         in="${pkgs.lxappearance}"
+        mkdir "$out"
 
         # Link every top-level folder from pkgs.lxappearance to our new target
         ln -s "$in"/* "$out"
@@ -168,6 +168,17 @@ in
         makeWrapper "$in/bin/lxappearance" "$out/bin/lxappearance" \
           --set-default GDK_BACKEND x11
       '';
+
+      # TODO: can also be done like this, which symlinks all files instead of folders. Figure out which to use long-term
+      # lxappearance-xwayland = pkgs.symlinkJoin {
+      #   name = "lxappearance-xwayland";
+      #   paths = [ pkgs.lxappearance ];
+      #   buildInputs = [ pkgs.makeWrapper ];
+      #   postBuild = ''
+      #     wrapProgram "$out/bin/lxappearance" \
+      #       --set-default GDK_BACKEND x11
+      #   '';
+      # };
     };
   };
 }

@@ -90,7 +90,7 @@ in
 
     # Packages
     nixpkgs.config.allowUnfree = true;
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = with pkgs // cfg.pkgs; [
       # Terminal
       fish
       tmux
@@ -109,6 +109,7 @@ in
       git
       cargo
       qemu_kvm
+      OVMF
       # clang # Not sure why I need this?
 
       # System utils

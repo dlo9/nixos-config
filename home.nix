@@ -1079,6 +1079,7 @@ in
 
       # Misc dev tools
       jq
+      go-task
     ];
 
     services = {
