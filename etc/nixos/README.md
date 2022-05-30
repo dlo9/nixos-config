@@ -5,7 +5,7 @@ This used to be a repository for system dotfiles, but have now been replaced by 
 # Adding a new host
 
 ## Installing
-TODO
+nixos-rebuild switch --flake 'github:dlo9/system-dotfiles?dir=etc/nixos'
 
 ## Configuration 
 1. On the host, clone this flake into the nixos configuration directory:
