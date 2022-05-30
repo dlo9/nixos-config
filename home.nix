@@ -159,6 +159,9 @@ in
           # Remember last place
           vim-lastplace
 
+          # Fix copy to system clipboard on wayland
+          vim-wayland-clipboard
+
           # Theme
           base16-vim
           vim-airline-themes
@@ -209,8 +212,14 @@ in
           " Set to auto read when a file is changed from the outside
           set autoread
 
-          " Use system clipboard
-          set clipboard=unnamed
+          " Use system clipboard for everything
+          "set clipboard=unnamed
+
+          " Use system clipboard for yank and paste
+          noremap  y  "+y
+          noremap  yy  "+yy
+          map  p  "+p
+          map  P  "+P
 
           " Spelling
           " Leader is `\`, so type `\+a` for spelling help
