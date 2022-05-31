@@ -84,11 +84,6 @@ info
 # Run it
 info "Running VM. Use <Ctrl-a> + <c> + <q> to exit..."
 export vm_mem installer_iso bios local_ssh_port extra_args="${disks[*]}"
+
+rm -f test.log
 expect -f test.exp
-# sudo qemu-kvm \
-# 	-m "$vm_mem" \
-# 	-nographic \
-# 	-cdrom "$installer_iso" \
-# 	-bios "$bios" \
-# 	-nic "user,hostfwd=tcp::$local_ssh_port-:22" \
-# 	"${disks[@]}"
