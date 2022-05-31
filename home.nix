@@ -925,7 +925,8 @@ in
 
         "wrap.yaml" = {
           onChange = ''
-            $HOME/.cargo/bin/wrap --alias
+            # This runs without our additional PATH variables, so absolute path must be given
+            [ -f $HOME/.cargo/bin/wrap ] && $HOME/.cargo/bin/wrap --alias
           '';
 
           text = ''
