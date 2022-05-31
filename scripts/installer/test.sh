@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+# Requirements (TODO: make this a flake):
+#   - bash
+#   - qemu, with OVMF (UEFI firmware)
+#   - ssh
+#   - 7z
+
 # TODO:
-#   - Create test dir
-#   - Create two qcow2 files
-#   - Download ISO?
 #   - Start VM from ISO
 #   - Edit install scripts with disk
 #   - Run installer
@@ -17,8 +20,12 @@ source util.sh
 
 state_dir="$HOME/.local/share/Trash/files/nix-installer-test"
 disk_dir="$state_dir/disks"
+boot_dir="$state_dir/boot"
+
 installer_url="https://channels.nixos.org/nixos-21.11/latest-nixos-minimal-x86_64-linux.iso"
-installer_iso="$state_dir/nix-installer.iso"
+installer_iso="$boot_dir/nix-installer.iso"
+initrd="initrd"
+kernel="bzImage"
 
 # Options
 disk_count=2
@@ -26,11 +33,10 @@ disk_size=20G
 vm_mem=4G
 local_ssh_port=2222
 
-
 # Create state directory
 info "Storing test state at $state_dir"
 info
-mkdir -p "$state_dir"
+mkdir -p "$state_dir" "$disk_dir" "$boot_dir"
 
 # Create disks
 disks=()
@@ -57,11 +63,18 @@ else
 fi
 info
 
+# Extract boot files for custom kernel arguments
+if [ ! -f "$boot_dir/$initrd" ] || [ ! -f "$boot_dir/$kernel" ]; then
+    info "Extracting initrd and kernel to $boot_dir..."
+    7z e "-o$boot_dir" "$installer_iso" "boot/$initrd" "boot/$kernel"
+fi
+info
+
 # Find UEFI firmware file
 info_ "Finding UEFI firmware... "
 bios="$(nix eval --raw -f '<nixpkgs>' OVMF.fd)/FV/OVMF.fd"
 if [ -f "$bios" ]; then
-    info "$bios"
+    info "Using UEFI firmware from $bios"
 else
     error "Not found"
     exit 1
@@ -70,13 +83,12 @@ info
 
 # Run it
 info "Running VM. Use <Ctrl-a> + <c> + <q> to exit..."
-sudo qemu-system-x86_64 \
-	-m "$vm_mem" \
-	-nographic \
-	--enable-kvm \
-	-cpu host \
-	-cdrom "$installer_iso" \
-	-bios "$bios" \
-	-nic "user,hostfwd=tcp::$local_ssh_port-:22" \
-	-boot order=d \
-	"${disks[@]}"
+export vm_mem installer_iso bios local_ssh_port extra_args="${disks[*]}"
+expect -f test.exp
+# sudo qemu-kvm \
+# 	-m "$vm_mem" \
+# 	-nographic \
+# 	-cdrom "$installer_iso" \
+# 	-bios "$bios" \
+# 	-nic "user,hostfwd=tcp::$local_ssh_port-:22" \
+# 	"${disks[@]}"
