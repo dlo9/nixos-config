@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/use/bin/env bash
 # To run: sudo bash ./partition.sh
 
 set -e
@@ -10,7 +10,9 @@ set -e
 vdev_type=  # Defaults to `disk` or `mirror` if empty, depending on disk count
 
 disks=(
-  /dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D
+  #/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D
+  /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001
+  /dev/disk/by-id/ata-QEMU_HARDDISK_QM00002
 )
 
 users=(
@@ -64,14 +66,14 @@ for disk in "${disks[@]}"; do
   echo "Partitioning disk $disk"
   sgdisk --zap-all "$disk"
   refresh "$disk"
-  
+
   # EFI Boot (partition 1) -- 1GB
   echo "Creating EFI partition"
   sgdisk --new 1:1M:+$efi_size --typecode 1:EF00 --change-name 1:EFI "$disk"
   refresh "$disk"
 
   mkfs.vfat -n EFI "$disk-part1"
-  
+
   # Swap (partition 2) -- 4GB
   echo "Creating swap partition"
   sgdisk --new 2:0:+$swap_size --typecode 2:8200 --change-name 2:swap "$disk"
@@ -79,7 +81,7 @@ for disk in "${disks[@]}"; do
 
   mkswap -L swap "$disk-part2"
   swapon "$disk-part2"
-  
+
   # Main pool (partition 3) -- remaining
   echo "Creating main pool partition"
   sgdisk --new 3:0:0 --typecode 3:8300 --change-name 3:pool "$disk"

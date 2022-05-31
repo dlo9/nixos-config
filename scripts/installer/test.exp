@@ -137,15 +137,8 @@ expectPrompt
 ##### COPY INSTALLER #####
 ##########################
 
-#spawn ssh -p 2222 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" nixos@localhost
-#expect "Password:"
-#send "nixos\r"
-#expectPrompt
-
-#log_file script.log
-
 send_user "Copying installer via SCP...\r\n"
-spawn scp -P 2222 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -r /etc/nixos/scripts/installer nixos@localhost:/home/nixos/installer
+spawn scp -P 2222 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -r /etc/nixos/scripts/installer/ nixos@localhost:/home/nixos
 expectOrError "Password:"
 send "nixos\r"
 expectOrError eof
