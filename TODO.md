@@ -1,0 +1,42 @@
+- Auto-create vim swap/backup/undo directories (`home.activation`?) - also use base dir `xdg.cacheHome`
+- Add nix-community binary cache
+- Update to 22.05 (nix w/flake option may not be necessary?)
+- Test auto-update with flake
+- Add root user config?
+- Installer:
+  - Unpack ISO to provide console=ttyS0
+  - Create nix-store dataset
+- Use `graphical` option for home-manager config
+- Waybar
+  - Add display module which opens `wdisplays`
+- Review [sway addons](https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway)
+- Test [qddcswitch](https://codeberg.org/Okxa/qddcswitch)
+- Add `wev`/keyboard tester
+- Firefox
+  - Custom userchrome for hiding tabs
+  - Some basic extensions?
+- quotebrowser
+  - adblock
+- git
+  - integrate `difftastic`
+- Build `wrap`
+- Use [more modern tools](https://github.com/ibraheemdev/modern-unix)
+- Add `mpv`
+- Test `neovim`
+- Set SSH user keys (in secret)
+- Add tailscale
+- PDF reader - Okular (or zathura)
+- QT styling
+- Firewall settings
+- Bluetooth & blueman-applet
+- Flameshot
+- Syncthing
+- `services.random-background`
+- `services.swayidle` or `services.screen-locker`
+- Admin email notifications:
+  - On upgrade
+  - ZFS send/recv errors
+  - scrub errors
+- Samba mounts (`systemd.user.mounts`?)
+- Configure sway with `wayland.windowManager.sway`
+- Enable auto-trim: `fstrim`
