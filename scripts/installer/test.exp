@@ -144,9 +144,10 @@ expectPrompt
 ##### COPY INSTALLER #####
 ##########################
 
+sleep 1
 send_user "Copying installer via SCP...\r\n"
 spawn scp -P 2222 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -r /etc/nixos/scripts/installer/ nixos@localhost:/home/nixos
-expectOrError "Password:"
+expect -timeout 30 "Password:"
 send "nixos\r"
 expectOrError eof
 
@@ -163,9 +164,15 @@ interact
 ##### FINISH #####
 ##################
 
-# Exit qemu
-puts "Expectations fulfilled, exiting now"
-send "c"
-expect "(qemu) "
-send "q\r"
-expect eof
+# If EOF then the user exited QEMU, otherwise do it ourselves
+# expect -timeout 1 {
+#   eof
+
+#   timeout {
+#     puts "Expectations fulfilled, exiting now"
+#     send "c"
+#     expect "(qemu) "
+#     send "q\r"
+#     exp_continue
+#   }
+# }
