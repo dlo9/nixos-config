@@ -22,7 +22,7 @@ state_dir="$HOME/.local/share/Trash/files/nix-installer-test"
 disk_dir="$state_dir/disks"
 boot_dir="$state_dir/boot"
 
-installer_url="https://channels.nixos.org/nixos-21.11/latest-nixos-minimal-x86_64-linux.iso"
+installer_url="https://channels.nixos.org/nixos-22.05/latest-nixos-minimal-x86_64-linux.iso"
 installer_iso="$boot_dir/nix-installer.iso"
 initrd="initrd"
 kernel="bzImage"
@@ -72,7 +72,8 @@ info
 
 # Find UEFI firmware file
 info_ "Finding UEFI firmware... "
-bios="$(nix eval --raw -f '<nixpkgs>' OVMF.fd)/FV/OVMF.fd"
+#bios="$(nix eval --raw -f '<nixpkgs>' OVMF.fd)/FV/OVMF.fd"
+bios="$(ls /nix/store/*-OVMF-*-fd/FV/OVMF.fd | head -1)"
 if [ -f "$bios" ]; then
     info "Using UEFI firmware from $bios"
 else

@@ -139,6 +139,9 @@ nix eval --raw 'nixpkgs#OVMF.version'   # Uses latest `nixpkgs` flake to get the
 nix eval --raw -f '<nixpkgs>' OVMF      # Uses system `nixpkgs` to get the nix store path for package output
 nix eval --raw -f '<nixpkgs>' OVMF.out  # Same as above, just more verbose
 nix eval --raw -f '<nixpkgs>' OVMF.fd   # Gets path of the alternate output `fd`
+
+# Get derivation for a given store path
+nix-store --query --deriver "$(which echo)"
 ```
 
 ### Networking

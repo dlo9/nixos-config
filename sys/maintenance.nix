@@ -16,8 +16,7 @@ in
     system.autoUpgrade = {
       enable = true;
       allowReboot = true;
-      flake = "github:NixOS/nixpkgs/nixos-21.11-small";
-      flags = [ "--update-input" "nixpkgs" "--commit-lock-file" ];
+      flags = [ "--upgrade" "--commit-lock-file" ];
       dates = "Sat, 02:00";
     };
 

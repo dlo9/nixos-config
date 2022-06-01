@@ -58,6 +58,7 @@ in
     #scheme = "${inputs.base16-unclaimed}/apathy.yaml";
 
     home = {
+      #stateVersion = "22.05";
       sessionPath = [
         "$HOME/.cargo/bin"
         "$HOME/.local/bin"
@@ -1093,10 +1094,10 @@ in
     ];
 
     services = {
-      redshift = {
+      gammastep = {
         enable = true;
         provider = "geoclue2";
-        package = pkgs.redshift-wlr;
+        tray = true;
       };
     };
   };

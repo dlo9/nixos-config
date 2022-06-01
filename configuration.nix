@@ -1,4 +1,3 @@
-# Search for config options at: https://search.nixos.org/options?channel=21.11
 { config, pkgs, ... }:
 
 {

@@ -75,12 +75,12 @@ in
     # Fonts
     fonts.fonts = with pkgs; [
       # Nerdfonts is huge, so only install specific fonts
-      # https://github.com/NixOS/nixpkgs/blob/nixos-21.11/pkgs/data/fonts/nerdfonts/shas.nix
-      (nerdfonts.override { fonts = [
-        #"DejaVuSansMono"
-        #"DroidSansMono"
-        "Noto" # If removed, add `noto-fonts-emoji` package to retain emoji support
-      ]; })
+      # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
+      (nerdfonts.override {
+        fonts = [
+          "Noto" # If removed, add `noto-fonts-emoji` package to retain emoji support
+        ];
+      })
     ];
 
     # Packages

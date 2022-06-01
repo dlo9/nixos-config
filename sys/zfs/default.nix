@@ -20,12 +20,30 @@ let
   };
 in
 {
-  imports = [
-    ./zfs-mount-options.nix
-  ];
+  options = {
+    # This configures zfs datasets to be managed by zfs utilities after boot as opposed to Nix. These are the recommended options
+    # in the Nix ZFS wiki, and so this automatically adds them so that hardward config doesn't need to be modified.
+    fileSystems = with types; mkOption {
+      type = attrsOf (submodule ({ name, config, ... }: {
+        options.zfsUtils = mkOption {
+          description = "Let zfsutils manage the mount. The option is ignored if the filesystem type is not ZFS or it's the root mount.";
+          type = bool;
+          default = cfg.enable;
 
-  options.sys.zfs = {
-    enable = mkEnableOption "ZFS tools" // { default = true; };
+          # When visible, it triggers a build of the nixos man pages with each rebuild (which takes a *long* time).
+          visible = false;
+        };
+
+        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && name != "/") [
+          "zfsutil"
+          "X-mount.mkdir"
+        ];
+      }));
+    };
+
+    sys.zfs = {
+      enable = mkEnableOption "ZFS tools" // { default = true; };
+    };
   };
 
   config = mkIf cfg.enable {
