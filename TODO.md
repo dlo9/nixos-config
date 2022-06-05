@@ -17,8 +17,6 @@
   - Some basic extensions?
 - quotebrowser
   - adblock
-- git
-  - integrate `difftastic`
 - Build `wrap`
 - Use [more modern tools](https://github.com/ibraheemdev/modern-unix)
 - Add `mpv`

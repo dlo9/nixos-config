@@ -82,6 +82,9 @@ in
         enable = true;
         userName = "David Orchard";
         userEmail = "if_coding@fastmail.com";
+
+        difftastic.enable = true;
+
         extraConfig = {
           init.defaultBranch = "main";
           pull.ff = "only";
