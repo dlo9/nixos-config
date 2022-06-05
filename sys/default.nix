@@ -124,7 +124,7 @@ in
       cargo
       qemu_kvm
       OVMF
-      # clang # Not sure why I need this?
+      clang # C compiler
 
       # System utils
       lsof
