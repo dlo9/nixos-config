@@ -392,6 +392,9 @@ in
         interactiveShellInit = ''
           # Theme
           fenv "source ${config.scheme inputs.base16-shell}"
+
+          # Keep fish when using nix-shell
+          any-nix-shell fish --info-right | source
         '';
 
         functions = {
@@ -430,10 +433,17 @@ in
           line_break.disabled = true;
           time.disabled = false;
           cmd_duration.min_time = 1000;
+
           status = {
             disabled = false;
             pipestatus = true;
           };
+
+          # Don't need to know the current rust version
+          rust.disabled = true;
+
+          # Which package version this source builds
+          package.disabled = true;
         };
       };
 
@@ -1091,6 +1101,8 @@ in
       # Misc dev tools
       jq
       go-task
+
+      any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
 
     services = {
