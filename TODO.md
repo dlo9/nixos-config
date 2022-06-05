@@ -38,3 +38,6 @@
 - Samba mounts (`systemd.user.mounts`?)
 - Configure sway with `wayland.windowManager.sway`
 - Enable auto-trim: `fstrim`
+
+- [Nix flake](https://hoverbear.org/blog/a-flake-for-your-crate/) for rust projects (e.g. wrap)
+- [nix-direnv](https://github.com/nix-community/nix-direnv)
