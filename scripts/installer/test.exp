@@ -1,3 +1,5 @@
+#!/usr/bin/env -S expect -f
+
 # This is an interactive script to test the partitioning and
 # installer scripts in a VM before I try them on a real host.
 #
@@ -17,31 +19,100 @@
 source lib.exp
 log_file test.log
 
+# Sleep causes console VM display output to pause at weird points since
+# display changes may not have been completely flushed. Instead of completely
+# pausing the process during sleep, this function waits instead, allowing display
+# output to run normally
+proc qsleep { secs } {
+	  interact timeout $secs return
+}
+
 ######################
 ##### Parameters #####
 ######################
 
-# TODO: Prompt the user for these and set a default
-set vm_mem $env(vm_mem)
-set installer_iso $env(installer_iso)
-set bios $env(bios)
-set local_ssh_port $env(local_ssh_port)
-set extra_args [split $env(extra_args) " "]
+# Defaults for user-configurable options
+set mem 2G
+set uefi no
+set disk_count 2
+set disk_size 20G
+set host_ssh_port 2222
 
-set state_dir "test-state"
+# TODO: prompt for parameter overrides, extra args
+#set extra_args [split $env(extra_args) " "]
 
-# TODO: Create disks, download installer
+# Other
+set state_dir "./test-state"
+
+set nixos_version "22.05"
+set iso_url "https://channels.nixos.org/nixos-$nixos_version/latest-nixos-minimal-x86_64-linux.iso"
+set iso "$state_dir/$nixos_version.iso"
+
+set disks {}
+for {set i 0}  {$i < $disk_count} {incr i} {
+  lappend disks "$state_dir/disk-$i.qcow2"
+}
+
+##############################
+##### Download installer #####
+##############################
+
+if [file exists $iso] {
+  _info "Using existing installer $iso"
+} else {
+  _info "Downloading installer $iso_url to $iso"
+  file mkdir [file dirname $iso]
+  spawn curl -L -o $iso $iso_url
+
+  # Wait for the download to start
+  expect "% Total"
+
+  # Wait for the download to finish
+  expect -timeout 120 {
+    default {
+      _error "Download failed"
+      exit 1
+    }
+
+    eof {
+      success "Download complete"
+    }
+  }
+}
+
+########################
+##### Create disks #####
+########################
+
+foreach disk $disks {
+  if { ! [file exists $disk] } {
+    _info "Creating disk $disk with size $disk_size..."
+    spawn qemu-img create -f qcow2 $disk $disk_size
+    expect eof
+  }
+}
 
 ###################
 ##### Boot VM #####
 ###################
 
-spawn qemu-kvm \
-	-m "$vm_mem" \
-	-nographic \
-	-cdrom "$installer_iso" \
-	-bios "$bios" \
-	-nic "user,hostfwd=tcp::$local_ssh_port-:22" {*}$extra_args
+_info "Booting VM..."
+set qemu_args [subst {
+  -m $mem
+  -nographic
+  -cdrom $iso
+  -nic "user,hostfwd=tcp::$host_ssh_port-:22"
+}]
+
+if { bool($uefi) } {
+  # TODO: find uefi bios
+  set uefi_bios ""
+  lappend qemu_args -bios "$uefi_bios"
+}
+
+# Boot the VM
+puts "qemu-kvm [join $qemu_args]"
+spawn qemu-kvm {*}$qemu_args
 set qemuId $spawn_id
 
 # Wait for grub, then select the right menu entry
@@ -60,7 +131,7 @@ expect {
     # Select submenu
     send [string repeat $down 4]
     expect "*HiDPI, Quirks and Accessibility"
-    sleep 1
+    qsleep 1
     send "\r"
 
     # Wait for submenu to load
@@ -69,7 +140,7 @@ expect {
     # Select submenu
     send [string repeat $down 10]
     expect "*Serial console=ttyS0"
-    sleep 1
+    qsleep 1
     send "\r"
 
     # Wait for submenu to load
@@ -78,7 +149,7 @@ expect {
 }
 
 # Select menu entry
-sleep 1
+qsleep 1
 send "\r"
 
 # Wait for prompt after boot
@@ -102,25 +173,33 @@ expectPrompt
 ##### Copy Scripts #####
 ########################
 
-sleep 1
-send_user "Copying installer via SCP...\r\n"
-spawn scp -P 2222 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -r /etc/nixos/scripts/installer/ nixos@localhost:/home/nixos
+qsleep 1
+_info "Copying installer via SCP..."
+spawn scp -P $host_ssh_port -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" {*}[glob *.exp] nixos@localhost:/home/nixos
 expect -timeout 30 "Password:"
 send "nixos\r"
-expectOrError eof
+expect {
+  "No such file" {
+    _error "Failed to SCP installer scripts to the test VM"
+    exit 1
+  }
+
+  eof
+}
 
 # Reattach to qemu
-send_user "Returning control to QEMU\r\n"
+_info "Returning control to QEMU. Use Ctrl+D or normal QEMU commands to exit"
 set spawn_id $qemuId
 send "\r"
-
-# Give user control
-# Return control with EOF (Ctrl-D) # TODO: Or not?? This doesn't work
-#interact
 
 ###################
 ##### Install #####
 ###################
 
-source partition.exp
-source install.exp
+# Give user control
+# Return control with EOF (Ctrl-D) # TODO: Or not?? This doesn't work
+set ctrl_d \004
+interact $ctrl_d return
+
+#source partition.exp
+#source install.exp

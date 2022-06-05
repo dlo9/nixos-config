@@ -58,35 +58,99 @@ expect_after {
 ##### Utility functions #####
 #############################
 
-# Sleep causes console VM display output to pause at weird points since
-# display changes may not have been completely flushed. Instead of completely
-# pausing the process during sleep, this function waits instead, allowing display
-# output to run normally
-proc sleep {secs} {
-	interact timeout $secs return
+# Capture's a command's output into a variable, exiting if the command returns a non-zero
+# exit status
+proc capture { out_var args } {
+	upvar $out_var out
+	set code [catch {exec {*}$args} out]
+	if { $code != 0 } {
+		puts "Command exited with code $code: $args"
+		exit $code
+	}
 }
+
+# # Sleep causes console VM display output to pause at weird points since
+# # display changes may not have been completely flushed. Instead of completely
+# # pausing the process during sleep, this function waits instead, allowing display
+# # output to run normally
+# interp alias {} exp_sleep {} sleep
+# proc sleep { secs } {
+# 	interact timeout $secs return
+# 	#exec sleep $secs
+# }
+
+# set system_puts puts
+# proc puts { args } {
+# 	system_sleep 1
+# 	system_puts args
+# 	system_sleep 1
+# }
 
 proc expectOrError { expectation } {
 	expect {
-		$expectation
+		$expectation {}
 
 		timeout {
-			puts "Failed: Encountered timeout at expectation $expectation"
+			_error "Failed: Encountered timeout at expectation $expectation"
 			exit 1
 		}
 	}
 }
 
 # Waits for a prompt
-set prompt "\[nixos@nixos:~\]\$"
+set userPrompt "\[nixos@nixos:~\]\$"
 proc expectPrompt {} {
-	expectOrError $prompt
+	global userPrompt userPrompt
+	expectOrError $userPrompt
 	sleep 0.5
 }
 
 # Waits for a root prompt
 set rootPrompt "\[root@nixos:~\]#"
 proc expectRootPrompt {} {
+	global rootPrompt rootPrompt
 	expectOrError $rootPrompt
 	sleep 0.5
+}
+
+##################
+##### Colors #####
+##################
+
+capture black tput setaf 0
+capture red tput setaf 1
+capture green tput setaf 2
+capture yellow tput setaf 3
+capture lime_yellow tput setaf 190
+capture powder_blue tput setaf 153
+capture blue tput setaf 4
+capture magenta tput setaf 5
+capture cyan tput setaf 6
+capture white tput setaf 7
+capture bright tput bold
+capture normal tput sgr0
+capture reverse tput smso
+capture underline tput smul
+
+proc colorize { color message } {
+	global $color normal
+	sleep .1
+	puts "[set $color]${message}${normal}"
+	sleep .1
+}
+
+proc _error { message } {
+	colorize red $message
+}
+
+proc _warn { message } {
+	colorize yellow $message
+}
+
+proc _info { message } {
+	colorize blue $message
+}
+
+proc _success { message } {
+	colorize green $message
 }
