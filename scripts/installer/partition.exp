@@ -1,0 +1,114 @@
+# This partitions a disk for encrypted ZFS-on-root EFI and legacy boot
+#
+# This script:
+#   -
+
+###################
+##### Prelude #####
+###################
+
+# Include library functions and set a log file
+source lib.exp
+log_file partition.log
+
+######################
+##### Parameters #####
+######################
+
+# TODO: prompt from user
+set disks { "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" }
+set adminUser "david"
+set zpoolPassword "password"
+set efiSize "500M"
+set swapSize "2G"
+
+#####################
+##### Functions #####
+#####################
+
+# Notify the kernel of partition changes so that commands can see the new partitions
+proc refreshDisk {disk} {
+  sleep 1
+  spawn "partprobe $disk"
+  expectRootPrompt
+  sleep 1
+}
+
+# Unmounts disks in every way unsed by this script
+# This is mainly useful for resetting the system back to its starting state in case this script needs to be re-run, otherwise errors abound
+proc umount {} {
+    # Unmount any existing EFI mounts
+    # This makes it easier to re-run the script without rebooting
+    puts "Unmounting existing EFI mounts"
+    for {set i 0}  {$i < [llength $disks]} {incr i} {
+      #set disk [lindex $i]
+      set mountPoint "/mnt/boot/efi[$i + 1]"
+      send "umount $mountPoint"
+      expect {
+        rootPrompt
+        "umount: $mountPoint: no mount point specified."
+      }
+    }
+
+    # Export ZFS pools
+    puts "Exporting ZFS pools"
+    send zpool export -a || true
+
+    # Turn off swap
+    puts "Disabling swap"
+    foreach disk $disks {
+        send "swapoff ${disk}-part2"
+        expect {
+            "swapoff: /dev/nvme0n1p2: swapoff failed: Invalid argument"
+            rootPrompt
+        }
+    }
+}
+
+proc eraseDisks {} {
+  puts "Erasing disks"
+  foreach disk $disks {
+    spawn wipefs -a
+  }
+}
+
+
+#####################
+##### Start #####
+#####################
+
+# Login as root
+send "sudo su -"
+expectRootPrompt
+
+
+
+# TODO
+# zpool export -a || true
+# for disk in "${disks[@]}"; do
+#   swapoff "$disk-part2" || true
+# done
+
+
+foreach disk $disks {
+  # TOTO: prompt
+  send_user "Erasing disk $disks"
+  send "wipefs -a \"$disk-\""
+}
+
+###################
+##### Cleanup #####
+###################
+
+# If EOF then the user exited QEMU, otherwise do it ourselves
+# expect -timeout 1 {
+#   eof
+
+#   timeout {
+#     puts "Expectations fulfilled, exiting now"
+#     send "c"
+#     expect "(qemu) "
+#     send "q\r"
+#     exp_continue
+#   }
+# }
