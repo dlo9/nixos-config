@@ -85,6 +85,19 @@ in
 
         difftastic.enable = true;
 
+        ignores = [
+          # Temporary files
+          "*~"
+          "*.swp"
+          "*.swo"
+
+          # Backups
+          "*.old"
+
+          # Logs
+          "*.log"
+        ];
+
         extraConfig = {
           init.defaultBranch = "main";
           pull.ff = "only";
