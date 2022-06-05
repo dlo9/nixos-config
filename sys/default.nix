@@ -98,6 +98,7 @@ in
     # networking.firewall.enable = false;
 
     # Shells
+    environment.binsh = "${pkgs.dash}/bin/dash";
     programs.fish.enable = true;
     environment.shells = [ pkgs.fish ];
 
