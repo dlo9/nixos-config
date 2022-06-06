@@ -28,12 +28,12 @@ if {$force_conservative} {
 }
 
 #
-# 2) differing output - Some programs produce different output each time
+# 2) differing ouexec tput - Some programs produce different ouexec tput each time
 # they run.  The "date" command is an obvious example.  Another is
 # ftp, if it produces throughput statistics at the end of a file
 # transfer.  If this causes a problem, delete these patterns or replace
 # them with wildcards.  An alternative is to use the -p flag (for
-# "prompt") which makes Expect only look for the last line of output
+# "prompt") which makes Expect only look for the last line of ouexec tput
 # (i.e., the prompt).  The -P flag allows you to define a character to
 # toggle this mode off and on.
 #
@@ -47,6 +47,7 @@ if {$force_conservative} {
 
 set timeout 10
 match_max 2000
+stty rows 50 cols 200
 
 # By default, exit on timeout or EOF
 expect_after {
@@ -64,20 +65,6 @@ set ctrlD \004
 #############################
 ##### Utility functions #####
 #############################
-
-# Capture's a command's output into a variable, exiting if the command returns a non-zero
-# exit status
-proc capture {outVar args} {
-  if { $outVar != "_" } {
-    upvar $outVar out
-  }
-
-  set code [catch {exec {*}$args} out]
-	if { $code != 0 } {
-		puts "Command exited with code $code: $args"
-		exit $code
-	}
-}
 
 proc expectOrError {expectation} {
 	expect {
@@ -129,11 +116,11 @@ proc newRootPrompt {args} {
   expectRootPrompt {*}$args
 }
 
-proc scpInstaller {hostSshPort} {
+proc syncInstaller {hostSshPort} {
 	_info "Copying installer scripts via SCP..."
 
   # Connect
-	spawn scp -P $hostSshPort -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" {*}[glob -type f *.exp *.sh *.nix] root@localhost:/installer
+	spawn rsync -a --progress -e "ssh -p $hostSshPort -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" --exclude "test-state/" --exclude "*.log" ../../ root@localhost:/config/
 
   # Send password
 	expect -timeout 30 "Password:"
@@ -149,14 +136,10 @@ proc scpInstaller {hostSshPort} {
 	}
 }
 
-proc requireRoot {} {
-  spawn whoami
-  expect -timeout 1 {
-    "root"
-    default {
-      _error "Must be executed as root user"
-      exit 1
-    }
+proc requireUser {requiredUser} {
+  set user [exec whoami]
+  if { $user != $user } {
+    _error "Need user $requiredUser, but found $user"
   }
 }
 
@@ -165,20 +148,21 @@ proc requireRoot {} {
 ##################
 
 set env(TERM) linux
-capture black tput setaf 0
-capture red tput setaf 1
-capture green tput setaf 2
-capture yellow tput setaf 3
-capture limeYellow tput setaf 190
-capture powderBlue tput setaf 153
-capture blue tput setaf 4
-capture magenta tput setaf 5
-capture cyan tput setaf 6
-capture white tput setaf 7
-capture bright tput bold
-capture normal tput sgr0
-capture reverse tput smso
-capture underline tput smul
+set black [exec tput setaf 0]
+set black [exec tput setaf 0]
+set red [exec tput setaf 1]
+set green [exec tput setaf 2]
+set yellow [exec tput setaf 3]
+set limeYellow [exec tput setaf 190]
+set powderBlue [exec tput setaf 153]
+set blue [exec tput setaf 4]
+set magenta [exec tput setaf 5]
+set cyan [exec tput setaf 6]
+set white [exec tput setaf 7]
+set bright [exec tput bold]
+set normal [exec tput sgr0]
+set reverse [exec tput smso]
+set underline [exec tput smul]
 
 proc colorize {color message} {
 	global $color normal

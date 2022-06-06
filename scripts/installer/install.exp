@@ -1,1 +1,61 @@
-# temp file
+#!/usr/bin/env -S expect -f
+
+# Installs NixOS to /mnt
+
+###################
+##### Prelude #####
+###################
+
+# Include library functions and set a log file
+source lib.exp
+log_file install.log
+
+######################
+##### Parameters #####
+######################
+
+# TODO: prompt from user
+set rootPassword password
+set configDir /config
+set installDir /mnt
+set hostname ace
+
+#####################
+##### Functions #####
+#####################
+
+proc copyConfig {} {
+    global configDir installDir
+
+    _info "Copying config to target..."
+    file mkdir $installDir/etc/nixos
+    exec rsync -a --progress $configDir/ $installDir/etc/nixos
+}
+
+proc setHostname {} {
+    global hostname
+    exec hostname $hostname
+}
+
+proc generateHardwareConfig {} {
+    global installDir hostname
+    exec nixos-generate-config --show-hardware-config > "$installDir/etc/nixos/hardware/$hostname.nix"
+}
+
+proc install {} {
+    global installDir hostname
+    spawn nixos-install --flake "/mnt/etc/nixos#$hostname" --root /mnt
+    expect timeout -30 eof
+    # TODO: root password
+}
+
+#################
+##### Start #####
+#################
+
+requireUser "root"
+
+copyConfig
+setHostname
+generateHardwareConfig
+install

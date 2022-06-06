@@ -48,7 +48,6 @@ set nixosVersion "22.05"
 set isoUrl "https://channels.nixos.org/nixos-$nixosVersion/latest-nixos-minimal-x86_64-linux.iso"
 set iso "$stateDir/$nixosVersion.iso"
 
-set disks {}
 for {set i 0}  {$i < $diskCount} {incr i} {
   lappend disks "$stateDir/disk-$i.qcow2"
 }
@@ -101,6 +100,7 @@ set qemuArgs [subst {
   -m $mem
   -nographic
   -cdrom $iso
+  -boot d
   -nic "user,hostfwd=tcp::$hostSshPort-:22"
 }]
 
@@ -188,9 +188,9 @@ expect "password updated successfully"
 ########################
 
 qsleep 1
-scpInstaller $hostSshPort
+syncInstaller $hostSshPort
 newRootPrompt
-send "cd /installer"
+send "cd /config/scripts/installer"
 newRootPrompt
 
 # Reattach to qemu
@@ -208,11 +208,15 @@ send ./setup.sh
 newRootPrompt 120
 
 # TODO: need to set variables via interactions
-# send ./partition.exp
-# expect -timeout -1 $rootPrompt
+_info "##### Starting Partitioning #####"
+send ./partition.exp
+newRootPrompt -1
+_success "##### Finished Partitioning #####"
 
+_info "##### Starting Install #####"
 # send ./install.exp
 # expect -timeout -1 $rootPrompt
+_info "##### Finished Install #####"
 
 #####################
 ##### Debugging #####

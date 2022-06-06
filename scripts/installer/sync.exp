@@ -2,4 +2,4 @@
 
 # Sync files between the host and test vm
 source lib.exp
-scpInstaller 2222
+syncInstaller 2222
