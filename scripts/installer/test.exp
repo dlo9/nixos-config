@@ -23,7 +23,7 @@ log_file test.log
 # display changes may not have been completely flushed. Instead of completely
 # pausing the process during sleep, this function waits instead, allowing display
 # output to run normally
-proc qsleep { secs } {
+proc qsleep {secs} {
 	  interact timeout $secs return
 }
 
@@ -34,23 +34,23 @@ proc qsleep { secs } {
 # Defaults for user-configurable options
 set mem 2G
 set uefi no
-set disk_count 2
-set disk_size 20G
-set host_ssh_port 2222
+set diskCount 2
+set diskSize 20G
+set hostSshPort 2222
 
 # TODO: prompt for parameter overrides, extra args
 #set extra_args [split $env(extra_args) " "]
 
 # Other
-set state_dir "./test-state"
+set stateDir "./test-state"
 
-set nixos_version "22.05"
-set iso_url "https://channels.nixos.org/nixos-$nixos_version/latest-nixos-minimal-x86_64-linux.iso"
-set iso "$state_dir/$nixos_version.iso"
+set nixosVersion "22.05"
+set isoUrl "https://channels.nixos.org/nixos-$nixosVersion/latest-nixos-minimal-x86_64-linux.iso"
+set iso "$stateDir/$nixosVersion.iso"
 
 set disks {}
-for {set i 0}  {$i < $disk_count} {incr i} {
-  lappend disks "$state_dir/disk-$i.qcow2"
+for {set i 0}  {$i < $diskCount} {incr i} {
+  lappend disks "$stateDir/disk-$i.qcow2"
 }
 
 ##############################
@@ -60,9 +60,9 @@ for {set i 0}  {$i < $disk_count} {incr i} {
 if [file exists $iso] {
   _info "Using existing installer $iso"
 } else {
-  _info "Downloading installer $iso_url to $iso"
+  _info "Downloading installer $isoUrl to $iso"
   file mkdir [file dirname $iso]
-  spawn curl -L -o $iso $iso_url
+  spawn curl -L -o $iso $isoUrl
 
   # Wait for the download to start
   expect "% Total"
@@ -86,8 +86,8 @@ if [file exists $iso] {
 
 foreach disk $disks {
   if { ! [file exists $disk] } {
-    _info "Creating disk $disk with size $disk_size..."
-    spawn qemu-img create -f qcow2 $disk $disk_size
+    _info "Creating disk $disk with size $diskSize..."
+    spawn qemu-img create -f qcow2 $disk $diskSize
     expect eof
   }
 }
@@ -97,26 +97,29 @@ foreach disk $disks {
 ###################
 
 _info "Booting VM..."
-set qemu_args [subst {
+set qemuArgs [subst {
   -m $mem
   -nographic
   -cdrom $iso
-  -nic "user,hostfwd=tcp::$host_ssh_port-:22"
+  -nic "user,hostfwd=tcp::$hostSshPort-:22"
 }]
+
+foreach disk $disks {
+  lappend qemuArgs -drive "file=$disk,format=qcow2"
+}
 
 if { bool($uefi) } {
   # TODO: find uefi bios
-  set uefi_bios ""
-  lappend qemu_args -bios "$uefi_bios"
+  set uefiBios ""
+  lappend qemuArgs -bios "$uefiBios"
 }
 
 # Boot the VM
-puts "qemu-kvm [join $qemu_args]"
-spawn qemu-kvm {*}$qemu_args
+puts "qemu-kvm [join $qemuArgs]"
+spawn qemu-kvm {*}$qemuArgs
 set qemuId $spawn_id
 
 # Wait for grub, then select the right menu entry
-set down "\[B"
 expect {
   # Bios
   "Automatic boot in" {
@@ -158,7 +161,8 @@ expect "<<< NixOS Stage 2 >>>"
 expect -timeout 60 "Welcome to NixOS"
 # Set console size
 stty rows 150 cols 200
-expectPrompt
+expectUserPrompt
+
 
 # Set password for easy SSH
 send "passwd\r"
@@ -167,39 +171,54 @@ send "nixos\r"
 expect "Retype new password:"
 send "nixos\r"
 expect "password updated successfully"
-expectPrompt
+expectUserPrompt
+
+# Login as root & set password
+send "sudo su -"
+newRootPrompt
+send "passwd\r"
+expect "New password:"
+send "root\r"
+expect "Retype new password:"
+send "root\r"
+expect "password updated successfully"
 
 ########################
 ##### Copy Scripts #####
 ########################
 
 qsleep 1
-_info "Copying installer via SCP..."
-spawn scp -P $host_ssh_port -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" {*}[glob *.exp] nixos@localhost:/home/nixos
-expect -timeout 30 "Password:"
-send "nixos\r"
-expect {
-  "No such file" {
-    _error "Failed to SCP installer scripts to the test VM"
-    exit 1
-  }
-
-  eof
-}
+scpInstaller $hostSshPort
+newRootPrompt
+send "cd /installer"
+newRootPrompt
 
 # Reattach to qemu
-_info "Returning control to QEMU. Use Ctrl+D or normal QEMU commands to exit"
+_info "Returning control to QEMU"
 set spawn_id $qemuId
-send "\r"
+newRootPrompt
 
 ###################
 ##### Install #####
 ###################
 
-# Give user control
-# Return control with EOF (Ctrl-D) # TODO: Or not?? This doesn't work
-set ctrl_d \004
-interact $ctrl_d return
+# Do some setup
+#send env NIXOS_CONFIG=$PWD/configuration.nix nixos-rebuild test
+send ./setup.sh
+newRootPrompt 120
 
-#source partition.exp
-#source install.exp
+# TODO: need to set variables via interactions
+# send ./partition.exp
+# expect -timeout -1 $rootPrompt
+
+# send ./install.exp
+# expect -timeout -1 $rootPrompt
+
+#####################
+##### Debugging #####
+#####################
+
+# Give user control
+_info "Giving control to user. Use Ctrl+D to return control"
+newRootPrompt
+interact $ctrlD return

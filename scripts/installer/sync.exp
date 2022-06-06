@@ -1,0 +1,5 @@
+#!/usr/bin/env -S expect -f
+
+# Sync files between the host and test vm
+source lib.exp
+scpInstaller 2222

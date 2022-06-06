@@ -1,8 +1,9 @@
-#!/use/bin/env bash
+#!/bin/sh
 
 set -e
 
-#nix-channel --add https://nixos.org/channels/nixos-22.05-small nixos
-printf '%s\n' 'a' 'a' | passwd
+# Install Nix with flake support
+nix-env -iA nixos.nixFlakes
 
-nix-env -iA nixos.tmux nixos.nixFlakes
+# Install script interpreter
+nix-env -iA nixos.expect

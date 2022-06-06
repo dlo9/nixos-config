@@ -54,75 +54,123 @@ expect_after {
     eof     { puts "Failed: Encountered end-of-file"; exit 1 }
 }
 
+##############################
+##### Special characters #####
+##############################
+
+set down "\[B"
+set ctrlD \004
+
 #############################
 ##### Utility functions #####
 #############################
 
 # Capture's a command's output into a variable, exiting if the command returns a non-zero
 # exit status
-proc capture { out_var args } {
-	upvar $out_var out
-	set code [catch {exec {*}$args} out]
+proc capture {outVar args} {
+  if { $outVar != "_" } {
+    upvar $outVar out
+  }
+
+  set code [catch {exec {*}$args} out]
 	if { $code != 0 } {
 		puts "Command exited with code $code: $args"
 		exit $code
 	}
 }
 
-# # Sleep causes console VM display output to pause at weird points since
-# # display changes may not have been completely flushed. Instead of completely
-# # pausing the process during sleep, this function waits instead, allowing display
-# # output to run normally
-# interp alias {} exp_sleep {} sleep
-# proc sleep { secs } {
-# 	interact timeout $secs return
-# 	#exec sleep $secs
-# }
-
-# set system_puts puts
-# proc puts { args } {
-# 	system_sleep 1
-# 	system_puts args
-# 	system_sleep 1
-# }
-
-proc expectOrError { expectation } {
+proc expectOrError {expectation} {
 	expect {
-		$expectation {}
-
 		timeout {
 			_error "Failed: Encountered timeout at expectation $expectation"
 			exit 1
 		}
+
+		$expectation
 	}
 }
 
 # Waits for a prompt
-set userPrompt "\[nixos@nixos:~\]\$"
-proc expectPrompt {} {
-	global userPrompt userPrompt
-	expectOrError $userPrompt
+proc expectPrompt {user host {cmd_timeout 0} {path_regex ".+"}} {
+  if { $cmd_timeout == 0 } {
+    global timeout
+  } else {
+    set timeout $cmd_timeout
+  }
+
+  expect {
+    timeout {
+      _error "Prompt not found for user $user@$host"
+    }
+
+    -re [subst -nobackslashes -nocommands {\[.*$user@$host:$path_regex\][$#].* }]
+  }
+
 	sleep 0.5
 }
 
+# Waits for a user prompt
+proc expectUserPrompt {args} {
+  expectPrompt "nixos" "nixos" {*}$args
+}
+
 # Waits for a root prompt
-set rootPrompt "\[root@nixos:~\]#"
-proc expectRootPrompt {} {
-	global rootPrompt rootPrompt
-	expectOrError $rootPrompt
-	sleep 0.5
+proc expectRootPrompt {args} {
+  expectPrompt "root" "nixos" {*}$args
+}
+
+proc newUserPrompt {args} {
+  send "\r"
+  expectUserPrompt {*}$args
+}
+
+proc newRootPrompt {args} {
+  send "\r"
+  expectRootPrompt {*}$args
+}
+
+proc scpInstaller {hostSshPort} {
+	_info "Copying installer scripts via SCP..."
+
+  # Connect
+	spawn scp -P $hostSshPort -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" {*}[glob -type f *.exp *.sh *.nix] root@localhost:/installer
+
+  # Send password
+	expect -timeout 30 "Password:"
+	send "root\r"
+
+  # Wait
+	expect {
+    "No such file" {
+      _error "Failed to SCP installer scripts to the test VM"
+    }
+
+    eof
+	}
+}
+
+proc requireRoot {} {
+  spawn whoami
+  expect -timeout 1 {
+    "root"
+    default {
+      _error "Must be executed as root user"
+      exit 1
+    }
+  }
 }
 
 ##################
 ##### Colors #####
 ##################
 
+set env(TERM) linux
 capture black tput setaf 0
 capture red tput setaf 1
 capture green tput setaf 2
 capture yellow tput setaf 3
-capture lime_yellow tput setaf 190
-capture powder_blue tput setaf 153
+capture limeYellow tput setaf 190
+capture powderBlue tput setaf 153
 capture blue tput setaf 4
 capture magenta tput setaf 5
 capture cyan tput setaf 6
@@ -132,25 +180,26 @@ capture normal tput sgr0
 capture reverse tput smso
 capture underline tput smul
 
-proc colorize { color message } {
+proc colorize {color message} {
 	global $color normal
 	sleep .1
-	puts "[set $color]${message}${normal}"
+	puts "${normal}[set $color]${message}${normal}"
 	sleep .1
 }
 
-proc _error { message } {
+proc _error {message} {
 	colorize red $message
+  error "An error was thrown"
 }
 
-proc _warn { message } {
+proc _warn {message} {
 	colorize yellow $message
 }
 
-proc _info { message } {
+proc _info {message} {
 	colorize blue $message
 }
 
-proc _success { message } {
+proc _success {message} {
 	colorize green $message
 }
