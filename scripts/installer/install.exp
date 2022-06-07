@@ -1,6 +1,6 @@
 #!/usr/bin/env -S expect -f
 
-# Installs NixOS to /mnt
+# Installs NixOS to $installDir
 
 ###################
 ##### Prelude #####
@@ -14,39 +14,40 @@ log_file install.log
 ##### Parameters #####
 ######################
 
-# TODO: prompt from user
-set rootPassword password
-set configDir /config
-set installDir /mnt
-set hostname ace
+source inputs.exp
+requireVars rootPassword configDir installDir hostname masterSopsAgeKey
 
 #####################
 ##### Functions #####
 #####################
 
-proc copyConfig {} {
-    global configDir installDir
-
+proc copyConfig {configDir installDir} {
     _info "Copying config to target..."
     file mkdir $installDir/etc/nixos
-    exec rsync -a --progress $configDir/ $installDir/etc/nixos
+    exec rsync -a --progress --delete --delete-excluded --exclude="*.log" $configDir/ $installDir/etc/nixos
 }
 
-proc setHostname {} {
-    global hostname
+proc setHostname {hostname} {
+    _info "Setting hostname to $hostname..."
     exec hostname $hostname
 }
 
-proc generateHardwareConfig {} {
-    global installDir hostname
-    exec nixos-generate-config --show-hardware-config > "$installDir/etc/nixos/hardware/$hostname.nix"
+proc generateHardwareConfig {hostname installDir configDir} {
+    _info "Generating hardware config..."
+    exec nixos-generate-config --root "$installDir" --show-hardware-config > "$configDir/hardware/$hostname.nix"
+    exec chown nixos:users "$configDir/hardware/$hostname.nix"
 }
 
-proc install {} {
-    global installDir hostname
-    spawn nixos-install --flake "/mnt/etc/nixos#$hostname" --root /mnt
-    expect timeout -30 eof
-    # TODO: root password
+proc installAgeKey {hostname masterSopsAgeKey configDir installDir} {
+    _info "Installing age key..."
+    exec env "SOPS_AGE_KEY=$masterSopsAgeKey" sops -d --extract \["$hostname"\]\["private"\] $configDir/secrets/age-keys.yaml > $installDir/var/sops-age-keys.txt
+}
+
+proc install {hostname installDir rootPassword} {
+    _info "Installing..."
+    # The scheme must be `path://`, or else `git+file://` is used, which doesn't add the untracked hardware config to the store
+    spawn nixos-install --no-root-password --flake "path://$installDir/etc/nixos#$hostname" --root $installDir
+    expect -timeout -1 eof
 }
 
 #################
@@ -55,7 +56,8 @@ proc install {} {
 
 requireUser "root"
 
-copyConfig
-setHostname
-generateHardwareConfig
-install
+generateHardwareConfig $hostname $installDir $configDir
+copyConfig $configDir $installDir
+setHostname $hostname
+installAgeKey $hostname $masterSopsAgeKey $configDir $installDir
+install $hostname $installDir $rootPassword

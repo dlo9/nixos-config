@@ -68,6 +68,7 @@ in
 
     # Main user
     users.users = {
+      root.hashedPassword = "$6$pO8WZEGMqpktyPjA$nbkvOhGDBJmqdSbfGH/OmeGugve5v0ePmeEj4KRTGqbiABnKILdW89hKG6zf2r7bmbMnnaE/9InYw03xW7Eoq1";
       "${cfg.user}" = {
         isNormalUser = true;
         createHome = true;

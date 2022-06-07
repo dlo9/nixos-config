@@ -150,11 +150,14 @@
 
             # Must load network module on boot for SSH access
             # lspci -v | grep -iA8 'network\|ethernet'
-            boot.initrd.availableKernelModules = [ "r8169" ];
-            boot.loader.grub.mirroredBoots = [
-              # TODO: add disk for legacy boot
-              { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
-            ];
+            boot = {
+              kernelParams = [ "nomodeset" ];
+              initrd.availableKernelModules = [ "r8169" ];
+              loader.grub.mirroredBoots = [
+                # TODO: add disk for legacy boot
+                { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
+              ];
+            };
 
             # GPU
             services.xserver.videoDrivers = [ "nvidia" ];
@@ -175,6 +178,25 @@
               #maintenance.enable = false;
               #secrets.enable = false;
               #wireless.enable = false;
+            };
+          })
+        ];
+
+        # Installer test
+        installer = buildSystem "installer" "x86_64-linux" [
+          ({ config, ... }: {
+            boot.loader = {
+              grub.mirroredBoots = [
+                { devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
+                { devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
+                # TODO: test
+                #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00001"; }
+                #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00002"; }
+              ];
+
+              # TODO: only for installing
+              efi.canTouchEfiVariables = false;
+              grub.efiInstallAsRemovable = true;
             };
           })
         ];

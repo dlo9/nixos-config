@@ -31,15 +31,9 @@ proc qsleep {secs} {
 ##### Parameters #####
 ######################
 
-# Defaults for user-configurable options
-set mem 2G
-set uefi no
-set diskCount 2
-set diskSize 20G
-set hostSshPort 2222
-
-# TODO: prompt for parameter overrides, extra args
-#set extra_args [split $env(extra_args) " "]
+# User-configurable options
+source inputs.exp
+requireVars mem uefi diskCount diskSize hostSshPort
 
 # Other
 set stateDir "./test-state"
@@ -188,9 +182,9 @@ expect "password updated successfully"
 ########################
 
 qsleep 1
-syncInstaller $hostSshPort
+syncInstaller $hostSshPort $configDir
 newRootPrompt
-send "cd /config/scripts/installer"
+send "cd $configDir/scripts/installer"
 newRootPrompt
 
 # Reattach to qemu
@@ -207,7 +201,6 @@ newRootPrompt
 send ./setup.sh
 newRootPrompt 120
 
-# TODO: need to set variables via interactions
 _info "##### Starting Partitioning #####"
 send ./partition.exp
 newRootPrompt -1
@@ -215,8 +208,12 @@ _success "##### Finished Partitioning #####"
 
 _info "##### Starting Install #####"
 # send ./install.exp
-# expect -timeout -1 $rootPrompt
+# newRootPrompt -1
 _info "##### Finished Install #####"
+
+# TODO: snapshot and try booting in a new session
+# Send qemu to background first?
+# https://wiki.qemu.org/Documentation/CreateSnapshot
 
 #####################
 ##### Debugging #####

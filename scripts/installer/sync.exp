@@ -2,4 +2,5 @@
 
 # Sync files between the host and test vm
 source lib.exp
-syncInstaller 2222
+source inputs.exp
+syncInstaller $hostSshPort $configDir

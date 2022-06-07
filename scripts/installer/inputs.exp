@@ -1,0 +1,28 @@
+#!/usr/bin/env -S expect -f
+
+# This script contains configuration variables for the installer scripts
+# TODO: prompt user for interactive (y/n), then all arguments with defaults
+
+# global
+set installDir /mnt
+set configDir /config
+
+# test.exp
+set mem 2G
+set uefi no
+set diskCount 2
+set diskSize 20G
+set hostSshPort 2222
+
+# partition.exp
+set disks { "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" }
+set vdevType [expr {[llength $disks] == 1 ? "disk" : "mirror"} ]
+set adminUser david
+set zpoolPassword password
+set efiSize 500M
+set swapSize 2G
+
+# install.exp
+set rootPassword password
+set hostname installer
+set masterSopsAgeKey <MY_MASTER_KEY>

@@ -12,7 +12,6 @@ in
   config = {
     boot = {
       kernelParams = [
-        #"nomodeset" # TODO: server only
         "boot_on_fail"
       ];
 
@@ -25,11 +24,10 @@ in
           zfsSupport = true;
           useOSProber = true;
           efiSupport = true;
-          #mirroredBoots = [];  # TODO
         };
 
         # TODO: swap when using installer
-        efi.canTouchEfiVariables = true;
+        efi.canTouchEfiVariables = mkDefault true;
         # boot.loader.grub.efiInstallAsRemovable = true;
       };
     };

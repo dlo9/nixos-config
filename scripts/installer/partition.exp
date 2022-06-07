@@ -23,14 +23,8 @@ log_file partition.log
 ##### Parameters #####
 ######################
 
-# TODO: prompt from user
-set disks { "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" }
-
-set vdevType [expr {[llength $disks] == 1 ? "disk" : "mirror"} ]
-set adminUser "david"
-set zpoolPassword "password"
-set efiSize "500M"
-set swapSize "2G"
+source inputs.exp
+requireVars disks vdevType adminUser zpoolPassword efiSize swapSize installDir
 
 #####################
 ##### Functions #####
@@ -125,9 +119,7 @@ proc resetDisks {disks} {
   }
 }
 
-proc partitionDisk {disk} {
-  global efiSize swapSize
-
+proc partitionDisk {disk efiSize swapSize} {
   _info "Partitioning disk $disk"
   exec sgdisk --zap-all "$disk"
   refreshDisk "$disk"
@@ -155,15 +147,13 @@ proc partitionDisk {disk} {
   refreshDisk "$disk"
 }
 
-proc partitionDisks {disks} {
+proc partitionDisks {disks efiSize swapSize} {
   foreach disk $disks {
-    partitionDisk $disk
+    partitionDisk $disk $efiSize $swapSize
   }
 }
 
-proc createZpool {disks} {
-  global vdevType zpoolPassword
-
+proc createZpool {disks vdevType zpoolPassword} {
   _info "Creating main pool"
   foreach disk $disks {
     lappend partitions "${disk}-part4"
@@ -182,9 +172,7 @@ proc createZpool {disks} {
     -O normalization=formD
     -O atime=off
     -O xattr=sa
-    -R /mnt
-    pool
-  } $vdevType {*}$partitions
+  } -R $installDir pool $vdevType {*}$partitions
 
   expect "Enter new passphrase:"
   sleep .5
@@ -195,13 +183,9 @@ proc createZpool {disks} {
   send "$zpoolPassword\n"
 
   expect eof
-
-  # TODO: mount
 }
 
-proc createDatasets {} {
-  global adminUser
-
+proc createDatasets {adminUser} {
   # System
   _info "Creating system datasets..."
 
@@ -231,17 +215,12 @@ proc snapshot {} {
 }
 
 # Mounts the zpool and EFI directories
-proc mountDisks {disks} {
+proc mountDisks {disks installDir} {
   _info "Mounting target disks..."
-
-  # TODO: shouldn't be necessary since `createHome` is set?
-  # Create the user's home directory, no need to mount it though
-  #mkdir -p "/mnt/home/$user"
-  #chown "1000:users" "/mnt/home/$user"
 
   for {set i 0} {$i < [llength $disks]} {incr i} {
     set disk [lindex $disks $i]
-    exec mount -o X-mount.mkdir "${disk}-part2" "/mnt/boot/efi$i"
+    exec mount -o X-mount.mkdir "${disk}-part2" "$installDir/boot/efi$i"
   }
 }
 
@@ -252,8 +231,8 @@ proc mountDisks {disks} {
 requireUser "root"
 
 resetDisks $disks
-partitionDisks $disks
-createZpool $disks
-createDatasets
+partitionDisks $disks $efiSize $swapSize
+createZpool $disks $vdevType $zpoolPassword
+createDatasets $adminUser
 snapshot
-mountDisks $disks
+mountDisks $disks $installDir

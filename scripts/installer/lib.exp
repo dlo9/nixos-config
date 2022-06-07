@@ -116,11 +116,11 @@ proc newRootPrompt {args} {
   expectRootPrompt {*}$args
 }
 
-proc syncInstaller {hostSshPort} {
-	_info "Copying installer scripts via SCP..."
+proc syncInstaller {hostSshPort configDir} {
+	_info "Copying installer scripts via SSH..."
 
   # Connect
-	spawn rsync -a --progress -e "ssh -p $hostSshPort -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" --exclude "test-state/" --exclude "*.log" ../../ root@localhost:/config/
+	spawn rsync -a --progress --delete -e "ssh -p $hostSshPort -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" --exclude "test-state/" --exclude "*.log" ../../ root@localhost:$configDir/
 
   # Send password
 	expect -timeout 30 "Password:"
@@ -140,6 +140,15 @@ proc requireUser {requiredUser} {
   set user [exec whoami]
   if { $user != $user } {
     _error "Need user $requiredUser, but found $user"
+  }
+}
+
+proc requireVars {args} {
+  foreach var $args {
+    upvar $var $var
+    if {! [info exists $var]} {
+      _error "Missing required variable $var"
+    }
   }
 }
 
