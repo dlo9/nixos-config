@@ -108,7 +108,7 @@
             ({ config, ... }: {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.david = import ./home.nix;
+              home-manager.users.david = import ./home;
 
               # Pass extra arguments to home.nix
               home-manager.extraSpecialArgs = {
@@ -162,7 +162,11 @@
             # GPU
             services.xserver.videoDrivers = [ "nvidia" ];
 
-            sys.kubernetes.enable = true;
+            sys = {
+              kubernetes.enable = true;
+              home.gui.enable = false;
+              graphical.enable = false;
+            };
           })
         ];
 
