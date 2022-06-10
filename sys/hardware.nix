@@ -14,13 +14,15 @@ in
       cpu.intel.updateMicrocode = true;
       cpu.amd.updateMicrocode = true;
       enableAllFirmware = true;
-      opengl.enable = true;
-      #enableRedistributableFirmware = true;
+      opengl = {
+        enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+      };
     };
 
     # Firmware update service
     services.fwupd.enable = true;
-
 
     environment.systemPackages = with pkgs; [
       # Sensors (fans, temp)

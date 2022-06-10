@@ -37,54 +37,6 @@ proc refreshDisk {disk} {
   sleep 1
 }
 
-# Unmounts disks in every way unsed by this script
-proc umountDisk {disk} {
-  _info "Unmounting partitons for disk $disk..."
-  set partitions [glob -nocomplain "${disk}-part\[1-9\]"]
-
-  # Unmount any existing EFI mounts
-  # This makes it easier to re-run the script without rebooting
-  foreach partition $partitions {
-    spawn umount $partition
-    expect {
-      eof {
-        _success "Unmounted partition $partition"
-      }
-
-      "not mounted"
-    }
-
-    puts \r
-  }
-}
-
-# Export ZFS pools
-proc exportPools {} {
-  _info "Exporting ZFS pools"
-  exec zpool export -a
-}
-
-# Disable swap for disk
-proc disableSwap {disk} {
-  _info "Unswapping partitons for disk $disk..."
-  set partitions [glob -nocomplain "${disk}-part\[1-9\]"]
-
-  # Unmount any existing EFI mounts
-  # This makes it easier to re-run the script without rebooting
-  foreach partition $partitions {
-    spawn swapoff $partition
-    expect {
-      eof {
-        _success "Swap disabled for $partition"
-      }
-
-      "swapoff failed: Invalid argument"
-    }
-
-    puts \r
-  }
-}
-
 # Erase existing filesystem/partition info for a disk
 proc eraseDisk {disk} {
   _info "Erasing disk $disk..."
@@ -103,16 +55,10 @@ proc eraseDisk {disk} {
   refreshDisk $disk
 }
 
-
 # Reset the system state by unmounting, unswapping, exporting, and erasing disks
 # This is mainly useful for resetting the system back to its starting state in case this script needs to be re-run, otherwise errors abound
 proc resetDisks {disks} {
-  foreach disk $disks {
-    umountDisk $disk
-    disableSwap $disk
-  }
-
-  exportPools
+  source export-disks.exp
 
   foreach disk $disks {
     eraseDisk $disk
@@ -153,7 +99,7 @@ proc partitionDisks {disks efiSize swapSize} {
   }
 }
 
-proc createZpool {disks vdevType zpoolPassword} {
+proc createZpool {disks vdevType zpoolPassword installDir} {
   _info "Creating main pool"
   foreach disk $disks {
     lappend partitions "${disk}-part4"
@@ -228,11 +174,16 @@ proc mountDisks {disks installDir} {
 ##### Start #####
 #################
 
+
+_info "##### Starting Partitioning #####"
+
 requireUser "root"
 
 resetDisks $disks
 partitionDisks $disks $efiSize $swapSize
-createZpool $disks $vdevType $zpoolPassword
+createZpool $disks $vdevType $zpoolPassword $installDir
 createDatasets $adminUser
 snapshot
 mountDisks $disks $installDir
+
+_success "##### Finished Partitioning #####"

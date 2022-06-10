@@ -33,18 +33,7 @@ proc qsleep {secs} {
 
 # User-configurable options
 source inputs.exp
-requireVars mem uefi diskCount diskSize hostSshPort
-
-# Other
-set stateDir "./test-state"
-
-set nixosVersion "22.05"
-set isoUrl "https://channels.nixos.org/nixos-$nixosVersion/latest-nixos-minimal-x86_64-linux.iso"
-set iso "$stateDir/$nixosVersion.iso"
-
-for {set i 0}  {$i < $diskCount} {incr i} {
-  lappend disks "$stateDir/disk-$i.qcow2"
-}
+requireVars mem uefi diskCount diskSize hostSshPort stateDir nixosVersion isoUrl iso diskFiles coreCount
 
 ##############################
 ##### Download installer #####
@@ -77,7 +66,7 @@ if [file exists $iso] {
 ##### Create disks #####
 ########################
 
-foreach disk $disks {
+foreach disk $diskFiles {
   if { ! [file exists $disk] } {
     _info "Creating disk $disk with size $diskSize..."
     spawn qemu-img create -f qcow2 $disk $diskSize
@@ -89,17 +78,19 @@ foreach disk $disks {
 ##### Boot VM #####
 ###################
 
-_info "Booting VM..."
+_info "Booting installer VM..."
 set qemuArgs [subst {
   -m $mem
   -nographic
   -cdrom $iso
   -boot d
+  -cpu host
+  -smp $coreCount
   -nic "user,hostfwd=tcp::$hostSshPort-:22"
 }]
 
-foreach disk $disks {
-  lappend qemuArgs -drive "file=$disk,format=qcow2"
+foreach disk $diskFiles {
+  lappend qemuArgs -drive "file=$disk,format=qcow2,if=virtio,cache=none"
 }
 
 if { bool($uefi) } {
@@ -157,7 +148,6 @@ expect -timeout 60 "Welcome to NixOS"
 stty rows 150 cols 200
 expectUserPrompt
 
-
 # Set password for easy SSH
 send "passwd\r"
 expect "New password:"
@@ -198,18 +188,20 @@ newRootPrompt
 
 # Do some setup
 #send env NIXOS_CONFIG=$PWD/configuration.nix nixos-rebuild test
-send ./setup.sh
-newRootPrompt 120
+#interact $ctrlD return
+# TODO: detect errors
+send "./setup.sh\r"
+expectRootPrompt 60
 
-_info "##### Starting Partitioning #####"
-send ./partition.exp
-newRootPrompt -1
-_success "##### Finished Partitioning #####"
+send "./partition.exp\r"
+sleep 0.5
+noRootPrompt "Finished Partitioning"
+expectRootPrompt
 
-_info "##### Starting Install #####"
-# send ./install.exp
-# newRootPrompt -1
-_info "##### Finished Install #####"
+send "./install.exp\r"
+sleep 0.5
+noRootPrompt "Finished Install"
+expectRootPrompt
 
 # TODO: snapshot and try booting in a new session
 # Send qemu to background first?

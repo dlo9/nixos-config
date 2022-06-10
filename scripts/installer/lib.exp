@@ -77,6 +77,10 @@ proc expectOrError {expectation} {
 	}
 }
 
+proc getPromptString {user host {path_regex ".+"}} {
+  return [subst -nobackslashes -nocommands {\[.*$user@$host:$path_regex\][$#].* }]
+}
+
 # Waits for a prompt
 proc expectPrompt {user host {cmd_timeout 0} {path_regex ".+"}} {
   if { $cmd_timeout == 0 } {
@@ -90,20 +94,48 @@ proc expectPrompt {user host {cmd_timeout 0} {path_regex ".+"}} {
       _error "Prompt not found for user $user@$host"
     }
 
-    -re [subst -nobackslashes -nocommands {\[.*$user@$host:$path_regex\][$#].* }]
+    -re [getPromptString $user $host $path_regex]
   }
 
 	sleep 0.5
 }
 
+proc clearExpect {} {
+  expect -timeout 1 default
+}
+
+proc noPrompt {user host shouldBe {timeout -1}} {
+  set path_regex ".+"
+
+  expect {
+    -re [getPromptString $user $host $path_regex] {
+      _error "Prompt found, but expected '$shouldBe'"
+    }
+
+    $shouldBe
+  }
+
+  # Wait for any other output (probably a prompt), and then clear the expect buffer
+	# sleep 0.5
+  # clearExpect
+}
+
 # Waits for a user prompt
 proc expectUserPrompt {args} {
-  expectPrompt "nixos" "nixos" {*}$args
+  expectPrompt nixos nixos {*}$args
 }
 
 # Waits for a root prompt
 proc expectRootPrompt {args} {
-  expectPrompt "root" "nixos" {*}$args
+  expectPrompt root nixos {*}$args
+}
+
+proc noUserPrompt {args} {
+  noPrompt nixos nixos {*}$args
+}
+
+proc noRootPrompt {args} {
+  noPrompt root nixos {*}$args
 }
 
 proc newUserPrompt {args} {

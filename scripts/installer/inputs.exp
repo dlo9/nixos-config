@@ -13,9 +13,11 @@ set uefi no
 set diskCount 2
 set diskSize 20G
 set hostSshPort 2222
+set coreCount 6
 
 # partition.exp
-set disks { "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" }
+#set disks { "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" }
+set disks { "/dev/disk/by-path/virtio-pci-0000:00:04.0" "/dev/disk/by-path/virtio-pci-0000:00:05.0" }
 set vdevType [expr {[llength $disks] == 1 ? "disk" : "mirror"} ]
 set adminUser david
 set zpoolPassword password
@@ -26,3 +28,23 @@ set swapSize 2G
 set rootPassword password
 set hostname installer
 set masterSopsAgeKey <MY_MASTER_KEY>
+
+# vm.exp
+
+
+# internal vars (shouldn't be modified by the user)
+set stateDir "./test-state"
+set nixosVersion "22.05"
+set isoUrl "https://channels.nixos.org/nixos-$nixosVersion/latest-nixos-minimal-x86_64-linux.iso"
+set iso "$stateDir/$nixosVersion.iso"
+
+for {set i 0} {$i < $diskCount} {incr i} {
+  lappend diskFileNames "disk-$i.qcow2"
+}
+
+set diskFiles [lmap disk $diskFileNames {expr {"$stateDir/$disk"}}]
+
+set diskTargetDir $stateDir/installed
+set installedDiskFiles [lmap disk $diskFileNames {expr {"$diskTargetDir/$disk"}}]
+
+set hostInstalledSshPort [expr $hostSshPort+1]

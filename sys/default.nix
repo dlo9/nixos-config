@@ -125,6 +125,7 @@ in
       cargo
       qemu_kvm
       OVMF
+      libvirt
       clang # C compiler
 
       # System utils

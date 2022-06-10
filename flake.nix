@@ -187,8 +187,8 @@
           ({ config, ... }: {
             boot.loader = {
               grub.mirroredBoots = [
-                { devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
-                { devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
+                { devices = [ "/dev/disk/by-path/virtio-pci-0000:00:04.0" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
+                { devices = [ "/dev/disk/by-path/virtio-pci-0000:00:05.0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
                 # TODO: test
                 #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00001"; }
                 #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00002"; }
@@ -198,6 +198,10 @@
               efi.canTouchEfiVariables = false;
               grub.efiInstallAsRemovable = true;
             };
+
+            services.qemuGuest.enable = true;
+            services.spice-vdagentd.enable = true;
+            boot.kernelParams = [ "nomodeset" ];
           })
         ];
       };

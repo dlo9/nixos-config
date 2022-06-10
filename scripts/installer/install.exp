@@ -15,7 +15,7 @@ log_file install.log
 ######################
 
 source inputs.exp
-requireVars rootPassword configDir installDir hostname masterSopsAgeKey
+requireVars rootPassword configDir installDir hostname masterSopsAgeKey disks
 
 #####################
 ##### Functions #####
@@ -46,6 +46,7 @@ proc installAgeKey {hostname masterSopsAgeKey configDir installDir} {
 proc install {hostname installDir rootPassword} {
     _info "Installing..."
     # The scheme must be `path://`, or else `git+file://` is used, which doesn't add the untracked hardware config to the store
+    # Root password is set in flake, plus there's a prompting issue: https://github.com/NixOS/nixpkgs/issues/95778
     spawn nixos-install --no-root-password --flake "path://$installDir/etc/nixos#$hostname" --root $installDir
     expect -timeout -1 eof
 }
@@ -54,6 +55,8 @@ proc install {hostname installDir rootPassword} {
 ##### Start #####
 #################
 
+_info "##### Starting Install #####"
+
 requireUser "root"
 
 generateHardwareConfig $hostname $installDir $configDir
@@ -61,3 +64,5 @@ copyConfig $configDir $installDir
 setHostname $hostname
 installAgeKey $hostname $masterSopsAgeKey $configDir $installDir
 install $hostname $installDir $rootPassword
+
+_success "##### Finished Install #####"

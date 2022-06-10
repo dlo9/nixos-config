@@ -2,6 +2,12 @@
 
 set -e
 
+nix-env -q
+
+echo "Searching expect" && which expect || true
+echo "Searching git" && which git || true
+echo "Searching sops" && which sops || true
+
 # Install Nix with flake support
 nix-env -iA nixos.nixFlakes
 
