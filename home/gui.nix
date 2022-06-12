@@ -53,6 +53,12 @@ in
   config = mkIf cfg.enable {
     programs = {
       qutebrowser.enable = true;
+
+      vim.plugins = with pkgs.vimPlugins // sysCfg.pkgs.vimPlugins; [
+        # Fix copy to system clipboard on wayland
+        vim-wayland-clipboard
+      ];
+
       alacritty = {
         enable = true;
 

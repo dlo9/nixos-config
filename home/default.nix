@@ -139,9 +139,6 @@ in
           # Remember last place
           vim-lastplace
 
-          # Fix copy to system clipboard on wayland
-          vim-wayland-clipboard
-
           # Theme
           base16-vim
           vim-airline-themes
@@ -196,10 +193,12 @@ in
           "set clipboard=unnamed
 
           " Use system clipboard for yank and paste
-          noremap  y  "+y
-          noremap  yy  "+yy
-          map  p  "+p
-          map  P  "+P
+          if $WAYLAND_DIRPLAY != ""
+            noremap  y  "+y
+            noremap  yy  "+yy
+            map  p  "+p
+            map  P  "+P
+          endif
 
           " Spelling
           " Leader is `\`, so type `\+a` for spelling help
