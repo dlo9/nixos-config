@@ -39,6 +39,10 @@ in
         name = "Numix-Cursor-Light";
         package = pkgs.numix-cursor-theme;
       };
+
+      shellAliases = {
+        k = "kubectl";
+      };
     };
 
     # Allow user-installed fonts
