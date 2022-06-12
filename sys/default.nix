@@ -80,6 +80,10 @@ in
         ];
         hashedPassword = "$6$HMrRhU.Z6Rrr5aYX$AUI.Vo0pe7r/JQ3hEBKH69KV8OeddPJS8EC/9YhSOuAgNTKsmX0aoMfdkitCHdeazXuP2eCBEF5IuFgNFeagS0";
         shell = pkgs.fish;
+
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMXnf0eYbX+aFIdf2ijIeJsVcDwXwgxV4u4e2PjLKll6 david@pavil"
+        ];
       };
     };
 
