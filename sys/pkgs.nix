@@ -30,6 +30,16 @@ in
       ###############
 
       vimPlugins = with vimUtils; {
+        vim-central = buildVimPlugin {
+          name = "vim-central";
+          src = fetchFromGitHub {
+            owner = "her";
+            repo = "central.vim";
+            rev = "802b20d0e6400f8b81079ca696153be5b50cc65a";
+            sha256 = "0j11dch1m48pf26dwzsxcz5x36k5fj4awa8hq4fl20gh3gzfylj4";
+          };
+        };
+
         vim-yadi = buildVimPlugin {
           name = "vim-yadi";
           src = fetchFromGitHub {

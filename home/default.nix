@@ -114,16 +114,13 @@ in
 
         settings = {
           background = "dark";
-          backupdir = [ "$HOME/.cache/vim/backup" ];
           copyindent = true;
-          directory = [ "$HOME/.cache/vim/swap" ];
           hidden = true;
           number = true;
           relativenumber = true;
           shiftwidth = 2;
           smartcase = true;
           tabstop = 2;
-          undodir = [ "$HOME/.cache/vim/undo" ];
         };
 
 
@@ -142,6 +139,9 @@ in
 
           # Remember last place
           vim-lastplace
+
+          # Centralize backup/swap/undo files to ~/.vim
+          vim-central
 
           # Theme
           base16-vim
