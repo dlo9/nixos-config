@@ -24,6 +24,7 @@ in
           zfsSupport = true;
           useOSProber = true;
           efiSupport = true;
+          efiInstallAsRemovable = mkDefault false;
         };
 
         # TODO: swap when using installer

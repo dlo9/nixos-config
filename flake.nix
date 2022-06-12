@@ -146,25 +146,34 @@
 
         cuttlefish = buildSystem "cuttlefish" "x86_64-linux" [
           ({ config, ... }: {
-            networking.interfaces.enp2s0.useDHCP = true;
+            # TODO: can I enable this and not deploy/block boot i fit's not connected?
+            #networking.interfaces.enp5s0f0.useDHCP = true;
+            networking.interfaces.enp5s0f1.useDHCP = true;
 
-            # Must load network module on boot for SSH access
-            # lspci -v | grep -iA8 'network\|ethernet'
             boot = {
-              kernelParams = [ "nomodeset" ];
-              initrd.availableKernelModules = [ "r8169" ];
+              # Must load network module on boot for SSH access
+              # lspci -v | grep -iA8 'network\|ethernet'
+              initrd.availableKernelModules = [ "igb" ];
               loader.grub.mirroredBoots = [
-                # TODO: add disk for legacy boot
-                { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
+                { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA1384E" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
+                { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA19AD2" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
+
+                # Also install onto a USB drive, since the motherboard can't boot from NVME
+                { devices = [ "/dev/disk/by-id/usb-Lexar_USB_Flash_Drive_046S07AT1V2U6VYA-0:0" ]; efiSysMountPoint = "/boot/efi2"; path = "/boot/efi2/EFI"; }
               ];
+
+              # TODO: don't think I need after install
+              # (and now that other boot issues are resolved)
+              loader.efi.canTouchEfiVariables = false;
+              loader.grub.efiInstallAsRemovable = true;
             };
 
             # GPU
             services.xserver.videoDrivers = [ "nvidia" ];
 
+            home-manager.users.david.home.gui.enable = false;
             sys = {
               kubernetes.enable = true;
-              home.gui.enable = false;
               graphical.enable = false;
             };
           })

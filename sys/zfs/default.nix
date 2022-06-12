@@ -15,7 +15,6 @@ let
 
   zfs-helper-ssh-prompt = pkgs.writeTextFile {
     name = "zfs-helper-ssh-prompt";
-    destination = "/root/.profile";
     text = "zfs-helper onBootPrompt";
   };
 in
@@ -114,13 +113,19 @@ in
 
       initrd.network = {
         # Make sure you have added the kernel module for your network driver to `boot.initrd.availableKernelModules`,
-        enable = false;
+        enable = true;
         ssh = {
           enable = true;
           port = 22;
 
           # Use the RSA key for initrd since ED25519 is used for the host
-          hostKeys = [ /etc/ssh/ssh_host_rsa_key ];
+          hostKeys = [
+            # TODO: This doesn't work because of something to do with the initrd /etc mount (I think)
+            /etc/ssh/ssh_host_rsa_key
+
+            # This was manually copied from the path above
+            /var/ssh_host_rsa_key
+          ];
 
           authorizedKeys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMXnf0eYbX+aFIdf2ijIeJsVcDwXwgxV4u4e2PjLKll6 david@pavil"
