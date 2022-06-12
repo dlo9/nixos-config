@@ -123,6 +123,7 @@ in
       ripgrep
       lshw
       yadm
+      pv
 
       # Development
       git
@@ -131,6 +132,8 @@ in
       OVMF
       libvirt
       clang # C compiler
+      jq
+      yq
 
       # System utils
       lsof
