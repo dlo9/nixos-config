@@ -154,7 +154,7 @@
         ];
 
         cuttlefish = buildSystem "cuttlefish" "x86_64-linux" [
-          ({ config, ... }: {
+          ({ config, pkgs, ... }: {
             # TODO: can I enable this and not deploy/block boot i fit's not connected?
             #networking.interfaces.enp5s0f0.useDHCP = true;
             networking.interfaces.enp5s0f1.useDHCP = true;
@@ -185,6 +185,10 @@
               kubernetes.enable = true;
               graphical.enable = false;
             };
+
+            environment.systemPackages = with pkgs; [
+              argocd
+            ];
           })
         ];
 
