@@ -72,8 +72,10 @@ in
       kubelet.extraOpts = "--fail-swap-on=false";
     };
 
-    # Is this the magic right here?
-    #networking.firewall.enable = false;
+    # TODO: get in-cluster API access working without this
+    # It neems like I need a router for this to work?
+    # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
+    networking.firewall.allowedTCPPorts = [ cfg.masterPort ];
 
     # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
     # services.kubernetes.kubelet.cni.config = [{
