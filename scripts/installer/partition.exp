@@ -101,11 +101,13 @@ proc partitionDisks {disks efiSize swapSize} {
 
 proc createZpool {disks vdevType zpoolPassword installDir} {
   _info "Creating main pool"
-  foreach disk $disks {
-    lappend partitions "${disk}-part4"
-  }
 
-  spawn zpool create {*}{
+  set partitions [lmap disk $disks {expr {"$disk-part4"}}]
+
+  # Build the zpool command
+  set zpoolCmd [subst -nocommands {
+    zpool
+    create
     -O compression=zstd
     -O encryption=aes-256-gcm
     -O keylocation=prompt
@@ -118,7 +120,18 @@ proc createZpool {disks vdevType zpoolPassword installDir} {
     -O normalization=formD
     -O atime=off
     -O xattr=sa
-  } -R $installDir pool $vdevType {*}$partitions
+    -R $installDir
+    pool
+  }]
+
+  if { $vdevType != "disk" } {
+    lappend zpoolCmd $vdevType
+  }
+
+  lappend zpoolCmd {*}$partitions
+
+  # Spawn the command
+  spawn {*}$zpoolCmd
 
   expect "Enter new passphrase:"
   sleep .5
