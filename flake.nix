@@ -185,10 +185,6 @@
               kubernetes.enable = true;
               graphical.enable = false;
             };
-
-            environment.systemPackages = with pkgs; [
-              argocd
-            ];
           })
         ];
 
@@ -228,12 +224,6 @@
             services.qemuGuest.enable = true;
             services.spice-vdagentd.enable = true;
             boot.kernelParams = [ "nomodeset" ];
-
-            networking.firewall.allowedTCPPorts = [
-              # ArgoCD ports
-              31301
-              30681
-            ];
           })
         ];
       };

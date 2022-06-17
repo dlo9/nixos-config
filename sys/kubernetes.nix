@@ -40,15 +40,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    # packages for administration tasks
     environment.systemPackages = with pkgs; [
-      kompose
       kubectl
-      kubernetes
+      kustomize
+      kubernetes-helm
+      sops
+      argocd
     ];
 
     # services.kubernetes.dataDir = "/var/lib/kubernetes";
 
+    # Copy the cluster admin kubeconfig to the admin users's home if it doesn't already exist
     system.activationScripts = {
       giveUserKubectlAdminAccess = ''
         # Link to admin kubeconfig
@@ -77,7 +79,14 @@ in
     # TODO: get in-cluster API access working without this
     # It neems like I need a router for this to work?
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
-    networking.firewall.allowedTCPPorts = [ cfg.masterPort ];
+    networking.firewall.allowedTCPPorts = [
+      cfg.masterPort
+
+      # ArgoCD ports
+      # Not sure why these are accessable?
+      #31301
+      #30681
+    ];
 
     # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
     # services.kubernetes.kubelet.cni.config = [{
