@@ -82,7 +82,13 @@ in
         shell = pkgs.fish;
 
         openssh.authorizedKeys.keys = [
+          # TODO: store these in git and pass in/reference directly?
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMXnf0eYbX+aFIdf2ijIeJsVcDwXwgxV4u4e2PjLKll6 david@pavil"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgFADH+64EO9XCSdeHdAQug7UPbXsoqehE2Qwxdj5Sn david@nebula"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAMKrdfKLsS0zIquQL+d8Z+YCpm2v2WQVnYi39iKc8a6 david@cuttlefish"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
+          # TODO: ace
         ];
       };
     };
@@ -92,15 +98,13 @@ in
 
     # Networking
     networking.dhcpcd.wait = "background";
+    networking.firewall = {
+      allowPing = true;
+      pingLimit = "--limit 1/second --limit-burst 10";
+    };
 
     # SSH
     services.openssh.enable = true;
-
-    # Open ports in the firewall.
-    # networking.firewall.allowedTCPPorts = [ ... ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
-    # Or disable the firewall altogether.
-    # networking.firewall.enable = false;
 
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
