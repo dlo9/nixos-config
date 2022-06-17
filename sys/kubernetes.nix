@@ -59,11 +59,11 @@ in
     system.activationScripts = {
       giveUserKubectlAdminAccess = ''
         # Link to admin kubeconfig
-        install -D -m 644 "/etc/kubernetes/cluster-admin.kubeconfig" "/root/.kube/config"
+        install -D -m 600 "/etc/kubernetes/cluster-admin.kubeconfig" "/root/.kube/config"
 
         if [ ! -f "/home/${cfg.admin}/.kube/config" ]; then
           install -d -o "${cfg.admin}" -g users "/home/${cfg.admin}/.kube/"
-          install -o "${cfg.admin}" -g users "/etc/kubernetes/cluster-admin.kubeconfig" "/home/${cfg.admin}/.kube/config"
+          install -o "${cfg.admin}" -g users -m 600 "/etc/kubernetes/cluster-admin.kubeconfig" "/home/${cfg.admin}/.kube/config"
         fi
 
         # Grant access to cluster key
