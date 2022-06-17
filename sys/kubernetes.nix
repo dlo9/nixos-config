@@ -70,9 +70,7 @@ in
       masterAddress = cfg.masterHostname;
       #masterAddress = "10.1.0.1";
 
-      # TODO: CoreDNS uses wrong IP for some reason
-      addons.dns.enable = false;
-
+      # Allow swap on host machine
       kubelet.extraOpts = "--fail-swap-on=false";
     };
 
