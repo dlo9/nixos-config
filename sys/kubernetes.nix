@@ -43,10 +43,15 @@ in
     environment.systemPackages = with pkgs; [
       kubectl
       kustomize
+      kustomize-sops
       kubernetes-helm
       sops
       argocd
     ];
+
+    environment.sessionVariables = {
+      KUSTOMIZE_PLUGIN_HOME = "/run/current-system/sw/lib";
+    };
 
     # services.kubernetes.dataDir = "/var/lib/kubernetes";
 
