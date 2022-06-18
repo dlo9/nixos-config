@@ -43,7 +43,13 @@ in
     environment.systemPackages = with pkgs; [
       kubectl
       kustomize
-      kustomize-sops
+      # https://github.com/NixOS/nixpkgs/issues/175515
+      (pkgs.kustomize-sops.overrideAttrs (oldAttrs: {
+        installPhase = ''
+          mkdir -p $out/lib/viaduct.ai/v1/ksops/
+          mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
+        '';
+      }))
       kubernetes-helm
       sops
       argocd
