@@ -85,6 +85,9 @@ in
 
       # Allow swap on host machine
       kubelet.extraOpts = "--fail-swap-on=false";
+
+      # Allow privileged containers
+      apiserver.extraOpts = "--allow-privileged";
     };
 
     # TODO: get in-cluster API access working without this
