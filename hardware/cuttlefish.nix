@@ -23,13 +23,13 @@
       fsType = "zfs";
     };
 
-  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.zfs" =
-    { device = "fast/containerd";
+  fileSystems."/home/david" =
+    { device = "fast/home/david";
       fsType = "zfs";
     };
 
-  fileSystems."/home/david" =
-    { device = "fast/home/david";
+  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.zfs" =
+    { device = "fast/containerd";
       fsType = "zfs";
     };
 
@@ -48,9 +48,89 @@
       fsType = "vfat";
     };
 
+  fileSystems."/slow/backup/david/archbook-duplicacy" =
+    { device = "slow/backup/david/archbook-duplicacy";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/recover/backup/david/nebula-windows" =
+    { device = "slow/backup/david/nebula-windows";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/backup/chelsea/windows-laptop" =
+    { device = "slow/backup/chelsea/windows-laptop";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/backup/david/mail" =
+    { device = "slow/backup/david/mail";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/photos" =
+    { device = "slow/media/photos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/ebooks" =
+    { device = "slow/media/ebooks";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/movies" =
+    { device = "slow/media/video/movies";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/audio" =
+    { device = "slow/media/audio";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/backup/david/motog5" =
+    { device = "slow/backup/david/motog5";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/comics" =
+    { device = "slow/media/comics";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/tv" =
+    { device = "slow/media/video/tv";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/documents" =
+    { device = "slow/documents";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/isos" =
+    { device = "slow/media/video/isos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/old/games" =
+    { device = "slow/games";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/personal" =
+    { device = "slow/media/video/personal";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/transcode" =
+    { device = "slow/media/video/transcode";
+      fsType = "zfs";
+    };
+
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
-      { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
+    [ { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
+      { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -62,6 +142,19 @@
   # networking.interfaces.enp5s0f0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp5s0f1.useDHCP = lib.mkDefault true;
   # networking.interfaces.flannel.1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.mynet.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth235fc857.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth4b5be979.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth56858282.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth57cb93cc.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth6806c05e.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth6eaf1f44.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth73184d89.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth7f063469.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethbdbedb34.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethc77c437a.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethdfd305e1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethed4eaa17.useDHCP = lib.mkDefault true;
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
