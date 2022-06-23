@@ -81,7 +81,9 @@ in
     services.kubernetes = {
       roles = [ "master" "node" ];
       masterAddress = cfg.masterHostname;
-      #masterAddress = "10.1.0.1";
+
+      # Use `hostname` instead of `cluster.local` since Android can't resolve .local through a VPN
+      addons.dns.clusterDomain = cfg.masterHostname;
 
       path = [
         config.services.openiscsi.package
@@ -104,6 +106,7 @@ in
     # TODO: get in-cluster API access working without this
     # It neems like I need a router for this to work?
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
+    #networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [
       cfg.masterPort
 
