@@ -90,6 +90,13 @@ in
       apiserver.extraOpts = "--allow-privileged";
     };
 
+    # ISCSI services required for OpenEBS (PVC storage):
+    # https://openebs.io/docs/user-guides/prerequisites#linux-platforms
+    services.openiscsi = {
+      enable = true;
+      name = config.networking.hostName;
+    };
+
     # TODO: get in-cluster API access working without this
     # It neems like I need a router for this to work?
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
