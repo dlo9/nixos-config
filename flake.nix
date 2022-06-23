@@ -158,6 +158,7 @@
             # TODO: can I enable this and not deploy/block boot i fit's not connected?
             #networking.interfaces.enp5s0f0.useDHCP = true;
             networking.interfaces.enp5s0f1.useDHCP = true;
+            #networking.dhcpcd.wait = "background";
 
             boot = {
               # Must load network module on boot for SSH access

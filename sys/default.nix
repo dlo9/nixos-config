@@ -97,7 +97,7 @@ in
     boot.kernelPackages = pkgs.linuxPackages_5_17;
 
     # Networking
-    networking.dhcpcd.wait = "background";
+    networking.dhcpcd.wait = mkDefault "background";
     networking.firewall = {
       allowPing = true;
       pingLimit = "--limit 1/second --limit-burst 10";
