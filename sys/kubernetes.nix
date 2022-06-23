@@ -114,6 +114,10 @@ in
       # Not sure why these are accessable?
       #31301
       #30681
+
+      # Web
+      80
+      443
     ];
 
     # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
