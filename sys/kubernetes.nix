@@ -83,6 +83,10 @@ in
       masterAddress = cfg.masterHostname;
       #masterAddress = "10.1.0.1";
 
+      path = [
+        config.services.openiscsi.package
+      ];
+
       # Allow swap on host machine
       kubelet.extraOpts = "--fail-swap-on=false";
 
