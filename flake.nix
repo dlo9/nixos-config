@@ -161,6 +161,10 @@
             #networking.dhcpcd.wait = "background";
 
             boot = {
+              zfs.extraPools = [
+                "slow"
+              ];
+
               # Must load network module on boot for SSH access
               # lspci -v | grep -iA8 'network\|ethernet'
               initrd.availableKernelModules = [ "igb" ];
