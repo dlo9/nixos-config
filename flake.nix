@@ -197,6 +197,29 @@
               kubernetes.enable = true;
               graphical.enable = false;
             };
+
+            powerManagement.cpuFreqGovernor = "powersave";
+
+            # Generate a new config with `sudo pwmconfig`
+            hardware.fancontrol = {
+              enable = true;
+                #FCFANS= hwmon3/device/pwm2=hwmon3/device/fan7_input+hwmon3/device/fan6_input+hwmon3/device/fan5_input
+              # Hot core: hwmon4/temp3_input
+              # Cool core: hwmon0/temp3_input
+              config = ''
+                INTERVAL=10
+                DEVPATH=hwmon5=devices/pci0000:00/0000:00:1f.3/i2c-2/2-002d
+                DEVNAME=hwmon5=nct7904
+                FCTEMPS=hwmon5/pwm4=hwmon4/temp3_input hwmon5/pwm3=hwmon4/temp3_input hwmon5/pwm2=hwmon4/temp3_input hwmon5/pwm1=hwmon4/temp3_input
+                #FCTEMPS=hwmon5/pwm4=hwmon0/temp3_input hwmon5/pwm3=hwmon0/temp3_input hwmon5/pwm2=hwmon0/temp3_input hwmon5/pwm1=hwmon0/temp3_input
+                FCFANS=hwmon5/pwm4=hwmon5/fan6_input hwmon5/pwm3=hwmon5/fan6_input hwmon5/pwm2=hwmon5/fan6_input hwmon5/pwm1=hwmon5/fan6_input
+                MINTEMP=hwmon5/pwm4=30 hwmon5/pwm3=30 hwmon5/pwm2=30 hwmon5/pwm1=30
+                MAXTEMP=hwmon5/pwm4=80 hwmon5/pwm3=80 hwmon5/pwm2=80 hwmon5/pwm1=80
+                MINSTART=hwmon5/pwm4=150 hwmon5/pwm3=150 hwmon5/pwm2=150 hwmon5/pwm1=150
+                MINSTOP=hwmon5/pwm4=0 hwmon5/pwm3=0 hwmon5/pwm2=0 hwmon5/pwm1=100
+                MAXPWM=hwmon5/pwm4=q
+              '';
+            };
           })
         ];
 
