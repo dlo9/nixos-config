@@ -169,6 +169,11 @@
               kernelModules = [ "coretemp" "nct7904" ];
 
               zfs.extraPools = [
+                #"slow"
+              ];
+
+              zfs.requestEncryptionCredentials = [
+                "fast"
                 "slow"
               ];
 
