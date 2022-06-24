@@ -67,6 +67,8 @@ in
     };
 
     # Main user
+    # TODO: Due to a bug, this needs to be ture for the hashedPassword to apply
+    users.mutableUsers = true;
     users.users = {
       root.hashedPassword = "$6$pO8WZEGMqpktyPjA$nbkvOhGDBJmqdSbfGH/OmeGugve5v0ePmeEj4KRTGqbiABnKILdW89hKG6zf2r7bmbMnnaE/9InYw03xW7Eoq1";
       "${cfg.user}" = {

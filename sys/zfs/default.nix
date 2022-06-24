@@ -36,6 +36,7 @@ in
         config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && name != "/") [
           "zfsutil"
           "X-mount.mkdir"
+          "nofail"
         ];
       }));
     };
