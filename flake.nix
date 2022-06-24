@@ -165,6 +165,9 @@
             #networking.dhcpcd.wait = "background";
 
             boot = {
+              # Sensors from `sudo sensors-detect`
+              kernelModules = [ "coretemp" "nct7904" ];
+
               zfs.extraPools = [
                 "slow"
               ];
