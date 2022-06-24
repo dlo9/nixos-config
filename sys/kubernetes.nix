@@ -118,6 +118,10 @@ in
       # Web
       80
       443
+
+      # Monitoring ports
+      9100  # Node exporter
+      10250  # Kubelet
     ];
 
     # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
