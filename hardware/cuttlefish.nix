@@ -48,23 +48,8 @@
       fsType = "vfat";
     };
 
-  fileSystems."/slow/backup/david/archbook-duplicacy" =
-    { device = "slow/backup/david/archbook-duplicacy";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/recover/backup/david/nebula-windows" =
-    { device = "slow/backup/david/nebula-windows";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/chelsea/windows-laptop" =
-    { device = "slow/backup/chelsea/windows-laptop";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/david/mail" =
-    { device = "slow/backup/david/mail";
+  fileSystems."/slow/backup/david/motog5" =
+    { device = "slow/backup/david/motog5";
       fsType = "zfs";
     };
 
@@ -73,38 +58,28 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/ebooks" =
-    { device = "slow/media/ebooks";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/media/video/movies" =
-    { device = "slow/media/video/movies";
-      fsType = "zfs";
-    };
-
   fileSystems."/slow/media/audio" =
     { device = "slow/media/audio";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/backup/david/motog5" =
-    { device = "slow/backup/david/motog5";
+  fileSystems."/slow/backup/david/mail" =
+    { device = "slow/backup/david/mail";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/comics" =
-    { device = "slow/media/comics";
+  fileSystems."/slow/backup/chelsea/windows-laptop" =
+    { device = "slow/backup/chelsea/windows-laptop";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/video/tv" =
-    { device = "slow/media/video/tv";
+  fileSystems."/slow/media/ebooks" =
+    { device = "slow/media/ebooks";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/documents" =
-    { device = "slow/documents";
+  fileSystems."/slow/backup/david/archbook-duplicacy" =
+    { device = "slow/backup/david/archbook-duplicacy";
       fsType = "zfs";
     };
 
@@ -118,6 +93,31 @@
       fsType = "zfs";
     };
 
+  fileSystems."/slow/documents" =
+    { device = "slow/documents";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/tv" =
+    { device = "slow/media/video/tv";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/recover/backup/david/nebula-windows" =
+    { device = "slow/backup/david/nebula-windows";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/movies" =
+    { device = "slow/media/video/movies";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/comics" =
+    { device = "slow/media/comics";
+      fsType = "zfs";
+    };
+
   fileSystems."/slow/media/video/personal" =
     { device = "slow/media/video/personal";
       fsType = "zfs";
@@ -128,9 +128,14 @@
       fsType = "zfs";
     };
 
+  fileSystems."/zfs" =
+    { device = "fast/zfs";
+      fsType = "zfs";
+    };
+
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
-      { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
+    [ { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
+      { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -143,18 +148,39 @@
   # networking.interfaces.enp5s0f1.useDHCP = lib.mkDefault true;
   # networking.interfaces.flannel.1.useDHCP = lib.mkDefault true;
   # networking.interfaces.mynet.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth235fc857.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth4b5be979.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth56858282.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth57cb93cc.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth6806c05e.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth6eaf1f44.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth73184d89.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth7f063469.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethbdbedb34.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethc77c437a.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethdfd305e1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethed4eaa17.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth069dc32b.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth1c1cbe6e.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth2dc77dfb.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth2eb8d5b2.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth2feaa8c1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth32bfd18a.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth345255b6.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth3c03bd51.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth4072f1db.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth508251ef.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth58807b91.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth58848a04.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth5941a43a.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth652377af.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth65e942de.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth6dde8335.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth80c57e6e.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth84ee5482.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth8558c0d6.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth8db56b72.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth8f73dd79.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth9071c0da.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth950e9451.useDHCP = lib.mkDefault true;
+  # networking.interfaces.veth97cdd5af.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vetha404e8c2.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vetha5adcda7.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vetha9725b94.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethc166b95c.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethdbc0481b.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethe258eec4.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethe994067f.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vethf870e85a.useDHCP = lib.mkDefault true;
 
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
