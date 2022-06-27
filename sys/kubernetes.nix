@@ -59,8 +59,6 @@ in
       KUSTOMIZE_PLUGIN_HOME = "/run/current-system/sw/lib";
     };
 
-    # services.kubernetes.dataDir = "/var/lib/kubernetes";
-
     # Copy the cluster admin kubeconfig to the admin users's home if it doesn't already exist
     system.activationScripts = {
       giveUserKubectlAdminAccess = ''
@@ -106,7 +104,6 @@ in
     # TODO: get in-cluster API access working without this
     # It neems like I need a router for this to work?
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
-    #networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [
       cfg.masterPort
 
@@ -124,57 +121,9 @@ in
       10250  # Kubelet
     ];
 
-    # networking.dhcpcd.denyInterfaces = [ "cuttlenet*" ];
-    # services.kubernetes.kubelet.cni.config = [{
-    #   name = "cuttlenet";
-    #   type = "flannel";
-    #   cniVersion = "0.3.1";
-    #   delegate = {
-    #     bridge = "cuttlenet";
-    #     isDefaultGateway = true;
-    #     hairpinMode = true;
-    #   };
-    # }];
-
-    # services.flannel = {
-    #   iface = "cuttlenet";
-    # };
-
     # To see available snapshotters, run: `ctr plugins ls | grep io.containerd.snapshotter`
     #   - zfs: slow, clutters filesystem
     #   - overlayfs: doesn't work on zfs
     virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "native";
-
-    #networking.enableIPv6 = false;
-    #networking.firewall.trustedInterfaces = [ "flannel.1" "mynet" "docker0" ];
-    # services.kubernetes = {
-    #   roles = [ "master" "node" ];
-    #   #kubelet.clusterDomain = "cluster" + cfg.masterHostname;
-    #   kubelet.clusterDomain = cfg.masterHostname;
-    #   masterAddress = cfg.masterAddress;
-    #   apiserverAddress = "https://${cfg.masterAddress}:${toString cfg.masterPort}";
-    #   apiserver = {
-    #     securePort = cfg.masterPort;
-    #     advertiseAddress = cfg.masterAddress;
-    #   };
-
-    #   # Use coredns
-    #   addons.dns.enable = true;
-
-    #   # Allow swap
-    #   kubelet.extraOpts = "--fail-swap-on=false";
-    # };
-
-    # # Enable nvidia support
-    # #services.kubernetes.kubelet.containerRuntime = "docker";
-    # hardware.opengl.driSupport32Bit = true;
-    # virtualisation.docker = {
-    #   enable = true;
-
-    #   # use nvidia as the default runtime
-    #   #enableNvidia = true;
-    #   #extraOptions = "--default-runtime=nvidia";
-    #   extraOptions = "--exec-opt native.cgroupdriver=systemd";
-    # };
   };
 }
