@@ -148,7 +148,7 @@
         ace = buildSystem "ace" "x86_64-linux" [
           ({ config, ... }: {
             boot.loader.grub.mirroredBoots = [
-              { devices = [ "/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
+              { devices = [ "/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
             ];
           })
         ];
