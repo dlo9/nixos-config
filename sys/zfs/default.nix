@@ -128,10 +128,8 @@ in
             /var/ssh_host_rsa_key
           ];
 
-          authorizedKeys = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMXnf0eYbX+aFIdf2ijIeJsVcDwXwgxV4u4e2PjLKll6 david@pavil"
-            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC6FKNF/0qdKMmH0D0XMeIix2Kvqh+c5DPGyv+7wpIiqo6snf95oycdcTaTKA6w4ryB0eiuWDlcZTH8+o7QFFPH+4fFN0pB9W/AfAegVRzuRRCxE3J1aw1jX93fVr0x9aa851/4g90IDJvJ7btO9Wp23KzFjrhc7NtrNFZLjNxtuIE+WT9IkRxVWMRwsoSrIIRv2pVRtQnqjxC93UAStZn1PQFoevxOhANkPZ/nQm1kvc2PYTFZSna9GN/sakv4NSjkAosCskwFtiR3iN/H23VsKsJFOo8N6tcapLYul+eTMqW83i6Emov/0yvkE+jcvrIt4jdnbSWbBX4HWnf2n8yyk83t1aRe4pJSvROwolPCvKeOACQiWf5Nk7Ch1hrBbnobs5pTWTGFBZM638ZXhebcVhL8yGciNtQiWIWZ/WIxDCSMklCSGaIl8tWtNzd8ljFJ6Z4RJXcoyC3PwJXGgE8j5RrQ8Plg9wK96kQvF4B5Imo2hpjWouYqPCJ6PozA9es= david@cuttlefish"
-          ];
+          # TODO: disable password auth (if not already?)
+          authorizedKeys = config.users.users.${sysCfg.user}.openssh.authorizedKeys.keys;
         };
       };
     };
