@@ -122,7 +122,7 @@ in
           # Use the RSA key for initrd since ED25519 is used for the host
           hostKeys = [
             # TODO: This doesn't work because of something to do with the initrd /etc mount (I think)
-            /etc/ssh/ssh_host_rsa_key
+            #/etc/ssh/ssh_host_rsa_key
 
             # This was manually copied from the path above
             /var/ssh_host_rsa_key
