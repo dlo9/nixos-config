@@ -607,6 +607,8 @@ in
         provider = "geoclue2";
         tray = true;
       };
+
+      syncthing.enable = true;
     };
   };
 }

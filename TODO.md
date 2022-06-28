@@ -20,7 +20,6 @@
 - QT styling
 - Bluetooth & blueman-applet
 - Flameshot
-- Syncthing
 - `services.random-background`
 - `services.swayidle` or `services.screen-locker`
 - Admin email notifications:
