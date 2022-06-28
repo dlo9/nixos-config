@@ -103,8 +103,11 @@ in
       pingLimit = "--limit 1/second --limit-burst 10";
     };
 
-    # SSH
+    services.tailscale.enable = true;
     services.openssh.enable = true;
+
+    # If set to the default (true), the firewall can break some tailscale and kubernetes configs
+    networking.firewall.checkReversePath = "loose";
 
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
