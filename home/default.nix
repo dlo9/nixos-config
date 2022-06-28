@@ -481,11 +481,6 @@ in
               - alias: cuttlefish
                 program: ssh
 
-                arguments:
-                  - key: -i
-                    value: ~/.ssh/archbook.id_rsa
-                    cleared-by: [-i]
-
                 keywords:
                   - keys: [--local]
                     values: [192.168.1.230]
