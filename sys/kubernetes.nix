@@ -106,19 +106,6 @@ in
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
     networking.firewall.allowedTCPPorts = [
       cfg.masterPort
-
-      # ArgoCD ports
-      # Not sure why these are accessable?
-      #31301
-      #30681
-
-      # Web
-      80
-      443
-
-      # Monitoring ports
-      9100  # Node exporter
-      10250  # Kubelet
     ];
 
     # To see available snapshotters, run: `ctr plugins ls | grep io.containerd.snapshotter`
