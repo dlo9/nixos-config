@@ -1,12 +1,6 @@
-- Auto-create vim swap/backup/undo directories (`home.activation`?) - also use base dir `xdg.cacheHome`
-- Add nix-community binary cache
-- Update to 22.05 (nix w/flake option may not be necessary?)
 - Test auto-update with flake
 - Add root user config?
-- Installer:
-  - Unpack ISO to provide console=ttyS0
-  - Create nix-store dataset
-- Use `graphical` option for home-manager config
+- Nix-store dataset
 - Waybar
   - Add display module which opens `wdisplays`
 - Review [sway addons](https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway)
@@ -21,11 +15,9 @@
 - Use [more modern tools](https://github.com/ibraheemdev/modern-unix)
 - Add `mpv`
 - Test `neovim`
-- Set SSH user keys (in secret)
-- Add tailscale
+- Set SSH user keys (in secret)?
 - PDF reader - Okular (or zathura)
 - QT styling
-- Firewall settings
 - Bluetooth & blueman-applet
 - Flameshot
 - Syncthing
@@ -37,7 +29,6 @@
   - scrub errors
 - Samba mounts (`systemd.user.mounts`?)
 - Configure sway with `wayland.windowManager.sway`
-- Enable auto-trim: `fstrim`
 
 - [Nix flake](https://hoverbear.org/blog/a-flake-for-your-crate/) for rust projects (e.g. wrap)
 - [nix-direnv](https://github.com/nix-community/nix-direnv)

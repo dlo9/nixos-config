@@ -38,5 +38,8 @@ in
         dates = [ "Sat, 03:00" ];
       };
     };
+
+    # Periodic SSD TRIM of mounted partitions
+    services.fstrim.enable = true;
   };
 }
