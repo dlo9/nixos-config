@@ -106,7 +106,19 @@ in
     # e.g. `curl --insecure 'https://10.0.0.1:443/api/v1/namespaces'
     networking.firewall.allowedTCPPorts = [
       cfg.masterPort
+
+      # Monitoring ports
+      9100  # Node exporter
+      10250  # Kubelet
+
+      # Home assistant
+      8123
     ];
+
+    boot.kernel.sysctl = {
+      # Defaults to 128 and causes 'too many open files' error for pods
+      "fs.inotify.max_user_instances" = 1024;
+    };
 
     # To see available snapshotters, run: `ctr plugins ls | grep io.containerd.snapshotter`
     #   - zfs: slow, clutters filesystem
