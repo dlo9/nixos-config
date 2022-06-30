@@ -96,7 +96,7 @@ in
     };
 
     # Kernel
-    boot.kernelPackages = pkgs.linuxPackages_5_17;
+    boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_zen;
 
     # Networking
     networking.dhcpcd.wait = mkDefault "background";
