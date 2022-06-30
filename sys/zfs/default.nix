@@ -120,7 +120,9 @@ in
           port = 22;
 
           hostKeys = [
-            /etc/ssh/ssh_host_rsa_key
+            # TODO: this doesn't work since this path is a symlink
+            #/etc/ssh/ssh_host_rsa_key
+            /var/ssh_host_rsa_key
           ];
 
           # TODO: disable password auth (if not already?)
