@@ -25,7 +25,7 @@ in
     #scheme = "${inputs.base16-unclaimed}/apathy.yaml";
 
     home = {
-      #stateVersion = "22.05";
+      stateVersion = "22.05";
       sessionPath = [
         "$HOME/.cargo/bin"
         "$HOME/.local/bin"
