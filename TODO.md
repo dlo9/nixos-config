@@ -1,5 +1,7 @@
 - Test auto-update with flake
 - Add root user config?
+- Store user passwords in sops
+- Add power usage metric to prometheus
 - Nix-store dataset
 - Waybar
   - Add display module which opens `wdisplays`
@@ -28,6 +30,7 @@
   - scrub errors
 - Samba mounts (`systemd.user.mounts`?)
 - Configure sway with `wayland.windowManager.sway`
+- mosh
 
 - [Nix flake](https://hoverbear.org/blog/a-flake-for-your-crate/) for rust projects (e.g. wrap)
 - [nix-direnv](https://github.com/nix-community/nix-direnv)
