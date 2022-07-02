@@ -22,6 +22,7 @@ in
         BossAdams.psk = "@BOSS_ADAMS@";
         "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
         qwertyuiop.psk = "@QWERTYUIOP@";
+        LGFAK.psk = "@LGFAK@";
       };
     };
   };
