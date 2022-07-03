@@ -41,8 +41,17 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      # Basic kubernetes CLIs
       kubectl
       kustomize
+
+      # Helm
+      kubernetes-helm
+
+      # SOPS
+      sops
+
+      # SOPS kustomize plugin
       # https://github.com/NixOS/nixpkgs/issues/175515
       (pkgs.kustomize-sops.overrideAttrs (oldAttrs: {
         installPhase = ''
@@ -50,13 +59,17 @@ in
           mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
         '';
       }))
-      kubernetes-helm
-      sops
+
+      # Gitops CLI
       argocd
+
+      # Containerd command line tools (e.g., crictl)
+      cri-tools
     ];
 
     environment.sessionVariables = {
       KUSTOMIZE_PLUGIN_HOME = "/run/current-system/sw/lib";
+      CONTAINER_RUNTIME_ENDPOINT = "unix:///run/containerd/containerd.sock";
     };
 
     # Copy the cluster admin kubeconfig to the admin users's home if it doesn't already exist
