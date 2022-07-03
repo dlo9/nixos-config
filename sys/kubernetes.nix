@@ -137,5 +137,30 @@ in
     #   - zfs: slow, clutters filesystem
     #   - overlayfs: doesn't work on zfs
     virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "native";
+
+    # Setup mail for ZFS notifications
+    services.postfix = {
+      enable = true;
+      domain = "sigpanic.com";
+      rootAlias = cfg.admin;
+
+      # Fastmail relay
+      # There MUST be authentication files placed at `smtp_sasl_password_maps` with the following contents:
+      # [smtp.fastmail.com]:465 username:password
+      relayHost = "smtp.fastmail.com";
+      relayPort = "465";
+      extraConfig = ''
+        smtp_sasl_auth_enable = yes
+        smtp_sasl_password_maps = hash:/run/secrets/postfix-auth
+        smtp_sasl_security_options = noanonymous
+        smtp_use_tls = yes
+      '';
+    };
+
+    sops.secrets."postfix-auth" = {
+      owner = config.services.postfix.user;
+      group = config.services.postfix.group;
+      mode = "0400";
+    };
   };
 }
