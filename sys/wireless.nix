@@ -12,12 +12,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    sops.secrets."wireless-env" = { };
+    sops.secrets.wireless-env = { };
 
     networking.wireless = {
       enable = true;
       userControlled.enable = true;
-      environmentFile = "/run/secrets/wireless-env";
+      environmentFile = config.sops.secrets.wireless-env.path;
       networks = {
         BossAdams.psk = "@BOSS_ADAMS@";
         "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";

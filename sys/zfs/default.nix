@@ -130,5 +130,50 @@ in
         };
       };
     };
+
+    # Setup mail for ZFS notifications
+    services.postfix = {
+      enable = true;
+      domain = "sigpanic.com";
+
+      # Fastmail relay
+      # There MUST be authentication files placed at `smtp_sasl_password_maps` with the following contents:
+      # [smtp.fastmail.com]:465 username:password
+      #
+      # Send a test mail: `echo "test mail" | sendmail user@domain.com`
+      # Check the mail queue: `mailq`
+      # Try resending queued mail: `sendmail -q`
+      # Check for errors: `systemctl status postfix`
+      relayHost = "smtp.fastmail.com";
+      relayPort = 465;
+      mapFiles = {
+        "postfix-auth" = config.sops.secrets.postfix-auth.path;
+      };
+
+      config = {
+        smtp_sasl_auth_enable = true;
+        smtp_sasl_password_maps = "hash:/var/lib/postfix/conf/postfix-auth";
+        smtp_sasl_security_options = "noanonymous";
+        smtp_use_tls = true;
+        smtp_tls_wrappermode = true;
+        smtp_tls_security_level = "encrypt";
+      };
+    };
+
+    sops.secrets.postfix-auth = { };
+    services.zfs.zed = {
+      settings = {
+        ZED_EMAIL_ADDR = [ "if_nas@fastmail.com" ];
+        ZED_EMAIL_PROG = "sendmail";
+        ZED_EMAIL_OPTS = "'@ADDRESS@'";
+
+        ZED_NOTIFY_INTERVAL_SECS = 3600;
+        ZED_NOTIFY_VERBOSE = false;
+
+
+        ZED_USE_ENCLOSURE_LEDS = true;
+        ZED_SCRUB_AFTER_RESILVER = false;
+      };
+    };
   };
 }
