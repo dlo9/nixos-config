@@ -208,6 +208,11 @@
               graphical.enable = false;
             };
 
+            environment.systemPackages = with pkgs; [
+              # Chassis and fan control
+              ipmitool
+            ];
+
             powerManagement.cpuFreqGovernor = "powersave";
 
             # Generate a new config with `sudo pwmconfig`
