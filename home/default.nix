@@ -450,6 +450,15 @@ in
     xdg = {
       enable = true;
       configFile = {
+        ###############
+        ##### Nix #####
+        ###############
+
+        "nixpkgs/config.nix".text = ''
+          {
+            allowUnfree = true;
+          }
+        '';
         ################
         ##### Wrap #####
         ################
