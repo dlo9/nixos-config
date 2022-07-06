@@ -33,6 +33,7 @@ in
 
       sessionVariables = {
         EDITOR = "${config.programs.vim.package}/bin/vim";
+        SOPS_AGE_KEY_FILE = "/var/sops-age-keys.txt";
       };
 
       pointerCursor = {
