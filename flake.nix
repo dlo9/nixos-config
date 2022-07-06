@@ -172,6 +172,7 @@
             boot = {
               # Sensors from `sudo sensors-detect`
               kernelModules = [ "coretemp" "nct7904" ];
+              kernelPackages = pkgs.linuxPackages_hardened;
 
               zfs.extraPools = [
                 #"slow"
