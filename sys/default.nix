@@ -66,22 +66,25 @@ in
       };
     };
 
-    # Main user
-    # TODO: Due to a bug, this needs to be ture for the hashedPassword to apply
-    users.mutableUsers = true;
+    # Users
+    sops.secrets."user-passwords/root".neededForUsers = true;
+    sops.secrets."user-passwords/${cfg.user}".neededForUsers = true;
+
+    users.mutableUsers = false;
     users.users = {
-      root.hashedPassword = "$6$pO8WZEGMqpktyPjA$nbkvOhGDBJmqdSbfGH/OmeGugve5v0ePmeEj4KRTGqbiABnKILdW89hKG6zf2r7bmbMnnaE/9InYw03xW7Eoq1";
+      root.passwordFile = config.sops.secrets."user-passwords/root".path;
+
       "${cfg.user}" = {
         isNormalUser = true;
+        passwordFile = config.sops.secrets."user-passwords/${cfg.user}".path;
         createHome = true;
+        shell = pkgs.fish;
         extraGroups = [
           "wheel"
           "docker"
           "audio"
           "video"
         ];
-        hashedPassword = "$6$HMrRhU.Z6Rrr5aYX$AUI.Vo0pe7r/JQ3hEBKH69KV8OeddPJS8EC/9YhSOuAgNTKsmX0aoMfdkitCHdeazXuP2eCBEF5IuFgNFeagS0";
-        shell = pkgs.fish;
 
         openssh.authorizedKeys.keys = [
           # TODO: store these in git and pass in/reference directly?

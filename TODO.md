@@ -1,6 +1,5 @@
 - Test auto-update with flake
 - Add root user config?
-- Store user passwords in sops
 - Add power usage metric to prometheus
 - Nix-store dataset
 - Waybar
