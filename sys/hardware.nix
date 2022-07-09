@@ -7,17 +7,19 @@ let
   cfg = sysCfg.hardware;
 in
 {
-  options.sys.hardware = { };
+  options.sys.hardware = {
+    isX64 = mkEnableOption "options for x86_64 systems" // { default = pkgs.stdenv.isx86_64; };
+  };
 
   config = {
     hardware = {
-      cpu.intel.updateMicrocode = true;
-      cpu.amd.updateMicrocode = true;
+      cpu.intel.updateMicrocode = cfg.isX64;
+      cpu.amd.updateMicrocode = cfg.isX64;
       enableAllFirmware = true;
       opengl = {
         enable = true;
         driSupport = true;
-        driSupport32Bit = true;
+        driSupport32Bit = cfg.isX64;
       };
     };
 

@@ -128,9 +128,11 @@
       );
     in
     {
-      nixosConfigurations = with nixpkgs.lib; {
+      nixosConfigurations = with nixpkgs.lib; rec {
         pavil = buildSystem "pavil" "x86_64-linux" [
           ({ config, ... }: {
+            boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
             networking.interfaces.wlo1.useDHCP = true;
 
             # Must load network module on boot for SSH access
@@ -234,9 +236,36 @@
                 FCFANS= hwmon5/pwm4=hwmon5/fan6_input  hwmon5/pwm3=hwmon5/fan6_input  hwmon5/pwm2=hwmon5/fan6_input  hwmon5/pwm1=hwmon5/fan6_input
                 MINTEMP= hwmon5/pwm4=40  hwmon5/pwm3=40  hwmon5/pwm2=40  hwmon5/pwm1=40
                 MAXTEMP= hwmon5/pwm4=80  hwmon5/pwm3=80  hwmon5/pwm2=80  hwmon5/pwm1=80
-                MINSTART=hwmon5/pwm4=50 hwmon5/pwm3=50 hwmon5/pwm2=50 hwmon5/pwm1=50
-                MINSTOP= hwmon5/pwm4=50 hwmon5/pwm3=50 hwmon5/pwm2=50 hwmon5/pwm1=50
+                MINSTART=hwmon5/pwm4=50  hwmon5/pwm3=50  hwmon5/pwm2=50  hwmon5/pwm1=50
+                MINSTOP= hwmon5/pwm4=50  hwmon5/pwm3=50  hwmon5/pwm2=50  hwmon5/pwm1=50
               '';
+            };
+          })
+        ];
+
+        # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
+        # Impure needed to access host paths without putting in the nix store
+        rpi3-image = rpi3.config.system.build.sdImage;
+        rpi3 = buildSystem "rpi3" "aarch64-linux" [
+          "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          ({ ... }: {
+            sdImage = {
+              compressImage = false;
+              populateRootCommands = ''
+                mkdir ./files/etc
+                cp -r ${/etc/nixos} ./files/etc/nixos
+
+                # TODO: sops secret
+                mkdir ./files/var
+                cp ${/tmp/sops-age-keys-rpi3.txt} ./files/var/sops-age-keys.txt
+              '';
+            };
+          })
+
+          ({ config, ... }: {
+            sys = {
+              graphical.enable = false;
+              zfs.enable = false;
             };
           })
         ];

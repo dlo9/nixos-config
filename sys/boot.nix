@@ -18,7 +18,7 @@ in
       loader = {
         timeout = 1;
         grub = {
-          enable = true;
+          enable = mkDefault true;
           configurationLimit = 10;
           splashImage = null; # I want all the text
           zfsSupport = true;
