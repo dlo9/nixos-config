@@ -71,58 +71,60 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
     let
       buildSystem = (hostName: system: modules:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
+        let hardwareConfig = ./hardware/${hostName}.nix;
+        in
+          nixpkgs.lib.nixosSystem {
+            inherit system;
 
-          modules = [
-            # Include configuration for nixFlakes, or else everything breaks after switching
-            ./configuration.nix
+            modules = [
+              # Include configuration for nixFlakes, or else everything breaks after switching
+              ./configuration.nix
 
-            # Overlays-module makes "pkgs.unstable" available in configuration.nix
-            ({ config, pkgs, ... }: {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  unstable = import nixpkgs-unstable {
-                    system = prev.system;
-                    config.allowUnfree = true;
-                  };
-                })
-              ];
-            })
+              ({ config, pkgs, ... }: {
+                # Overlays-module makes "pkgs.unstable" available in configuration.nix
+                nixpkgs.overlays = [
+                  (final: prev: {
+                    unstable = import nixpkgs-unstable {
+                      system = prev.system;
+                      config.allowUnfree = true;
+                    };
+                  })
+                ];
+              })
 
-            # Hardware config
-            ./hardware/${hostName}.nix
+              # Hardware config
+              ({ config, pkgs, lib, ... }@inputs: (lib.optionalAttrs (lib.pathExists hardwareConfig) (import hardwareConfig inputs)))
 
-            # Set hostname, so that it's not copied elsewhere
-            { networking.hostName = hostName; }
+              # Set hostname, so that it's not copied elsewhere
+              { networking.hostName = hostName; }
 
-            # Secrets management
-            inputs.sops-nix.nixosModules.sops
+              # Secrets management
+              inputs.sops-nix.nixosModules.sops
 
-            # Custom system modules
-            ./sys
+              # Custom system modules
+              ./sys
 
-            # Home-manager configuration
-            # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
-            home-manager.nixosModules.home-manager
-            ({ config, ... }: {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.david = import ./home;
+              # Home-manager configuration
+              # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
+              home-manager.nixosModules.home-manager
+              ({ config, ... }: {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.david = import ./home;
 
-              # Pass extra arguments to home.nix
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                sysCfg = config.sys;
-              };
-            })
-          ] ++ modules;
+                # Pass extra arguments to home.nix
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                  sysCfg = config.sys;
+                };
+              })
+            ] ++ modules;
 
-          # Pass extra arguments to modules
-          # specialArgs = {
-          #   inherit inputs;
-          # };
-        }
+            # Pass extra arguments to modules
+            # specialArgs = {
+            #   inherit inputs;
+            # };
+          }
       );
     in
     {
