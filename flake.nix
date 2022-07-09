@@ -121,9 +121,9 @@
             ] ++ modules;
 
             # Pass extra arguments to modules
-            # specialArgs = {
-            #   inherit inputs;
-            # };
+            specialArgs = {
+              inherit inputs;
+            };
           }
       );
     in

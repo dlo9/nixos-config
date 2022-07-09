@@ -143,6 +143,8 @@ in
       clang # C compiler
       jq
       yq
+      rnix-lsp # Nix language server
+      nixpkgs-fmt
 
       # System utils
       lsof
