@@ -121,8 +121,8 @@ in
       cfg.masterPort
 
       # Monitoring ports
-      9100  # Node exporter
-      10250  # Kubelet
+      9100 # Node exporter
+      10250 # Kubelet
 
       # Home assistant
       8123

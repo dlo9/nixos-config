@@ -149,7 +149,7 @@ in
           vim-airline-themes
 
           # Autocomplete plugins
-          coc-nvim  # Base
+          coc-nvim # Base
           coc-git
           coc-rust-analyzer
           coc-spell-checker
