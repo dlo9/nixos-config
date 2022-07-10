@@ -7,10 +7,11 @@ let
 in
 {
   imports = [
-    ./graphical/default.nix
+    ./graphical
     ./zfs
 
     ./boot.nix
+    ./gaming.nix
     ./hardware.nix
     ./kubernetes.nix
     ./lib.nix

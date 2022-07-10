@@ -264,6 +264,7 @@
 
           ({ config, ... }: {
             sys = {
+              gaming.enabled = false;
               graphical.enable = false;
               zfs.enable = false;
             };
