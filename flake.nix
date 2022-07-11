@@ -108,14 +108,17 @@
             # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
             home-manager.nixosModules.home-manager
             ({ config, ... }: {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.david = import ./home;
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "home-manager-backup";
+                users.david = import ./home;
 
-              # Pass extra arguments to home.nix
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                sysCfg = config.sys;
+                # Pass extra arguments to home.nix
+                extraSpecialArgs = {
+                  inherit inputs;
+                  sysCfg = config.sys;
+                };
               };
             })
           ] ++ modules;
