@@ -1,3 +1,3 @@
 #!/bin/sh
 
-nixos-generate-config --show-hardware-config > "/etc/nixos/hardware/$(hostname).nix"
+nixos-generate-config --show-hardware-config | nixpkgs-fmt > "/etc/nixos/hardware/$(hostname).nix"

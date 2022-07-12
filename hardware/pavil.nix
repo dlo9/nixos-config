@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -14,33 +15,37 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "pool/nixos/root";
+    {
+      device = "pool/nixos/root";
       fsType = "zfs";
     };
 
   fileSystems."/root" =
-    { device = "pool/home/root";
+    {
+      device = "pool/home/root";
       fsType = "zfs";
     };
 
   fileSystems."/home/david" =
-    { device = "pool/home/david";
+    {
+      device = "pool/home/david";
       fsType = "zfs";
     };
 
   fileSystems."/home/david/Games" =
-    { device = "pool/games";
+    {
+      device = "pool/games";
       fsType = "zfs";
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/D300-B14E";
+    {
+      device = "/dev/disk/by-uuid/D300-B14E";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

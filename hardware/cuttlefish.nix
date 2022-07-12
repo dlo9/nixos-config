@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "mpt3sas" "isci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
@@ -14,124 +15,146 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "fast/nixos/root";
+    {
+      device = "fast/nixos/root";
       fsType = "zfs";
     };
 
   fileSystems."/root" =
-    { device = "fast/home/root";
+    {
+      device = "fast/home/root";
       fsType = "zfs";
     };
 
   fileSystems."/home/david" =
-    { device = "fast/home/david";
+    {
+      device = "fast/home/david";
       fsType = "zfs";
     };
 
   fileSystems."/zfs" =
-    { device = "fast/zfs";
+    {
+      device = "fast/zfs";
       fsType = "zfs";
     };
 
   fileSystems."/boot/efi0" =
-    { device = "/dev/disk/by-uuid/D10A-E7FF";
+    {
+      device = "/dev/disk/by-uuid/D10A-E7FF";
       fsType = "vfat";
     };
 
   fileSystems."/boot/efi1" =
-    { device = "/dev/disk/by-uuid/D007-7D72";
+    {
+      device = "/dev/disk/by-uuid/D007-7D72";
       fsType = "vfat";
     };
 
   fileSystems."/boot/efi2" =
-    { device = "/dev/disk/by-uuid/388C-755D";
+    {
+      device = "/dev/disk/by-uuid/388C-755D";
       fsType = "vfat";
     };
 
   fileSystems."/slow/backup/david/archbook-duplicacy" =
-    { device = "slow/backup/david/archbook-duplicacy";
+    {
+      device = "slow/backup/david/archbook-duplicacy";
       fsType = "zfs";
     };
 
   fileSystems."/slow/backup/david/mail" =
-    { device = "slow/backup/david/mail";
+    {
+      device = "slow/backup/david/mail";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/video/movies" =
-    { device = "slow/media/video/movies";
+    {
+      device = "slow/media/video/movies";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/audio" =
-    { device = "slow/media/audio";
+    {
+      device = "slow/media/audio";
       fsType = "zfs";
     };
 
   fileSystems."/slow/backup/david/motog5" =
-    { device = "slow/backup/david/motog5";
+    {
+      device = "slow/backup/david/motog5";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/ebooks" =
-    { device = "slow/media/ebooks";
+    {
+      device = "slow/media/ebooks";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/comics" =
-    { device = "slow/media/comics";
+    {
+      device = "slow/media/comics";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/video/transcode" =
-    { device = "slow/media/video/transcode";
+    {
+      device = "slow/media/video/transcode";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/video/personal" =
-    { device = "slow/media/video/personal";
+    {
+      device = "slow/media/video/personal";
       fsType = "zfs";
     };
 
   fileSystems."/slow/backup/chelsea/windows-laptop" =
-    { device = "slow/backup/chelsea/windows-laptop";
+    {
+      device = "slow/backup/chelsea/windows-laptop";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/video/tv" =
-    { device = "slow/media/video/tv";
+    {
+      device = "slow/media/video/tv";
       fsType = "zfs";
     };
 
   fileSystems."/slow/recover/backup/david/nebula-windows" =
-    { device = "slow/backup/david/nebula-windows";
+    {
+      device = "slow/backup/david/nebula-windows";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/video/isos" =
-    { device = "slow/media/video/isos";
+    {
+      device = "slow/media/video/isos";
       fsType = "zfs";
     };
 
   fileSystems."/slow/old/games" =
-    { device = "slow/games";
+    {
+      device = "slow/games";
       fsType = "zfs";
     };
 
   fileSystems."/slow/documents" =
-    { device = "slow/documents";
+    {
+      device = "slow/documents";
       fsType = "zfs";
     };
 
   fileSystems."/slow/media/photos" =
-    { device = "slow/media/photos";
+    {
+      device = "slow/media/photos";
       fsType = "zfs";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
-      { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
+      { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
