@@ -190,31 +190,7 @@ in
       #   '';
       # };
 
-      steam-tui = rustPlatform.buildRustPackage rec {
-        pname = "steam-tui";
-        version = "0.2.0";
-        #cargoSha256 = lib.fakeSha256;
-        cargoHash = "sha256-oeyPHFORdo0wsmdM2gdv1sNGX9lFPmbVwPE6fOtUkS4=";
-
-        src = fetchFromGitHub {
-          owner = "dmadisetti";
-          repo = pname;
-          rev = version;
-          sha256 = "13aqpjadc0wmgyk2wi6aidrm8msfdfpm3bzvyj2c0i5giyviinv5";
-        };
-
-        nativeBuildInputs = [
-          openssl
-          pkgconfig
-        ];
-
-        packages = [
-          steamcmd
-        ];
-
-        PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
-        doCheck = false;
-      };
+      steam-tui = callPackage ./pkgs/steam-tui.nix { withWine = true; };
     };
   };
 }

@@ -31,6 +31,17 @@ in
       environment.systemPackages = with pkgs; [
         sysCfg.pkgs.steam-tui
       ];
+
+      networking.firewall.allowedTCPPorts = [
+        27036
+      ];
+
+      networking.firewall.allowedUDPPortRanges = [
+        {
+          from = 27031;
+          to = 27036;
+        }
+      ];
     })
   ]);
 }
