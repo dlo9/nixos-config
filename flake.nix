@@ -71,7 +71,9 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
     let
       buildSystem = (hostName: system: modules:
-        let hardwareConfig = ./hardware/${hostName}.nix;
+        let
+          hardwareConfig = ./hardware/${hostName}.nix;
+          hostConfig = ./hosts/${hostName};
         in
         nixpkgs.lib.nixosSystem {
           inherit system;
@@ -93,7 +95,10 @@
             })
 
             # Hardware config
-            ({ config, pkgs, lib, ... }@inputs: (lib.optionalAttrs (lib.pathExists hardwareConfig) (import hardwareConfig inputs)))
+            ({ config, pkgs, lib, ... }@args: (lib.optionalAttrs (lib.pathExists hardwareConfig) (import hardwareConfig args)))
+
+            # Host config
+            ({ config, pkgs, lib, ... }@args: (lib.optionalAttrs (lib.pathExists hostConfig) (import hostConfig args)))
 
             # Set hostname, so that it's not copied elsewhere
             { networking.hostName = hostName; }
