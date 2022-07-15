@@ -29,7 +29,7 @@ in
 
     (mkIf (!cfg.graphical) {
       environment.systemPackages = with pkgs; [
-        sysCfg.pkgs.steam-tui
+        #sysCfg.pkgs.steam-tui
       ];
 
       networking.firewall.allowedTCPPorts = [
