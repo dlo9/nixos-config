@@ -47,6 +47,9 @@ in
       };
     };
 
+    # Enable zram
+    zramSwap.enable = true;
+
     # Docker
     virtualisation.docker = {
       enable = true;
