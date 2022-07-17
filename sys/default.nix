@@ -48,7 +48,7 @@ in
     };
 
     # Enable zram
-    zramSwap.enable = true;
+    #zramSwap.enable = true;
 
     # Docker
     virtualisation.docker = {
