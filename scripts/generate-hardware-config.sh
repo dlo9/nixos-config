@@ -1,3 +1,5 @@
 #!/bin/sh
 
-nixos-generate-config --show-hardware-config | nixpkgs-fmt > "/etc/nixos/hardware/$(hostname).nix"
+nixos-generate-config --show-hardware-config | \
+  sed '/# networking.*/d' | \
+  nixpkgs-fmt > "/etc/nixos/hardware/$(hostname).nix"
