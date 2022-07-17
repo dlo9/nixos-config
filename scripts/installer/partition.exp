@@ -157,8 +157,16 @@ proc createDatasets {adminUser} {
   # Mount it now, or the mount later will overlay the other dataset mounts and `zpool export` can fail
   exec zfs mount pool/nixos/root
 
-  # Other system datasets
-  exec zfs create  -o mountpoint=/var/lib/containerd/io.containerd.snapshotter.v1.zfs pool/containerd
+  # Containerization
+  exec zfs create -o canmount=off -o mountpoint=none pool/kubernetes
+  exec zfs create pool/kubernetes/storage
+  exec zfs create pool/kubernetes/containerd
+  exec zfs create -V 100G pool/kubernetes/containerd/overlayfs-snapshotter
+  exec mkfs.ext4 /dev/zvol/pool/kubernetes/containerd/overlayfs-snapshotter
+  exec mount /dev/zvol/pool/kubernetes/containerd/overlayfs-snapshotter /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs
+
+  # Don't recommend using this
+  exec zfs create  -o mountpoint=/var/lib/containerd/io.containerd.snapshotter.v1.zfs pool/kubernetes/containerd/zfs-snapshotter
 
   # User datasets
   _info "Creating user datasets..."
