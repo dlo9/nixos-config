@@ -24,7 +24,7 @@ if [ -z "$owner" ] || [ -z "$repo" ]; then
     exit 1
 fi
 
-rev="$(curl -s "https://api.github.com/repos/$owner/$repo/commits/$rev" | jq -r ".sha")"
+#rev="$(curl -s "https://api.github.com/repos/$owner/$repo/commits/$rev" | jq -r ".sha")"
 hash="$(nix-prefetch-url --unpack https://github.com/$owner/$repo/archive/$rev.tar.gz 2>/dev/null)"
 
 cat << EOF
