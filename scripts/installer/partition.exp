@@ -160,10 +160,14 @@ proc createDatasets {adminUser} {
   # Containerization
   exec zfs create -o canmount=off -o mountpoint=none pool/kubernetes
   exec zfs create pool/kubernetes/storage
+
   exec zfs create pool/kubernetes/containerd
   exec zfs create -V 100G pool/kubernetes/containerd/overlayfs-snapshotter
   exec mkfs.ext4 /dev/zvol/pool/kubernetes/containerd/overlayfs-snapshotter
-  exec mount /dev/zvol/pool/kubernetes/containerd/overlayfs-snapshotter /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs
+
+  exec zfs create pool/kubernetes/docker
+  exec zfs create -V 20G pool/kubernetes/docker/overlayfs-storage
+  exec mkfs.ext4 /dev/zvol/pool/kubernetes/docker/overlayfs-storage
 
   # Don't recommend using this
   exec zfs create  -o mountpoint=/var/lib/containerd/io.containerd.snapshotter.v1.zfs pool/kubernetes/containerd/zfs-snapshotter
@@ -184,6 +188,9 @@ proc snapshot {} {
 # Mounts the zpool and EFI directories
 proc mountDisks {disks installDir} {
   _info "Mounting target disks..."
+
+  exec mount -o X-mount.mkdir /dev/zvol/pool/kubernetes/containerd/overlayfs-snapshotter /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs
+  exec mount -o X-mount.mkdir /dev/zvol/pool/kubernetes/docker/overlayfs-storage /var/lib/docker/overlay2
 
   for {set i 0} {$i < [llength $disks]} {incr i} {
     set disk [lindex $disks $i]
