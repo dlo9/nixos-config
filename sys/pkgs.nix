@@ -191,6 +191,7 @@ in
       # };
 
       steam-tui = callPackage ./pkgs/steam-tui.nix { withWine = true; };
+      genie-client = callPackage ./pkgs/genie-client.nix {};
     };
   };
 }
