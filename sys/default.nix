@@ -54,6 +54,10 @@ in
     virtualisation.docker = {
       enable = true;
       enableOnBoot = true;
+      daemon.settings = {
+        # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
+        storage-driver = "overlay2";
+      };
     };
 
     # Timezone

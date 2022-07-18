@@ -135,7 +135,7 @@ in
 
     # To see available snapshotters, run: `ctr plugins ls | grep io.containerd.snapshotter`
     #   - zfs: slow, clutters filesystem
-    #   - overlayfs: doesn't work on zfs
-    virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "native";
+    #   - overlayfs: doesn't work on zfs, so /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs MUST be a non-zfs mount (e.g., ext4 zvol)
+    virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "overlayfs";
   };
 }
