@@ -51,6 +51,12 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    home.pointerCursor = {
+      name = "Numix-Cursor-Light";
+      package = pkgs.numix-cursor-theme;
+    };
+
     programs = {
       qutebrowser.enable = true;
 

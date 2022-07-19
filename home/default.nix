@@ -36,11 +36,6 @@ in
         SOPS_AGE_KEY_FILE = "/var/sops-age-keys.txt";
       };
 
-      pointerCursor = {
-        name = "Numix-Cursor-Light";
-        package = pkgs.numix-cursor-theme;
-      };
-
       shellAliases = {
         k = "kubectl";
       };
