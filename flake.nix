@@ -143,10 +143,6 @@
 
             networking.interfaces.wlo1.useDHCP = true;
 
-            # Must load network module on boot for SSH access
-            # lspci -v | grep -iA8 'network\|ethernet'
-            boot.initrd.availableKernelModules = [ "iwlwifi" ];
-
             boot.loader.grub.mirroredBoots = [
               { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
             ];
