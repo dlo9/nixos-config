@@ -244,6 +244,13 @@
                 MINSTOP= hwmon5/pwm4=50  hwmon5/pwm3=50  hwmon5/pwm2=50  hwmon5/pwm1=50
               '';
             };
+
+            # Allow IP forwarding for tailscale subnets
+            boot.kernel.sysctl = {
+              # Already enabled for kubelet
+              #"net.ipv4.ip_forward" = 1;
+              "net.ipv6.conf.all.forwarding" = 1;
+            };
           })
         ];
 
