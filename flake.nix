@@ -271,11 +271,15 @@
           })
 
           ({ config, ... }: {
+            home-manager.users.david.home.gui.enable = false;
+
             sys = {
-              gaming.enabled = false;
+              gaming.enable = false;
               graphical.enable = false;
               zfs.enable = false;
             };
+
+            virtualisation.docker.enable = false;
           })
         ];
 

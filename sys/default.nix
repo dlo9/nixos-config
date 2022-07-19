@@ -52,7 +52,7 @@ in
 
     # Docker
     virtualisation.docker = {
-      enable = true;
+      enable = mkDefault true;
       enableOnBoot = true;
       daemon.settings = {
         # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
