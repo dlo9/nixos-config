@@ -177,6 +177,10 @@
             networking.interfaces.enp5s0f1.useDHCP = true;
             #networking.dhcpcd.wait = "background";
 
+            # Ues overlay2 Docker storage driver for better performance. For this to work,
+            # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
+            virtualisation.docker.daemon.settings.storage-driver = "overlay2";
+
             boot = {
               # Sensors from `sudo sensors-detect`
               kernelModules = [ "coretemp" "nct7904" ];
