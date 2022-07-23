@@ -280,6 +280,18 @@
           ({ config, pkgs, ... }: {
             home-manager.users.david.home.gui.enable = false;
 
+            # Enable zram
+            zramSwap.enable = true;
+
+            # Enable swapfile
+            swapDevices = [
+              {
+                device = "/var/swapfile";
+                size = 4096;
+                randomEncryption = true;
+              }
+            ];
+
             sys = {
               gaming.enable = false;
               graphical.enable = false;
