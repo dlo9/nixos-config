@@ -280,6 +280,14 @@
           ({ config, pkgs, ... }: {
             home-manager.users.david.home.gui.enable = false;
 
+            # Enable audio
+            sound.enable = true;
+            hardware.pulseaudio.enable = true;
+
+            boot.loader.raspberryPi.firmwareConfig = ''
+              dtparam=audio=on
+            '';
+
             # Enable zram
             zramSwap.enable = true;
 
