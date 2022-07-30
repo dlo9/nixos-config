@@ -242,6 +242,7 @@
             sys = {
               kubernetes.enable = true;
               graphical.enable = false;
+              maintenance.autoUpgrade = true;
             };
 
             environment.systemPackages = with pkgs; [

@@ -9,13 +9,14 @@ in
 {
   options.sys.maintenance = {
     enable = mkEnableOption "system maintenance" // { default = true; };
+    autoUpgrade = mkEnableOption "automatic system upgrades" // { default = false; };
   };
 
   config = mkIf cfg.enable {
     # Autoupgrade
     # Can be run manually with: `systemctl start nixos-upgrade.service`
     system.autoUpgrade = {
-      enable = true;
+      enable = cfg.autoUpgrade;
       allowReboot = mkDefault false;
       flake = "path:///etc/nixos#${config.networking.hostName}";
       flags = [ "--recreate-lock-file" "--commit-lock-file" ];
