@@ -612,12 +612,17 @@ in
     ];
 
     services = {
+      # Bluetooth controls
+      blueman-applet.enable = true;
+
+      # Enable red-shifted nightime display
       gammastep = {
         enable = true;
         provider = "geoclue2";
         tray = true;
       };
 
+      # File syncing
       syncthing.enable = true;
     };
   };
