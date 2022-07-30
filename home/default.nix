@@ -563,5 +563,7 @@ in
 
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
+
+    systemd.user.startServices = "sd-switch";
   };
 }
