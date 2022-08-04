@@ -3,13 +3,19 @@
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
 
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.05-small;
+    # TODO: revert back to 22.05-small once [submoduleWith](https://github.com/NixOS/nixpkgs/blob/6c32b75a332a5f6ca08a36d1e7f0e9d38ec39d19/lib/types.nix#L569)
+    # has a description field. This is due to changes in home-manager which I can't revert
+    #nixpkgs.url = github:NixOS/nixpkgs/nixos-22.05-small;
+    #nixpkgs.url = github:NixOS/nixpkgs/nixos-test-staging;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
     # Secrets management
     sops-nix.url = github:Mic92/sops-nix;
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Home manager
+    # FUTURE: set to a specific release, or else changes can become out of sync with nixos
+    #home-manager.url = github:nix-community/home-manager/release-22.05;
     home-manager.url = github:nix-community/home-manager;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
