@@ -129,7 +129,7 @@ in
       starship
       zoxide
 
-      # Utils
+      # Linux utils
       vim
       nodejs # Vim plugins
       curl
@@ -137,6 +137,11 @@ in
       lshw
       yadm
       pv
+      p7zip
+
+      # Nix utils
+      nix-diff
+      nix-tree
 
       # Development
       git
