@@ -28,7 +28,11 @@ in
     programs.xwayland.enable = true;
     programs.sway = {
       enable = true;
-      wrapperFeatures.gtk = true;
+      wrapperFeatures = {
+        base = true;
+        gtk = true;
+      };
+
       extraSessionCommands = ''
         # SDL:
         export SDL_VIDEODRIVER=wayland
@@ -114,5 +118,14 @@ in
 
     services.avahi.enable = true;
     services.avahi.nssmdns = true;
+
+    # Add GVFS for samba mounts in file manager
+    #services.gvfs.enable = true;
+    services.gvfs = {
+      enable = true;
+      package = lib.mkForce pkgs.gnome3.gvfs;
+    };
+
+    services.gnome.gnome-keyring.enable = true;
   };
 }

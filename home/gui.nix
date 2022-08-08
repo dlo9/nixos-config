@@ -649,6 +649,10 @@ in
       # So that links open in a browser when clicked from other applications
       # (e.g. vscode)
       xdg-utils
+
+      # File manager
+      pcmanfm
+      xfce.thunar
     ];
 
     services = {
@@ -686,6 +690,10 @@ in
           { event = "lock"; command = "${swaylock}"; }
         ];
       };
+
+      # FUTURE: this doesn't work
+      # https://github.com/nix-community/home-manager/issues/1454
+      # gnome-keyring.enable = true;
     };
 
     wayland.windowManager.sway = {
