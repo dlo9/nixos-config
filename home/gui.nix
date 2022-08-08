@@ -669,18 +669,21 @@ in
       #   - 5m: lock the screen
       #   - 10m: turn off the screen
       #   - 15m: suspend
-      swayidle = {
+      swayidle = let
+        swaylock = "${pkgs.swaylock}/bin/swaylock";
+        swaymsg = "${pkgs.sway}/bin/swaymsg";
+      in {
         enable = true;
 
         timeouts = [
-          { timeout = 5 * 60; command = "swaylock -f"; }
-          { timeout = 10 * 60; command = ''swaymsg "output * dpms off"''; resumeCommand = ''swaymsg "output * dpms on"''; }
+          { timeout = 5 * 60; command = "${swaylock} -f"; }
+          { timeout = 10 * 60; command = ''${swaymsg} "output * dpms off"''; resumeCommand = ''${swaymsg} "output * dpms on"''; }
           { timeout = 15 * 60; command = "systemctl suspend"; }
         ];
 
         events = [
-          { event = "before-sleep"; command = "swaylock"; }
-          { event = "lock"; command = "swaylock"; }
+          { event = "before-sleep"; command = "${swaylock}"; }
+          { event = "lock"; command = "${swaylock}"; }
         ];
       };
     };
