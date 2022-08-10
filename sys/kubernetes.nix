@@ -92,6 +92,7 @@ in
     services.kubernetes = {
       roles = [ "master" "node" ];
       masterAddress = cfg.masterHostname;
+      easyCerts = true;
 
       # Use `hostname.cluster` instead of `cluster.local` since Android can't resolve .local through a VPN
       addons.dns.clusterDomain = "${cfg.masterHostname}.cluster";
