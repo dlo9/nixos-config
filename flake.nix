@@ -146,6 +146,7 @@
         pavil = buildSystem "pavil" "x86_64-linux" [
           ({ config, pkgs, ... }: {
             boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+            programs.adb.enable = true;
 
             networking.interfaces.wlo1.useDHCP = true;
 

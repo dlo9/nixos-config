@@ -85,6 +85,7 @@ in
           "docker"
           "audio"
           "video"
+          "adbusers"
         ];
 
         openssh.authorizedKeys.keys = [
