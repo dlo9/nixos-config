@@ -19,6 +19,11 @@
     home-manager.url = github:nix-community/home-manager;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    mobile-nixos = {
+      url = github:NixOS/mobile-nixos;
+      flake = false;
+    };
+
     # Theming
     # A decent alternative (can generate color from picture): https://git.sr.ht/~misterio/nix-colors
     base16.url = github:SenchoPens/base16.nix;
@@ -190,6 +195,8 @@
 
         ace = buildSystem "ace" "x86_64-linux" [
           ({ config, ... }: {
+            boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
             boot.loader = {
               efi.canTouchEfiVariables = false;
 
@@ -286,6 +293,64 @@
               #"net.ipv4.ip_forward" = 1;
               "net.ipv6.conf.all.forwarding" = 1;
             };
+          })
+        ];
+
+        # Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
+        # Impure needed to access host paths without putting in the nix store
+        moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
+
+        # https://mobile.nixos.org/devices/motorola-potter.html
+        # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
+        # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
+        moto = buildSystem "moto" "aarch64-linux" [
+          ({ ... }: import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "motorola-potter"; })
+
+          ({ config, pkgs, ... }: {
+
+            mobile = {
+              adbd.enable = true;
+
+              boot.stage-1 = {
+                fbterm.enable = true;
+
+                networking = {
+                  enable = true;
+
+                  # These are the defaults, but are here for easy reference
+                  IP = "172.16.42.1";
+                  hostIP = "172.16.42.2";
+                };
+
+                kernel = {
+                  allowMissingModules = false;
+
+                  # https://github.com/NixOS/mobile-nixos/pull/506
+                  #useNixOSKernel = true;
+                };
+
+                shell.shellOnFail = true;
+                #ssh.enable = true;
+              };
+            };
+
+            hardware.firmware = [
+              (config.mobile.device.firmware.override {
+                modem = ./firmware;
+              })
+            ];
+
+            sys = {
+              kernel = false;
+              gaming.enable = false;
+              graphical.enable = false;
+              zfs.enable = false;
+            };
+
+            home-manager.users.david.home.gui.enable = false;
+
+            # This kernel does not support rpfilter
+            networking.firewall.checkReversePath = false;
           })
         ];
 

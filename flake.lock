@@ -181,6 +181,22 @@
         "type": "github"
       }
     },
+    "mobile-nixos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1659299256,
+        "narHash": "sha256-MzeeBiULuqsj8TpaWWxI44ciYjrR6H3CwljJDwkT6TU=",
+        "owner": "NixOS",
+        "repo": "mobile-nixos",
+        "rev": "87e579471c42def38f719028ad6c5d746f26027b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "mobile-nixos",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1659487974,
@@ -242,6 +258,7 @@
         "base16-waybar": "base16-waybar",
         "base16-wofi": "base16-wofi",
         "home-manager": "home-manager",
+        "mobile-nixos": "mobile-nixos",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix"

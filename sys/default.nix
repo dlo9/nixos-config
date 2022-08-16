@@ -27,6 +27,8 @@ in
       type = types.nonEmptyStr;
       default = "david";
     };
+
+    kernel = mkEnableOption "set the kernel" // { default = true; };
   };
 
   config = {
@@ -101,7 +103,7 @@ in
     };
 
     # Kernel
-    boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_zen;
+    boot.kernelPackages = mkIf cfg.kernel pkgs.linuxKernel.packages.linux_zen;
 
     # Networking
     networking.dhcpcd.wait = mkDefault "background";
@@ -114,7 +116,7 @@ in
     services.openssh.enable = true;
 
     # If set to the default (true), the firewall can break some tailscale and kubernetes configs
-    networking.firewall.checkReversePath = "loose";
+    networking.firewall.checkReversePath = mkDefault "loose";
 
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
