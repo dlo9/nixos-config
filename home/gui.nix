@@ -743,14 +743,26 @@ in
         # See available outputs with: swaymsg -t get_outputs
         output = {
           "*" = { bg = "${wallpaper} fill"; };
+
+          # Left monitor
           DP-1 = { resolution = "2560x1400"; position = "0,0"; };
+          DP-3 = { resolution = "2560x1400"; position = "0,0"; };
+
+          # Right monitor
           DVI-D-1 = { resolution = "2560x1400"; position = "2560,0"; };
+          HDMI-A-1 = { resolution = "2560x1400"; position = "2560,0"; };
         };
 
         workspaceOutputAssign = [
           { output = "*"; workspace = "1"; }
+
+          # Left monitor
           { output = "DP-1"; workspace = "1"; }
+          { output = "DP-3"; workspace = "1"; }
+
+          # Right monitor
           { output = "DVI-D-1"; workspace = "10"; }
+          { output = "HDMI-A-1"; workspace = "10"; }
         ];
 
         # See available inputs with: swaymsg -t get_inputs
