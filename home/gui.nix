@@ -653,6 +653,9 @@ in
       # File manager
       pcmanfm
       xfce.thunar
+
+      # USB installer
+      ventoy-bin
     ];
 
     services = {
