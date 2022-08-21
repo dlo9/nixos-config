@@ -26,15 +26,15 @@
       fsType = "zfs";
     };
 
-  fileSystems."/zfs" =
-    {
-      device = "fast/zfs";
-      fsType = "zfs";
-    };
-
   fileSystems."/home/david" =
     {
       device = "fast/home/david";
+      fsType = "zfs";
+    };
+
+  fileSystems."/zfs" =
+    {
+      device = "fast/zfs";
       fsType = "zfs";
     };
 
@@ -50,34 +50,10 @@
       fsType = "vfat";
     };
 
-  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" =
-    {
-      device = "/dev/disk/by-uuid/bc8b3a3d-a573-4996-bc04-2a4ff209aa2f";
-      fsType = "ext4";
-    };
-
   fileSystems."/boot/efi2" =
     {
       device = "/dev/disk/by-uuid/388C-755D";
       fsType = "vfat";
-    };
-
-  fileSystems."/slow/media/audio" =
-    {
-      device = "slow/media/audio";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/chelsea/windows-laptop" =
-    {
-      device = "slow/backup/chelsea/windows-laptop";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/media/video/transcode" =
-    {
-      device = "slow/media/video/transcode";
-      fsType = "zfs";
     };
 
   fileSystems."/slow/backup/david/archbook-duplicacy" =
@@ -92,9 +68,15 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/photos" =
+  fileSystems."/slow/media/video/movies" =
     {
-      device = "slow/media/photos";
+      device = "slow/media/video/movies";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/audio" =
+    {
+      device = "slow/media/audio";
       fsType = "zfs";
     };
 
@@ -104,9 +86,9 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/video/tv" =
+  fileSystems."/slow/media/ebooks" =
     {
-      device = "slow/media/video/tv";
+      device = "slow/media/ebooks";
       fsType = "zfs";
     };
 
@@ -116,21 +98,9 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/recover/backup/david/nebula-windows" =
+  fileSystems."/slow/media/video/transcode" =
     {
-      device = "slow/backup/david/nebula-windows";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/documents" =
-    {
-      device = "slow/documents";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/old/games" =
-    {
-      device = "slow/games";
+      device = "slow/media/video/transcode";
       fsType = "zfs";
     };
 
@@ -140,22 +110,52 @@
       fsType = "zfs";
     };
 
+  fileSystems."/slow/backup/chelsea/windows-laptop" =
+    {
+      device = "slow/backup/chelsea/windows-laptop";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/tv" =
+    {
+      device = "slow/media/video/tv";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/recover/backup/david/nebula-windows" =
+    {
+      device = "slow/backup/david/nebula-windows";
+      fsType = "zfs";
+    };
+
   fileSystems."/slow/media/video/isos" =
     {
       device = "slow/media/video/isos";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/ebooks" =
+  fileSystems."/slow/old/games" =
     {
-      device = "slow/media/ebooks";
+      device = "slow/games";
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/video/movies" =
+  fileSystems."/slow/documents" =
     {
-      device = "slow/media/video/movies";
+      device = "slow/documents";
       fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/photos" =
+    {
+      device = "slow/media/photos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" =
+    {
+      device = "/dev/disk/by-uuid/bc8b3a3d-a573-4996-bc04-2a4ff209aa2f";
+      fsType = "ext4";
     };
 
   swapDevices =
@@ -168,7 +168,6 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
