@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./hardware.nix
-  ];
-
   config = {
     sdImage = {
       compressImage = false;
