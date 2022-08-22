@@ -7,12 +7,12 @@ let
   cfg = sysCfg.development;
 in
 {
-  options.sys.gaming = {
+  options.sys.development = {
     enable = mkEnableOption "development tools" // { default = true; };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs // cfg.pkgs; [
+    environment.systemPackages = with pkgs // sysCfg.pkgs; [
       git
       cargo
       qemu_kvm
