@@ -103,7 +103,7 @@ in
     };
 
     # Kernel
-    boot.kernelPackages = mkIf cfg.kernel pkgs.linuxKernel.packages.linux_zen;
+    boot.kernelPackages = mkIf cfg.kernel (mkDefault pkgs.linuxKernel.packages.linux_zen);
 
     # Networking
     networking.dhcpcd.wait = mkDefault "background";
