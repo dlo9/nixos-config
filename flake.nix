@@ -19,6 +19,11 @@
     home-manager.url = github:nix-community/home-manager;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     mobile-nixos = {
       # path:/home/david/code/mobile-nixos
       url = github:NixOS/mobile-nixos;
@@ -456,6 +461,15 @@
             boot.kernelParams = [ "nomodeset" ];
           })
         ];
+      };
+
+      packages.x86_64-linux = {
+        vmware = inputs.nixos-generators.nixosGenerate {
+          system = "x86_64-linux";
+          modules = [
+          ];
+          format = "iso";
+        };
       };
     };
 }
