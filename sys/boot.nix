@@ -7,9 +7,11 @@ let
   cfg = sysCfg.boot;
 in
 {
-  options.sys.boot = { };
+  options.sys.boot = {
+    enable = mkEnableOption "boot" // { default = true; };
+  };
 
-  config = {
+  config = mkIf cfg.enable {
     boot = {
       kernelParams = [
         "boot_on_fail"
