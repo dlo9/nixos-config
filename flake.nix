@@ -20,6 +20,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     mobile-nixos = {
+      # path:/home/david/code/mobile-nixos
       url = github:NixOS/mobile-nixos;
       flake = false;
     };
