@@ -58,7 +58,7 @@ let
 in
 {
   options.home.gui = {
-    enable = mkEnableOption "user graphical programs" // { default = true; };
+    enable = mkEnableOption "user graphical programs" // { default = sysCfg.graphical.enable; };
   };
 
   config = mkIf cfg.enable {
@@ -676,23 +676,25 @@ in
       #   - 5m: lock the screen
       #   - 10m: turn off the screen
       #   - 15m: suspend
-      swayidle = let
-        swaylock = "${pkgs.swaylock}/bin/swaylock";
-        swaymsg = "${pkgs.sway}/bin/swaymsg";
-      in {
-        enable = true;
+      swayidle =
+        let
+          swaylock = "${pkgs.swaylock}/bin/swaylock";
+          swaymsg = "${pkgs.sway}/bin/swaymsg";
+        in
+        {
+          enable = true;
 
-        timeouts = [
-          { timeout = 5 * 60; command = "${swaylock} -f"; }
-          { timeout = 10 * 60; command = ''${swaymsg} "output * dpms off"''; resumeCommand = ''${swaymsg} "output * dpms on"''; }
-          { timeout = 15 * 60; command = "systemctl suspend"; }
-        ];
+          timeouts = [
+            { timeout = 5 * 60; command = "${swaylock} -f"; }
+            { timeout = 10 * 60; command = ''${swaymsg} "output * dpms off"''; resumeCommand = ''${swaymsg} "output * dpms on"''; }
+            { timeout = 15 * 60; command = "systemctl suspend"; }
+          ];
 
-        events = [
-          { event = "before-sleep"; command = "${swaylock}"; }
-          { event = "lock"; command = "${swaylock}"; }
-        ];
-      };
+          events = [
+            { event = "before-sleep"; command = "${swaylock}"; }
+            { event = "lock"; command = "${swaylock}"; }
+          ];
+        };
 
       # FUTURE: this doesn't work
       # https://github.com/nix-community/home-manager/issues/1454

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 with types;
@@ -8,6 +8,10 @@ let
   cfg = sysCfg.secrets;
 in
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
+
   options.sys.secrets = {
     enable = mkEnableOption "secrets management" // { default = true; };
 

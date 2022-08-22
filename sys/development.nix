@@ -12,6 +12,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    programs.adb.enable = true;
+
     environment.systemPackages = with pkgs // sysCfg.pkgs; [
       git
       cargo

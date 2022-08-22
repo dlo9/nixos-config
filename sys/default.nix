@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 
@@ -49,6 +49,16 @@ in
         ];
       };
     };
+
+    nixpkgs.overlays = [
+      (final: prev: {
+        # Makes "pkgs.unstable" available in configuration.nix
+        unstable = import inputs.nixpkgs-unstable {
+          system = prev.system;
+          config.allowUnfree = true;
+        };
+      })
+    ];
 
     # Enable zram
     #zramSwap.enable = true;
