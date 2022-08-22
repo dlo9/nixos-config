@@ -397,6 +397,7 @@
             ];
 
             sys = {
+              development.enable = false;
               gaming.enable = false;
               graphical.enable = false;
               zfs.enable = false;

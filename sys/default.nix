@@ -11,6 +11,7 @@ in
     ./zfs
 
     ./boot.nix
+    ./development.nix
     ./gaming.nix
     ./hardware.nix
     ./kubernetes.nix
@@ -127,23 +128,12 @@ in
       curl
       ripgrep
       lshw
-      yadm
       pv
       p7zip
 
       # Nix utils
       nix-diff
       nix-tree
-
-      # Development
-      git
-      cargo
-      qemu_kvm
-      OVMF
-      libvirt
-      clang # C compiler
-      jq
-      yq
       rnix-lsp # Nix language server
       nixpkgs-fmt
 
@@ -156,9 +146,6 @@ in
       sops
       age
       ssh-to-age
-
-      # Other
-      flavours # Themes
     ];
 
     # This value determines the NixOS release from which the default
