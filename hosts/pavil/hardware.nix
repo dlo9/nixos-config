@@ -9,10 +9,23 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }];
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" =
     {
@@ -20,10 +33,10 @@
       fsType = "zfs";
     };
 
-  fileSystems."/root" =
+  fileSystems."/boot/efi" =
     {
-      device = "pool/home/root";
-      fsType = "zfs";
+      device = "/dev/disk/by-uuid/D300-B14E";
+      fsType = "vfat";
     };
 
   fileSystems."/home/david" =
@@ -38,15 +51,9 @@
       fsType = "zfs";
     };
 
-  fileSystems."/boot/efi" =
+  fileSystems."/root" =
     {
-      device = "/dev/disk/by-uuid/D300-B14E";
-      fsType = "vfat";
+      device = "pool/home/root";
+      fsType = "zfs";
     };
-
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }];
-
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
