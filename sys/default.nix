@@ -43,9 +43,11 @@ in
         substituters = [
           "https://cache.nixos.org/"
           "https://nix-community.cachix.org"
-        ];
+
+        ] ++ lib.optional (!config.services.nix-serve.enable) "https://nix-serve.sigpanic.com";
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
         ];
       };
     };
