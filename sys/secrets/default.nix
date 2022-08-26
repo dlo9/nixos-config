@@ -24,14 +24,14 @@ in
     hostSecretsFile = mkOption {
       type = path;
       # TODO: make this path <secrets>, or a cfg option
-      default = ../secrets/hosts/${cfg.hostname}.yaml;
+      default = ../../hosts/${cfg.hostname}/secrets.yaml;
       description = "Host-specific secrets file";
     };
   };
 
   config = mkIf cfg.enable {
     sops = {
-      defaultSopsFile = ../secrets/shared.yaml;
+      defaultSopsFile = ./shared.yaml;
       gnupg.sshKeyPaths = [ ];
 
       age = {

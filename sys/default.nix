@@ -8,6 +8,7 @@ in
 {
   imports = [
     ./graphical
+    ./secrets
     ./zfs
 
     ./boot.nix
@@ -18,7 +19,6 @@ in
     ./lib.nix
     ./maintenance.nix
     ./pkgs.nix
-    ./secrets.nix
     ./wireless.nix
   ];
 
