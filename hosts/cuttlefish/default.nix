@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  sysCfg = config.sys;
+in
 {
   imports = [
     ./hardware.nix
@@ -90,6 +93,19 @@
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
+    # Nix cache
+    sops.secrets.nix-serve-private-key = {
+      sopsFile = sysCfg.secrets.hostSecretsFile;
+    };
+
+    services.nix-serve = {
+      enable = true;
+      port = 5000;
+      openFirewall = true;
+      secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
+    };
+
+    # ZFS autosnapshot and replication
     services.zrepl = {
       enable = true;
       settings = {
