@@ -1,0 +1,12 @@
+{
+  ssh-keys = {
+    host = {
+      ed25519 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWijpon/IRvFuZpVuuCxbcQBCZ2zAgnOYTIJcNf7RGl root@nebula";
+      rsa = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlTwlhFIUWtnftateHOfGbpudW0C+uxZtfWwlWHtZ3HgqVmeqNs/oU+S9fXLjdC3uIZJlLqKV02YTCF+r5i5a58OvTNtuKKq8h/CHQOuG1Q8eCH+WDgE/7nbmQYuT8v5avx5rssW4TEvFBgPU81ecZ01QeHt1TofNcUK+LJq8QQYw9qZUzV/WXVBmxey7YfmJkvQDybEPL3o0oKCV5V4PH7GXTQUkwE9TtzQIkc1ZAhvXFL9YIxqHX7bq2Lz1qWrT9ATHSu4rOtTqYDCvlldJRlqAA6FEjFUapjFOFjxaUEP4ua2AX9Fr5NHITEH1pOVujco54bvbCaslgwS7tZ+hA+ScTHWb9aoMllMcWpn6t4AlPgXjKwDf+1fFCBzYhYGJUSmnJQh9/EajbC5vSbuCMYr/YBZYwJ2Mt9GNniR95MGoh5n2NQ+Vt36YgWt8yLzLPGCV+aIyOqdb4zpwMPy4N6AmuDd7HXaEFnP0HqT0D27oZ9phbZLFjKlitH3iFzT0= root@nebula";
+    };
+
+    david = {
+      ed25519 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgFADH+64EO9XCSdeHdAQug7UPbXsoqehE2Qwxdj5Sn david@nebula";
+    };
+  };
+}
