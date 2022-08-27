@@ -62,7 +62,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     home.pointerCursor = {
       name = "Numix-Cursor-Light";
       package = pkgs.numix-cursor-theme;
@@ -1004,5 +1003,7 @@ in
         bindswitch --reload --locked lid:off output eDP-1 enable
       '';
     };
+
+    systemd.user.startServices = "sd-switch";
   };
 }
