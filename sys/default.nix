@@ -135,6 +135,7 @@ in
       p7zip
 
       # Nix utils
+      git
       nix-diff
       nix-tree
       rnix-lsp # Nix language server

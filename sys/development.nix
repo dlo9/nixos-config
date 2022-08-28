@@ -17,7 +17,6 @@ in
     programs.adb.enable = true;
 
     environment.systemPackages = with pkgs // sysCfg.pkgs; [
-      git
       cargo
       qemu_kvm
       OVMF
