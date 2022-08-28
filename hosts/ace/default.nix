@@ -6,6 +6,8 @@
   ];
 
   config = {
+    sys.gaming.enable = false;
+
     boot.loader = {
       efi.canTouchEfiVariables = false;
 
