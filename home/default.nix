@@ -38,6 +38,18 @@ in
 
       shellAliases = {
         k = "kubectl";
+
+        # Use modern alternatives to classic unix tools
+        # https://github.com/ibraheemdev/modern-unix
+        du = "${pkgs.du-dust}/bin/dust";
+        df = "${pkgs.duf}/bin/duf";
+        cat = "${pkgs.bat}/bin/bat";
+        ls = "${pkgs.exa}/bin/exa";
+        grep = "${pkgs.ripgrep}/bin/rg";
+        top = "${pkgs.bottom}/bin/btm";
+        htop = "${pkgs.bottom}/bin/btm";
+        ping = "${pkgs.gping}/bin/gping";
+        ps = "${pkgs.procs}/bin/procs";
       };
     };
 
@@ -557,9 +569,10 @@ in
     };
 
     home.packages = with pkgs // sysCfg.pkgs; [
-      # Misc dev tools
       jq
       go-task
+      fd # Modern `find` alternative
+      tldr # Simple `man` alternative
 
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
