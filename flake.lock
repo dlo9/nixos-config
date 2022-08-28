@@ -160,6 +160,23 @@
         "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
       }
     },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1661803792,
+        "narHash": "sha256-yKPeSmwvsJSv+STN5UMDZvYvlExHsq3dDtHLK20fjes=",
+        "path": "/home/david/code/disko",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/david/code/disko",
+        "type": "path"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -293,6 +310,7 @@
         "base16-unclaimed": "base16-unclaimed",
         "base16-waybar": "base16-waybar",
         "base16-wofi": "base16-wofi",
+        "disko": "disko",
         "home-manager": "home-manager",
         "mobile-nixos": "mobile-nixos",
         "nixos-generators": "nixos-generators",

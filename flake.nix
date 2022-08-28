@@ -28,6 +28,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Disk partitioning
+    disko = {
+      #url = "github:nix-community/disko";
+      url = "path:/home/david/code/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     mobile-nixos = {
       # path:/home/david/code/mobile-nixos
       url = github:NixOS/mobile-nixos;
@@ -198,7 +205,8 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "ace" { };
+          #modules = defaultModules "ace" { };
+          modules = defaultModules "ace" ./hosts/portable/partition.nix;
         };
 
         cuttlefish = nixosSystem {
@@ -236,6 +244,14 @@
         # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
         # Impure needed to access host paths without putting in the nix store
         rpi3-image = rpi3.config.system.build.sdImage;
+
+        # Portable, can be used as a bootstrap image
+        portable = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "portable" { };
+        };
 
         # Installer test
         installer = buildSystem "installer" "x86_64-linux" [
