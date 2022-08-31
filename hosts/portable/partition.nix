@@ -13,7 +13,8 @@ let
     type = "devices";
 
     content = {
-      "disk/by-id/usb-Generic_Flash_Disk_9D63220B-0:0" = {
+      "disk/by-id/usb-Leef_Supra_0171000000030148-0:0" = {
+        #"disk/by-id/usb-Generic_Flash_Disk_9D63220B-0:0" = {
         type = "table";
         format = "gpt";
         partitions = [
@@ -76,7 +77,7 @@ let
         type = "zpool";
         # mode = "mirror";
 
-        mountpoint = "/mnt";
+        #mountpoint = "/mnt";
 
         options = {
           ashift = "12";
@@ -95,6 +96,7 @@ let
           dnodesize = "auto";
           acltype = "posixacl";
           canmount = "off";
+          mountpoint = "none";
           normalization = "formD";
           atime = "off";
           xattr = "sa";
