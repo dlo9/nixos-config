@@ -30,5 +30,59 @@
     hardware.pulseaudio.extraConfig = "
       load-module module-switch-on-connect
     ";
+
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 8888 ];
+    services.zrepl = {
+      enable = true;
+      settings = {
+        global = {
+          logging = [
+            {
+              type = "stdout";
+              level = "warn";
+              format = "human";
+              time = true;
+              color = true;
+            }
+          ];
+        };
+
+        jobs = [
+          {
+            name = "cuttlefish replication";
+            type = "source";
+
+            serve = {
+              type = "tcp";
+              #listen = ":8888";
+              #listen_freebind: true;
+              listen = "100.111.108.84:8888";
+              clients = {
+                "100.97.145.42" = "cuttlefish";
+              };
+            };
+
+            filesystems = {
+              "<" = true;
+            };
+
+            send = {
+              encrypted = true;
+              large_blocks = true;
+              compressed = true;
+              embedded_data = true;
+              raw = true;
+              #saved = true;
+            };
+
+            snapshotting = {
+              type = "periodic";
+              prefix = "auto-";
+              interval = "15m";
+            };
+          }
+        ];
+      };
+    };
   };
 }

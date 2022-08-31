@@ -1,7 +1,45 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+
 let
   sysCfg = config.sys;
+  zreplDefaults = {
+    pruning = {
+      keep_sender = [
+        { type = "not_replicated"; }
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+          regex = "^auto-.*";
+        }
+        {
+          type = "regex";
+          regex = "^manual.*";
+        }
+        {
+          type = "regex";
+          regex = ".*";
+        }
+      ];
+
+      keep_receiver = [
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+          regex = "^auto-.*";
+        }
+        {
+          type = "regex";
+          regex = "^manual.*";
+        }
+        {
+          type = "regex";
+          regex = ".*";
+        }
+      ];
+    };
+  };
 in
 {
   imports = [
@@ -140,6 +178,7 @@ in
 
               # Disable replicated datasets, trash
               "slow/abyss<" = false;
+              "slow/replication<" = false;
               "slow/backup/drywell<" = false;
               "slow/trash<" = false;
             };
@@ -147,7 +186,7 @@ in
             snapshotting = {
               type = "periodic";
               interval = "15m";
-              prefix = "zrepl_";
+              prefix = "auto-";
             };
 
             pruning = {
@@ -155,7 +194,7 @@ in
                 {
                   type = "grid";
                   grid = "1x1h(keep=all) | 24x1h | 31x1d | 12x30d";
-                  regex = "^zrepl_.*";
+                  regex = "^(auto-|zrepl_).*";
                 }
                 {
                   type = "regex";
@@ -164,6 +203,27 @@ in
               ];
             };
           }
+
+          (recursiveUpdate zreplDefaults {
+            name = "pavil replication";
+            type = "pull";
+            root_fs = "slow/replication/pavil";  # This must exist
+            interval = "1h";
+
+            connect = {
+              type = "tcp";
+              address = "pavil:8888";
+            };
+
+            recv = {
+              # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
+              placeholder.encryption = "off";
+              properties.override = {
+                canmount = "off";
+                refreservation = "none";
+              };
+            };
+          })
 
           #{
           #  name = "drywell replication";
