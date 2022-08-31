@@ -33,7 +33,7 @@ in
           visible = false;
         };
 
-        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && name != "/") [
+        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name ["/" "/nix"])) [
           "zfsutil"
           "X-mount.mkdir"
           "nofail"

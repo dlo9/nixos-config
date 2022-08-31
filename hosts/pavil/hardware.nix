@@ -51,6 +51,12 @@
       fsType = "zfs";
     };
 
+  fileSystems."/nix" =
+    {
+      device = "pool/nixos/nix";
+      fsType = "zfs";
+    };
+
   fileSystems."/root" =
     {
       device = "pool/home/root";

@@ -54,8 +54,6 @@
 
             serve = {
               type = "tcp";
-              #listen = ":8888";
-              #listen_freebind: true;
               listen = "100.111.108.84:8888";
               clients = {
                 "100.97.145.42" = "cuttlefish";
@@ -64,6 +62,7 @@
 
             filesystems = {
               "<" = true;
+              "pool/nixos/nix<" = false;
             };
 
             send = {
@@ -72,7 +71,6 @@
               compressed = true;
               embedded_data = true;
               raw = true;
-              #saved = true;
             };
 
             snapshotting = {
