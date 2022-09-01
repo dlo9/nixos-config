@@ -8,34 +8,63 @@ let
     pruning = {
       keep_sender = [
         { type = "not_replicated"; }
+
+        # Keep up to a week
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 6x1d";
+          regex = "^auto-short.*";
+        }
+
+        # Keep up to a month
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 30x1d";
+          regex = "^auto-medium.*";
+        }
+
+        # Keep up to a year
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+          regex = "^auto-long.*";
+        }
+
+        # Keep non-auto snapshots
+        {
+          type = "regex";
           regex = "^auto-.*";
-        }
-        {
-          type = "regex";
-          regex = "^manual.*";
-        }
-        {
-          type = "regex";
-          regex = ".*";
+          negate = true;
         }
       ];
 
       keep_receiver = [
+        # Keep up to a week
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 6x1d";
+          regex = "^auto-short.*";
+        }
+
+        # Keep up to a month
+        {
+          type = "grid";
+          grid = "1x1h(keep=all) | 23x1h | 30x1d";
+          regex = "^auto-medium.*";
+        }
+
+        # Keep up to a year
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+          regex = "^auto-long.*";
+        }
+
+        # Keep non-auto snapshots
+        {
+          type = "regex";
           regex = "^auto-.*";
-        }
-        {
-          type = "regex";
-          regex = "^manual.*";
-        }
-        {
-          type = "regex";
-          regex = ".*";
+          negate = true;
         }
       ];
     };
@@ -207,7 +236,7 @@ in
           (recursiveUpdate zreplDefaults {
             name = "pavil replication";
             type = "pull";
-            root_fs = "slow/replication/pavil";  # This must exist
+            root_fs = "slow/replication/pavil"; # This must exist
             interval = "1h";
 
             connect = {
