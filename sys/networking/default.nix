@@ -17,6 +17,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.fqdn = "${networking.hostName}";
+
     ########################
     ### Private SSH Keys ###
     ########################
@@ -85,10 +87,13 @@ in
     ###########################
 
     # Only the master key can log in as root
-    users.users.root.openssh.authorizedKeys.keys = [ masterSshKey ];
+    users.users.root.openssh.authorizedKeys.keys = flatten [
+      inputs.mergedExports.ssh-keys.host.ed25519
+      masterSshKey
+    ];
 
-    # TODO: for all users
     users.users.${user}.openssh.authorizedKeys.keys = flatten [
+      inputs.mergedExports.ssh-keys.host.ed25519
       inputs.mergedExports.ssh-keys.${user}.ed25519
       # inputs.mergedExports.ssh-keys.${user}.rsa
       masterSshKey
