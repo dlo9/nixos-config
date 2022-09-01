@@ -7,7 +7,6 @@ let
   cfg = sysCfg.networking;
   hostExports = inputs.exports.${config.networking.hostName};
   user = sysCfg.user;
-  #userHome = config.home-manager.users.${user}.home.homeDirectory;
   userHome = config.users.users.${user}.home;
   masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
 in
@@ -52,6 +51,13 @@ in
       wireless-env = mkIf cfg.wireless { };
     };
 
+    # Necessary for distributed builds
+    programs.ssh.extraConfig = ''
+      Host cuttlefish
+          IdentitiesOnly yes
+          IdentityFile /etc/ssh/ssh_host_ed25519_key
+    '';
+
     #######################
     ### Public SSH Keys ###
     #######################
@@ -86,7 +92,7 @@ in
       inputs.mergedExports.ssh-keys.${user}.ed25519
       # inputs.mergedExports.ssh-keys.${user}.rsa
       masterSshKey
-      #"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
     ];
 
     ################

@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+
 {
   imports = [
     ./hardware.nix
@@ -82,5 +84,23 @@
         ];
       };
     };
+
+    # Use cuttlefish as a remote builder
+    nix.buildMachines = mkIf (config.networking.hostName != "cuttlefish") [{
+      hostName = "cuttlefish";
+      system = "x86_64-linux";
+      # systems = ["x86_64-linux" "aarch64-linux"];
+
+      maxJobs = 4;
+      speedFactor = 2;
+      supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      mandatoryFeatures = [ ];
+    }];
+
+    nix.distributedBuilds = true;
+
+    nix.extraOptions = ''
+      builders-use-substitutes = true
+    '';
   };
 }
