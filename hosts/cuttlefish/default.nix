@@ -13,27 +13,27 @@ let
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 6x1d";
-          regex = "^auto-short.*";
+          regex = "^zrepl_short_.*";
         }
 
         # Keep up to a month
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d";
-          regex = "^auto-medium.*";
+          regex = "^zrepl_medium_.*";
         }
 
         # Keep up to a year
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
-          regex = "^auto-long.*";
+          regex = "^zrepl_long_.*";
         }
 
         # Keep non-auto snapshots
         {
           type = "regex";
-          regex = "^auto-.*";
+          regex = "^zrepl_.*";
           negate = true;
         }
       ];
@@ -43,27 +43,27 @@ let
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 6x1d";
-          regex = "^auto-short.*";
+          regex = "^zrepl_short_.*";
         }
 
         # Keep up to a month
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d";
-          regex = "^auto-medium.*";
+          regex = "^zrepl_medium_.*";
         }
 
         # Keep up to a year
         {
           type = "grid";
           grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
-          regex = "^auto-long.*";
+          regex = "^zrepl_long_.*";
         }
 
         # Keep non-auto snapshots
         {
           type = "regex";
-          regex = "^auto-.*";
+          regex = "^zrepl_.*";
           negate = true;
         }
       ];
@@ -215,7 +215,7 @@ in
             snapshotting = {
               type = "periodic";
               interval = "15m";
-              prefix = "auto-";
+              prefix = "zrepl_";
             };
 
             pruning = {
@@ -223,7 +223,7 @@ in
                 {
                   type = "grid";
                   grid = "1x1h(keep=all) | 24x1h | 31x1d | 12x30d";
-                  regex = "^(auto-|zrepl_).*";
+                  regex = "^zrepl_.*";
                 }
                 {
                   type = "regex";
@@ -276,7 +276,7 @@ in
           #      {
           #        type = "grid";
           #        grid = "1x1h(keep=all) | 24x1h | 31x1d | 12x30d";
-          #        regex = "^auto-.*";
+          #        regex = "^zrepl_.*";
           #      }
           #      {
           #        type = "regex";
@@ -292,7 +292,7 @@ in
           #      {
           #        type = "grid";
           #        grid = "1x1h(keep=all) | 24x1h | 31x1d | 12x30d";
-          #        regex = "^auto-.*";
+          #        regex = "^zrepl_.*";
           #      }
           #      {
           #        type = "regex";

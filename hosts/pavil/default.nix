@@ -28,7 +28,7 @@ with lib;
       };
     };
 
-    # Auto-switch to new bluetooth devices
+    # zrepl_switch to new bluetooth devices
     hardware.pulseaudio.extraConfig = "
       load-module module-switch-on-connect
     ";
@@ -109,7 +109,7 @@ with lib;
 
               snapshotting = {
                 type = "periodic";
-                prefix = "auto-${retentionPolicy}-";
+                prefix = "zrepl_${retentionPolicy}_";
                 interval = "15m";
               };
             };
@@ -126,13 +126,13 @@ with lib;
 
               snapshotting = {
                 type = "periodic";
-                prefix = "auto-local-";
+                prefix = "zrepl_local_";
                 interval = "15m";
               };
 
               pruning.keep =
                 let
-                  regex = "^auto-local-.*";
+                  regex = "^zrepl_local_.*";
                 in
                 [
                   {
