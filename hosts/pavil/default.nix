@@ -49,7 +49,7 @@ with lib;
           ];
         };
 
-        job =
+        jobs =
           let
             # listToAttrs where the value is the same for all keys
             listToUnityAttrs = list: value: listToAttrs (forEach list (key: nameValuePair key value));
