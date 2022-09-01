@@ -30,7 +30,7 @@ let
           regex = "^zrepl_long_.*";
         }
 
-        # Keep non-auto snapshots
+        # Keep non-zrepl snapshots
         {
           type = "regex";
           regex = "^zrepl_.*";
@@ -60,7 +60,7 @@ let
           regex = "^zrepl_long_.*";
         }
 
-        # Keep non-auto snapshots
+        # Keep non-zrepl snapshots
         {
           type = "regex";
           regex = "^zrepl_.*";
@@ -220,14 +220,18 @@ in
 
             pruning = {
               keep = [
+                # Keep up to a year
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 24x1h | 31x1d | 12x30d";
+                  grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
                   regex = "^zrepl_.*";
                 }
+
+                # Keep non-zrepl snapshots
                 {
                   type = "regex";
-                  regex = "^manual.*";
+                  regex = "^zrepl_.*";
+                  negate = true;
                 }
               ];
             };
