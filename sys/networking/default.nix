@@ -55,7 +55,7 @@ in
 
     # Necessary for distributed builds
     programs.ssh.extraConfig = ''
-      Host cuttlefish
+      Match user root host cuttlefish
           IdentitiesOnly yes
           IdentityFile /etc/ssh/ssh_host_ed25519_key
     '';
