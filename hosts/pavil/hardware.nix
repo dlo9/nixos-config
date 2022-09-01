@@ -45,9 +45,33 @@
       fsType = "zfs";
     };
 
-  fileSystems."/home/david/Games" =
+  fileSystems."/home/david/.cache" =
     {
-      device = "pool/games";
+      device = "pool/home/david/.cache";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/david/.local/share/Steam" =
+    {
+      device = "pool/games/steam";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/david/.local/share/lutris" =
+    {
+      device = "pool/games/lutris";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/david/Downloads" =
+    {
+      device = "pool/home/david/Downloads";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/david/code" =
+    {
+      device = "pool/home/david/code";
       fsType = "zfs";
     };
 
