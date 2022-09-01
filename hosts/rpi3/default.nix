@@ -38,6 +38,7 @@
       development.enable = false;
       gaming.enable = false;
       graphical.enable = false;
+      low-power = true;
       zfs.enable = false;
     };
 

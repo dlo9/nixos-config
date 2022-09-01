@@ -31,6 +31,7 @@ in
     };
 
     kernel = mkEnableOption "set the kernel" // { default = true; };
+    low-power = mkEnableOption "low power mode" // { default = false; };
   };
 
   config = {
@@ -52,6 +53,23 @@ in
           "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
         ];
       };
+
+      # Use cuttlefish as a remote builder
+      buildMachines = mkIf cfg.low-power [{
+        hostName = "cuttlefish";
+        systems = ["x86_64-linux" "aarch64-linux"];
+
+        maxJobs = 4;
+        speedFactor = 1;
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        mandatoryFeatures = [ ];
+      }];
+
+      distributedBuilds = true;
+
+      extraOptions = ''
+        builders-use-substitutes = true
+      '';
     };
 
     nixpkgs.overlays = [
