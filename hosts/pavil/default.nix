@@ -114,6 +114,7 @@ with lib;
               serve = {
                 type = "tcp";
                 listen = "100.111.108.84:8888";
+                listen_freebind = true;
                 clients = {
                   "100.97.145.42" = "cuttlefish";
                 };
