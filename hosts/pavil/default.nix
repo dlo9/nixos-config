@@ -85,8 +85,30 @@ with lib;
               (listToUnityAttrs myFs true) // (listToUnityAttrs otherFs false);
 
 
-            cuttlefishReplicationJob = retentionPolicy: {
-              name = "cuttlefish ${retentionPolicy}-retention replication";
+            snapshotJob = retentionPolicy: rec {
+              name = "snapshot ${retentionPolicy}-retention datasets";
+              type = "snap";
+
+              filesystems = getReplicationPolicy retentionPolicy;
+
+              snapshotting = {
+                type = "periodic";
+                prefix = "zrepl_${retentionPolicy}_";
+                interval = "15m";
+              };
+
+              # Keep everything, pruning will be done during replication
+              pruning.keep = [
+                {
+                  type = "regex";
+                  regex = ".*";
+                }
+              ];
+            };
+          in
+          [
+            {
+              name = "cuttlefish replication";
               type = "source";
 
               serve = {
@@ -97,7 +119,9 @@ with lib;
                 };
               };
 
-              filesystems = getReplicationPolicy retentionPolicy;
+              filesystems = {
+                "<" = true;
+              };
 
               send = {
                 encrypted = true;
@@ -108,46 +132,15 @@ with lib;
               };
 
               snapshotting = {
-                type = "periodic";
-                prefix = "zrepl_${retentionPolicy}_";
-                interval = "15m";
+                # Snapshots are done in separate jobs so that only one port is needed
+                type = "manual";
               };
-            };
-          in
-          [
-            (cuttlefishReplicationJob "long")
-            (cuttlefishReplicationJob "medium")
-            (cuttlefishReplicationJob "short")
-            {
-              name = "local no-replication snapshotting";
-              type = "snap";
-
-              filesystems = getReplicationPolicy "local";
-
-              snapshotting = {
-                type = "periodic";
-                prefix = "zrepl_local_";
-                interval = "15m";
-              };
-
-              pruning.keep =
-                let
-                  regex = "^zrepl_local_.*";
-                in
-                [
-                  {
-                    type = "grid";
-                    grid = "1x1h(keep=all) | 23x1h";
-                    inherit regex;
-                  }
-
-                  {
-                    type = "regex";
-                    negate = true;
-                    inherit regex;
-                  }
-                ];
             }
+
+            (snapshotJob "long")
+            (snapshotJob "medium")
+            (snapshotJob "short")
+            (snapshotJob "local")
           ];
       };
     };
