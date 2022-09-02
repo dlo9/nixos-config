@@ -58,6 +58,12 @@
       fsType = "zfs";
     };
 
+  fileSystems."/nix" =
+    {
+      device = "fast/nixos/nix";
+      fsType = "zfs";
+    };
+
   fileSystems."/root" =
     {
       device = "fast/home/root";
