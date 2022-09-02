@@ -129,12 +129,24 @@ let
           rec {
             type = "zfs_filesystem";
             name = "nixos/root";
-            mountpoint = "/";
+            #mountpoint = "/";
 
             options = {
               canmount = "noauto";
-              # TODO?: Mount it now, or the mount later will overlay the other dataset mounts and `zpool export` can fail
-              inherit mountpoint;
+              #inherit mountpoint;
+              mountpoint = "/";
+            };
+          }
+
+          rec {
+            type = "zfs_filesystem";
+            name = "nixos/nix";
+            #mountpoint = "/nix";
+
+            options = {
+              canmount = "noauto";
+              #inherit mountpoint;
+              mountpoint = "/nix";
             };
           }
 
@@ -145,29 +157,32 @@ let
           rec {
             type = "zfs_filesystem";
             name = "home";
-            mountpoint = "/home";
+            #mountpoint = "/home";
 
             options = {
-              # TODO: script doesn't handle canmount properly
               canmount = "off";
-              inherit mountpoint;
+              #inherit mountpoint;
+              mountpoint = "/home";
             };
           }
 
           rec {
             type = "zfs_filesystem";
             name = "home/root";
-            mountpoint = "/root";
+            #mountpoint = "/root";
 
             options = {
-              inherit mountpoint;
+              #inherit mountpoint;
+              mountpoint = "/root";
             };
           }
 
           rec {
             type = "zfs_filesystem";
             name = "home/${admin}";
-            options.mountpoint = "none";
+            mountpoint = "/home";
+            #options.mountpoint = "none";
+            #mountpoint = "/home";
           }
         ];
       };
@@ -176,9 +191,10 @@ let
 in
 {
   config = {
-    environment.systemPackages = [
-      (pkgs.writeScriptBin "${hostName}-partition" (inputs.disko.lib.create disk-config))
-      (pkgs.writeScriptBin "${hostName}-mount" (inputs.disko.lib.mount disk-config))
+    environment.systemPackages = with pkgs; [
+      parted
+      (writeScriptBin "${hostName}-partition" (inputs.disko.lib.create disk-config))
+      (writeScriptBin "${hostName}-mount" (inputs.disko.lib.mount disk-config))
     ];
   };
 }
