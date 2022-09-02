@@ -120,9 +120,9 @@ with lib;
                 };
               };
 
-              filesystems = {
-                "<" = true;
-              };
+              # Only exclude filesystems which shouldn't replicate at all.
+              # Otherwise, zrepl unnecessarily syncs the snapshots and then fails when deleting them
+              filesystems = { "<" = true; } // listToUnityAttrs retentionPolicies.local false;
 
               send = {
                 encrypted = true;
