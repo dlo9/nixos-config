@@ -31,5 +31,10 @@
       "kvm-intel"
       "kvm-amd"
     ];
+
+    # Ethernet modules for remote boot login
+    boot.initrd.kernelModules = [
+      "r8169"
+    ];
   };
 }
