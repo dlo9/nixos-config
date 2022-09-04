@@ -30,7 +30,7 @@ sudo drywell-partition
 
 8. Install initrd keys (for SSH and secrets)
 
-        sudo mkdir /mnt/var
+        sudo mkdir -p /mnt/var
 
         # SOPS_AGE_KEY must be set to the master key
         export SOPS_AGE_KEY="MASTER_KEY_HERE"

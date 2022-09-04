@@ -8,6 +8,8 @@
   config = {
     sys = {
       gaming.enable = false;
+      development.enable = false;
+      graphical.enable = false;
       # TODO: kubernetes
     };
 
