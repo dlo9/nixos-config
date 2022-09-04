@@ -24,5 +24,12 @@
     };
 
     networking.interfaces.enp1s0.useDHCP = true;
+    hardware.cpu.intel.updateMicrocode = true;
+    hardware.cpu.amd.updateMicrocode = true;
+
+    boot.kernelModules = [
+      "kvm-intel"
+      "kvm-amd"
+    ];
   };
 }
