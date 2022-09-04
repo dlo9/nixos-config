@@ -22,5 +22,7 @@
         { devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
       ];
     };
+
+    networking.interfaces.enp1s0.useDHCP = true;
   };
 }
