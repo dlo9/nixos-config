@@ -167,11 +167,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1662262100,
-        "narHash": "sha256-OGCC6/JOzWCho4BG3z8O9mcqNoNcTgP5t7CnjUmdyd0=",
+        "lastModified": 1662274000,
+        "narHash": "sha256-7qxwypUzHIl3EVvOSOhMSvaksKPwbtVWlV1Pa0403A4=",
         "owner": "dlo9",
         "repo": "disko",
-        "rev": "768d856eed8986d7486c76aeb60f8b26ddf075aa",
+        "rev": "eb590da3c9ed02331173a89af4cb194e38240a93",
         "type": "github"
       },
       "original": {

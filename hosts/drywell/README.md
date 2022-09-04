@@ -1,4 +1,4 @@
-sudo portable-partition
+sudo drywell-partition
 # Installation
 
 1. Build the partitioning commands:
@@ -12,16 +12,16 @@ sudo portable-partition
 
 4. Partition the USB
 
-        sudo portable-partition
+        sudo drywell-partition
 
 5. Mount the USB
 
-        sudo portable-mount
+        sudo drywell-mount
 
 6. Generate the hardware configuration
 
         # TODO: remove host swap from config
-        ./generate-hardware-config.sh /mnt portable
+        ./generate-hardware-config.sh /mnt drywell
 
 7. Sync the nix configuration
 
@@ -35,14 +35,14 @@ sudo portable-partition
         # SOPS_AGE_KEY must be set to the master key
         export SOPS_AGE_KEY="MASTER_KEY_HERE"
 
-        sudo -E sh -c "sops -d --extract '[\"ssh-keys\"][\"host\"][\"rsa\"]' /etc/nixos/hosts/portable/secrets.yaml > /mnt/var/ssh_host_rsa_key"
+        sudo -E sh -c "sops -d --extract '[\"ssh-keys\"][\"host\"][\"rsa\"]' /etc/nixos/hosts/drywell/secrets.yaml > /mnt/var/ssh_host_rsa_key"
 
-        sudo -E sh -c "sops -d --extract '[\"portable\"][\"private\"]' /etc/nixos/sys/secrets/age-keys.yaml > /mnt/var/sops-age-keys.txt"
+        sudo -E sh -c "sops -d --extract '[\"drywell\"][\"private\"]' /etc/nixos/sys/secrets/age-keys.yaml > /mnt/var/sops-age-keys.txt"
 
 9. Install
 
         # Impure needed for `fromYaml` for some reason
-        sudo nixos-install --flake "path:///mnt/etc/nixos#portable" --root /mnt --impure
+        sudo nixos-install --flake "path:///mnt/etc/nixos#drywell" --root /mnt --impure
 
 10. Unmount
 
