@@ -38,9 +38,14 @@ proc generateHardwareConfig {hostname installDir configDir} {
     exec chown nixos:users "$configDir/hardware/$hostname.nix"
 }
 
+proc installInitSshKey {hostname masterSopsAgeKey configDir installDir} {
+    _info "Installing init ssh key..."
+    exec env "SOPS_AGE_KEY=$masterSopsAgeKey" sops -d --extract \["ssh-keys"\]\["host"\]\["rsa"\] "$configDir/hosts/$hostname/secrets.yaml" > $installDir/var/ssh_host_rsa_key
+}
+
 proc installAgeKey {hostname masterSopsAgeKey configDir installDir} {
     _info "Installing age key..."
-    exec env "SOPS_AGE_KEY=$masterSopsAgeKey" sops -d --extract \["$hostname"\]\["private"\] $configDir/secrets/age-keys.yaml > $installDir/var/sops-age-keys.txt
+    exec env "SOPS_AGE_KEY=$masterSopsAgeKey" sops -d --extract \["$hostname"\]\["private"\] $configDir/sys/secrets/age-keys.yaml > $installDir/var/sops-age-keys.txt
 }
 
 proc install {hostname installDir rootPassword} {
@@ -62,6 +67,7 @@ requireUser "root"
 generateHardwareConfig $hostname $installDir $configDir
 copyConfig $configDir $installDir
 setHostname $hostname
+installInitSshKey $hostname $masterSopsAgeKey $configDir $installDir
 installAgeKey $hostname $masterSopsAgeKey $configDir $installDir
 install $hostname $installDir $rootPassword
 

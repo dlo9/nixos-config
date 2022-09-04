@@ -44,7 +44,7 @@ let
             content = {
               type = "filesystem";
               format = "fat";
-              mountpoint = "/boot/efi0";
+              mountpoint = "/boot/efi";
             };
           }
 
@@ -180,7 +180,7 @@ let
           rec {
             type = "zfs_filesystem";
             name = "home/${admin}";
-            mountpoint = "/home";
+            options.mountpoint = "/home/${admin}";
             #options.mountpoint = "none";
             #mountpoint = "/home";
           }

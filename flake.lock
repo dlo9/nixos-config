@@ -167,14 +167,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1661834902,
-        "narHash": "sha256-cPLwGNNIqMDoL4cMMZ2q1P9Vb2XWDr3zm+5gYee3wck=",
-        "path": "/home/david/code/disko",
-        "type": "path"
+        "lastModified": 1662262100,
+        "narHash": "sha256-OGCC6/JOzWCho4BG3z8O9mcqNoNcTgP5t7CnjUmdyd0=",
+        "owner": "dlo9",
+        "repo": "disko",
+        "rev": "768d856eed8986d7486c76aeb60f8b26ddf075aa",
+        "type": "github"
       },
       "original": {
-        "path": "/home/david/code/disko",
-        "type": "path"
+        "owner": "dlo9",
+        "repo": "disko",
+        "type": "github"
       }
     },
     "home-manager": {

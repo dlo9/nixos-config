@@ -24,7 +24,7 @@ in
           configurationLimit = 10;
           splashImage = null; # I want all the text
           zfsSupport = true;
-          useOSProber = true;
+          useOSProber = mkDefault true;
           efiSupport = true;
           efiInstallAsRemovable = mkDefault false;
         };

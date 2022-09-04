@@ -57,7 +57,7 @@ in
       # Use cuttlefish as a remote builder
       buildMachines = mkIf cfg.low-power [{
         hostName = "cuttlefish";
-        systems = ["x86_64-linux" "aarch64-linux"];
+        systems = [ "x86_64-linux" "aarch64-linux" ];
 
         maxJobs = 4;
         speedFactor = 1;

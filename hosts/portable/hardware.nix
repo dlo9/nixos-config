@@ -9,45 +9,58 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "pool/nixos/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/home/david" =
-    {
-      device = "pool/home/david";
-      fsType = "zfs";
-    };
-
-  fileSystems."/root" =
-    {
-      device = "pool/home/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/boot/efi0" =
-    {
-      device = "/dev/disk/by-uuid/E9D4-B207";
-      fsType = "vfat";
-    };
-
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/047c4134-9d40-464b-af54-eae670b7841a"; }];
+    [{ device = "/dev/disk/by-uuid/505a2e74-e6a7-44f6-b835-f1bd904acb62"; }
+      { device = "/dev/disk/by-uuid/38d458a8-e4cf-43e7-9175-999c44159e2e"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;
 
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  fileSystems."/" =
+    {
+      device = "upool/nixos/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot/efi" =
+    {
+      device = "/dev/disk/by-uuid/4FE4-F3C5";
+      fsType = "vfat";
+    };
+
+  fileSystems."/home/david" =
+    {
+      device = "upool/home/david";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    {
+      device = "upool/nixos/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/root" =
+    {
+      device = "upool/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/upool" =
+    {
+      device = "upool";
+      fsType = "zfs";
+    };
 }

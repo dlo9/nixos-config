@@ -1,9 +1,12 @@
 #!/bin/sh
 
-config="./$(hostname)/hardware.nix"
+root="${1:-/}"
+hostname="${2:-$(hostname)}"
+config="/etc/nixos/hosts/$hostname/hardware.nix"
+
+touch "$config"
 
 # Must use `sudo` so that all mounts are visible
-sudo nixos-generate-config --show-hardware-config | ./process-hardware-config.awk | \
+sudo nixos-generate-config --root "$root" --show-hardware-config | \
+  ./process-hardware-config.awk | \
   nixpkgs-fmt > "$config"
-
-chown $USER:users "$config"

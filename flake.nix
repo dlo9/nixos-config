@@ -31,7 +31,8 @@
     # Disk partitioning
     disko = {
       #url = "github:nix-community/disko";
-      url = "path:/home/david/code/disko";
+      url = "github:dlo9/disko";
+      #url = "path:/home/david/code/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -186,12 +187,13 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "pavil" ({ config, pkgs, ... }: {
-            # Testing
-            environment.systemPackages = with pkgs; with config.sys.pkgs; [
-              genie-client
-            ];
-          });
+          modules = defaultModules "pavil" ./hosts/portable/partition.nix;
+          # modules = defaultModules "pavil" ({ config, pkgs, ... }: {
+          #   # Testing
+          #   environment.systemPackages = with pkgs; with config.sys.pkgs; [
+          #     genie-client
+          #   ];
+          # });
         };
 
         nebula = nixosSystem {
