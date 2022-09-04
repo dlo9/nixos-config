@@ -3,8 +3,10 @@
 let
   # Size in MiB
   biosSize = 1;
-  efiSize = 512;
-  swapSize = 1024;
+  efiSize = 1024;
+  swapSize = 8 * 1024;
+  reservedSize = "15G";
+  containerdSize = "30G";
 
   hostName = "drywell";
   admin = "david";
@@ -13,7 +15,7 @@ let
     type = "devices";
 
     content = {
-      "disk/by-id/usb-Leef_Supra_0171000000030148-0:0" = {
+      "disk/by-id/nvme-Force_MP500_17037932000122530025" = {
         type = "table";
         format = "gpt";
         partitions = [
@@ -37,7 +39,7 @@ let
             content = {
               type = "filesystem";
               format = "fat";
-              mountpoint = "/boot/efi";
+              mountpoint = "/boot/efi0";
             };
           }
 
@@ -58,13 +60,13 @@ let
             end = "100%";
             content = {
               type = "zfs";
-              pool = "upool";
+              pool = "fast";
             };
           }
         ];
       };
 
-      upool = {
+      fast = {
         type = "zpool";
 
         options = {
@@ -96,7 +98,7 @@ let
             options = {
               canmount = "off";
               mountpoint = "none";
-              refreservation = "1G";
+              refreservation = reservedSize;
             };
           }
 
@@ -113,7 +115,7 @@ let
             };
           }
 
-          rec {
+          {
             type = "zfs_filesystem";
             name = "nixos/root";
 
@@ -123,7 +125,7 @@ let
             };
           }
 
-          rec {
+          {
             type = "zfs_filesystem";
             name = "nixos/nix";
 
@@ -137,7 +139,7 @@ let
           ### Users Homes ###
           ###################
 
-          rec {
+          {
             type = "zfs_filesystem";
             name = "home";
 
@@ -147,7 +149,7 @@ let
             };
           }
 
-          rec {
+          {
             type = "zfs_filesystem";
             name = "home/root";
 
@@ -156,10 +158,85 @@ let
             };
           }
 
-          rec {
+          {
             type = "zfs_filesystem";
             name = "home/${admin}";
             options.mountpoint = "/home/${admin}";
+          }
+
+          ########################
+          ### Containerization ###
+          ########################
+
+          {
+            type = "zfs_filesystem";
+            name = "containers";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "containers/containerd";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "containers/containerd/content";
+            options = {
+              mountpoint = "/var/lib/containerd/io.containerd.content.v1.content";
+            };
+          }
+
+          {
+            type = "zfs_volume";
+            name = "containers/containerd/overlayfs-snapshotter";
+            size = "${containerdSize}";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "containers/kubernetes";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "containers/kubernetes/storage";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "containers/docker";
+            options = {
+              mountpoint = "/var/lib/docker";
+            };
+          }
+
+          {
+            type = "zfs_filesystem";
+            name = "zfs";
+            options = {
+              mountpoint = "/zfs";
+            };
           }
         ];
       };

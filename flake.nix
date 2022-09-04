@@ -252,7 +252,14 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "portable" { };
+          modules = defaultModules "portable" ./hosts/drywell/partition.nix;
+        };
+
+        drywell = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "drywell" { };
         };
 
         # Installer test
