@@ -17,7 +17,7 @@ mountPersist() {
 
   # Mount EFI
   echo "Mounting EFI"
-  mount -t vfat /dev/disk/by-partlabel/EFI "$mountDir"
+  mount -t vfat /dev/disk/by-label/EFI "$mountDir"
 }
 
 # Unmount the filesystem used for persistence
