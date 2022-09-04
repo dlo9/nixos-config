@@ -47,4 +47,5 @@ sudo portable-partition
 10. Unmount
 
         sudo swapoff /dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0-part3
+        sudo umount /mnt/boot/efi
         sudo zpool export upool
