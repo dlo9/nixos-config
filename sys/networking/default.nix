@@ -113,6 +113,7 @@ in
         "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
         qwertyuiop.psk = "@QWERTYUIOP@";
         LGFAK.psk = "@LGFAK@";
+        "gh 42".psk = "@GH_42@";
       };
     };
   };
