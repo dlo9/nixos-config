@@ -12,7 +12,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    boot.binfmt.emulatedSystems = [ "aarch64-linux i686-linux x86_64-linux" ];
 
     programs.adb.enable = true;
 
