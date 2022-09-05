@@ -13,7 +13,7 @@ let
     type = "devices";
 
     content = {
-      "disk/by-id/usb-Leef_Supra_0171000000030148-0:0" = {
+      "disk/by-id/usb-Lexar_USB_Flash_Drive_04PRY5BWVCGJ9U83-0:0" = {
         #"disk/by-id/usb-Generic_Flash_Disk_9D63220B-0:0" = {
         type = "table";
         format = "gpt";

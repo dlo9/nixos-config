@@ -19,7 +19,7 @@
       grub.useOSProber = false;
 
       grub.mirroredBoots = [
-        { devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
+        { devices = [ "/dev/disk/by-id/usb-Lexar_USB_Flash_Drive_04PRY5BWVCGJ9U83-0:0" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
       ];
     };
 

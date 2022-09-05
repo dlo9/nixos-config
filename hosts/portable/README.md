@@ -8,7 +8,7 @@ sudo portable-partition
 2. Insert the USB
 3. [Optional] If already installed, wipe the existing partition table:
 
-        sudo wipefs -a /dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0-part* /dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0
+        sudo wipefs -a /dev/disk/by-id/usb-Lexar_USB_Flash_Drive_04PRY5BWVCGJ9U83-0:0-part* /dev/disk/by-id/usb-Lexar_USB_Flash_Drive_04PRY5BWVCGJ9U83-0:0
 
 4. Partition the USB
 
@@ -46,6 +46,6 @@ sudo portable-partition
 
 10. Unmount
 
-        sudo swapoff /dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0-part3
+        sudo swapoff /dev/disk/by-id/usb-Lexar_USB_Flash_Drive_04PRY5BWVCGJ9U83-0:0-part3
         sudo umount /mnt/boot/efi
         sudo zpool export upool

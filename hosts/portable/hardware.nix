@@ -9,13 +9,13 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_acpi" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/38d458a8-e4cf-43e7-9175-999c44159e2e"; }];
+    [{ device = "/dev/disk/by-uuid/e1ceee5e-3e28-4c83-bd18-1b0dff945a07"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -24,7 +24,7 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" =
@@ -35,7 +35,7 @@
 
   fileSystems."/boot/efi" =
     {
-      device = "/dev/disk/by-uuid/4FE4-F3C5";
+      device = "/dev/disk/by-uuid/C9F6-4350";
       fsType = "vfat";
     };
 

@@ -251,8 +251,8 @@
         portable = nixosSystem {
           inherit specialArgs;
 
-          system = "x86_64-linux";
-          modules = defaultModules "portable" ./hosts/drywell/partition.nix;
+          system = "i686-linux";
+          modules = defaultModules "portable" { };
         };
 
         drywell = nixosSystem {
