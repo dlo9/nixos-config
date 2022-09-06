@@ -187,13 +187,16 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "pavil" ./hosts/portable/partition.nix;
-          # modules = defaultModules "pavil" ({ config, pkgs, ... }: {
-          #   # Testing
-          #   environment.systemPackages = with pkgs; with config.sys.pkgs; [
-          #     genie-client
-          #   ];
-          # });
+          modules = defaultModules "pavil" ({ config, pkgs, ... }: {
+            imports = [
+              ./hosts/portable/partition.nix
+            ];
+
+            # Testing
+            environment.systemPackages = with pkgs; with config.sys.pkgs; [
+              genie-client
+            ];
+          });
         };
 
         nebula = nixosSystem {
@@ -248,10 +251,24 @@
         rpi3-image = rpi3.config.system.build.sdImage;
 
         # Portable, can be used as a bootstrap image
-        portable = nixosSystem {
+        portable-i686 = nixosSystem {
           inherit specialArgs;
 
           system = "i686-linux";
+          modules = defaultModules "portable" { };
+        };
+
+        portable-x86_64 = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "portable" { };
+        };
+
+        portable-aarch64 = nixosSystem {
+          inherit specialArgs;
+
+          system = "aarch64-linux";
           modules = defaultModules "portable" { };
         };
 
