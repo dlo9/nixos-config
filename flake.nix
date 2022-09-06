@@ -192,6 +192,8 @@
               ./hosts/portable/partition.nix
             ];
 
+            partitionScript.baseName = "portable";
+
             # Testing
             environment.systemPackages = with pkgs; with config.sys.pkgs; [
               genie-client

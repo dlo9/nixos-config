@@ -14,6 +14,7 @@ in
   options.sys.networking = {
     enable = mkEnableOption "networking" // { default = true; };
     wireless = mkEnableOption "wireless networking" // { default = true; };
+    authenticateTailscale = mkEnableOption "authenticate tailscale" // { default = false; };
   };
 
   config = mkIf cfg.enable {
@@ -120,6 +121,17 @@ in
     ###########
 
     services.tailscale.enable = true;
+
+    sops.secrets.tailscale-auth-key = mkIf cfg.authenticateTailscale {
+      sopsFile = sysCfg.secrets.hostSecretsFile;
+    };
+
+    systemd.services.tailscale-anthenticate = mkIf cfg.authenticateTailscale {
+      script = ''
+        tailscale up --auth-key "file:${config.sops.secrets.tailscale-auth-key.path}"
+      '';
+      wantedBy = [ "multi-user.target" ];
+    };
 
     ############
     ### Misc ###
