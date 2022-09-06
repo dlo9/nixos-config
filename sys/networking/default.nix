@@ -17,8 +17,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.fqdn = "${networking.hostName}";
-
     ########################
     ### Private SSH Keys ###
     ########################
@@ -116,5 +114,29 @@ in
         "gh 42".psk = "@GH_42@";
       };
     };
+
+    ###########
+    ### VPN ###
+    ###########
+
+    services.tailscale.enable = true;
+
+    ############
+    ### Misc ###
+    ############
+
+    networking.fqdn = "${networking.hostName}";
+
+    # Don't wait for network availability to boot
+    networking.dhcpcd.wait = mkDefault "background";
+
+    # If set to the default (true), the firewall can break some tailscale and kubernetes configs
+    networking.firewall.checkReversePath = mkDefault "loose";
+    networking.firewall = {
+      allowPing = true;
+      pingLimit = "--limit 1/second --limit-burst 10";
+    };
+
+    services.openssh.enable = true;
   };
 }

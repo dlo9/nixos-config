@@ -117,19 +117,6 @@ in
     # Kernel
     boot.kernelPackages = mkIf cfg.kernel (mkDefault pkgs.linuxKernel.packages.linux_zen);
 
-    # Networking
-    networking.dhcpcd.wait = mkDefault "background";
-    networking.firewall = {
-      allowPing = true;
-      pingLimit = "--limit 1/second --limit-burst 10";
-    };
-
-    services.tailscale.enable = true;
-    services.openssh.enable = true;
-
-    # If set to the default (true), the firewall can break some tailscale and kubernetes configs
-    networking.firewall.checkReversePath = mkDefault "loose";
-
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
     programs.fish.enable = true;
