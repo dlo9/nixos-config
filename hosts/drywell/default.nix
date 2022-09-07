@@ -1,5 +1,31 @@
 { config, pkgs, lib, inputs, ... }:
 
+with builtins;
+with lib;
+
+let
+  zreplDefaults = {
+    pruning = {
+      keep_sender = [
+        { type = "not_replicated"; }
+
+        # Keep everything
+        {
+          type = "regex";
+          regex = ".*";
+        }
+      ];
+
+      keep_receiver = [
+        # Keep everything
+        {
+          type = "regex";
+          regex = ".*";
+        }
+      ];
+    };
+  };
+in
 {
   imports = [
     ./hardware.nix
@@ -26,5 +52,46 @@
     boot.initrd.kernelModules = [
       "r8169"
     ];
+
+    # ZFS autosnapshot and replication
+    services.zrepl = {
+      enable = true;
+      settings = {
+        global = {
+          logging = [
+            {
+              type = "stdout";
+              level = "warn";
+              format = "human";
+              time = true;
+              color = true;
+            }
+          ];
+        };
+
+        jobs = [
+          (recursiveUpdate zreplDefaults {
+            name = "drywell replication";
+            type = "pull";
+            root_fs = "slow/replication/drywell"; # This must exist
+            interval = "1h";
+
+            connect = {
+              type = "tcp";
+              address = "192.168.1.200:8888";
+            };
+
+            recv = {
+              # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
+              placeholder.encryption = "inherit";
+              properties.override = {
+                canmount = "off";
+                refreservation = "none";
+              };
+            };
+          })
+        ];
+      };
+    };
   };
 }
