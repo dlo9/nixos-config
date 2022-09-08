@@ -10,6 +10,7 @@
       gaming.enable = false;
       development.enable = false;
       low-power = true;
+      networking.authenticateTailscale = true;
     };
 
     boot.kernelParams = [ "nomodeset" ];
@@ -33,8 +34,9 @@
     ];
 
     # Ethernet modules for remote boot login
-    boot.initrd.kernelModules = [
+    boot.initrd.availableKernelModules = [
       "r8169"
+      "iwlwifi"
     ];
   };
 }

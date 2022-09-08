@@ -33,7 +33,7 @@ in
           visible = false;
         };
 
-        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name ["/" "/nix"])) [
+        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name [ "/" "/nix" ])) [
           "zfsutil"
           "X-mount.mkdir"
           "nofail"
@@ -43,6 +43,14 @@ in
 
     sys.zfs = {
       enable = mkEnableOption "ZFS tools" // { default = true; };
+
+      network-modules = mkOption {
+        type = types.listOf types.nonEmptyStr;
+        description = "The wifi module to load at boot time";
+      };
+
+      # TODO: Doesn't work yet, iwlwifi fails on the last step of the 4-way handshake
+      initrd-wireless = mkEnableOption "wifi connections in initrd" // { default = false; };
     };
   };
 
@@ -102,15 +110,23 @@ in
         "/root/.profile".source = zfs-helper-ssh-prompt;
       };
 
-      initrd.extraUtilsCommands = ''
-        copy_bin_and_libs ${zfs-helper}/bin/zfs-helper
-      '';
+      initrd.extraUtilsCommands = foldl' (x: y: x + "\n" + y) "" [
+        "copy_bin_and_libs ${zfs-helper}/bin/zfs-helper"
+        (optionalString cfg.initrd-wireless "copy_bin_and_libs ${pkgs.wpa_supplicant}/bin/wpa_supplicant")
+      ];
 
-      initrd.extraUtilsCommandsTest = ''
-        $out/bin/zfs-helper version
-      '';
+      initrd.extraUtilsCommandsTest = foldl' (x: y: x + "\n" + y) "" [
+        "$out/bin/zfs-helper version"
+        (optionalString cfg.initrd-wireless "$out/bin/wpa_supplicant -v")
+      ];
 
-      initrd.postDeviceCommands = "zfs-helper onBoot >/dev/null &";
+      # To debug, use: wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &
+      initrd.postDeviceCommands = foldl' (x: y: x + "\n" + y) "" [
+        (optionalString cfg.initrd-wireless "wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &")
+        "zfs-helper onBoot >/dev/null &"
+      ];
+
+      initrd.availableKernelModules = cfg.network-modules;
 
       initrd.network = {
         # Make sure you have added the kernel module for your network driver to `boot.initrd.availableKernelModules`,
