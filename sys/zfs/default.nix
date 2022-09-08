@@ -46,6 +46,7 @@ in
 
       network-modules = mkOption {
         type = types.listOf types.nonEmptyStr;
+        default = [];
         description = "The wifi module to load at boot time";
       };
 
@@ -99,7 +100,6 @@ in
         Type = "oneshot";
         ExecStart = ''${zfs-helper}/bin/zfs-helper onShutdown'';
       };
-
     };
 
     # Unlock ZFS with SSH at boot
