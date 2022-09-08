@@ -571,8 +571,21 @@ in
     home.packages = with pkgs // sysCfg.pkgs; [
       jq
       go-task
+
+      # Modern alternatives without aliases
       fd # Modern `find` alternative
       tldr # Simple `man` alternative
+      mtr
+
+      # Modern alternatives with aliases
+      du-dust
+      duf
+      bat
+      exa
+      ripgrep
+      bottom
+      gping
+      procs
 
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
