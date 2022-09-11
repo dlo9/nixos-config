@@ -655,6 +655,11 @@ in
 
       # USB installer
       ventoy-bin
+
+      # Testing
+      kopia # Backup tool
+      ddcutil
+      ddcui
     ];
 
     services = {
