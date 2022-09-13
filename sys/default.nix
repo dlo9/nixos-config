@@ -43,10 +43,12 @@ in
     nix = {
       settings = {
         substituters = [
-          "https://cache.nixos.org/"
-          "https://nix-community.cachix.org"
+          # Default priority is 50, lower number is higher priority
+          "https://cache.nixos.org?priority=50"
+          "https://nix-community.cachix.org?priority=50"
+          "daemon?priority=10"
 
-        ] ++ lib.optional (!config.services.nix-serve.enable) "https://nix-serve.sigpanic.com";
+        ] ++ lib.optional (!config.services.nix-serve.enable) "https://nix-serve.sigpanic.com?priority=100";
 
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
