@@ -30,11 +30,11 @@ unmountPersist() {
 
 waitForPool() {
   echo "Waiting for pool to import"
-  
+
   while [ "$(zpool list -H | wc -l)" -eq 0 ]; do
     sleep 1
   done
-  
+
   echo "Pool imported"
 }
 
@@ -67,7 +67,7 @@ unlockDatasets() {
   echo "Decrypting ZFS datasets"
 
   while read -r encRoot key; do
-	echo "Decrypting $encRoot"
+	  echo "Decrypting $encRoot"
     echo "$key" | zfs load-key "$encRoot"
   done < "$keyFileMem"
 }

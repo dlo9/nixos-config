@@ -197,7 +197,12 @@ in
         fi
 
         if [ -z "$SOPS_AGE_KEY" ]; then
-          echo "ERROR: SOPSs key not set"
+          echo "ERROR: SOPS_AGE_KEY not set"
+          exit 1
+        fi
+
+        if [ -z "$POOL_PASSPHRASE" ]; then
+          echo "ERROR: POOL_PASSPHRASE"
           exit 1
         fi
 
@@ -209,7 +214,10 @@ in
         wipefs -a "$DEVICE"*
 
         # Partition the USB
-        portable-partition
+        printf "%s\n" "$POOL_PASSPHRASE" "$POOL_PASSPHRASE" | portable-partition
+
+        # Label EFI for loading keys during boot
+        sudo fatlabel "$DEVICE-part2" EFI
 
         # Mount the USB
         umountDevice() {
@@ -236,9 +244,12 @@ in
         sops -d --extract '["ssh-keys"]["host"]["rsa"]' /etc/nixos/hosts/portable/secrets.yaml > /mnt/var/ssh_host_rsa_key
         sops -d --extract '["portable"]["private"]' /etc/nixos/sys/secrets/age-keys.yaml > /mnt/var/sops-age-keys.txt
 
+        # Install pool key for automatic decryption
+        printf '%s\t%s\n' "upool" "$POOL_PASSPHRASE" >> "/mnt/boot/efi/zfs_keys"
+
         # Install
         # Impure needed for `fromYaml` for some reason
-        nixos-install --flake "path:///mnt/etc/nixos#portable-i686" --root /mnt --impure
+        nixos-install --no-root-password --flake "path:///mnt/etc/nixos#portable-i686" --root /mnt --impure
       '')
     ];
   };
