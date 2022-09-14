@@ -129,6 +129,11 @@ in
       # Chassis and fan control
       ipmitool
       #ipmicfg
+
+      # CUDA support
+      #cudaPackages.cudatoolkit
+      cudaPackages.cutensor
+      cudaPackages.cudnn
     ];
 
     powerManagement.cpuFreqGovernor = "powersave";
@@ -171,6 +176,8 @@ in
       openFirewall = true;
       secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
     };
+
+    networking.firewall.allowedTCPPorts = [ 9000 ];
 
     # ZFS autosnapshot and replication
     services.zrepl = {
