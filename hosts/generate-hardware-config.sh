@@ -1,13 +1,13 @@
 #!/bin/sh
 
-root="$1"
+root="${1:-/}"
 hostname="${2:-$(hostname)}"
 dir="$(dirname "$0")"
 config="$dir/$hostname/hardware.nix"
 
 touch "$config"
 
-if [ -n "$root" ]; then
+if [ "$root" != "/" ]; then
   extraArgs="--root $root"
 fi
 

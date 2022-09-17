@@ -3,6 +3,9 @@
 This used to be a repository for system dotfiles, but have now been replaced by the nix configurations for all my machines.
 
 # Adding a new host
+```sh
+SOPS_AGE_KEY=MY_MASTER_KEY ./scripts/util/create-host-config <hostname> <admin> <description>
+```
 
 ## Installing
 ### The fancy way
