@@ -11,6 +11,7 @@ age-keys: &age-keys
   - &portable age1gcjvff6wd48as5jmym0d9efalye248vmmwe6r2htz2wgv6xyldpqjjrlqu
   - &installer age1na853jz9pslss7rleap2hwgaxmlrjrry8yh2rjrn90tcee4r5f3ssjj5vp
   - &rpi3 age189fhnxddwst08ug2j644nqd9vtxf2tp2kr3ygmutruayvzt7ss9sd3jf4m
+  - &limb-1 age1egxva7myft04uzkfurq4altj92neuchtggw62z55p3tt3ddlnvxsf6ersm
 
 creation_rules:
   #######################
@@ -80,3 +81,10 @@ creation_rules:
     - age:
       - *bitwarden
       - *rpi3
+
+  - path_regex: ^hosts/limb-1/secrets.yaml$
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *limb-1
