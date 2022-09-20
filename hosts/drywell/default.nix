@@ -43,7 +43,7 @@ in
     boot.loader = {
       grub.mirroredBoots = [
         { devices = [ "/dev/disk/by-id/nvme-Force_MP500_17037932000122530025" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
-        { devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
+        #{ devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
       ];
     };
 
