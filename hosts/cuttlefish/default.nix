@@ -123,7 +123,7 @@ in
     sys = {
       kubernetes.enable = true;
       graphical.enable = false;
-      maintenance.autoUpgrade = true;
+      #maintenance.autoUpgrade = true;
     };
 
     environment.systemPackages = with pkgs; [
