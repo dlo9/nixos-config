@@ -73,6 +73,7 @@ in
 {
   imports = [
     ./hardware.nix
+    ./samba.nix
   ];
 
   config = {
