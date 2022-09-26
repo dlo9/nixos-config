@@ -112,10 +112,9 @@ in
       openFirewall = true;
 
       shares = {
-        smb = {
-          path = "/slow/smb/";
+        michael = {
+          path = "/slow/smb/michael";
           browseable = "yes";
-          #content = "Network storage";
           "read only" = "no";
           #"guest ok" = "yes";
           "create mask" = "0644";
@@ -123,21 +122,31 @@ in
           "force user" = "michael";
           "force group" = "users";
           "valid users" = "+samba";
-          #"valid users" = "david michael";
+        };
+
+        michael-backup = {
+          path = "/slow/backup/michael";
+          browseable = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "michael";
+          "force group" = "users";
+          "valid users" = "+samba";
         };
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`
       extraConfig = let
-        tailscaleNat = "100.64.0.0/10";
+        tailscaleCidr = "100.64.0.0/10";
         in ''
           workgroup = WORKGROUP
-          server string = drywell2
-          netbios name = drywell2
+          server string = drywell
+          netbios name = drywell
           security = user
           #use sendfile = yes
           #max protocol = smb2
-          hosts allow = 100.64. 192.168. 127.0.0.1 localhost
+          hosts allow = ${tailscaleCidr} 192.168. 127.0.0.1 localhost
           hosts deny = 0.0.0.0/0
           guest account = nobody
           map to guest = bad user
