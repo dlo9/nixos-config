@@ -155,6 +155,7 @@
             useUserPackages = true;
             backupFileExtension = "home-manager-backup";
             users.david = import ./home;
+            users.root.home.stateVersion = "22.11";
 
             # Pass extra arguments to home.nix
             extraSpecialArgs = {
