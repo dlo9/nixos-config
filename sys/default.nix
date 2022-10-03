@@ -95,11 +95,11 @@ in
       enableOnBoot = true;
     };
 
-    virtualisation.podman = {
-      enable = mkDefault true;
+    #virtualisation.podman = {
+    #  enable = mkDefault true;
       #dockerCompat = true;
       #dockerSocket.enable = true;
-    };
+    #};
 
     # Timezone
     time.timeZone = "America/Los_Angeles";

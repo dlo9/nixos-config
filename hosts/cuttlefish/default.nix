@@ -178,7 +178,13 @@ in
       secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
     };
 
-    networking.firewall.allowedTCPPorts = [ 9000 ];
+    networking.firewall.allowedTCPPorts = [
+      # TODO: is this for prometheus?
+      9000
+
+      # Misc testing
+      8080
+    ];
 
     # ZFS autosnapshot and replication
     services.zrepl = {
