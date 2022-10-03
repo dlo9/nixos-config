@@ -84,7 +84,9 @@ buildImage {
       sway
       foot # Terminal emulator
       xwayland
+
       mesa
+      mesa-demos
 
       novnc
       python310Packages.websockify

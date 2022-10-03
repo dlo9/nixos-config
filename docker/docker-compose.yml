@@ -10,8 +10,11 @@ services:
     volumes:
       - /run/opengl-driver:/run/opengl-driver
     devices:
-      - /dev/dri/card0:/dev/dri/card0
-      - /dev/dri/renderD128:/dev/dri/renderD128
-      - /dev/drm_dp_aux0:/dev/drm_dp_aux0
-      - /dev/drm_dp_aux1:/dev/drm_dp_aux1
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+
+      # - /dev/dri/card0:/dev/dri/card0
+      # - /dev/dri/renderD128:/dev/dri/renderD128
+      # - /dev/drm_dp_aux0:/dev/drm_dp_aux0
+      # - /dev/drm_dp_aux1:/dev/drm_dp_aux1
     entrypoint: sway
