@@ -264,6 +264,13 @@
           modules = defaultModules "portable" { };
         };
 
+        portable = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "portable" { };
+        };
+
         portable-aarch64 = nixosSystem {
           inherit specialArgs;
 
