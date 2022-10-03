@@ -31,6 +31,17 @@ with lib;
           "force group" = "users";
           "valid users" = "+samba";
         };
+
+        chelsea-backup = {
+          path = "/slow/smb/chelsea-backup";
+          browseable = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "chelsea";
+          "force group" = "users";
+          "valid users" = "+samba";
+        };
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`

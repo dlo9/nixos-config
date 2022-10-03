@@ -218,6 +218,10 @@ in
               "slow/replication<" = false;
               "slow/backup/drywell<" = false;
               "slow/trash<" = false;
+
+              # Computer backups
+              # TODO: move these
+              "slow/smb/chelsea-backup" = false;
             };
 
             snapshotting = {
