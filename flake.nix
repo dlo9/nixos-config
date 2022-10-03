@@ -141,9 +141,6 @@
       ];
 
       defaultModules = (hostName: extraSettings: [
-        # Include configuration for nixFlakes, or else everything breaks after switching
-        ./configuration.nix
-
         # Custom system modules
         ./sys
 
