@@ -30,8 +30,9 @@ in
       ###############
 
       vimPlugins = with vimUtils; {
-        vim-central = buildVimPlugin {
+        vim-central = buildVimPlugin rec {
           name = "vim-central";
+          pname = name;
           src = fetchFromGitHub {
             owner = "her";
             repo = "central.vim";
@@ -40,8 +41,9 @@ in
           };
         };
 
-        vim-yadi = buildVimPlugin {
+        vim-yadi = buildVimPlugin rec {
           name = "vim-yadi";
+          pname = name;
           src = fetchFromGitHub {
             owner = "timakro";
             repo = "vim-yadi";
@@ -50,8 +52,9 @@ in
           };
         };
 
-        coc-rome = buildVimPlugin {
+        coc-rome = buildVimPlugin rec {
           name = "coc-rome";
+          pname = name;
           src = fetchFromGitHub {
             owner = "fannheyward";
             repo = "coc-rome";
@@ -60,8 +63,9 @@ in
           };
         };
 
-        coc-sh = buildVimPlugin {
+        coc-sh = buildVimPlugin rec {
           name = "coc-sh";
+          pname = name;
           src = fetchFromGitHub {
             owner = "josa42";
             repo = "coc-sh";
@@ -70,8 +74,9 @@ in
           };
         };
 
-        coc-docker = buildVimPlugin {
+        coc-docker = buildVimPlugin rec {
           name = "coc-docker";
+          pname = name;
           src = fetchFromGitHub {
             owner = "josa42";
             repo = "coc-docker";
@@ -191,7 +196,7 @@ in
       # };
 
       steam-tui = callPackage ./pkgs/steam-tui.nix { withWine = true; };
-      genie-client = callPackage ./pkgs/genie-client.nix {};
+      genie-client = callPackage ./pkgs/genie-client.nix { };
     };
   };
 }

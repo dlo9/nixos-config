@@ -18,7 +18,7 @@ in
 
       fromYAML = yamlFile: builtins.fromJSON (
         builtins.readFile (
-          pkgs.runCommandNoCC "from-yaml"
+          pkgs.runCommand "from-yaml"
             {
               allowSubstitutes = false;
               preferLocalBuild = true;

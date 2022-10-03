@@ -72,6 +72,7 @@ in
 
       extraOptions = ''
         builders-use-substitutes = true
+        experimental-features = nix-command flakes
       '';
     };
 
@@ -89,9 +90,16 @@ in
     #zramSwap.enable = true;
 
     # Docker
-    virtualisation.docker = {
+    # virtualisation.docker = {
+    #   enable = mkDefault true;
+    #   enableOnBoot = true;
+    # };
+
+    virtualisation.podman = {
       enable = mkDefault true;
-      enableOnBoot = true;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      extraPackages = [ pkgs.zfs ];
     };
 
     # Timezone
