@@ -90,16 +90,15 @@ in
     #zramSwap.enable = true;
 
     # Docker
-    # virtualisation.docker = {
-    #   enable = mkDefault true;
-    #   enableOnBoot = true;
-    # };
+    virtualisation.docker = {
+      enable = mkDefault true;
+      enableOnBoot = true;
+    };
 
     virtualisation.podman = {
       enable = mkDefault true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      extraPackages = [ pkgs.zfs ];
+      #dockerCompat = true;
+      #dockerSocket.enable = true;
     };
 
     # Timezone

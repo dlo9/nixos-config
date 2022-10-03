@@ -1,5 +1,8 @@
 # Build result
 result
 
+# VM Disks
+*.qcow2
+
 # Temporary files
 *.swp
