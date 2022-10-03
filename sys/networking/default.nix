@@ -182,7 +182,7 @@ in
           (cuttlefish-share "documents")
           #(cuttlefish-share "games")
           #(cuttlefish-share "movies")
-          #(cuttlefish-share "photos")
+          (cuttlefish-share "photos")
           #(cuttlefish-share "tv")
         ];
     })
