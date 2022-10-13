@@ -86,6 +86,9 @@ in
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
+    # For steam docker
+    security.unprivilegedUsernsClone = true;
+
     boot = {
       # Sensors from `sudo sensors-detect`
       kernelModules = [ "coretemp" "nct7904" ];

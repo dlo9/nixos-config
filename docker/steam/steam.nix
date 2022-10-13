@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs, pkgs-unstable }:
 
 with pkgs.dockerTools;
 
@@ -15,7 +15,7 @@ let
     include /etc/sway/config
 
     output "HEADLESS-1" {
-      mode 1920x1080@60Hz
+      # mode 1920x1080@60Hz
       position 0,0
     }
 
@@ -54,11 +54,11 @@ buildImage {
     #!${pkgs.runtimeShell}
     ${pkgs.dockerTools.shadowSetup}
 
-    groupadd users
-    groupadd audio
-    groupadd video
+    groupadd -g 100 users
+    groupadd -g 17 audio
+    groupadd -g 26 video
 
-    useradd -m -g users -G audio,video steam
+    useradd -m -u 1000 -g users -G audio,video steam
 
     mkdir -p /home/steam/.config/sway
     cp "${sway-config}" /home/steam/.config/sway/config
@@ -69,7 +69,8 @@ buildImage {
     chown -R steam:users /run/user/1000
   '';
 
-  copyToRoot = pkgs.buildEnv {
+  #copyToRoot = pkgs.buildEnv {
+  contents = pkgs.buildEnv {
     name = "root";
 
     pathsToLink = [ "/share/man" "/share/doc" "/bin" "/etc" ];
@@ -84,9 +85,12 @@ buildImage {
       sway
       foot # Terminal emulator
       xwayland
+      xorg.xev
 
-      mesa
-      mesa-demos
+      #mesa
+      #mesa-demos
+
+      steam
 
       novnc
       python310Packages.websockify
@@ -134,7 +138,7 @@ buildImage {
       # https://ryantm.github.io/nixpkgs/builders/images/dockertools/#ssec-pkgs-dockerTools-helpers
       usrBinEnv
       binSh
-      caCertificates
+      #caCertificates
       #fakeNss
     ];
   };
