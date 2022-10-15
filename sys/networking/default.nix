@@ -135,6 +135,15 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
+
+      #####################
+      ### Remote access ###
+      #####################
+
+      services.openssh.enable = true;
+      programs.mosh.enable = true;
+      programs.mosh.withUtempter = false;
+
       ############
       ### Misc ###
       ############
@@ -150,8 +159,6 @@ in
         allowPing = true;
         pingLimit = "--limit 1/second --limit-burst 10";
       };
-
-      services.openssh.enable = true;
     })
     ({
       #############
