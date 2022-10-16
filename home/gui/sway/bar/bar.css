@@ -1,0 +1,142 @@
+/**********************/
+/***** Global/Bar *****/
+/**********************/
+
+* {
+  font-family: NotoSansMono Nerd Font;
+  font-size: 14px;
+
+  /* Slanted */
+  border-radius: 0.3em 0.9em;
+
+  /* None */
+  /*border-radius: 0;*/
+
+  outline: none;
+  border-color: transparent;
+}
+
+#waybar {
+  background: @base00;
+}
+
+label {
+  padding: 0 0.5em;
+  margin: 0.3em;
+  color: @base05;
+}
+
+/************************/
+/***** Left modules *****/
+/************************/
+
+/* Use button padding instead of label */
+#workspaces label {
+  padding: 0;
+  margin: 0;
+}
+
+#workspaces button {
+  padding: 0;
+  margin: 0.3em 0.2em;
+}
+
+/* Workspace highlighting */
+
+/* Plain and translucent by default */
+#workspaces button {
+  box-shadow: 0 -0.2em alpha(@base04, 0.5);
+  background: alpha(@base04, 0.25);
+}
+
+/* More opaque when hovered */
+#workspaces :hover {
+  box-shadow: 0 -0.2em @base04;
+  background: alpha(@base04, 0.5);
+}
+
+/* Change color when focused */
+#workspaces .focused {
+  box-shadow: 0 -0.2em alpha(@base0F, 0.75);
+  background: alpha(@base0F, 0.25);
+}
+
+/* Change color and more opaque when both */
+#workspaces :hover.focused {
+  box-shadow: 0 -0.2em @base0F;
+  background: alpha(@base0F, 0.5);
+}
+
+/**************************/
+/***** Center modules *****/
+/**************************/
+
+/* Center weather icon*/
+
+#custom-weather {
+  margin-left: -0.5em;
+  margin-right: 3em;
+}
+
+/*************************/
+/***** Right modules *****/
+/*************************/
+
+/* Module backgrounds */
+#network {
+  box-shadow: 0 -0.2em @base0F;
+  background: alpha(@base0F, 0.25);
+}
+
+#memory {
+  box-shadow: 0 -0.2em @base08;
+  background: alpha(@base08, 0.25);
+}
+
+#cpu {
+  box-shadow: 0 -0.2em @base0A;
+  background: alpha(@base0A, 0.25);
+}
+
+#disk {
+  box-shadow: 0 -0.2em @base0D;
+  background: alpha(@base0D, 0.25);
+}
+
+#pulseaudio {
+  box-shadow: 0 -0.2em @base0C;
+  background: alpha(@base0C, 0.25);
+}
+
+#battery {
+  box-shadow: 0 -0.2em @base0B;
+  background: alpha(@base0B, 0.25);
+}
+
+#backlight {
+  box-shadow: 0 -0.2em @base06;
+  background: alpha(@base06, 0.25);
+}
+
+#custom-displays {
+  box-shadow: 0 -0.2em @base08;
+  background: alpha(@base08, 0.25);
+}
+
+#temperature {
+  box-shadow: 0 -0.2em @base09;
+  background: alpha(@base09, 0.25);
+}
+
+#tray {
+  padding: 0 0.5em;
+  margin: 0.3em 0.2em;
+
+  box-shadow: 0 -0.2em @base0E;
+  background: alpha(@base0E, 0.25);
+}
+
+/* Fix tooltip background */
+tooltip, tooltip label {
+  background: @base02;
+}

@@ -13,7 +13,7 @@ in
 {
   imports = [
     inputs.base16.homeManagerModule
-    ./gui.nix
+    ./gui
   ];
 
   options.home = {
@@ -442,6 +442,7 @@ in
         enable = true;
         enableFishIntegration = true;
       };
+
       bottom = {
         enable = true;
 
@@ -452,7 +453,6 @@ in
           };
         };
       };
-
     };
 
     xdg = {

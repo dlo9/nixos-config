@@ -24,55 +24,6 @@ in
       fi
     '';
 
-    # Window manager
-    programs.xwayland.enable = true;
-    programs.sway = {
-      enable = true;
-      wrapperFeatures = {
-        base = true;
-        gtk = true;
-      };
-
-      extraSessionCommands = ''
-        # SDL:
-        export SDL_VIDEODRIVER=wayland
-        # QT (needs qt5.qtwayland in systemPackages):
-        export QT_QPA_PLATFORM=wayland-egl
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-        # Fix for some Java AWT applications (e.g. Android Studio),
-        # use this if they aren't displayed properly:
-        export _JAVA_AWT_WM_NONREPARENTING=1
-      '';
-      extraPackages = with pkgs; [
-        # Core
-        swaylock
-        swayidle
-        swaybg
-        waybar
-
-        # Clipboard
-        wl-clipboard
-        copyq
-
-        # Notifications
-        mako
-
-        # Shell
-        alacritty
-
-        # Menus and application selection
-        wofi
-        dex
-
-        # Hardware controls
-        brightnessctl
-        pavucontrol
-
-        # Display management
-        wdisplays
-      ];
-    };
-
     # Audio
     hardware.pulseaudio.enable = true;
 
