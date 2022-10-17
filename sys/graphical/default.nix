@@ -16,6 +16,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Allow swaylock
+    security.pam.services.swaylock = {};
+
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = "${sysCfg.user}";
     environment.loginShellInit = ''
