@@ -70,30 +70,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/backup/chelsea/windows-laptop" =
-    {
-      device = "slow/backup/chelsea/windows-laptop";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/david/archbook-duplicacy" =
-    {
-      device = "slow/backup/david/archbook-duplicacy";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/david/mail" =
-    {
-      device = "slow/backup/david/mail";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/backup/david/motog5" =
-    {
-      device = "slow/backup/david/motog5";
-      fsType = "zfs";
-    };
-
   fileSystems."/slow/documents" =
     {
       device = "slow/documents";
@@ -121,6 +97,12 @@
   fileSystems."/slow/media/photos" =
     {
       device = "slow/media/photos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video-optimized" =
+    {
+      device = "slow/media/video-optimized";
       fsType = "zfs";
     };
 
@@ -160,9 +142,21 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/recover/backup/david/nebula-windows" =
+  fileSystems."/slow/smb/chelsea" =
     {
-      device = "slow/backup/david/nebula-windows";
+      device = "slow/smb/chelsea";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/smb/chelsea-backup" =
+    {
+      device = "slow/smb/chelsea-backup";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/lib/containerd/io.containerd.content.v1.content" =
+    {
+      device = "fast/kubernetes/containerd/content";
       fsType = "zfs";
     };
 

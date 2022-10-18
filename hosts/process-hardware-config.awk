@@ -30,6 +30,7 @@ currentFilesystem != "" {
     for (i in fileSystemsSorted) {
         fileSystem = fileSystemsSorted[i];
 
+        # TODO: ignore cifs mounts
         if (fileSystem ~ /^\/var\/lib\/kubernetes\/pods/) {
             # Pod mounts are managed by kubernetes
             continue;
