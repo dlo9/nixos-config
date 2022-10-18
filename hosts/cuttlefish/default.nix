@@ -74,6 +74,7 @@ in
   imports = [
     ./hardware.nix
     ./samba.nix
+    ./users.nix
   ];
 
   config = {
