@@ -1,43 +1,70 @@
 #!/usr/bin/env -S awk -f
 
+BEGIN {
+    ignoredPaths[0] = "^/var/lib/kubernetes/pods/";
+    ignoredPaths[1] = "^/var/lib/docker/overlay2/";
+
+    ignoredFilesystemTypes[0] = "autofs";
+}
+
 # Skip commented network interfaces
 /# networking/ { next; }
 
-# Detect a fileSystem mount start
+# Detect a filesystem mount start
 match($0, /fileSystems\."(.*)"/, matches) {
     currentFilesystem = matches[1];
 }
 
-# Store the fileSystem mount
+# Store the filesystem mount
 currentFilesystem != "" {
-    # Detect a fileSystem mount end
+    # Detect a filesystem mount end
     if ($0 ~ /^$/) {
-        currentFilesystem = ""
+        currentFilesystem = "";
     } else {
-        fileSystems[currentFilesystem] = fileSystems[currentFilesystem] "\n" $0;
+        filesystemSpecs[currentFilesystem] = filesystemSpecs[currentFilesystem] "\n" $0;
+
+        if (match($0, /fsType = "(.*)"/, matches)) {
+            filesystemTypes[currentFilesystem] = matches[1];
+        }
     }
 
-    # Don't print the empty line
+    # Don't print the current line
     next;
 }
 
 # Last line
 /^\}$/ {
-    # Sort fileSystems
-    asorti(fileSystems, fileSystemsSorted);
+    # Sort filesystems
+    asorti(filesystemSpecs, filesystemsSorted);
 
-    # Print fileSystems
-    for (i in fileSystemsSorted) {
-        fileSystem = fileSystemsSorted[i];
+    # Print filesystems
+    for (i in filesystemsSorted) {
+        shouldOutput = 1;
 
-        # TODO: ignore cifs mounts
-        if (fileSystem ~ /^\/var\/lib\/kubernetes\/pods/) {
-            # Pod mounts are managed by kubernetes
-            continue;
+        # Ignore configured paths
+        currentFilesystem = filesystemsSorted[i];
+        for (j in ignoredPaths) {
+            ignoredPath = ignoredPaths[j];
+            if (currentFilesystem ~ ignoredPath) {
+                shouldOutput = 0;
+                break;
+            }
         }
 
-        print fileSystems[fileSystem];
+        # Ignore configured filesystems
+        currentFilesystemType = filesystemTypes[currentFilesystem];
+        for (j in ignoredFilesystemTypes) {
+            ignoredFilesystemType = ignoredFilesystemTypes[j];
+            if (currentFilesystemType ~ ignoredFilesystemType) {
+                shouldOutput = 0;
+                break;
+            }
+        }
+
+        if (shouldOutput) {
+            print filesystemSpecs[currentFilesystem];
+        }
     }
 }
 
-{ print }
+{ print; }
