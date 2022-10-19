@@ -102,11 +102,19 @@ with lib;
                 interval = "15m";
               };
 
-              # Keep everything, pruning will be done during replication
               pruning.keep = [
+                # Keep local snapshots up to a week
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 23x1h | 6x1d";
+                  regex = "^zrepl_local_.*";
+                }
+
+                # Keep everything else, which will be pruned during replication
                 {
                   type = "regex";
-                  regex = ".*";
+                  regex = "^zrepl_local_.*";
+                  negate = true;
                 }
               ];
             };
