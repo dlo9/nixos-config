@@ -100,12 +100,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/video-optimized" =
-    {
-      device = "slow/media/video-optimized";
-      fsType = "zfs";
-    };
-
   fileSystems."/slow/media/video/isos" =
     {
       device = "slow/media/video/isos";
@@ -115,6 +109,12 @@
   fileSystems."/slow/media/video/movies" =
     {
       device = "slow/media/video/movies";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/media/video/optimized" =
+    {
+      device = "slow/media/video/optimized";
       fsType = "zfs";
     };
 
