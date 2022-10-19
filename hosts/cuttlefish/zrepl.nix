@@ -3,70 +3,19 @@
 with lib;
 
 let
-  zreplDefaults = {
-    pruning = {
-      keep_sender = [
-        { type = "not_replicated"; }
+  keepNotReplicated = {
+    type = "not_replicated";
+  };
 
-        # Keep up to a week
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 6x1d";
-          regex = "^zrepl_short_.*";
-        }
+  keepAll = {
+    type = "regex";
+    regex = ".*";
+  };
 
-        # Keep up to a month
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 30x1d";
-          regex = "^zrepl_medium_.*";
-        }
-
-        # Keep up to a year
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
-          regex = "^zrepl_long_.*";
-        }
-
-        # Keep non-zrepl snapshots
-        {
-          type = "regex";
-          regex = "^zrepl_.*";
-          negate = true;
-        }
-      ];
-
-      keep_receiver = [
-        # Keep up to a week
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 6x1d";
-          regex = "^zrepl_short_.*";
-        }
-
-        # Keep up to a month
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 30x1d";
-          regex = "^zrepl_medium_.*";
-        }
-
-        # Keep up to a year
-        {
-          type = "grid";
-          grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
-          regex = "^zrepl_long_.*";
-        }
-
-        # Keep non-zrepl snapshots
-        {
-          type = "regex";
-          regex = "^zrepl_.*";
-          negate = true;
-        }
-      ];
-    };
+  keepNonZrepl = {
+    type = "regex";
+    regex = "^zrepl_.*";
+    negate = true;
   };
 in
 {
@@ -108,46 +57,86 @@ in
             #   - long: up to 1 year remotely
 
             retentionPolicies = {
-              never = [
-                # Trash
-                "slow/trash<"
+              never = {
+                filesystems = [
+                  # Trash
+                  "slow/trash<"
 
-                # TODO: should disable snapshotting completely, or might break zrepl push/pull
-                # Replicated datasets
-                "slow/replication<"
-                "slow/backup/drywell<"
-              ];
+                  # TODO: should disable snapshotting completely, or might break zrepl push/pull
+                  # Replicated datasets
+                  "slow/replication<"
+                  "slow/backup/drywell<"
+                ];
+              };
 
-              local = [
-                # Caches
-                "fast/home/david/.cache<"
-                "fast/home/david/code<"
-                "fast/home/david/Downloads<"
-                "fast/nixos/nix<"
-              ];
+              local = {
+                filesystems = [
+                  # Caches
+                  "fast/home/david/.cache<"
+                  "fast/home/david/code<"
+                  "fast/home/david/Downloads<"
+                  "fast/nixos/nix<"
 
-              short = [
-                # Computer backups
-                # TODO: move these
-                # TODO: make local only, but up to a week?
-                "slow/smb/chelsea-backup<"
-              ];
+                  # Container cache
+                  "fast/kubernetes/docker<"
+                  "fast/kubernetes/containerd<"
+                ];
 
-              medium = [ ];
+                # Keep up to a week
+                keepPolicy = {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 23x1h | 6x1d";
+                  regex = "^zrepl_local_.*";
+                };
+              };
 
-              long = [ "<" ];
+              short = {
+                filesystems = [
+                  # Computer backups
+                  # TODO: move these
+                  # TODO: make local only, but up to a week?
+                  "slow/smb/chelsea-backup<"
+                ];
 
+                # Keep up to a week
+                keepPolicy = {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 23x1h | 6x1d";
+                  regex = "^zrepl_short_.*";
+                };
+              };
+
+              medium = {
+                filesystems = [ ];
+
+                # Keep up to a month
+                keepPolicy = {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 23x1h | 30x1d";
+                  regex = "^zrepl_medium_.*";
+                };
+              };
+
+              long = {
+                filesystems = [ "<" ];
+
+                # Keep up to a year
+                keepPolicy = {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+                  regex = "^zrepl_long_.*";
+                };
+              };
             };
 
             # Turns an attrSet of { filesystem -> bool } where each filesystem in the given
             # policy is set to `true`, and each filesystem in other policies is set to `false`
             getReplicationPolicy = policy:
               let
-                myFs = retentionPolicies."${policy}";
-                otherFs = (flatten (mapAttrsToList (n: v: optionals (n != policy) v) retentionPolicies));
+                myFs = retentionPolicies."${policy}".filesystems;
+                otherFs = (flatten (mapAttrsToList (n: v: optionals (n != policy) v.filesystems) retentionPolicies));
               in
               (listToUnityAttrs myFs true) // (listToUnityAttrs otherFs false);
-
 
             snapshotJob = retentionPolicy: rec {
               name = "snapshot ${retentionPolicy}-retention datasets";
@@ -162,46 +151,14 @@ in
               };
 
               # Keep everything, pruning will be done during replication
+              # TODO: change back to `keepAll` once we're replicating
               pruning.keep = [
-                {
-                  type = "regex";
-                  regex = ".*";
-                }
+                retentionPolicies."${retentionPolicy}".keepPolicy
+                keepNonZrepl
               ];
             };
           in
           [
-            #{
-            #  name = "cuttlefish replication";
-            #  type = "source";
-
-            #  serve = {
-            #    type = "tcp";
-            #    listen = "100.111.108.84:8888";
-            #    listen_freebind = true;
-            #    clients = {
-            #      "100.97.145.42" = "cuttlefish";
-            #    };
-            #  };
-
-            #  # Only exclude filesystems which shouldn't replicate at all.
-            #  # Otherwise, zrepl unnecessarily syncs the snapshots and then fails when deleting them
-            #  filesystems = { "<" = true; } // listToUnityAttrs retentionPolicies.local false;
-
-            #  send = {
-            #    encrypted = true;
-            #    large_blocks = true;
-            #    compressed = true;
-            #    embedded_data = true;
-            #    raw = true;
-            #  };
-
-            #  snapshotting = {
-            #    # Snapshots are done in separate jobs so that only one port is needed
-            #    type = "manual";
-            #  };
-            #}
-
             # Snapshot jobs
             (snapshotJob "long")
             (snapshotJob "medium")
@@ -209,7 +166,7 @@ in
             (snapshotJob "local")
 
             # Pull job for pavil
-            (recursiveUpdate zreplDefaults {
+            {
               name = "pavil replication";
               type = "pull";
               root_fs = "slow/replication/pavil"; # This must exist
@@ -228,7 +185,23 @@ in
                   refreservation = "none";
                 };
               };
-            })
+
+              pruning = {
+                keep_sender = [
+                  keepNotReplicated
+                  retentionPolicies.local.keepPolicy
+                  retentionPolicies.short.keepPolicy
+                  retentionPolicies.medium.keepPolicy
+                  retentionPolicies.long.keepPolicy
+                ];
+
+                keep_receiver = [
+                  retentionPolicies.short.keepPolicy
+                  retentionPolicies.medium.keepPolicy
+                  retentionPolicies.long.keepPolicy
+                ];
+              };
+            }
           ];
       };
     };
