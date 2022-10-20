@@ -62,7 +62,7 @@ in
         userName = "David Orchard";
         userEmail = "if_coding@fastmail.com";
 
-        difftastic.enable = true;
+        difftastic.enable = false;
 
         ignores = [
           # Temporary files
@@ -217,6 +217,12 @@ in
           " Leader is `\`, so type `\+a` for spelling help
           vmap <leader>a <Plug>(coc-codeaction-selected)
           nmap <leader>a <Plug>(coc-codeaction-selected)
+
+          " Accept autocomplete item. I haven't needed this before, not sure why I do now
+          " Make <CR> to accept selected completion item or notify coc.nvim to format
+          " <C-g>u breaks current undo, please make your own choice.
+          inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
           """"""""
           "" UI ""
