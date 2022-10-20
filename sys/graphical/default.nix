@@ -17,7 +17,7 @@ in
 
   config = mkIf cfg.enable {
     # Allow swaylock
-    security.pam.services.swaylock = {};
+    security.pam.services.swaylock = { };
 
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = "${sysCfg.user}";
@@ -31,15 +31,28 @@ in
     hardware.pulseaudio.enable = true;
 
     # Fonts
-    fonts.fonts = with pkgs; [
-      # Nerdfonts is huge, so only install specific fonts
-      # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
-      (nerdfonts.override {
-        fonts = [
-          "Noto" # If removed, add `noto-fonts-emoji` package to retain emoji support
-        ];
-      })
-    ];
+    fonts = {
+      fonts = with pkgs; [
+        # Nerdfonts is huge, so only install specific fonts
+        # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
+        (nerdfonts.override {
+          fonts = [
+            "Noto"
+          ];
+        })
+
+        noto-fonts-emoji
+      ];
+
+      fontconfig = {
+        defaultFonts = {
+          serif = [ "NotoSerif Nerd Font" "" ];
+          sansSerif = [ "NotoSans Nerd Font" "DejaVu Sans" ];
+          monospace = [ "Noto Nerd Font Mono" ];
+          emoji = [ "Noto Color Emoji" ];
+        };
+      };
+    };
 
     # Packages
     environment.systemPackages = with pkgs; [
