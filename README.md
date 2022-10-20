@@ -116,6 +116,9 @@ This section contains information I frequently have to look up, and want an easi
 # Build and apply the configuration at `/etc/nixos` as the current and default boot profiles
 nixos-rebuild switch
 
+# Build, and apply the configuration, updating dependencies first
+nixos-rebuild switch --recreate-lock-file
+
 # Build and aplly the configuration as the current profile only. The default boot profile is unchanged
 # and will be run when the system is rebooted
 nixos-rebuild test
