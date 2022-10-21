@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, inputs, pkgs, lib, ... }:
 
 with lib;
 
@@ -10,6 +10,7 @@ in
     ./hardware.nix
     ./samba.nix
     ./users.nix
+    inputs.vscode-server.nixosModule
     ./zrepl.nix
   ];
 
@@ -126,5 +127,7 @@ in
       8080
     ];
 
+    # Code Server
+    services.vscode-server.enable = true;
   };
 }
