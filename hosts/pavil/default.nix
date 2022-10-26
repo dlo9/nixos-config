@@ -71,6 +71,8 @@ with lib;
                 "pool/home/david/.cache<"
                 "pool/home/david/code<"
                 "pool/nixos/nix<"
+                "pool/games<"
+                "pool/reserved<"
               ];
 
               short = [ "pool/home/david/Downloads<" ];
