@@ -11,6 +11,7 @@ in
     ./samba.nix
     ./users.nix
     inputs.vscode-server.nixosModule
+    ./vnc.nix
     ./zrepl.nix
   ];
 
@@ -23,9 +24,6 @@ in
     # Ues overlay2 Docker storage driver for better performance. For this to work,
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
-
-    # For steam docker
-    security.unprivilegedUsernsClone = true;
 
     boot = {
       # Sensors from `sudo sensors-detect`
@@ -60,10 +58,10 @@ in
 
     # GPU
     services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.nvidia.nvidiaPersistenced = true;
 
     sys = {
       kubernetes.enable = true;
-      graphical.enable = false;
       #maintenance.autoUpgrade = true;
     };
 
@@ -76,6 +74,8 @@ in
       #cudaPackages.cudatoolkit
       cudaPackages.cutensor
       cudaPackages.cudnn
+
+      sysCfg.pkgs.sunshine
     ];
 
     powerManagement.cpuFreqGovernor = "powersave";

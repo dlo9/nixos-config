@@ -21,7 +21,7 @@ in
 
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = "${sysCfg.user}";
-    environment.loginShellInit = ''
+    environment.loginShellInit = mkDefault ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
         exec sway
       fi
