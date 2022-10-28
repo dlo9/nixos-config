@@ -262,7 +262,7 @@ in
           output = {
             "*" = { bg = "${wallpaper} fill"; };
             HEADLESS-1 = { resolution = "1920x1080"; position = "0,0"; };
-            HDMI-A-1 = { resolution = "1280x720"; position = "0,0"; };
+            #HDMI-A-1 = { resolution = "1280x720"; position = "0,0"; };
 
             # Left monitor
             DP-1 = { resolution = "2560x1400"; position = "0,0"; };
@@ -270,7 +270,7 @@ in
 
             # Right monitor
             DVI-D-1 = { resolution = "2560x1400"; position = "2560,0"; };
-            #HDMI-A-1 = { resolution = "2560x1400"; position = "2560,0"; };
+            HDMI-A-1 = { resolution = "2560x1400"; position = "2560,0"; };
           };
 
           workspaceOutputAssign = [
