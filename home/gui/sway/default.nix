@@ -381,7 +381,7 @@ in
             "${modifier}+Return" = "exec ${terminal}";
 
             # Open the power menu
-            "${modifier}+Shift+e" = "exec ${pkgs.writeScript "power.sh" (readFile ./bar/power.sh)}";
+            "${modifier}+Shift+e" = "exec ${pkgs.callPackage ./bar/power.nix {}}/bin/power.sh";
 
             # Kill focused window
             "${modifier}+Shift+q" = "kill";

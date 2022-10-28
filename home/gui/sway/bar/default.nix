@@ -87,7 +87,7 @@ in
 
             "custom/power" = {
               format = "⏻";
-              on-click = "exec ${pkgs.writeScript "power.sh" (readFile ./power.sh)}";
+              on-click = "exec ${pkgs.callPackage ./power.nix {}}";
               tooltip = false;
             };
 
