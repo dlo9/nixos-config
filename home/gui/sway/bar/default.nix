@@ -87,7 +87,7 @@ in
 
             "custom/power" = {
               format = "⏻";
-              on-click = "exec ${pkgs.callPackage ./power.nix {}}";
+              on-click = "exec ${pkgs.callPackage ./power.nix {}}/bin/power.sh";
               tooltip = false;
             };
 

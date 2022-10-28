@@ -2,7 +2,8 @@
 
 entries="Logout Suspend Reboot Shutdown"
 
-selected=$(printf '%s\n' "$entries" | wofi --conf="$HOME/.config/wofi/config.power" --style="$HOME/.config/wofi/style.widgets.css" | awk '{print tolower($1)}')
+# shellcheck disable=SC2086
+selected=$(printf '%s\n' $entries | wofi --conf="$HOME/.config/wofi/config.power" --style="$HOME/.config/wofi/style.widgets.css" | awk '{print tolower($1)}')
 
 case $selected in
     logout)
