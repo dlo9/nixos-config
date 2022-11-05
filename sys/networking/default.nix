@@ -169,16 +169,16 @@ in
       environment.systemPackages = with pkgs; [ cifs-utils gnome.seahorse ];
       services.gnome.gnome-keyring.enable = true; # TODO: unlock password doesn't work
       sops.secrets.cuttlefish-samba-secrets = { };
-      fileSystems =
+      fileSystems = mkIf (config.networking.hostName != "cuttlefish") (
         let
-          cuttlefish-host = "cuttlefish";
+          host = "cuttlefish";
           # this line prevents hanging on network split
           automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
           cuttlefish-share = name: {
             # Would prefer to use the following, but then /run/users/UID is created with the wrong (root) permission
             #"/run/user/${toString config.users.users."${sysCfg.user}".uid}/${name}"
             "/cuttlefish/${name}" = {
-              device = "//${cuttlefish-host}/${name}";
+              device = "//${host}/${name}";
               fsType = "cifs";
               options = [ "${automount_opts},credentials=${config.sops.secrets.cuttlefish-samba-secrets.path},uid=${toString config.users.users."${sysCfg.user}".uid},gid=${toString config.users.groups.users.gid}" ];
             };
@@ -187,7 +187,7 @@ in
         foldl' (x: y: x // y) { } [
           (cuttlefish-share "documents")
           (cuttlefish-share "media")
-        ];
+        ]);
     })
   ];
 }
