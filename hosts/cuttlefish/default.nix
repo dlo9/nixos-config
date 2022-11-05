@@ -76,6 +76,11 @@ in
       cudaPackages.cudnn
 
       sysCfg.pkgs.sunshine
+
+      # Contains "new" flags for Nvidia GPUs which are in all the docs
+      (ffmpeg_5-full.override {
+        nv-codec-headers = nv-codec-headers-11;
+      })
     ];
 
     powerManagement.cpuFreqGovernor = "powersave";
