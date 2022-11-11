@@ -76,6 +76,7 @@ in
                   "fast/home/david/code<"
                   "fast/home/david/Downloads<"
                   "fast/nixos/nix<"
+                  "slow/media/video/optimized<"
 
                   # Container cache
                   "fast/kubernetes/docker<"
