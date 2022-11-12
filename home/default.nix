@@ -604,6 +604,10 @@ in
       fzf # Required for navi
       cheat
 
+      # Terminal recorder
+      vhs
+      ttyd
+
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
   };
