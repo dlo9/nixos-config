@@ -17,6 +17,9 @@ in
       # System bar
       waybar = {
         enable = true;
+
+        # https://github.com/Alexays/Waybar/wiki/Configuration
+        # Number formatting: https://fmt.dev/latest/syntax.html#format-specification-mini-language
         settings = {
           # TODO: use program paths
           mainBar = {
@@ -146,6 +149,7 @@ in
 
             modules-right = [
               "network"
+              "network#vpn"
               "memory"
               "cpu"
               "disk"
@@ -160,18 +164,17 @@ in
 
             network = {
               format-disconnected = "⚠ Disconnected";
-              format-ethernet = " {ifname}";
-              format-wifi = " {signalStrength}%";
+              format-ethernet = " {ifname} 李 {bandwidthTotalBytes:>0}";
+              format-wifi = "  {essid} 李 {bandwidthTotalBytes:>0}";
               interval = 1;
               on-click = "alacritty -e nmtui";
-              tooltip-format = "{ifname}: {ipaddr}\n{essid}\n祝 {bandwidthUpBits:>8}  {bandwidthDownBits:>8}";
+              tooltip-format = "{ifname}: {ipaddr}\n{essid} ({signalStrength}%) \n祝 {bandwidthUpBytes:>0}  {bandwidthDownBytes:>0}";
             };
 
             "network#vpn" = {
-              format = " {essid} ({signalStrength}%)";
-              format-disconnected = "⚠ Disconnected";
-              interface = "tun0";
-              tooltip-format = "{ifname}: {ipaddr}/{cidr}";
+              format = "嬨";
+              interface = "tailscale0";
+              tooltip-format = "{ifname}: {ipaddr}/{cidr}\n祝 {bandwidthUpBytes:>2}  {bandwidthDownBytes:>2}";
             };
 
             position = "top";
