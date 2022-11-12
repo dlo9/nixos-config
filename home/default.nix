@@ -50,7 +50,7 @@ in
         htop = "${pkgs.bottom}/bin/btm";
         ping = "${pkgs.gping}/bin/gping";
         ps = "${pkgs.procs}/bin/procs";
-        watch  = "${pkgs.viddy}/bin/viddy";
+        watch = "${pkgs.viddy}/bin/viddy";
       };
     };
 
@@ -393,6 +393,10 @@ in
 
           # Keep fish when using nix-shell
           any-nix-shell fish --info-right | source
+
+          # Cheatsheet
+          # Use Ctrl + G to open
+          navi widget fish | source
         '';
 
         functions = {
@@ -593,6 +597,12 @@ in
       bottom
       gping
       procs
+      viddy
+
+      # Cheatsheet-like helpers
+      navi
+      fzf # Required for navi
+      cheat
 
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
