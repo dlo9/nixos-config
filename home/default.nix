@@ -50,6 +50,7 @@ in
         htop = "${pkgs.bottom}/bin/btm";
         ping = "${pkgs.gping}/bin/gping";
         ps = "${pkgs.procs}/bin/procs";
+        watch  = "${pkgs.viddy}/bin/viddy";
       };
     };
 
