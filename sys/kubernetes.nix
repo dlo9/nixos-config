@@ -92,6 +92,9 @@ in
     services.kubernetes = {
       roles = [ "master" "node" ];
       masterAddress = cfg.masterHostname;
+
+      # Refresh certs with:
+      # sudo systemctl restart cfssl certmgr kubernetes.slice; sudo chown david /var/lib/kubernetes/secrets/cluster-admin-key.pem
       easyCerts = true;
 
       # Use `hostname.cluster` instead of `cluster.local` since Android can't resolve .local through a VPN
