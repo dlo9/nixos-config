@@ -133,6 +133,19 @@ in
     ];
 
     # Code Server
-    services.vscode-server.enable = true;
+    #services.vscode-server.enable = true;
+
+    # Web shell
+    # Only accessable from "mynet", which is the k8s node network
+    networking.firewall.interfaces.mynet.allowedTCPPorts = [ 7681 ];
+    services.ttyd = {
+      enable = true;
+      port = 7681;
+      interface = "mynet";
+      clientOptions = {
+        fontFamily = "NotoSansMono Nerd Font";
+        fontSize = "14";
+      };
+    };
   };
 }
