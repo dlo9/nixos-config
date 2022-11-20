@@ -5,6 +5,9 @@ let
 in
 {
   config = {
+    # Enable nvidia
+    sys.graphical.nvidia = true;
+
     # Add seatd for GPU access
     users.users.david.extraGroups = [ "render" ];
 
@@ -95,22 +98,6 @@ in
         47999
         48000
       ];
-    };
-
-    # Enable nvidia DRM
-    hardware.nvidia = {
-      modesetting.enable = true;
-
-      #prime = {
-      #  #offload.enable = true;
-      #  sync.enable = true;
-
-      #  # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
-      #  intelBusId = "PCI:8:3:0";
-
-      #  # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
-      #  nvidiaBusId = "PCI:85:0:0";
-      #};
     };
   };
 }

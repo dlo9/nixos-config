@@ -112,12 +112,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slow/media/video/optimized" =
-    {
-      device = "slow/media/video/optimized";
-      fsType = "zfs";
-    };
-
   fileSystems."/slow/media/video/personal" =
     {
       device = "slow/media/video/personal";
@@ -151,6 +145,30 @@
   fileSystems."/slow/smb/chelsea-backup" =
     {
       device = "slow/smb/chelsea-backup";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slowcache/media" =
+    {
+      device = "slowcache/media";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slowcache/media/video" =
+    {
+      device = "slowcache/media/video";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slowcache/media/video/movies" =
+    {
+      device = "slowcache/media/video/movies";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slowcache/media/video/tv" =
+    {
+      device = "slowcache/media/video/tv";
       fsType = "zfs";
     };
 
