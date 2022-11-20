@@ -397,6 +397,9 @@ in
           # Cheatsheet
           # Use Ctrl + G to open
           navi widget fish | source
+
+          # Autocorrect
+          thefuck --alias | source
         '';
 
         functions = {
@@ -607,6 +610,9 @@ in
       # Terminal recorder
       vhs
       ttyd
+
+      # Autocorrect
+      thefuck
 
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
     ];
