@@ -164,6 +164,9 @@ in
       kopia # Backup tool
       ddcutil
       ddcui
+
+      # Signal
+      signal-desktop
     ];
 
     services = {
