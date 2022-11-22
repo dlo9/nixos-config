@@ -3,9 +3,6 @@
 - Nix-store dataset
 - Review [sway addons](https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway)
 - Test [qddcswitch](https://codeberg.org/Okxa/qddcswitch)
-- Firefox
-  - Custom userchrome for hiding tabs
-  - Some basic extensions?
 - quotebrowser
   - adblock
 - Build `wrap`

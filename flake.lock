@@ -301,6 +301,21 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1669107541,
+        "narHash": "sha256-e8sTfo8jnIYi3hKKDX2yweLuSjYw55TR+k2Yb1UpogE=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "ab296f9d5f276d85f9410f454159c814a3145a4e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "base16": "base16",
@@ -319,6 +334,7 @@
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nur": "nur",
         "sops-nix": "sops-nix",
         "vscode-server": "vscode-server"
       }

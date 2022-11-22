@@ -76,15 +76,18 @@ in
       '';
     };
 
-    nixpkgs.overlays = [
-      (final: prev: {
-        # Makes "pkgs.unstable" available in configuration.nix
-        unstable = import inputs.nixpkgs-unstable {
-          system = prev.system;
-          config.allowUnfree = true;
-        };
-      })
-    ];
+    nixpkgs = {
+      config.allowUnfree = true;
+      overlays = [
+        (final: prev: {
+          # Makes "pkgs.unstable" available in configuration.nix
+          unstable = import inputs.nixpkgs-unstable {
+            system = prev.system;
+            config.allowUnfree = true;
+          };
+        })
+      ];
+    };
 
     # Enable zram
     #zramSwap.enable = true;
@@ -135,7 +138,6 @@ in
     environment.shells = [ pkgs.fish ];
 
     # Packages
-    nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs // cfg.pkgs; [
       # Terminal
       fish

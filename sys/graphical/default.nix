@@ -66,11 +66,6 @@ in
       # System utils
       gparted # Partitioning
 
-      # Web browsers
-      qutebrowser
-      firefox-wayland
-      chromium
-
       # Key tester
       wev
 

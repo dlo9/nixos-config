@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, sysCfg, ... }:
+{ config, pkgs, lib, inputs, sysCfg, nur, ... }:
 
 with lib;
 with types;
@@ -24,7 +24,110 @@ in
     };
 
     programs = {
+      ####################
+      ### Web browsers ###
+      ####################
+
       qutebrowser.enable = true;
+
+      chromium = {
+        enable = true;
+        extensions = [
+          { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+        ];
+      };
+
+      firefox = {
+        enable = true;
+        package = pkgs.firefox-devedition-bin;
+
+        # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
+        extensions = with nur.repos.rycee.firefox-addons; [
+          #amazon-band-detector
+          auto-tab-discard
+          bitwarden
+          #base16
+          facebook-container
+          #highlight-all
+          honey
+          #surfshark
+          tab-session-manager
+          tree-style-tab
+          ublock-origin
+          vimium
+        ];
+
+        profiles = {
+          dev-edition-default = {
+            # To change an existing profile called `48gm70ji.default-release` into default:
+            #   cd ~/.mozilla/firefox; rg -l 48gm70ji default | xargs -I {} sed -i 's#48gm70ji.default-release#default#g' {}
+            path = "default";
+            id = 1;
+          };
+
+         default-release = {
+           id = 0;
+           isDefault = true;
+           path = "default";
+           search = {
+             force = true;
+             default = "DuckDuckGo";
+             order =  [
+               "DuckDuckGo"
+               "Google"
+             ];
+
+             engines = {
+               "Nix Packages" = {
+                 urls = [{
+                   template = "https://search.nixos.org/packages";
+                   params = [
+                     { name = "type"; value = "packages"; }
+                     { name = "query"; value = "{searchTerms}"; }
+                   ];
+                 }];
+
+                 icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                 definedAliases = [ "@np" ];
+               };
+
+               "NixOS Wiki" = {
+                 urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
+                 iconUpdateURL = "https://nixos.wiki/favicon.png";
+                 updateInterval = 24 * 60 * 60 * 1000; # every day
+                 definedAliases = [ "@nw" ];
+               };
+             };
+           };
+
+           settings = {
+             # See userChrome below
+             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+           };
+
+           # https://gist.github.com/ruanbekker/f800e098936b27c7cf956c56005fe362
+           userChrome = ''
+             #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
+               opacity: 0;
+               pointer-events: none;
+             }
+
+             #main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+               visibility: collapse !important;
+             }
+
+             #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+               display: none;
+             }
+
+             .tab {
+               margin-left: 1px;
+               margin-right: 1px;
+             }
+           '';
+          };
+        };
+      };
 
       vim.plugins = with pkgs.vimPlugins // sysCfg.pkgs.vimPlugins; [
         # Fix copy to system clipboard on wayland

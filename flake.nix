@@ -23,6 +23,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nur.url = github:nix-community/NUR;
+
     vscode-server = {
       url = "github:msteen/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -153,6 +155,9 @@
         # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
         inputs.home-manager.nixosModules.home-manager
 
+        # Nix User repo
+        inputs.nur.nixosModules.nur
+
         # Home-manager configuration
         ({ config, inputs, ... }: {
           home-manager = {
@@ -166,12 +171,10 @@
             extraSpecialArgs = {
               inherit inputs;
               sysCfg = config.sys;
+              nur = config.nur;
             };
           };
         })
-
-        # Utility funtions
-        ({ config, inputs, ... }: { })
 
         # Passed-in module
         extraSettings
