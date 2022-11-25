@@ -39,7 +39,6 @@ in
 
       firefox = {
         enable = true;
-        package = pkgs.firefox-devedition-bin;
 
         # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
         extensions = with nur.repos.rycee.firefox-addons; [
