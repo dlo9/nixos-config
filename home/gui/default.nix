@@ -285,6 +285,9 @@ in
       # File syncing
       syncthing.enable = true;
 
+      # Screenshots
+      # Disabled since this isn't working on sway right now
+      #flameshot.enable = true;
 
       # FUTURE: this doesn't work
       # https://github.com/nix-community/home-manager/issues/1454
