@@ -20,6 +20,11 @@ in
     xdg.portal.enable = true;
     xdg.portal.wlr.enable = true;
 
+    # Override sway default
+    home-manager.users.david.wayland.windowManager.sway.config.output = {
+      HDMI-A-1 = { resolution = "1280x720"; position = "0,0"; };
+    };
+
     # Works (but not performant) with:
     # env WAYLAND_DISPLAY=HEADLESS-1 WLR_BACKENDS=headless WLR_NO_HARDWARE_CURSORS=1 WLR_LIBINPUT_NO_DEVICES=1 WLR_RENDERER=pixman sway --unsupported-gpu
     # env WLR_HEADLESS_OUTPUTS=1 WLR_BACKENDS=headless WLR_RENDERER=pixman sway --unsupported-gpu
@@ -40,7 +45,7 @@ in
     # env WAYLAND_DISPLAY=HDMI-A-1 WLR_DRM_DEVICES=/dev/dri/card1 WLR_LIBINPUT_NO_DEVICES=1 WLR_BACKENDS=drm sway --unsupported-gpu
 
     # Testing steps:
-    #   1. nvidia-smi prom
+    #   1. nvidia-smi pmon
     #   2. sudo seatd -u david -g users -l debug
     #   3. env WLR_DRM_DEVICES=/dev/dri/card1 WLR_BACKENDS=drm,libinput WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu
     #   4. sudo env WAYLAND_DISPLAY=wayland-1 sunshine sunshine.conf
