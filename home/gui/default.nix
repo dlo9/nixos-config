@@ -269,6 +269,8 @@ in
 
       # Signal
       signal-desktop
+
+      #geekbench5
     ];
 
     services = {

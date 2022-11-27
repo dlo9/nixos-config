@@ -25,10 +25,13 @@ in
 
     # Firmware update service
     services.fwupd.enable = true;
-
     environment.systemPackages = with pkgs; [
       # Sensors (fans, temp)
       lm_sensors
+
+      # Manually set CPU governor
+      # cpupower frequency-set -g powersave
+      config.boot.kernelPackages.cpupower
     ];
 
     # TODO
