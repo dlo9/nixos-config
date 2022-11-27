@@ -148,18 +148,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slowcache/media" =
-    {
-      device = "slowcache/media";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slowcache/media/video" =
-    {
-      device = "slowcache/media/video";
-      fsType = "zfs";
-    };
-
   fileSystems."/slowcache/media/video/movies" =
     {
       device = "slowcache/media/video/movies";

@@ -37,6 +37,7 @@ in
       zfs.requestEncryptionCredentials = [
         "fast"
         "slow"
+        "slowcache"
       ];
 
       # Must load network module on boot for SSH access
