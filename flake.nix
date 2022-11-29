@@ -212,8 +212,8 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          #modules = defaultModules "ace" { };
-          modules = defaultModules "ace" ./hosts/portable/partition.nix;
+          modules = defaultModules "ace" { };
+          #modules = defaultModules "ace" ./hosts/portable/partition.nix;
         };
 
         cuttlefish = nixosSystem {
