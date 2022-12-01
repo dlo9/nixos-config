@@ -1,5 +1,3 @@
-/* Live debug via: env GTK_DEBUG=interactive waybar */
-
 /**********************/
 /***** Global/Bar *****/
 /**********************/
@@ -23,29 +21,25 @@
 }
 
 label {
+  padding: 0 0.5em;
+  margin: 0.3em;
   color: @base05;
-}
-
-/*******************/
-/***** Spacing *****/
-/*******************/
-
-button {
-  padding: 0em 0.4em;
-  margin: 0.2em 0.2em;
-}
-
-#workspaces label {
-  margin: 0em -0.4em;
-}
-
-#tray {
-  margin: 0.2em 0em;
 }
 
 /************************/
 /***** Left modules *****/
 /************************/
+
+/* Use button padding instead of label */
+#workspaces label {
+  padding: 0;
+  margin: 0;
+}
+
+#workspaces button {
+  padding: 0;
+  margin: 0.3em 0.2em;
+}
 
 /* Workspace highlighting */
 
@@ -135,6 +129,9 @@ button {
 }
 
 #tray {
+  padding: 0 0.5em;
+  margin: 0.3em 0.2em;
+
   box-shadow: 0 -0.2em @base0E;
   background: alpha(@base0E, 0.25);
 }

@@ -1,9 +1,8 @@
 {
   inputs = {
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
-
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11-small;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
 
     # Secrets management
     sops-nix = {

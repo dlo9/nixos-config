@@ -130,6 +130,9 @@ nixos-rebuild test --fast
 # Check the configuration for errors, without building it. This is the fastest way of hacking a complete system
 # https://github.com/NixOS/nix/issues/3908
 nix eval "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel.drvPath"
+
+# Find why a package is required by the system
+nix-tree --derivation "path:.#nixosConfigurations.$(hostname).config.system.build.toplevel"
 ```
 
 ### Nix store

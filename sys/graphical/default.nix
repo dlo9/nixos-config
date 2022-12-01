@@ -102,10 +102,9 @@ in
     services.avahi.nssmdns = true;
 
     # Add GVFS for samba mounts in file manager
-    #services.gvfs.enable = true;
     services.gvfs = {
       enable = true;
-      package = lib.mkForce pkgs.gnome.gvfs;
+      package = pkgs.gvfs;
     };
 
     services.gnome.gnome-keyring.enable = true;

@@ -22,8 +22,8 @@ in
       programs.steam.enable = true;
 
       environment.systemPackages = with pkgs; [
-        # TODO: Try gamehub when available: https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=gamehub
         lutris
+        gamehub
       ];
     })
 
