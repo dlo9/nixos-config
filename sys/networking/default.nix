@@ -105,11 +105,17 @@ in
       ### Wireless ###
       ################
 
+      # Configure wpg_supplicant
       networking.wireless = mkIf cfg.wireless {
         enable = true;
+
+        # Enable wpa_gui
         userControlled.enable = true;
         environmentFile = config.sops.secrets.wireless-env.path;
         networks = {
+          internet.psk = "@INTERNET@";
+          "?".psk = "@INTERNET@";
+          iot.psk = "@IOT@";
           BossAdams.psk = "@BOSS_ADAMS@";
           "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
           qwertyuiop.psk = "@QWERTYUIOP@";
@@ -166,7 +172,13 @@ in
       #############
 
       # For mount.cifs, required unless domain name resolution is not needed.
-      environment.systemPackages = with pkgs; [ cifs-utils gnome.seahorse ];
+      environment.systemPackages = with pkgs; [
+        cifs-utils
+        gnome.seahorse
+
+        # Networking
+        wpa_supplicant_gui
+      ];
       services.gnome.gnome-keyring.enable = true; # TODO: unlock password doesn't work
       sops.secrets.cuttlefish-samba-secrets = { };
 
@@ -189,7 +201,8 @@ in
         foldl' (x: y: x // y) { } [
           (cuttlefish-share "documents")
           (cuttlefish-share "media")
-        ]);
+        ]
+      );
     })
   ];
 }
