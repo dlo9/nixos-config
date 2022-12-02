@@ -169,7 +169,9 @@ in
       environment.systemPackages = with pkgs; [ cifs-utils gnome.seahorse ];
       services.gnome.gnome-keyring.enable = true; # TODO: unlock password doesn't work
       sops.secrets.cuttlefish-samba-secrets = { };
-      fileSystems = mkIf (config.networking.hostName != "cuttlefish") (
+
+      # TODO: opt-in better
+      fileSystems = mkIf (config.networking.hostName != "drywell" && config.networking.hostName != "cuttlefish") (
         let
           host = "cuttlefish";
           # this line prevents hanging on network split

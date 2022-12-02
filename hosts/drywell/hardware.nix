@@ -9,7 +9,7 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
@@ -60,6 +60,24 @@
   fileSystems."/root" =
     {
       device = "fast/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/backup/michael" =
+    {
+      device = "slow/backup/michael";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/smb" =
+    {
+      device = "slow/smb";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/smb-old" =
+    {
+      device = "slow/smb-old";
       fsType = "zfs";
     };
 
