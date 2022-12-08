@@ -123,7 +123,9 @@ in
           "docker"
           "audio"
           "video"
-          "adbusers"
+          "adbusers"  # Android ADB
+          "scanner"  # Scanning
+          "lp"  # Printing
         ];
       };
     };

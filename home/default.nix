@@ -614,7 +614,9 @@ in
       # Autocorrect
       thefuck
 
+      # Nix utils
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
+      nix-prefetch
     ];
   };
 }

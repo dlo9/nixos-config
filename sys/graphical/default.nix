@@ -98,6 +98,23 @@ in
       pkgs.brgenml1cupswrapper
     ];
 
+    # Scanning
+    services.saned.enable = true;
+    hardware.sane = {
+      enable = true;
+      drivers.scanSnap.enable = true;
+      brscan4 = {
+        enable = true;
+        netDevices = {
+          home = {
+            model = "MFC-J480DW";
+            nodename = "BRW541379C4810E";
+            #ip = "192.168.1.212";
+          };
+        };
+      };
+    };
+
     services.avahi.enable = true;
     services.avahi.nssmdns = true;
 

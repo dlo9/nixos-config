@@ -271,6 +271,9 @@ in
       signal-desktop
 
       #geekbench5
+
+      # Scanning
+      gnome.simple-scan
     ];
 
     services = {
