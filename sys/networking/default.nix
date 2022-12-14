@@ -121,6 +121,7 @@ in
           qwertyuiop.psk = "@QWERTYUIOP@";
           LGFAK.psk = "@LGFAK@";
           "gh 42".psk = "@GH_42@";
+          "Menehune House & Cottage".psk = "@MENEHUNE@";
         };
       };
 
