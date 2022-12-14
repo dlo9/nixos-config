@@ -18,5 +18,7 @@
         { devices = [ "/dev/disk/by-id/ata-KINGSTON_SNS4151S332G_50026B724500626D" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
       ];
     };
+
+    powerManagement.cpuFreqGovernor = "ondemand";
   };
 }
