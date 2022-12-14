@@ -105,7 +105,7 @@ in
     #};
 
     # Timezone
-    time.timeZone = "America/Los_Angeles";
+    services.localtimed.enable = true;
 
     # Users
     users.mutableUsers = false;
