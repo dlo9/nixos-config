@@ -66,6 +66,9 @@ in
                   # Replicated datasets
                   "slow/replication<"
                   "slow/backup/drywell<"
+
+                  # Tdarr temp
+                  "fast/kubernetes/storage/pvc-f81c171e-9ef3-4d0c-8377-9e7854747171"
                 ];
               };
 
