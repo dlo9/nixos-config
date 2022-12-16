@@ -75,7 +75,7 @@ in
         /home/david/vnc.sh &
 
         echo "Starting VNC Client"
-        novnc --web ${pkgs.novnc}/share/webapps/novnc --listen 8080 --vnc localhost:5900 > /tmp/novnc
+        #novnc --web ${pkgs.novnc}/share/webapps/novnc --listen 8080 --vnc localhost:5900 > /tmp/novnc
       '')
     ];
 
