@@ -55,6 +55,11 @@ in
       "r8169"
     ];
 
+    boot.zfs.requestEncryptionCredentials = [
+      "fast"
+      "slow"
+    ];
+
     # ZFS autosnapshot and replication
     services.zrepl = {
       enable = true;

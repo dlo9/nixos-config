@@ -107,6 +107,19 @@ in
     # Timezone
     services.localtimed.enable = true;
 
+    # Location services
+    services.geoclue2 = {
+      enable = true;
+
+      appConfig = {
+        "gammastep" = {
+          isAllowed = true;
+          isSystem = false;
+          users = [ "1000" ];
+        };
+      };
+    };
+
     # Users
     users.mutableUsers = false;
     users.users = {

@@ -74,19 +74,6 @@ in
       zathura
     ];
 
-    # Location services
-    services.geoclue2 = {
-      enable = true;
-
-      appConfig = {
-        "gammastep" = {
-          isAllowed = true;
-          isSystem = false;
-          users = [ "1000" ];
-        };
-      };
-    };
-
     # Printing
     # To add a printer, go to:
     # http://localhost:631/
