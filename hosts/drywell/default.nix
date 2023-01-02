@@ -121,7 +121,6 @@ in
           path = "/slow/smb/michael";
           browseable = "yes";
           "read only" = "no";
-          #"guest ok" = "yes";
           "create mask" = "0644";
           "directory mask" = "0755";
           "force user" = "michael";
@@ -136,6 +135,28 @@ in
           "create mask" = "0644";
           "directory mask" = "0755";
           "force user" = "michael";
+          "force group" = "users";
+          "valid users" = "+samba";
+        };
+
+        sue = {
+          path = "/slow/smb/sue";
+          browseable = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "sue";
+          "force group" = "users";
+          "valid users" = "+samba";
+        };
+
+        sue-backup = {
+          path = "/slow/backup/sue";
+          browseable = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "sue";
           "force group" = "users";
           "valid users" = "+samba";
         };
@@ -159,15 +180,21 @@ in
     };
 
     # Users
-    users.users.michael = {
-      uid = 1001;
-      isNormalUser = true;
-      hashedPassword = "$6$S/H.nEE7XEPdyO6v$ENulPNgv2WGmwdCD7zluMNasQ/wPFdc61wjxC2/aFXcl9dLvbMzzeSeVI9V5dxycJaojJRFUtqKYNPJIX767P1";
-      createHome = false;
-      #shell = pkgs.fish;
-      extraGroups = [
-        "samba"
-      ];
+    users.users = {
+      michael = {
+        uid = 1001;
+        isNormalUser = true;
+        hashedPassword = "$6$S/H.nEE7XEPdyO6v$ENulPNgv2WGmwdCD7zluMNasQ/wPFdc61wjxC2/aFXcl9dLvbMzzeSeVI9V5dxycJaojJRFUtqKYNPJIX767P1";
+        createHome = false;
+        extraGroups = [ "samba" ];
+      };
+
+      sue = {
+        uid = 1002;
+        isNormalUser = true;
+        createHome = false;
+        extraGroups = [ "samba" ];
+      };
     };
 
     users.groups.samba = {};
