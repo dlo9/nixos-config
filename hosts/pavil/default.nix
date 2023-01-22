@@ -33,6 +33,15 @@ with lib;
       };
     };
 
+    environment.systemPackages = with pkgs; [
+      #wineWowPackages.stable
+      # ADB fire tablet stuff
+      gnome.zenity
+
+      # Notes app
+      obsidian
+    ];
+
     # zrepl_switch to new bluetooth devices
     hardware.pulseaudio.extraConfig = "
       load-module module-switch-on-connect
