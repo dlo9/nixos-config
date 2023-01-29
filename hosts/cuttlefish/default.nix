@@ -76,7 +76,8 @@ in
       cudaPackages.cutensor
       cudaPackages.cudnn
 
-      sysCfg.pkgs.sunshine
+      #sysCfg.pkgs.sunshine
+      #sunshine
 
       # Contains "new" flags for Nvidia GPUs which are in all the docs
       (ffmpeg_5-full.override {
