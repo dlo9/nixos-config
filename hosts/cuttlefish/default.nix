@@ -12,6 +12,7 @@ in
     ./users.nix
     inputs.vscode-server.nixosModule
     ./vnc.nix
+    ./webdav.nix
     ./zrepl.nix
   ];
 

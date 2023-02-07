@@ -49,6 +49,7 @@ in
     #   2. sudo seatd -u david -g users -l debug
     #   3. env WLR_DRM_DEVICES=/dev/dri/card1 WLR_BACKENDS=drm,libinput WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu
     #   4. sudo env WAYLAND_DISPLAY=wayland-1 sunshine sunshine.conf
+    #   4. (alternate) sudo env WAYLAND_DISPLAY=wayland-1 flatpak run dev.lizardbyte.sunshine sunshine.conf
 
     # Variable docs at: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
     environment.loginShellInit = ''
