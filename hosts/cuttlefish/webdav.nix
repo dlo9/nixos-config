@@ -11,6 +11,7 @@ let
 
   webdav-root = pkgs.linkFarm "webdav-root" {
     "documents" = "/slow/documents";
+    "media" = "/slow/media";
   };
 in
 {
