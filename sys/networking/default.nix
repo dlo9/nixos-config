@@ -179,6 +179,7 @@ in
 
         # Networking
         wpa_supplicant_gui
+        inetutils
       ];
       services.gnome.gnome-keyring.enable = true; # TODO: unlock password doesn't work
       sops.secrets.cuttlefish-samba-secrets = { };
