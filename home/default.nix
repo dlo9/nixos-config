@@ -539,16 +539,6 @@ in
                   - keys: [--unique, -u]
                     values: ['!a[\$0]++']
 
-              - alias: maintain
-                program: sh
-
-                arguments:
-                  - key: -c
-
-                keywords:
-                  - keys: [--bg]
-                    values: ['killall swaybg; swaybg -i ~/.config/sway/wallpapers/spaceman.jpg &']
-
               - alias: theme
                 program: sh
 

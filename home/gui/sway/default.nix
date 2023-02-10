@@ -10,8 +10,12 @@ let
   wallpaper = fetchurl {
     # Spaceman
     # https://forum.endeavouros.com/t/new-wallpaper/6308/162
-    url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
-    sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
+    # url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
+    # sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
+
+    name = "elementary-os-7";
+    url = "https://raw.githubusercontent.com/elementary/wallpapers/3f36a60cbb9b8b2a37d0bc5129365ac2ac7acf98/backgrounds/Photo%20of%20Valley.jpg";
+    sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
 
     # Pink sunset
     # url = https://cutewallpaper.org/22/retro-neon-race-4k-wallpapers/285729412.jpg;
