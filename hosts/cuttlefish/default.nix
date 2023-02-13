@@ -7,6 +7,7 @@ let
 in
 {
   imports = [
+    ./docker.nix
     ./hardware.nix
     ./samba.nix
     ./users.nix
