@@ -29,6 +29,7 @@ in
 {
   imports = [
     ./hardware.nix
+    ./webdav.nix
   ];
 
   config = {
