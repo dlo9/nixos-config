@@ -168,6 +168,7 @@ in
       lshw
       pv
       p7zip
+      file
 
       # Nix utils
       git
