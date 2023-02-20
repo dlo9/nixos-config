@@ -30,6 +30,7 @@ in
   imports = [
     ./hardware.nix
     ./webdav.nix
+    ./nginx.nix
   ];
 
   config = {
