@@ -13,10 +13,10 @@ let
 
   webdav-root = pkgs.linkFarm "webdav-root" {
     "sue" = "/slow/smb/sue";
-    "sue-backup" = "/slow/backup/sue";
-
     "michael" = "/slow/smb/michael";
-    "michael-backup" = "/slow/backup/michael";
+
+    "backup/sue" = "/slow/backup/sue";
+    "backup/michael" = "/slow/backup/michael";
   };
 in
 {

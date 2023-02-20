@@ -140,28 +140,6 @@ in
           "force group" = "users";
           "valid users" = "+samba";
         };
-
-        #sue = {
-        #  path = "/slow/smb/sue";
-        #  browseable = "yes";
-        #  "read only" = "no";
-        #  "create mask" = "0644";
-        #  "directory mask" = "0755";
-        #  "force user" = "sue";
-        #  "force group" = "users";
-        #  "valid users" = "+samba";
-        #};
-
-        #sue-backup = {
-        #  path = "/slow/backup/sue";
-        #  browseable = "yes";
-        #  "read only" = "no";
-        #  "create mask" = "0644";
-        #  "directory mask" = "0755";
-        #  "force user" = "sue";
-        #  "force group" = "users";
-        #  "valid users" = "+samba";
-        #};
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`
