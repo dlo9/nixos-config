@@ -40,6 +40,17 @@ with lib;
 
       # Notes app
       obsidian
+
+      # Backups
+      kopia
+
+      (appimageTools.wrapType2 {
+        name = "kopia-ui";
+        src = fetchurl {
+          url = "https://github.com/kopia/kopia/releases/download/v0.12.1/KopiaUI-0.12.1.AppImage";
+          sha256 = "sha256-Kc7ylkXuvD+E6YRe52F1gJqoaAGwQkm/3D91q43P6gU=";
+        };
+      })
     ];
 
     # zrepl_switch to new bluetooth devices
