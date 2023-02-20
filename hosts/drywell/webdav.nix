@@ -13,6 +13,8 @@ let
 
   webdav-root = pkgs.linkFarm "webdav-root" {
     "sue" = "/slow/smb/sue";
+    "sue-server" = "/slow/smb/sue";
+
     "michael" = "/slow/smb/michael";
 
     "backup/sue" = "/slow/backup/sue";
