@@ -7,7 +7,8 @@ let
   # nix-shell -p terraform-providers.htpasswd --run "htpasswd -nB david"
   htpasswd = pkgs.writeText "htpasswd" ''
     david:$2y$05$pe8DCM.Q8ojQZtYUnM.HP..Lw3IOfpywuVD6QLD5yZ3QNVm0ZyOPi
-    sue:$2y$05$ekNYzH4lRi9b01AEx859QujzOAASwd5w6rJ3BLnYfV0sTpyH6ZZq6
+    sue:$2y$05$XKP3L/DsHkLMszi0sWRHAO9Yz3xgaRfyiRqH8cqYcATyQDzWRKlBO
+    michael:$2y$05$1zRGWNFtecV1mxcrO8lSz.5sOmUqZSXRtwBw8W.soEh83Ryl37iS2
   '';
 
   webdav-root = pkgs.linkFarm "webdav-root" {
