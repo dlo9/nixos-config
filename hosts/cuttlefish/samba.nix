@@ -31,18 +31,6 @@ with lib;
         openFirewall = true;
 
         shares = {
-          chelsea = defaults // {
-            path = "/slow/smb/chelsea";
-            "force user" = "chelsea";
-            "valid users" = "+samba";
-          };
-
-          chelsea-backup = defaults // {
-            path = "/slow/smb/chelsea-backup";
-            "force user" = "chelsea";
-            "valid users" = "+samba";
-          };
-
           documents = defaults // {
             path = "/slow/documents";
             "force user" = "david";

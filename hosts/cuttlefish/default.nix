@@ -12,6 +12,7 @@ in
     ./samba.nix
     ./users.nix
     inputs.vscode-server.nixosModule
+    ./nginx.nix
     ./vnc.nix
     ./webdav.nix
     ./zrepl.nix

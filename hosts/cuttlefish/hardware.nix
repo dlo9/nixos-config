@@ -52,6 +52,24 @@
       fsType = "vfat";
     };
 
+  fileSystems."/fast/docker" =
+    {
+      device = "fast/docker";
+      fsType = "zfs";
+    };
+
+  fileSystems."/fast/docker/containers" =
+    {
+      device = "fast/docker/containers";
+      fsType = "zfs";
+    };
+
+  fileSystems."/fast/docker/containers/node-red" =
+    {
+      device = "fast/docker/containers/node-red";
+      fsType = "zfs";
+    };
+
   fileSystems."/home/david" =
     {
       device = "fast/home/david";
@@ -67,6 +85,12 @@
   fileSystems."/root" =
     {
       device = "fast/home/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slow/backup/chelsea" =
+    {
+      device = "slow/backup/chelsea";
       fsType = "zfs";
     };
 
@@ -139,12 +163,6 @@
   fileSystems."/slow/smb/chelsea" =
     {
       device = "slow/smb/chelsea";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slow/smb/chelsea-backup" =
-    {
-      device = "slow/smb/chelsea-backup";
       fsType = "zfs";
     };
 

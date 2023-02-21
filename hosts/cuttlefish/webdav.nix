@@ -5,13 +5,18 @@ with lib;
 
 let
   # nix-shell -p terraform-providers.htpasswd --run "htpasswd -nB david"
+  # nix-shell -p apacheHttpd --run "htpasswd -nB david"
   htpasswd = pkgs.writeText "htpasswd" ''
     david:$2y$05$pe8DCM.Q8ojQZtYUnM.HP..Lw3IOfpywuVD6QLD5yZ3QNVm0ZyOPi
+    chelsea:$2y$05$XngjpZNS3WVzR.1i.F695.Qh9NdJCbRPz9lpRBcESMi5kQFF5zvxi
   '';
 
   webdav-root = pkgs.linkFarm "webdav-root" {
     "documents" = "/slow/documents";
     "media" = "/slow/media";
+
+    "chelsea-cuttlefish" = "/slow/smb/chelsea";
+    "backup/chelsea" = "/slow/backup/chelsea";
   };
 in
 {
@@ -76,21 +81,6 @@ in
             hide-symlinks = false;
             case-insensitive = "false";
           }
-          #{
-          #  route = [ "/documents(/*path)" ];
-          #  directory = "/slow/documents";
-          #  methods = [ "webdav-rw" ];
-
-          #  # TODO: make defaults
-          #  handler = "filesystem";
-          #  on_notfound = "return";
-
-          #  auth = "true";
-          #  setuid = true;
-          #  autoindex = true;
-          #  hide-symlinks = true;
-          #  case-insensitive = "false";
-          #}
         ];
       };
     };

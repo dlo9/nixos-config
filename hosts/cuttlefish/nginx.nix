@@ -4,7 +4,7 @@ with builtins;
 with lib;
 
 let
-  useACMEHost = "drywell.sigpanic.com";
+  useACMEHost = "sigpanic.com";
   sysCfg = config.sys;
 in
 {
@@ -25,11 +25,11 @@ in
         credentialsFile = config.sops.secrets.cloudflare-dns.path;
       };
 
-      certs."${dns}" = {
+      certs."${useACMEHost}" = {
         #ocspMustStaple = true;
         group = "nginx";
         extraDomainNames = [
-          "*.drywell.sigpanic.com"
+          "*.sigpanic.com"
         ];
       };
     };
@@ -44,13 +44,27 @@ in
       virtualHosts = {
         "webdav.${useACMEHost}" = {
           inherit useACMEHost;
-          addSSL = true;
+          forceSSL = true;
 
           locations."/" = {
             proxyPass = "http://localhost:12345";
             proxyWebsockets = true;
             extraConfig = ''
               client_max_body_size 50M;
+            '';
+          };
+        };
+
+        "*.${useACMEHost}" = {
+          inherit useACMEHost;
+          forceSSL = true;
+          default = true;
+
+          locations."/" = {
+            proxyPass = "http://192.168.1.230:1080";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_intercept_errors on;
             '';
           };
         };
