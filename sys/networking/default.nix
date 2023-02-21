@@ -118,6 +118,7 @@ in
           iot.psk = "@IOT@";
           BossAdams.psk = "@BOSS_ADAMS@";
           "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
+          "pretty fly for a wifi-5G".psk = "@PRETTY_FLY_FOR_A_WIFI@";
           qwertyuiop.psk = "@QWERTYUIOP@";
           LGFAK.psk = "@LGFAK@";
           "gh 42".psk = "@GH_42@";
