@@ -72,6 +72,9 @@ in
       mpv
       okular
       zathura
+
+      # Keyring
+      libsecret
     ];
 
     # Printing
@@ -111,6 +114,8 @@ in
       package = pkgs.gvfs;
     };
 
+    # Keyring
+    security.pam.services.login.enableGnomeKeyring = true;
     services.gnome.gnome-keyring.enable = true;
   };
 }

@@ -81,6 +81,8 @@ in
         extraConfig = {
           init.defaultBranch = "main";
           pull.ff = "only";
+          credential.helper = "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
+          push.autoSetupRemote = true;
         };
       };
 
