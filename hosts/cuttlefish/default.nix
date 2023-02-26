@@ -13,6 +13,7 @@ in
     ./users.nix
     inputs.vscode-server.nixosModule
     ./nginx.nix
+    ./virtualization.nix
     ./vnc.nix
     ./webdav.nix
     ./zrepl.nix

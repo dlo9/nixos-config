@@ -34,7 +34,8 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      #wineWowPackages.stable
+      virt-manager
+
       # ADB fire tablet stuff
       gnome.zenity
 

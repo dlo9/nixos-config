@@ -21,6 +21,7 @@ in
     home.pointerCursor = {
       name = "Numix-Cursor-Light";
       package = pkgs.numix-cursor-theme;
+      gtk.enable = true;
     };
 
     programs = {
