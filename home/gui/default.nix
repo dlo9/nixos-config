@@ -170,6 +170,10 @@ in
         extensions = with pkgs.vscode-extensions // sysCfg.pkgs.vscode-extensions; [
           shan.code-settings-sync
           jnoortheen.nix-ide
+
+          # Enables SSH into a Nix remote host:
+          # https://nixos.wiki/wiki/Visual_Studio_Code#Nix-sourced_VS_Code_to_NixOS_host
+          ms-vscode-remote.remote-ssh
         ];
       };
     };
