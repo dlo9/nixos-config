@@ -25,7 +25,7 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" =
@@ -163,6 +163,12 @@
   fileSystems."/slow/smb/chelsea" =
     {
       device = "slow/smb/chelsea";
+      fsType = "zfs";
+    };
+
+  fileSystems."/slowcache/iso" =
+    {
+      device = "slowcache/iso";
       fsType = "zfs";
     };
 
