@@ -301,7 +301,14 @@ in
 
       # FUTURE: this doesn't work
       # https://github.com/nix-community/home-manager/issues/1454
-      # gnome-keyring.enable = true;
+      gnome-keyring = {
+        enable = true;
+        components = [
+          "pkcs11"
+          "secrets"
+          "ssh"
+        ];
+      };
     };
 
     systemd.user.startServices = "sd-switch";

@@ -101,6 +101,10 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
       ];
 
+      # Enable the ssh agent
+      programs.ssh.startAgent = true;
+      security.pam.enableSSHAgentAuth = true;
+
       ################
       ### Wireless ###
       ################
@@ -182,7 +186,6 @@ in
         wpa_supplicant_gui
         inetutils
       ];
-      services.gnome.gnome-keyring.enable = true; # TODO: unlock password doesn't work
       sops.secrets.cuttlefish-samba-secrets = { };
 
       # TODO: opt-in better
