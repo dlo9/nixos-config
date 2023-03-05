@@ -20,10 +20,9 @@ in
   ];
 
   config = {
-    # TODO: can I enable this and not deploy/block boot i fit's not connected?
-    #networking.dhcpcd.wait = "background";
-
     networking = {
+      dhcpcd.wait = "if-carrier-up";
+
       interfaces.lan = {
         useDHCP = true;
 
