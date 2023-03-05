@@ -22,9 +22,6 @@ in
   config = {
     networking = {
       dhcpcd.wait = "if-carrier-up";
-      dhcpcd.extraConfig = ''
-        noipv4ll
-      '';
 
       interfaces.lan = {
         # FUTURE: Use a locally administered, unicast address like "02:9e:8d:a6:ea:d5"
