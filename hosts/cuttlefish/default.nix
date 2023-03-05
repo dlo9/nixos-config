@@ -21,9 +21,30 @@ in
 
   config = {
     # TODO: can I enable this and not deploy/block boot i fit's not connected?
-    #networking.interfaces.enp5s0f0.useDHCP = true;
-    networking.interfaces.enp5s0f1.useDHCP = true;
     #networking.dhcpcd.wait = "background";
+
+    networking = {
+      interfaces.lan = {
+        useDHCP = true;
+
+        # Use a locally administered, unicast address
+        #macAddress = "02:9e:8d:a6:ea:d5";
+      };
+
+      bonds = {
+        lan = {
+          interfaces = [
+            "enp5s0f1"
+            "enp5s0f0"
+          ];
+
+          driverOptions = {
+            mode = "balance-rr";
+            miimon = "100";
+          };
+        };
+      };
+    };
 
     # Ues overlay2 Docker storage driver for better performance. For this to work,
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
