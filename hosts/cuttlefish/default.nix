@@ -108,8 +108,6 @@ in
       })
     ];
 
-    powerManagement.cpuFreqGovernor = "powersave";
-
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`
     # View current PWM values: `cat /sys/class/hwmon/hwmon5/pwm1`
