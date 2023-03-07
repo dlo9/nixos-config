@@ -13,6 +13,7 @@ in
     ./users.nix
     inputs.vscode-server.nixosModule
     ./nginx.nix
+    ./services
     ./virtualization.nix
     ./vnc.nix
     ./webdav.nix
@@ -98,6 +99,7 @@ in
       #cudaPackages.cudatoolkit
       cudaPackages.cutensor
       cudaPackages.cudnn
+      nvidia-vaapi-driver
 
       #sysCfg.pkgs.sunshine
       #sunshine

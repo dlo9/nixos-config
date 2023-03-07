@@ -36,10 +36,22 @@ in
 
     services.nginx = {
       enable = true;
+
+      enableReload = true;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
+
+      appendHttpConfig = ''
+        # upstream sent too big header while reading response header from upstream
+        proxy_busy_buffers_size   512k;
+        proxy_buffers   4 512k;
+        proxy_buffer_size   256k;
+      '';
+
+      # Necessary for photo uploads, backups, etc.
+      clientMaxBodySize = "50M";
 
       virtualHosts = {
         "webdav.${useACMEHost}" = {
@@ -49,9 +61,6 @@ in
           locations."/" = {
             proxyPass = "http://localhost:12345";
             proxyWebsockets = true;
-            extraConfig = ''
-              client_max_body_size 50M;
-            '';
           };
         };
 
@@ -63,15 +72,12 @@ in
           locations."/" = {
             proxyPass = "http://192.168.1.230:1080";
             proxyWebsockets = true;
-            extraConfig = ''
-              proxy_intercept_errors on;
-            '';
           };
         };
       };
     };
 
-    networking.firewall.allowedTCPPorts = [
+    networking.firewall.interfaces.lan.allowedTCPPorts = [
       80
       443
     ];
