@@ -8,7 +8,6 @@ with lib;
   ];
 
   config = {
-    networking.interfaces.wlo1.useDHCP = true;
     # Ethernet modules for remote boot login
     #sys.zfs.network-modules = [ "iwlwifi" ];
     #sys.zfs.initrd-wireless = true;
