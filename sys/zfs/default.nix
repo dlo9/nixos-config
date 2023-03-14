@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
@@ -21,7 +21,7 @@ in
 {
   options = {
     # This configures zfs datasets to be managed by zfs utilities after boot as opposed to Nix. These are the recommended options
-    # in the Nix ZFS wiki, and so this automatically adds them so that hardward config doesn't need to be modified.
+    # in the Nix ZFS wiki, and so this automatically adds them so that hardware config doesn't need to be modified.
     fileSystems = with types; mkOption {
       type = attrsOf (submodule ({ name, config, ... }: {
         options.zfsUtils = mkOption {
@@ -33,7 +33,9 @@ in
           visible = false;
         };
 
-        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name [ "/" "/nix" ])) [
+        # Any filesystems marked "neededForBoot" need to have mountpoint=legacy since initrd will mount them manually:
+        # https://search.nixos.org/options?channel=22.11&show=fileSystems.%3Cname%3E.neededForBoot
+        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name utils.pathsNeededForBoot)) [
           "zfsutil"
           "X-mount.mkdir"
           "nofail"
@@ -46,7 +48,7 @@ in
 
       network-modules = mkOption {
         type = types.listOf types.nonEmptyStr;
-        default = [];
+        default = [ ];
         description = "The wifi module to load at boot time";
       };
 
@@ -112,17 +114,17 @@ in
 
       initrd.extraUtilsCommands = foldl' (x: y: x + "\n" + y) "" [
         "copy_bin_and_libs ${zfs-helper}/bin/zfs-helper"
-        (optionalString cfg.initrd-wireless "copy_bin_and_libs ${pkgs.wpa_supplicant}/bin/wpa_supplicant")
+        #(optionalString cfg.initrd-wireless "copy_bin_and_libs ${pkgs.wpa_supplicant}/bin/wpa_supplicant")
       ];
 
       initrd.extraUtilsCommandsTest = foldl' (x: y: x + "\n" + y) "" [
         "$out/bin/zfs-helper version"
-        (optionalString cfg.initrd-wireless "$out/bin/wpa_supplicant -v")
+        #(optionalString cfg.initrd-wireless "$out/bin/wpa_supplicant -v")
       ];
 
       # To debug, use: wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &
       initrd.postDeviceCommands = foldl' (x: y: x + "\n" + y) "" [
-        (optionalString cfg.initrd-wireless "wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &")
+        # (optionalString cfg.initrd-wireless "wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &")
         "zfs-helper onBoot >/dev/null &"
       ];
 
@@ -130,7 +132,7 @@ in
 
       initrd.network = {
         # Make sure you have added the kernel module for your network driver to `boot.initrd.availableKernelModules`,
-        enable = true;
+        enable = mkDefault true;
         ssh = {
           enable = true;
           port = 22;
