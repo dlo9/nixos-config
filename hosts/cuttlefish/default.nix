@@ -23,6 +23,7 @@ in
   config = {
     # Ues overlay2 Docker storage driver for better performance. For this to work,
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
+    # Remove this when OpenZFS has added overlay support in 2.2: https://github.com/openzfs/zfs/pull/9414
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
     boot = {
