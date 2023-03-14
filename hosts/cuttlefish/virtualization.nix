@@ -13,8 +13,6 @@ in
       kernelParams =  [ "intel_iommu=on" ];
     };
 
-    networking.bridges.bridge-lan.interfaces = [ "enp5s0f0" ];
-
     virtualisation.libvirtd = {
       enable = true;
       qemu = {

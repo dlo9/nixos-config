@@ -12,7 +12,6 @@ in
     ./samba.nix
     ./users.nix
     inputs.vscode-server.nixosModule
-    ./nginx.nix
     ./services
     ./virtualization.nix
     ./vnc.nix

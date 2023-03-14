@@ -3,7 +3,10 @@
 {
   imports = [
     ./authorization.nix
+    ./certs.nix
     ./jellyfin.nix
+    ./caddy.nix
+    #./nginx.nix
   ];
 
   config = {

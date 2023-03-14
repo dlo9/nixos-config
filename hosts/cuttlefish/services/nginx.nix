@@ -9,31 +9,19 @@ let
 in
 {
   config = {
-    sops.secrets.cloudflare-dns = {
-      sopsFile = sysCfg.secrets.hostSecretsFile;
-    };
+    # Give nginx cert access
+    users.users.nginx.extraGroups = [ "acme" ];
 
-    security.acme = {
-      acceptTerms = true;
+    # Reload nginx on new certs
+    security.acme.defaults.reloadServices = [ "nginx" ];
 
-      defaults = {
-        # Testing environment
-        #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    # Open ports
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
+    ];
 
-        email = "if_coding@fastmail.com";
-        dnsProvider = "cloudflare";
-        credentialsFile = config.sops.secrets.cloudflare-dns.path;
-      };
-
-      certs."${useACMEHost}" = {
-        #ocspMustStaple = true;
-        group = "nginx";
-        extraDomainNames = [
-          "*.sigpanic.com"
-        ];
-      };
-    };
-
+    # Actual nginx definition
     services.nginx = {
       enable = true;
 
@@ -64,6 +52,16 @@ in
           };
         };
 
+        "router.${useACMEHost}" = {
+          inherit useACMEHost;
+          forceSSL = true;
+
+          locations."/" = {
+            proxyPass = "http://192.168.1.1";
+            proxyWebsockets = true;
+          };
+        };
+
         "*.${useACMEHost}" = {
           inherit useACMEHost;
           forceSSL = true;
@@ -76,10 +74,5 @@ in
         };
       };
     };
-
-    networking.firewall.interfaces.lan.allowedTCPPorts = [
-      80
-      443
-    ];
   };
 }

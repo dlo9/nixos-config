@@ -21,6 +21,9 @@ in
       externalInterface = "lan";
     };
 
+    # Caddy
+    reverseProxies = { jellyfin = "http://jellyfin.containers:8096"; };
+
     # Nginx
     services.nginx.virtualHosts = {
       "${container}.sigpanic.com" = {
