@@ -7,12 +7,12 @@ let
 in
 {
   imports = [
+    ./boot
     ./graphical
     ./networking
     ./secrets
     ./zfs
 
-    ./boot.nix
     ./development.nix
     ./gaming.nix
     ./hardware.nix
@@ -100,8 +100,8 @@ in
 
     #virtualisation.podman = {
     #  enable = mkDefault true;
-      #dockerCompat = true;
-      #dockerSocket.enable = true;
+    #dockerCompat = true;
+    #dockerSocket.enable = true;
     #};
 
     # Timezone
@@ -136,9 +136,9 @@ in
           "docker"
           "audio"
           "video"
-          "adbusers"  # Android ADB
-          "scanner"  # Scanning
-          "lp"  # Printing
+          "adbusers" # Android ADB
+          "scanner" # Scanning
+          "lp" # Printing
         ];
       };
     };

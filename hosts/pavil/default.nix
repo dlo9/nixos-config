@@ -5,13 +5,10 @@ with lib;
 {
   imports = [
     ./hardware.nix
+    ./network.nix
   ];
 
   config = {
-    # Ethernet modules for remote boot login
-    #sys.zfs.network-modules = [ "iwlwifi" ];
-    #sys.zfs.initrd-wireless = true;
-
     boot.loader.grub.mirroredBoots = [
       { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
     ];
