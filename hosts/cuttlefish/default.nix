@@ -11,6 +11,7 @@ in
     ./hardware.nix
     ./samba.nix
     ./users.nix
+    ./network.nix
     inputs.vscode-server.nixosModule
     ./services
     ./virtualization.nix
@@ -20,30 +21,6 @@ in
   ];
 
   config = {
-    networking = {
-      dhcpcd.wait = "if-carrier-up";
-
-      interfaces.lan = {
-        # FUTURE: Use a locally administered, unicast address like "02:9e:8d:a6:ea:d5"
-        # Only downside is that it won't get the same IP during init and after init
-        macAddress = "00:25:90:91:fd:ab";
-      };
-
-      bonds = {
-        lan = {
-          interfaces = [
-            "enp5s0f1"
-            "enp5s0f0"
-          ];
-
-          driverOptions = {
-            mode = "balance-rr";
-            miimon = "100";
-          };
-        };
-      };
-    };
-
     # Ues overlay2 Docker storage driver for better performance. For this to work,
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";

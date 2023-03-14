@@ -9,7 +9,7 @@
 
   config = {
     # Enable systemd in init
-    boot.initrd.systemd.enable = true;
+    # boot.initrd.systemd.enable = true;
 
     # Enable emergency access, even with root account locked
     # TODO: sync this with systemd.enableEmergencyMode
