@@ -11,6 +11,10 @@ let
   masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
 in
 {
+  imports = [
+    ./systemd.nix
+  ];
+
   options.sys.networking = {
     enable = mkEnableOption "networking" // { default = true; };
     wireless = mkEnableOption "wireless networking" // { default = true; };

@@ -5,7 +5,6 @@ with lib;
 {
   imports = [
     ./hardware.nix
-    ./network.nix
   ];
 
   config = {

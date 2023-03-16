@@ -4,43 +4,24 @@ with lib;
 
 {
   config = {
-    # Use systemd-networkd
-    networking = {
-      # Use systemd networking, but also keep scripted networking since it's currently only way to get
-      # the network working during boot
-      useDHCP = true;
-      useNetworkd = true;
-    };
-
-    systemd.network = {
-      enable = true;
-
-      # Only block boot until a single interface comes online
-      wait-online = {
-        # timeout = 60;
-        timeout = 0;
-        anyInterface = true;
+    systemd.network.networks = {
+      # Bond ethernet devices into a "lan" device
+      "35-wired" = {
+        bond = [ "lan" ];
+        DHCP = "no";
       };
 
-      networks = {
-        "35-wired" = {
-          name = "en*";
-          bond = [ "lan" ];
-          dhcpV4Config.RouteMetric = 1024;
-        };
+      # Disable wireless
+      "35-wireless".DHCP = "no";
 
-        "35-wireless" = {
-          name = "wl*";
-          dhcpV4Config.RouteMetric = 2048; # Prefer wired
-        };
-
-        "40-lan" = {
-          name = "lan";
-          DHCP = "yes";
-          dhcpV4Config.RouteMetric = 512;
-        };
+      # Configure "lan"
+      "40-lan" = {
+        name = "lan";
+        DHCP = "yes";
+        dhcpV4Config.RouteMetric = 512;
       };
 
+      # Create "lan"
       netdevs."10-lan" = {
         netdevConfig = {
           Kind = "bond";
