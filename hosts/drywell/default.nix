@@ -49,9 +49,6 @@ in
       ];
     };
 
-    networking.useDHCP = true;
-    networking.interfaces.enp2s0.useDHCP = true;
-
     # Ethernet modules for remote boot login
     boot.initrd.kernelModules = [
       "r8169"
@@ -143,9 +140,11 @@ in
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`
-      extraConfig = let
-        tailscaleCidr = "100.64.0.0/10";
-        in ''
+      extraConfig =
+        let
+          tailscaleCidr = "100.64.0.0/10";
+        in
+        ''
           workgroup = WORKGROUP
           server string = drywell
           netbios name = drywell
@@ -177,7 +176,7 @@ in
       };
     };
 
-    users.groups.samba = {};
+    users.groups.samba = { };
     users.users.david.extraGroups = [ "samba" ];
   };
 }

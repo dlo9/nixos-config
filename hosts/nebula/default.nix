@@ -6,7 +6,6 @@
   ];
 
   config = {
-    networking.interfaces.enp8s0.useDHCP = true;
     home-manager.users.david.home.gui.bluetooth.enable = false;
     sys.graphical.nvidia = false;
 
