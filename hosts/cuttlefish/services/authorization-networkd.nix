@@ -36,14 +36,20 @@ in
       };
     };
 
+    # environment.etc = {
+    #   "systemd/network/80-container-ve.network" = {
+    #     source = "${pkgs.systemd}/lib/systemd/network/80-container-ve.network";
+    #   };
+    # };
+
     # Containers
     containers = {
       keycloak = {
         autoStart = true;
-        privateNetwork = true;
+        # privateNetwork = true;
 
-        hostAddress = "10.2.0.1";
-        localAddress = "10.2.0.2";
+        # hostAddress = "10.2.0.1";
+        # localAddress = "10.2.0.2";
 
         bindMounts = {
           "/secrets/postgres-password" = {
@@ -62,6 +68,10 @@ in
           "--private-users=0"
           "--private-users-ownership=chown"
 
+          # Add networking
+          "--network-veth"
+          # "--network-zone=keycloak"
+
           "--link-journal=host"
           "--property=CPUQuota=100%"
           "--property=MemoryHigh=1G"
@@ -70,10 +80,40 @@ in
         config = {
           system.stateVersion = "22.05";
 
-          networking.firewall = {
-            enable = true;
-            allowedTCPPorts = [ 80 ];
+          networking = {
+            # https://github.com/NixOS/nixpkgs/issues/69414#issuecomment-770755154
+            useHostResolvConf = false;
+            useDHCP = false;
+            useNetworkd = true;
+
+            firewall = {
+              enable = true;
+              allowedTCPPorts = [ 80 ];
+            };
           };
+
+          systemd.network.enable = true;
+          systemd.network.networks."20-host0" = {
+            matchConfig = {
+              Virtualization = "container";
+              Name = "host0";
+            };
+
+            dhcpConfig.UseTimezone = "yes";
+            networkConfig = {
+              DHCP = "yes";
+              LLDP = "yes";
+              EmitLLDP = "customer-bridge";
+              LinkLocalAddressing = mkDefault "ipv6";
+            };
+          };
+
+          # Link virtual host link configuration unit
+          # environment.etc = {
+          #   "systemd/network/80-container-host0.network" = {
+          #     source = "${pkgs.systemd}/lib/systemd/network/80-container-host0.network";
+          #   };
+          # };
 
           users.users.postgres.uid = config.users.users.nix-container1.uid;
           users.groups.postgres.gid = config.users.groups.nix-container1.gid;
