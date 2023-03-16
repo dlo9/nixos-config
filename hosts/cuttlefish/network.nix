@@ -4,21 +4,23 @@ with lib;
 
 {
   config = {
-    systemd.network.networks = {
-      # Bond ethernet devices into a "lan" device
-      "35-wired" = {
-        bond = [ "lan" ];
-        DHCP = "no";
-      };
+    systemd.network = {
+      networks = {
+        # Bond ethernet devices into a "lan" device
+        "35-wired" = {
+          bond = [ "lan" ];
+          DHCP = "no";
+        };
 
-      # Disable wireless
-      "35-wireless".DHCP = "no";
+        # Disable wireless
+        "35-wireless".DHCP = "no";
 
-      # Configure "lan"
-      "40-lan" = {
-        name = "lan";
-        DHCP = "yes";
-        dhcpV4Config.RouteMetric = 512;
+        # Configure "lan"
+        "40-lan" = {
+          name = "lan";
+          DHCP = "yes";
+          dhcpV4Config.RouteMetric = 512;
+        };
       };
 
       # Create "lan"
