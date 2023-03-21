@@ -99,6 +99,23 @@ in
 
       # Use `hostname.cluster` instead of `cluster.local` since Android can't resolve .local through a VPN
       addons.dns.clusterDomain = "${cfg.masterHostname}.cluster";
+      addons.dns.corefile = ''
+        .:10053 {
+          errors
+          health :10054
+          kubernetes ${config.services.kubernetes.addons.dns.clusterDomain} in-addr.arpa ip6.arpa {
+            pods insecure
+            fallthrough in-addr.arpa ip6.arpa
+          }
+          prometheus :10055
+          # forward . /etc/resolv.conf
+          forward . 1.1.1.1
+          cache 30
+          loop
+          reload
+          loadbalance
+        }
+      '';
 
       path = [
         config.services.openiscsi.package
