@@ -103,11 +103,15 @@ in
         ];
 
         extraFlags = [
-          # User namespaces are currently incompatable with idmapped devices:
-          # https://github.com/systemd/systemd/issues/21987#issuecomment-1355234983
-          # "-U"
-          "--private-users=identity"
-          "--private-users-ownership=auto"
+          # Can't ID map on the ramfs secrets mount (unverified theory)
+          #"-U"
+          # "--private-users=identity"
+          # "--private-users-ownership=auto"
+
+          # Fix filesystem permissions with this
+          # https://wiki.archlinux.org/title/Systemd-nspawn#Unprivileged_containers
+          "--private-users=0"
+          "--private-users-ownership=chown"
 
           "--link-journal=host"
           "--property=CPUQuota=400%"
@@ -140,7 +144,7 @@ in
 
           system.activationScripts = {
             linkLegacyConfig = ''
-              ln -s /var/lib/jellyfin /config
+              ln -sf /var/lib/jellyfin /config
             '';
           };
         };

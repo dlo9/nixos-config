@@ -15,8 +15,8 @@
   boot.extraModulePackages = [ ];
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }
-      { device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }];
+    [{ device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf"; }
+      { device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -61,6 +61,12 @@
   fileSystems."/fast/docker/containers" =
     {
       device = "fast/docker/containers";
+      fsType = "zfs";
+    };
+
+  fileSystems."/fast/docker/containers/authentik" =
+    {
+      device = "fast/docker/containers/authentik";
       fsType = "zfs";
     };
 
@@ -199,6 +205,12 @@
   fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" =
     {
       device = "/dev/disk/by-uuid/bc8b3a3d-a573-4996-bc04-2a4ff209aa2f";
+      fsType = "ext4";
+    };
+
+  fileSystems."/var/lib/containers" =
+    {
+      device = "/dev/disk/by-uuid/2cd34af9-d45c-4019-a196-769b5bbdcf05";
       fsType = "ext4";
     };
 
