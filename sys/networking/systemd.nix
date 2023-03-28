@@ -14,6 +14,10 @@ in
       useNetworkd = true;
     };
 
+    services.resolved.domains = [
+      "lan"
+    ];
+
     systemd.network = {
       enable = true;
 
