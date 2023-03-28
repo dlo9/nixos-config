@@ -98,11 +98,12 @@ in
       enableOnBoot = true;
     };
 
-    #virtualisation.podman = {
-    #  enable = mkDefault true;
-    #dockerCompat = true;
-    #dockerSocket.enable = true;
-    #};
+    virtualisation.podman = {
+      enable = false;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.dnsname.enable = true;
+    };
 
     # Timezone
     services.localtimed.enable = true;
@@ -134,6 +135,7 @@ in
         extraGroups = [
           "wheel"
           "docker"
+          "podman"
           "audio"
           "video"
           "adbusers" # Android ADB

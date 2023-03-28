@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./authentik.nix
     ./authorization.nix
     ./certs.nix
     ./jellyfin.nix

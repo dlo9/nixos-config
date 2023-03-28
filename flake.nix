@@ -16,6 +16,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Docker-compose in Nix
+    arion = {
+      url = github:hercules-ci/arion;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nur.url = github:nix-community/NUR;
 
     vscode-server = {
@@ -150,6 +156,9 @@
 
         # Nix User repo
         inputs.nur.nixosModules.nur
+
+        # Docker-compose in Nix
+        inputs.arion.nixosModules.arion
 
         # Home-manager configuration
         ({ config, inputs, ... }: {
