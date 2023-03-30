@@ -261,11 +261,10 @@ in
       xdg-utils
 
       # File manager
-      pcmanfm
       cinnamon.nemo
-      xfce.thunar
-      xfce.thunar-volman
-      xfce.thunar-archive-plugin
+      #xfce.thunar
+      #xfce.thunar-volman
+      #xfce.thunar-archive-plugin
 
       # USB installer
       ventoy-bin
