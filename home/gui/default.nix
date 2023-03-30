@@ -262,7 +262,10 @@ in
 
       # File manager
       pcmanfm
+      cinnamon.nemo
       xfce.thunar
+      xfce.thunar-volman
+      xfce.thunar-archive-plugin
 
       # USB installer
       ventoy-bin

@@ -108,11 +108,8 @@ in
     services.avahi.enable = true;
     services.avahi.nssmdns = true;
 
-    # Add GVFS for samba mounts in file manager
-    services.gvfs = {
-      enable = true;
-      package = pkgs.gvfs;
-    };
+    # Add GVFS for samba/cifs, webdav, etc.
+    services.gvfs.enable = true;
 
     # Keyring
     services.gnome.gnome-keyring.enable = true;
