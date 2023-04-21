@@ -9,28 +9,25 @@ in
 {
   imports = [
     ./polkit.nix
+    ./nvidia
   ];
 
   options.sys.graphical = {
     enable = mkEnableOption "graphical shell" // { default = true; };
-    nvidia = mkEnableOption "nvidia GPU" // { default = false; };
   };
 
   config = mkIf cfg.enable {
     # Allow swaylock
     security.pam.services.swaylock = { };
 
-    # Nvidia driver
-    services.xserver.videoDrivers = optional cfg.nvidia "nvidia";
-
-    # Enable nvidia DRM
-    hardware.nvidia.modesetting.enable = cfg.nvidia;
-
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = "${sysCfg.user}";
     environment.loginShellInit = mkDefault ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-        exec sway ${if cfg.nvidia then "--unsupported-gpu" else ""}
+        ${if (elem "nvidia" config.services.xserver.videoDrivers)
+          then "exec env WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu"
+          else "exec sway"
+        }
       fi
     '';
 

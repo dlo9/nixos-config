@@ -277,6 +277,9 @@ in
       # Signal
       signal-desktop
 
+      # Notes app
+      obsidian
+
       #geekbench5
 
       # Scanning

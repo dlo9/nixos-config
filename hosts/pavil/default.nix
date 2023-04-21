@@ -32,9 +32,6 @@ with lib;
       # ADB fire tablet stuff
       gnome.zenity
 
-      # Notes app
-      obsidian
-
       # Backups
       kopia
 
