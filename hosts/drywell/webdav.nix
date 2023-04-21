@@ -59,7 +59,7 @@ in
 
             auth = "true";
             setuid = true;
-            autoindex = true;
+            autoindex = false;
             hide-symlinks = false;
             case-insensitive = "false";
           }

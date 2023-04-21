@@ -25,7 +25,7 @@ in
         credentialsFile = config.sops.secrets.cloudflare-dns.path;
       };
 
-      certs."${dns}" = {
+      certs."${useACMEHost}" = {
         #ocspMustStaple = true;
         group = "nginx";
         extraDomainNames = [
