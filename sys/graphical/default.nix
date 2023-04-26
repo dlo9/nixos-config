@@ -65,6 +65,7 @@ in
     environment.systemPackages = with pkgs; [
       # System utils
       gparted # Partitioning
+      exfatprogs
 
       # Key tester
       wev
