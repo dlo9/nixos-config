@@ -281,6 +281,13 @@ in
 
       # Scanning
       gnome.simple-scan
+
+      # Keyring GUI
+      gnome.seahorse
+
+      # Networking utils
+      wpa_supplicant_gui
+      inetutils
     ];
 
     services = {

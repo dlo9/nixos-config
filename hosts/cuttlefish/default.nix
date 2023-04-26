@@ -9,7 +9,6 @@ in
   imports = [
     ./docker
     ./hardware.nix
-    ./samba.nix
     ./users.nix
     ./network.nix
     inputs.vscode-server.nixosModule

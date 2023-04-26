@@ -11,6 +11,13 @@ in
       };
 
       users = {
+        chelsea = {
+          uid = 1001;
+          group = "users";
+          isSystemUser = true;
+          createHome = false;
+        };
+
         media = {
           uid = media-id;
           group = "media";
