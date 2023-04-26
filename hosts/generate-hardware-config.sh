@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+set -e -o pipefail
 
 root="${1:-/}"
 hostname="${2:-$(hostname)}"
