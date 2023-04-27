@@ -5,6 +5,7 @@ with lib;
 
 {
   imports = [
+    ./ddns.nix
     ./hardware.nix
     ./webdav.nix
     ./nginx.nix
