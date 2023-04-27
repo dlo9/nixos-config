@@ -5,6 +5,7 @@
     ./authentik.nix
     ./authorization.nix
     ./certs.nix
+    ./ddns.nix
     ./jellyfin.nix
     ./caddy.nix
     #./nginx.nix
