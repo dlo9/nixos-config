@@ -66,6 +66,7 @@ in
       # System utils
       gparted # Partitioning
       exfatprogs
+      ntfs3g
 
       # Key tester
       wev
