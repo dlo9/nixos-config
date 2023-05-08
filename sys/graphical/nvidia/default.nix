@@ -4,15 +4,18 @@ with lib;
 
 let
   unlock = import ./unlock.nix;
+  cfg = config.sys.graphical;
 in
 {
   options.sys.graphical = {
     nvidia = mkEnableOption "nvidia GPU" // { default = false; };
   };
 
-  config = {
+  config = mkIf cfg.nvidia {
     # Required to remedy weird crash when using nvidia in docker
     # systemd.enableUnifiedCgroupHierarchy = false;
+
+    boot.blacklistedKernelModules = [ "nouveau" ];
 
     # https://nixos.wiki/wiki/Chromium#Enabling_native_Wayland_support
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -37,8 +40,10 @@ in
 
         # TODO: the following test still doesn't work
         # nix-shell -p libva-utils --run vainfo
-        nvidia-vaapi-driver
+        #nvidia-vaapi-driver
       ];
     };
+
+    # environment.systemPackages = [ (pkgs.callPackage ./vgpu.nix { }) ];
   };
 }

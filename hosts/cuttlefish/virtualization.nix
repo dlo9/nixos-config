@@ -10,7 +10,9 @@ in
   config = {
     boot = {
       kernelModules = [ "vfio-pci" ];
-      kernelParams =  [ "intel_iommu=on" ];
+      # TODO: Try "iommu=pt" for better performance:
+      # https://access.redhat.com/documentation/en-us/red_hat_virtualization/4.1/html/installation_guide/appe-configuring_a_hypervisor_host_for_pci_passthrough
+      kernelParams = [ "intel_iommu=on" ];
     };
 
     virtualisation.libvirtd = {
@@ -34,6 +36,7 @@ in
     programs.dconf.enable = true;
     environment.systemPackages = with pkgs; [
       virt-manager
+      looking-glass-client
     ];
 
     users.users."${sysCfg.user}".extraGroups = [ "libvirtd" ];
