@@ -24,7 +24,7 @@ let
     domains = [
       {
         domain_name = "sigpanic.com";
-        sub_domains = ["@"];
+        sub_domains = [ "@" ];
       }
     ];
   });
@@ -46,9 +46,6 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        #RuntimeDirectoryMode = "0700";
-        #inherit StateDirectory;
-        #Type = "oneshot";
         inherit RuntimeDirectory;
         ExecStartPre = "!${pkgs.writeShellScript "godns-prestart" ''
           install --mode=600 --owner=$USER "${configFile}" "/run/${RuntimeDirectory}/godns.json"
