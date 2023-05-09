@@ -10,6 +10,7 @@ in
     ./boot
     ./graphical
     ./networking
+    ./pkgs
     ./secrets
     ./zfs
 
@@ -19,7 +20,6 @@ in
     ./kubernetes.nix
     ./lib.nix
     ./maintenance.nix
-    ./pkgs.nix
   ];
 
   # Top-level configuration options

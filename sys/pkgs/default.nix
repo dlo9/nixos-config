@@ -195,10 +195,10 @@ in
       #   '';
       # };
 
-      steam-tui = callPackage ./pkgs/steam-tui.nix { withWine = true; };
-      genie-client = callPackage ./pkgs/genie-client.nix { };
-      sunshine = callPackage ./pkgs/sunshine.nix { };
-      nss-docker = callPackage ./pkgs/nss-docker.nix { };
+      steam-tui = callPackage ./steam-tui.nix { withWine = true; };
+      genie-client = callPackage ./genie-client.nix { };
+      sunshine = callPackage ./sunshine.nix { };
+      nss-docker = callPackage ./nss-docker.nix { };
     };
   };
 }
