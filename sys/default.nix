@@ -30,7 +30,6 @@ in
       default = "david";
     };
 
-    kernel = mkEnableOption "set the kernel" // { default = true; };
     low-power = mkEnableOption "low power mode" // { default = false; };
   };
 
@@ -144,10 +143,6 @@ in
         ];
       };
     };
-
-    # Kernel
-    #boot.kernelPackages = mkIf cfg.kernel (mkDefault pkgs.linuxKernel.packages.linux_zen);
-    boot.kernelPackages = mkIf cfg.kernel (mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages);
 
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
