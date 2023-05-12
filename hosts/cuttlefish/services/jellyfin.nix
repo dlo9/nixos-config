@@ -61,45 +61,11 @@ in
 
           "/run/opengl-driver" = { };
 
-          # "/dev/dri:idmap" = {
-          #   hostPath = "/dev/dri";
-          #   isReadOnly = false;
-          # };
-
-          # "/dev/dri/card0:idmap" = {
-          #   hostPath = "/dev/dri/card0";
-          #   isReadOnly = false;
-          # };
-
-          # "/dev/dri/card1:idmap" = {
-          #   hostPath = "/dev/dri/card1";
-          #   isReadOnly = false;
-          # };
-
-          # "/dev/dri/renderD128:idmap" = {
-          #   hostPath = "/dev/dri/renderD128";
-          #   isReadOnly = false;
-          # };
-
-          "/dev/dri/card0" = { };
-          "/dev/dri/card1" = { };
           "/dev/dri/renderD128" = { };
-          "/dev/nvidia0" = { };
-          "/dev/nvidiactl" = { };
-          "/dev/nvidia-modeset" = { };
-          "/dev/nvidia-uvm" = { };
-          "/dev/nvidia-uvm-tools" = { };
         };
 
         allowedDevices = [
-          (rwDevice "/dev/dri/card0")
-          (rwDevice "/dev/dri/card1")
           (rwDevice "/dev/dri/renderD128")
-          (rwDevice "/dev/nvidia0")
-          (rwDevice "/dev/nvidiactl")
-          (rwDevice "/dev/nvidia-modeset")
-          (rwDevice "/dev/nvidia-uvm")
-          (rwDevice "/dev/nvidia-uvm-tools")
         ];
 
         extraFlags = [
@@ -120,6 +86,10 @@ in
 
         config = {
           system.stateVersion = "22.05";
+          environment.sessionVariables = {
+            # To use intel GPU as vaapi
+            LIBVA_DRIVER_NAME = "iHD";
+          };
 
           networking.firewall = {
             enable = true;

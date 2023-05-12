@@ -28,7 +28,6 @@ in
     boot = {
       # Sensors from `sudo sensors-detect`
       kernelModules = [ "coretemp" "nct7904" ];
-      kernelPackages = pkgs.linuxPackages_hardened;
 
       zfs.extraPools = [
         #"slow"
@@ -42,24 +41,17 @@ in
 
       # Must load network module on boot for SSH access
       # lspci -v | grep -iA8 'network\|ethernet'
-      initrd.availableKernelModules = [ "igb" ];
+      initrd.availableKernelModules = [ "r8169" ];
       loader.grub.mirroredBoots = [
         { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA1384E" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
         { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA19AD2" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
-
-        # Also install onto a USB drive, since the motherboard can't boot from NVME
-        { devices = [ "/dev/disk/by-id/usb-Lexar_USB_Flash_Drive_046S07AT1V2U6VYA-0:0" ]; efiSysMountPoint = "/boot/efi2"; path = "/boot/efi2/EFI"; }
       ];
-
-      # TODO: don't think I need after install
-      # (and now that other boot issues are resolved)
-      loader.efi.canTouchEfiVariables = false;
-      loader.grub.efiInstallAsRemovable = true;
     };
 
     # GPU
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia.nvidiaPersistenced = true;
+    hardware.opengl.extraPackages = with pkgs; [ intel-media-driver ];
 
     sys = {
       kubernetes.enable = true;
@@ -67,30 +59,26 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      # Chassis and fan control
-      ipmitool
-      #ipmicfg
-
       # CUDA support
       #cudaPackages.cudatoolkit
-      cudaPackages.cutensor
-      cudaPackages.cudnn
-      nvidia-vaapi-driver
+      #cudaPackages.cutensor
+      #cudaPackages.cudnn
+      #nvidia-vaapi-driver
 
       #sysCfg.pkgs.sunshine
       #sunshine
 
       # Contains "new" flags for Nvidia GPUs which are in all the docs
-      (ffmpeg_5-full.override {
-        nv-codec-headers = nv-codec-headers-11;
-      })
+      #(ffmpeg_5-full.override {
+      #  nv-codec-headers = nv-codec-headers-11;
+      #})
     ];
 
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`
     # View current PWM values: `cat /sys/class/hwmon/hwmon5/pwm1`
     hardware.fancontrol = {
-      enable = true;
+      enable = false;
       # Hot core: hwmon0/temp3_input
       # Cool core: hwmon4/temp3_input
       config = ''

@@ -31,7 +31,7 @@ with lib;
 
           # FUTURE: Use a locally administered, unicast address like "02:9e:8d:a6:ea:d5"
           # Only downside is that it won't get the same IP during init and after init
-          MACAddress = "00:25:90:91:fd:ab";
+          MACAddress = "d8:bb:c1:c8:5c:da";
         };
 
         bondConfig.MIIMonitorSec = "1s";

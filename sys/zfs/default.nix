@@ -61,7 +61,7 @@ in
     # Kernel
     # TODO: change back once 23.05 is available
     #boot.kernelPackages = mkIf cfg.kernel (mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages);
-    boot.kernelPackages = mkDefault pkgs.unstable.linuxKernel.kernels.linux_6_3;
+    boot.kernelPackages = mkDefault pkgs.unstable.linuxKernel.packages.linux_6_2;
 
     # Derive `hostId`, which must be set for `zpool import`, from hostname
     # If instead it should be static for a host, then generate with `tr -dc 0-9a-f < /dev/urandom | head -c 8`

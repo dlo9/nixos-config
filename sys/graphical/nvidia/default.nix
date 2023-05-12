@@ -21,7 +21,7 @@ in
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
     # Nvidia driver
-    services.xserver.videoDrivers = [ "nvidia" ];
+    #services.xserver.videoDrivers = [ "nvidia" ];
 
     # Enable nvidia DRM
     hardware = {
@@ -35,8 +35,8 @@ in
       };
 
       opengl.extraPackages = with pkgs; [
-        vaapiVdpau
-        libvdpau-va-gl
+        #vaapiVdpau
+        #libvdpau-va-gl
 
         # TODO: the following test still doesn't work
         # nix-shell -p libva-utils --run vainfo
