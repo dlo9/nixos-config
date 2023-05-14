@@ -86,10 +86,10 @@ in
 
         config = {
           system.stateVersion = "22.05";
-          environment.sessionVariables = {
-            # To use intel GPU as vaapi
-            LIBVA_DRIVER_NAME = "iHD";
-          };
+          # environment.sessionVariables = {
+          #   # To use intel GPU as vaapi
+          #   LIBVA_DRIVER_NAME = "iHD";
+          # };
 
           networking.firewall = {
             enable = true;

@@ -12,9 +12,13 @@ in
     ./users.nix
     ./network.nix
     inputs.vscode-server.nixosModule
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-gpu-intel
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     ./services
     ./virtualization.nix
-    ./vnc.nix
+    #./vnc.nix
     ./webdav.nix
     ./zrepl.nix
   ];
@@ -48,10 +52,31 @@ in
       ];
     };
 
-    # GPU
-    services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.nvidia.nvidiaPersistenced = true;
-    hardware.opengl.extraPackages = with pkgs; [ intel-media-driver ];
+
+    # GPUs
+    # See GPUs/sDRM/Render devices with:
+    # drm_info -j | jq 'with_entries(.value |= .driver.desc)'
+    # ls -l /sys/class/drm/renderD*/device/driver
+
+    # Nvidia GPU
+    #services.xserver.videoDrivers = [ "nvidia" ];
+    #hardware.nvidia.nvidiaPersistenced = true;
+
+    # Intel GPU
+    # nixpkgs.config.packageOverrides = pkgs: {
+    #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    # };
+
+    # hardware.opengl = {
+    #   enable = true;
+    #   extraPackages = with pkgs; [
+    #     intel-media-driver
+    #     vaapiIntel
+    #     vaapiVdpau
+    #     libvdpau-va-gl
+    #     intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
+    #   ];
+    # };
 
     sys = {
       kubernetes.enable = true;
@@ -59,6 +84,9 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      # Intel utilization: intel_gpu_top
+      intel-gpu-tools
+
       # CUDA support
       #cudaPackages.cudatoolkit
       #cudaPackages.cutensor

@@ -4,6 +4,9 @@
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
 
+    # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # Secrets management
     sops-nix = {
       url = github:Mic92/sops-nix;
