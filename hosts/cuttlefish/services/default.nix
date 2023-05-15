@@ -8,7 +8,7 @@
     ./ddns.nix
     ./jellyfin.nix
     ./caddy.nix
-    # ./zabbix.nix
+    ./zabbix.nix
     #./nginx.nix
   ];
 

@@ -23,21 +23,37 @@ with lib;
     services.zabbixServer = {
       enable = true;
 
+      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
+      package = pkgs.unstable.zabbix.server;
+
       # listen.port = "10051";
       # openFirewall = false;
       # settings = {};
 
       database = {
         type = "pgsql";
-        createLocally = true;
+        createLocally = false;
 
         # Re-add and disable `createLocally`
         # passwordFile = config.sops.secrets."services/zabbix/postgres-password".path;
       };
     };
 
+    services.zabbixAgent = {
+      enable = true;
+
+      server = "localhost";
+
+      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
+      package = pkgs.unstable.zabbix.agent;
+
+    };
+
     services.zabbixWebCaddy = {
       enable = true;
+
+      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
+      package = pkgs.unstable.zabbix.web;
 
       database = {
         type = "pgsql";
@@ -62,17 +78,25 @@ with lib;
       '';
     };
 
+    # Enables "ident" authentication in postgres
+    services.oidentd.enable = true;
+
     services.postgresql = {
 
       enable = true;
       # enableTCPIP = true;
       ensureDatabases = [ config.services.zabbixServer.database.name ];
+
       ensureUsers = [
         {
           name = config.services.zabbixServer.database.user;
           ensurePermissions = { "DATABASE ${config.services.zabbixServer.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
+
+      authentication = ''
+        host ${config.services.zabbixServer.database.name} ${config.services.zabbixServer.database.user} samehost ident
+      '';
     };
 
     # services.httpd.enable = mkForce false;
