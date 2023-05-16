@@ -7,6 +7,11 @@
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    check_mk_agent = {
+      url = "github:BenediktSeidl/nixos-check_mk_agent-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Secrets management
     sops-nix = {
       url = github:Mic92/sops-nix;

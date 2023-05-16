@@ -5,7 +5,7 @@
     # ./authentik.nix
     # ./authorization.nix
     ./certs.nix
-    # ./checkmk.nix
+    ./checkmk.nix
     ./ddns.nix
     ./jellyfin.nix
     ./netdata.nix

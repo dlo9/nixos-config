@@ -4,7 +4,21 @@ with builtins;
 with lib;
 
 {
+  imports = [
+    inputs.check_mk_agent.nixosModules.check_mk_agent
+  ];
+
   config = {
+    services.check_mk_agent = {
+      enable = true;
+      bind = "0.0.0.0";
+      openFirewall = true;
+      package = pkgs.check_mk_agent.override {
+        enablePluginSmart = true;
+        enablePluginDocker = true;
+      };
+    };
+
     sops.secrets."services/checkmk/env" = {
       sopsFile = config.sys.secrets.hostSecretsFile;
     };

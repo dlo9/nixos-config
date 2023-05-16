@@ -182,6 +182,44 @@
         "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
       }
     },
+    "check_mk_agent": {
+      "inputs": {
+        "checkmk": "checkmk",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1673604399,
+        "narHash": "sha256-VqEBHBJ/QbBJ2zVRT80TRdp+mWcaTGinBHuel74EscM=",
+        "owner": "BenediktSeidl",
+        "repo": "nixos-check_mk_agent-overlay",
+        "rev": "59c40e469c8a2429b1bb1a4e9278a2603b1e7322",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BenediktSeidl",
+        "repo": "nixos-check_mk_agent-overlay",
+        "type": "github"
+      }
+    },
+    "checkmk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673600050,
+        "narHash": "sha256-NtEgXmwFPubT2mFRM171k52tD6Ref6NmZNM/YZzKRnE=",
+        "owner": "tribe29",
+        "repo": "checkmk",
+        "rev": "f2879ef2ce6b2ede505fdae30dd861dcdf843622",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tribe29",
+        "ref": "2.1.0",
+        "repo": "checkmk",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -423,6 +461,7 @@
         "base16-unclaimed": "base16-unclaimed",
         "base16-waybar": "base16-waybar",
         "base16-wofi": "base16-wofi",
+        "check_mk_agent": "check_mk_agent",
         "disko": "disko",
         "home-manager": "home-manager",
         "mobile-nixos": "mobile-nixos",
