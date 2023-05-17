@@ -399,12 +399,22 @@ in
           # Cheatsheet
           # Use Ctrl + G to open
           navi widget fish | source
-
-          # Autocorrect
-          thefuck --alias | source
         '';
 
         functions = {
+          # Autocorrect
+          # From `thefuck --alias`. It's slow, so use the rendered command to speed up
+          # shell startup
+          fuck = ''
+            set -l fucked_up_command $history[1]
+            env TF_SHELL=fish TF_ALIAS=fuck PYTHONIOENCODING=utf-8 thefuck $fucked_up_command THEFUCK_ARGUMENT_PLACEHOLDER $argv | read -l unfucked_command
+            if [ "$unfucked_command" != "" ]
+              eval $unfucked_command
+              builtin history delete --exact --case-sensitive -- $fucked_up_command
+              builtin history merge
+            end
+          '';
+
           fish_user_key_bindings = ''
             # Ctrl-Backspace
             bind \e\[3^ kill-word
@@ -419,6 +429,8 @@ in
             # https://unix.stackexchange.com/questions/139115/disable-ctrl-d-window-close-in-terminator-terminal-emulator
             bind --erase --preset \cd
           '';
+
+          fish_greeting = "";
 
           fork = ''
             eval "$argv & disown > /dev/null"
