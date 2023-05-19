@@ -85,20 +85,6 @@ in
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
-
-      # CUDA support
-      #cudaPackages.cudatoolkit
-      #cudaPackages.cutensor
-      #cudaPackages.cudnn
-      #nvidia-vaapi-driver
-
-      #sysCfg.pkgs.sunshine
-      #sunshine
-
-      # Contains "new" flags for Nvidia GPUs which are in all the docs
-      #(ffmpeg_5-full.override {
-      #  nv-codec-headers = nv-codec-headers-11;
-      #})
     ];
 
     # Generate a new (invalid) config: `sudo pwmconfig`
