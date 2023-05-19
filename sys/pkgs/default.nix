@@ -199,6 +199,7 @@ in
       genie-client = callPackage ./genie-client.nix { };
       sunshine = callPackage ./sunshine.nix { };
       nss-docker = callPackage ./nss-docker.nix { };
+      caddy = callPackage ./caddy.nix { };
     };
   };
 }

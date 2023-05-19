@@ -52,7 +52,6 @@ in
       ];
     };
 
-
     # GPUs
     # See GPUs/sDRM/Render devices with:
     # drm_info -j | jq 'with_entries(.value |= .driver.desc)'
