@@ -20,7 +20,7 @@ in
     networking.nat = {
       enable = true;
       internalInterfaces = [ "ve-${container}" ];
-      externalInterface = "lan";
+      externalInterface = "enp39s0";
     };
 
     # Nginx

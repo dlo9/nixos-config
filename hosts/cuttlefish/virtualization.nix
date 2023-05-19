@@ -5,15 +5,36 @@ with lib;
 
 let
   sysCfg = config.sys;
+
+  # lspci -nn | grep -i nvidia
+  # sudo virsh net-start default
+  gpuIDs = [
+    "10de:1b81" # Graphics
+    "10de:10f0" # Audio
+  ];
 in
 {
   config = {
     boot = {
-      kernelModules = [ "vfio-pci" ];
-      # TODO: Try "iommu=pt" for better performance:
-      # https://access.redhat.com/documentation/en-us/red_hat_virtualization/4.1/html/installation_guide/appe-configuring_a_hypervisor_host_for_pci_passthrough
-      kernelParams = [ "intel_iommu=on" ];
+      # Nvidia GPU passthrough
+      # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/5/html/virtualization/chap-virtualization-pci_passthrough
+      # https://astrid.tech/2022/09/22/0/nixos-gpu-vfio/
+      # pci_0000_10_00_0
+      kernelModules = [
+        "vfio_pci"
+        "vfio"
+        "vfio_iommu_type1"
+        "vfio_virqfd"
+      ];
+
+      kernelParams = [
+        "iommu=pt"
+        ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs)
+      ];
     };
+
+    hardware.opengl.enable = true;
+    virtualisation.spiceUSBRedirection.enable = true;
 
     virtualisation.libvirtd = {
       enable = true;

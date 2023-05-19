@@ -121,13 +121,6 @@ in
       '';
     };
 
-    # Allow IP forwarding for tailscale subnets
-    boot.kernel.sysctl = {
-      # Already enabled for kubelet
-      #"net.ipv4.ip_forward" = 1;
-      "net.ipv6.conf.all.forwarding" = 1;
-    };
-
     # Nix cache
     sops.secrets.nix-serve-private-key = {
       sopsFile = sysCfg.secrets.hostSecretsFile;
