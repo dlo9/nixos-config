@@ -9,7 +9,7 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "mpt3sas" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "mpt3sas" "xhci_pci" "ahci" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
@@ -61,6 +61,12 @@
   fileSystems."/fast/docker/containers/authentik" =
     {
       device = "fast/docker/containers/authentik";
+      fsType = "zfs";
+    };
+
+  fileSystems."/fast/docker/containers/checkmk" =
+    {
+      device = "fast/docker/containers/checkmk";
       fsType = "zfs";
     };
 

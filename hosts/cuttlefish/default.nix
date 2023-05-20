@@ -30,8 +30,8 @@ in
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
     boot = {
-      # Sensors from `sudo sensors-detect`
-      kernelModules = [ "coretemp" "nct7904" ];
+      # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
+      kernelModules = [ "nct6775" ];
 
       zfs.extraPools = [
         #"slow"
@@ -82,6 +82,8 @@ in
       #maintenance.autoUpgrade = true;
     };
 
+    boot.blacklistedKernelModules = [ "nouveau" ];
+
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
@@ -90,6 +92,8 @@ in
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`
     # View current PWM values: `cat /sys/class/hwmon/hwmon5/pwm1`
+    # Turn off (almost) all fans:
+    # for i in (seq 1 7); echo 0 | sudo tee /sys/class/hwmon/hwmon5/pwm$i; end
     hardware.fancontrol = {
       enable = false;
       # Hot core: hwmon0/temp3_input

@@ -33,8 +33,8 @@ in
       ];
     };
 
-    hardware.opengl.enable = true;
-    virtualisation.spiceUSBRedirection.enable = true;
+    # hardware.opengl.enable = true;
+    # virtualisation.spiceUSBRedirection.enable = true;
 
     virtualisation.libvirtd = {
       enable = true;
@@ -54,11 +54,11 @@ in
       };
     };
 
-    programs.dconf.enable = true;
-    environment.systemPackages = with pkgs; [
-      virt-manager
-      looking-glass-client
-    ];
+    # programs.dconf.enable = true;
+    # environment.systemPackages = with pkgs; [
+    #   virt-manager
+    #   looking-glass-client
+    # ];
 
     users.users."${sysCfg.user}".extraGroups = [ "libvirtd" ];
   };
