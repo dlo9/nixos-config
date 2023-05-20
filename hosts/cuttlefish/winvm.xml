@@ -1,24 +1,81 @@
-<domain type="kvm">
-  <name>win10</name>
+<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+
+  <!-- Resources -->
+  <!-- Fixing inaccessable boot device: https://gist.github.com/Francesco149/dc156cfd9ecfc3659469315c45fa0f96 -->
+
+  <!--          -->
+  <!-- METADATA -->
+  <!--          -->
+  <name>winvm</name>
   <uuid>39af3762-7db4-4588-a524-b8ddad03095f</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
+
+  <!--        -->
+  <!-- MEMORY -->
+  <!--        -->
+
   <memory unit="KiB">33554432</memory>
   <currentMemory unit="KiB">33554432</currentMemory>
-  <vcpu placement="static">8</vcpu>
+
+  <!-- Static Hugepages -->
+  <!-- <memoryBacking>
+    <hugepages/>
+  </memoryBacking> -->
+
+  <!--     -->
+  <!-- CPU -->
+  <!--     -->
+
+  <!-- IO threads: only one per controller, I have multiple disks but only one SCSI controller -->
+  <iothreads>1</iothreads>
+
+  <!-- CPU pinning -->
+  <vcpu placement="static">6</vcpu>
   <cputune>
-    <vcpupin vcpu="0" cpuset="0"/>
-    <vcpupin vcpu="1" cpuset="1"/>
-    <vcpupin vcpu="2" cpuset="2"/>
-    <vcpupin vcpu="3" cpuset="3"/>
-    <vcpupin vcpu="4" cpuset="4"/>
-    <vcpupin vcpu="5" cpuset="5"/>
-    <vcpupin vcpu="6" cpuset="6"/>
-    <vcpupin vcpu="7" cpuset="7"/>
+    <vcpupin vcpu="0" cpuset="3"/>
+    <vcpupin vcpu="1" cpuset="9"/>
+    <vcpupin vcpu="2" cpuset="4"/>
+    <vcpupin vcpu="3" cpuset="10"/>
+    <vcpupin vcpu="4" cpuset="5"/>
+    <vcpupin vcpu="5" cpuset="11"/>
+    <emulatorpin cpuset='0-2,6-8'/>
+    <iothreadpin iothread='1' cpuset='0-2,6-8'/>
   </cputune>
+
+  <!-- CPU topology -->
+  <cpu mode="host-passthrough" check="none">
+    <topology sockets="1" cores="3" threads="2"/>
+    <cache mode='passthrough'/>
+    <feature policy='require' name='topoext'/>
+  </cpu>
+
+  <!--       -->
+  <!-- Other -->
+  <!--       -->
+
+  <!-- Virtualization features -->
+  <features>
+    <vmport state="off"/>
+    <acpi/>
+    <apic/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+      <vendor_id state="on" value="kvm hyperv"/>
+      <vpindex state='on'/>
+      <synic state='on'/>
+      <stimer state='on'/>
+      <reset state='on'/>
+      <frequencies state='on'/>
+    </hyperv>
+  </features>
+
+  <!-- Miscellaneous  -->
   <os>
     <type arch="x86_64" machine="pc-q35-7.1">hvm</type>
     <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
@@ -26,19 +83,6 @@
     <boot dev="hd"/>
     <bootmenu enable="no"/>
   </os>
-  <features>
-    <acpi/>
-    <apic/>
-    <hyperv mode="custom">
-      <relaxed state="on"/>
-      <vapic state="on"/>
-      <spinlocks state="on" retries="8191"/>
-    </hyperv>
-    <vmport state="off"/>
-  </features>
-  <cpu mode="host-passthrough" check="none" migratable="on">
-    <topology sockets="1" dies="1" cores="4" threads="2"/>
-  </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -54,12 +98,84 @@
   </pm>
   <devices>
     <emulator>/run/libvirt/nix-emulators/qemu-system-x86_64</emulator>
+
+    <!-- Storage controller (SCSI) -->
+    <controller type="scsi" index="0" model="virtio-scsi">
+      <driver iothread='1' queues='8'/>
+      <address type="pci" domain="0x0000" bus="0x10" slot="0x01" function="0x0"/>
+    </controller>
+
+    <!-- Boot disk: sudo zfs create -b 64k -V 100G fast/vm/winvm -->
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="none" io="native" discard="unmap"/>
       <source dev="/dev/zvol/fast/vm/winvm"/>
-      <target dev="sda" bus="sata"/>
+      <target dev="sda" bus="scsi"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
+
+    <!-- Data disk: sudo zfs create -b 64k -V 512G slow/vm/winvm -->
+    <disk type="block" device="disk">
+      <driver name="qemu" type="raw" cache="none" io="native" discard="unmap"/>
+      <source dev="/dev/zvol/slow/vm/winvm"/>
+      <target dev="sdb" bus="scsi"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+    </disk>
+
+    <!-- MACVLAN network -->
+    <interface type="direct">
+      <mac address="52:54:00:24:f1:f7"/>
+      <source dev="winvm" mode="bridge"/>
+      <model type="virtio"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
+    </interface>
+
+    <!-- Input devices -->
+    <input type="mouse" bus="virtio">
+      <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
+    </input>
+    <input type="keyboard" bus="virtio">
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
+    </input>
+    <input type="mouse" bus="ps2"/>
+    <input type="keyboard" bus="ps2"/>
+
+    <!-- Emulated TPM -->
+    <tpm model="tpm-crb">
+      <backend type="emulator" version="2.0"/>
+    </tpm>
+
+    <!-- Virtualized audio/video -->
+    <audio id="1" type="none"/>
+
+    <!-- Virt-manager video (uncomment to enable) -->
+    <!-- <graphics type="spice" port="-1" autoport="no">
+      <listen type="address"/>
+      <gl enable="no"/>
+    </graphics> -->
+
+    <!-- GPU video -->
+    <video>
+      <model type="vga" vram="16384" heads="1" primary="yes"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
+    </video>
+
+    <!-- Passthrough GPU: graphics -->
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0x0000" bus="0x10" slot="0x00" function="0x0"/>
+      </source>
+      <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
+    </hostdev>
+
+    <!-- Passthrough GPU: audio -->
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0x0000" bus="0x10" slot="0x00" function="0x1"/>
+      </source>
+      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+    </hostdev>
+
+    <!-- Miscellaneous -->
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
     </controller>
@@ -143,15 +259,6 @@
       <model name="pcie-pci-bridge"/>
       <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
     </controller>
-    <controller type="sata" index="0">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x1f" function="0x2"/>
-    </controller>
-    <interface type="direct">
-      <mac address="52:54:00:24:f1:f7"/>
-      <source dev="winvm" mode="bridge"/>
-      <model type="virtio"/>
-      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
-    </interface>
     <serial type="pty">
       <target type="isa-serial" port="0">
         <model name="isa-serial"/>
@@ -160,38 +267,6 @@
     <console type="pty">
       <target type="serial" port="0"/>
     </console>
-    <input type="mouse" bus="virtio">
-      <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
-    </input>
-    <input type="keyboard" bus="virtio">
-      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
-    </input>
-    <input type="mouse" bus="ps2"/>
-    <input type="keyboard" bus="ps2"/>
-    <tpm model="tpm-crb">
-      <backend type="emulator" version="2.0"/>
-    </tpm>
-    <graphics type="spice">
-      <listen type="none"/>
-      <gl enable="no"/>
-    </graphics>
-    <audio id="1" type="none"/>
-    <video>
-      <model type="vga" vram="16384" heads="1" primary="yes"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
-    </video>
-    <hostdev mode="subsystem" type="pci" managed="yes">
-      <source>
-        <address domain="0x0000" bus="0x10" slot="0x00" function="0x0"/>
-      </source>
-      <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="pci" managed="yes">
-      <source>
-        <address domain="0x0000" bus="0x10" slot="0x00" function="0x1"/>
-      </source>
-      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
-    </hostdev>
     <memballoon model="virtio">
       <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
     </memballoon>
