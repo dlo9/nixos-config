@@ -2,6 +2,7 @@
 
   <!-- Resources -->
   <!-- Fixing inaccessable boot device: https://gist.github.com/Francesco149/dc156cfd9ecfc3659469315c45fa0f96 -->
+  <!-- Clock timing: https://www.reddit.com/r/VFIO/comments/asf3tg/drastic_stuttering_reduction_using_invtsc_feature/-->
 
   <!--          -->
   <!-- METADATA -->
@@ -51,6 +52,7 @@
     <topology sockets="1" cores="3" threads="2"/>
     <cache mode='passthrough'/>
     <feature policy='require' name='topoext'/>
+    <feature policy='require' name='invtsc'/>
   </cpu>
 
   <!--       -->
@@ -84,10 +86,11 @@
     <bootmenu enable="no"/>
   </os>
   <clock offset="localtime">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-    <timer name="hypervclock" present="yes"/>
+    <timer name='rtc' present='no' tickpolicy='catchup'/>
+    <timer name='pit' present='no' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+    <timer name='kvmclock' present='no'/>
+    <timer name='hypervclock' present='yes'/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
