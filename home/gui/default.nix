@@ -272,7 +272,6 @@ in
       # Testing
       kopia # Backup tool
       ddcutil
-      ddcui
 
       # Signal
       signal-desktop

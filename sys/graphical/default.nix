@@ -74,7 +74,15 @@ in
 
       # Keyring
       libsecret
+
+      # Control monitor settings (brightness, contrast, etc.) via GUI
+      # Must enable `hardware.i2c.*`
+      ddcui
     ];
+
+    # Enable i2c for the main user to control monitors via software
+    hardware.i2c.enable = true;
+    users.users."${sysCfg.user}".extraGroups = [ config.hardware.i2c.group ];
 
     # Printing
     # To add a printer, go to:
