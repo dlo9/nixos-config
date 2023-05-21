@@ -16,6 +16,18 @@ let
       '';
     };
   });
+
+  autheliaForwardAuth = ''
+    forward_auth http://192.168.1.230:1080 {
+      transport http {
+        proxy_protocol v2
+      }
+
+      header_up Host "auth.sigpanic.com"
+      uri /api/verify?rd=https://auth.sigpanic.com
+      copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+    }
+  '';
 in
 {
   options.reverseProxies = mkOption {
@@ -36,6 +48,12 @@ in
       80
       443
     ];
+
+    # Secrets
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets."services/caddy/env".path;
+    sops.secrets."services/caddy/env" = {
+      sopsFile = config.sys.secrets.hostSecretsFile;
+    };
 
     # Actual caddy definition
     services.caddy = {
@@ -73,6 +91,21 @@ in
             serverAliases = [ "webdav.sigpanic.com" ];
             extraConfig = ''
               reverse_proxy http://localhost:12345
+            '';
+          };
+
+          sunshine = {
+            inherit useACMEHost;
+            serverAliases = [ "sunshine.sigpanic.com" ];
+            extraConfig = ''
+              ${autheliaForwardAuth}
+
+              reverse_proxy https://winvm.lan:47990 {
+                header_up Authorization "Basic {$SUNSHINE_BASIC_AUTH}"
+                transport http {
+                  tls_insecure_skip_verify
+                }
+              }
             '';
           };
 
