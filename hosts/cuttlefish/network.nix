@@ -52,6 +52,12 @@ in
           name = "cuttlefish";
           DHCP = "yes";
           dhcpV4Config.Hostname = "cuttlefish";
+          #bridge = [ "containers" ];
+        };
+
+        "40-containers" = {
+          name = "containers";
+          # DHCP = "no";
         };
       };
 
@@ -68,7 +74,22 @@ in
             Mode = "bridge";
           };
         };
+
+        # Virtual network card for cuttlefish
+        "15-containers" = {
+          netdevConfig = {
+            Name = "containers";
+            Kind = "bridge";
+          };
+        };
       };
     };
+
+    networking.firewall.trustedInterfaces = [
+      "cuttlefish"
+      # "ve-jellyfin"
+      # "containers"
+      # "ve-test"
+    ];
   };
 }

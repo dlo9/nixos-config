@@ -18,23 +18,7 @@ in
     networking.nat = {
       enable = true;
       internalInterfaces = [ "ve-${container}" ];
-      externalInterface = "enp39s0";
-    };
-
-    # Caddy
-    reverseProxies = { jellyfin = "http://jellyfin.containers:8096"; };
-
-    # Nginx
-    services.nginx.virtualHosts = {
-      "${container}.sigpanic.com" = {
-        useACMEHost = "sigpanic.com";
-        forceSSL = true;
-
-        locations."/" = {
-          proxyPass = "http://${container}.containers:8096";
-          proxyWebsockets = true;
-        };
-      };
+      externalInterface = "cuttlefish";
     };
 
     # Containers
@@ -43,6 +27,7 @@ in
         autoStart = true;
         privateNetwork = true;
 
+        #hostBridge = "containers";
         hostAddress = "10.2.0.1";
         localAddress = "10.2.0.3";
 

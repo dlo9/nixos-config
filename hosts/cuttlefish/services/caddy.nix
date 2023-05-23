@@ -7,15 +7,6 @@ let
   useACMEHost = "sigpanic.com";
   listenAddresses = [ "0.0.0.0" ];
   sysCfg = config.sys;
-  simpleProxy = (name: value: {
-    "${name}" = {
-      useACMEHost = "sigpanic.com";
-      serverAliases = [ "${name}.sigpanic.com" ];
-      extraConfig = ''
-        reverse_proxy http://${name}.containers:8096
-      '';
-    };
-  });
 
   autheliaForwardAuth = ''
     forward_auth http://192.168.1.230:1080 {
@@ -30,12 +21,6 @@ let
   '';
 in
 {
-  options.reverseProxies = mkOption {
-    type = types.attrsOf types.nonEmptyStr;
-    # default = [];
-    description = "Hostname to upstream proxy config";
-  };
-
   config = {
     # Give caddy cert access
     users.users.caddy.extraGroups = [ "acme" ];
@@ -65,7 +50,7 @@ in
       package = config.sys.pkgs.caddy;
 
       virtualHosts =
-        (mapAttrs simpleProxy config.reverseProxies) // {
+        {
           keycloak = {
             inherit useACMEHost;
             serverAliases = [ "keycloak.sigpanic.com" ];
