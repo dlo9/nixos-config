@@ -51,6 +51,8 @@ in
         ping = "${pkgs.gping}/bin/gping";
         ps = "${pkgs.procs}/bin/procs";
         watch = "${pkgs.viddy}/bin/viddy";
+
+        carbonyl = "docker run --rm -it fathyb/carbonyl";
       };
     };
 
