@@ -22,6 +22,20 @@ with lib;
 
       configDir = {
         "health_alarm_notify.conf" = config.sops.secrets."services/netdata/health_alarm_notify.conf".path;
+
+        # Enable systemd scraping
+        "go.d.conf" = pkgs.writeTextFile "go.d.conf" ''
+          modules:
+            systemdunits: yes
+        '';
+
+        # Enable systemd alerts
+        "go.d/systemdunits.conf" = pkgs.writeTextFile "go.d/systemdunits.conf" ''
+          jobs:
+            - name: service-units
+              include:
+                - '*.service'
+        '';
       };
     };
 
