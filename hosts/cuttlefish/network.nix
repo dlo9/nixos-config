@@ -42,6 +42,10 @@ in
           macvlan = [
             "cuttlefish"
           ];
+
+          bridge = [
+            "containers"
+          ];
         };
 
         # Disable wireless
@@ -55,10 +59,10 @@ in
           #bridge = [ "containers" ];
         };
 
-        "40-containers" = {
-          name = "containers";
-          # DHCP = "no";
-        };
+        # "40-containers" = {
+        #   name = "containers";
+        #   # DHCP = "no";
+        # };
       };
 
       netdevs = {

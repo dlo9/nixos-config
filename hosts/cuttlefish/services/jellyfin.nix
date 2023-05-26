@@ -17,7 +17,7 @@ in
     # Networking
     networking.nat = {
       enable = true;
-      internalInterfaces = [ "ve-${container}" ];
+      internalInterfaces = [ "ve-+" ];
       externalInterface = "cuttlefish";
     };
 
@@ -27,7 +27,6 @@ in
         autoStart = true;
         privateNetwork = true;
 
-        #hostBridge = "containers";
         hostAddress = "10.2.0.1";
         localAddress = "10.2.0.3";
 
@@ -71,19 +70,15 @@ in
 
         config = {
           system.stateVersion = "22.05";
-          # environment.sessionVariables = {
-          #   # To use intel GPU as vaapi
-          #   LIBVA_DRIVER_NAME = "iHD";
-          # };
-
-          networking.firewall = {
-            enable = true;
-            allowedTCPPorts = [ 8096 ];
+          networking = {
+            firewall.allowedTCPPorts = [ 8096 ];
           };
 
           services.jellyfin = {
             enable = true;
           };
+
+          environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
 
           users = {
             groups.jellyfin.gid = 568;
