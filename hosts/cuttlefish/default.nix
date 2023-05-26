@@ -16,6 +16,7 @@ in
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-gpu-intel
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    inputs.nixos-hardware.nixosModules.common-hidpi
     ./services
     ./virtualization.nix
     #./vnc.nix

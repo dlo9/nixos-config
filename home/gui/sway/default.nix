@@ -282,16 +282,17 @@ in
 
           # See available outputs with: swaymsg -t get_outputs
           output = mkDefault {
-            "*" = { bg = "${wallpaper} fill"; };
-            HEADLESS-1 = { resolution = "1920x1080"; position = "0,0"; };
+            "*" = { bg = "${wallpaper} fill"; adaptive_sync = "on"; };
+            #HEADLESS-1 = { resolution = "1920x1080"; position = "0,0"; };
 
             # Left monitor
-            DP-1 = { resolution = "2560x1400"; position = "0,0"; };
-            DP-3 = { resolution = "2560x1400"; position = "0,0"; };
+            DP-1 = { resolution = "2560x1440"; position = "0,0"; };
+            DP-3 = { resolution = "2560x1440"; position = "0,0"; };
 
             # Right monitor
-            DVI-D-1 = { resolution = "2560x1400"; position = "2560,0"; };
-            HDMI-A-1 = { resolution = "2560x1400"; position = "2560,0"; };
+            DVI-D-1 = { resolution = "2560x1440"; position = "2560,0"; };
+            HDMI-A-1 = { resolution = "2560x1440"; position = "2560,0"; };
+            HDMI-A-2 = { resolution = "2560x1440"; position = "2560,0";  };
           };
 
           workspaceOutputAssign = [
