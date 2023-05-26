@@ -25,5 +25,12 @@
     # Zabbix
     # users.groups.zabbix.gid = 180;
     # users.users.zabbix.uid = 180;
+
+    # Networking
+    networking.nat = {
+      enable = true;
+      internalInterfaces = [ "ve-+" ];
+      externalInterface = "cuttlefish";
+    };
   };
 }
