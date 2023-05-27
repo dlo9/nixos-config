@@ -4,10 +4,12 @@ This used to be a repository for system dotfiles, but have now been replaced by 
 
 # Adding a new host
 ```sh
-SOPS_AGE_KEY=MY_MASTER_KEY ./scripts/util/create-host-config <hostname> <admin> <description>
+env SOPS_AGE_KEY=MY_MASTER_KEY ./scripts/util/create-host-config <hostname> <admin> <description>
 ```
 
-## Installing
+# Installing
+- Add a new host config via [Adding a new host](#adding-a-new-host)
+
 ### The fancy way
 This method installs the NixOS configuration from this repo directly -- it's fancy, but
 makes it more difficult to manage long-term on the host.

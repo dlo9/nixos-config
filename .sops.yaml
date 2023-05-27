@@ -12,6 +12,7 @@ age-keys: &age-keys
   - &installer age1na853jz9pslss7rleap2hwgaxmlrjrry8yh2rjrn90tcee4r5f3ssjj5vp
   - &rpi3 age189fhnxddwst08ug2j644nqd9vtxf2tp2kr3ygmutruayvzt7ss9sd3jf4m
   - &limb-1 age1egxva7myft04uzkfurq4altj92neuchtggw62z55p3tt3ddlnvxsf6ersm
+  - &nib age1szk33dt0yyeru746p0elrym3hpc5hr6w6lqz0hd8xhrdt44k3sdqmpx0lk
 
 creation_rules:
   #######################
@@ -88,3 +89,10 @@ creation_rules:
     - age:
       - *bitwarden
       - *limb-1
+
+  - path_regex: ^hosts/nib/secrets.yaml$
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *nib

@@ -114,4 +114,7 @@ sops -e -i "$hostDir/secrets.yaml"
 ### Hardware Generation ###
 ###########################
 
-"$repoDir/hosts/generate-hardware-config.sh" / "$hostname"
+#"$repoDir/hosts/generate-hardware-config.sh" / "$hostname"
+git add -u
+git add "hosts/$hostname"
+git commit -m "Add host: $hostname"
