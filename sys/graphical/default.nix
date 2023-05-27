@@ -78,6 +78,9 @@ in
       # Control monitor settings (brightness, contrast, etc.) via GUI
       # Must enable `hardware.i2c.*`
       ddcui
+
+      # Virtualization management
+      virt-manager
     ];
 
     # Enable i2c for the main user to control monitors via software
