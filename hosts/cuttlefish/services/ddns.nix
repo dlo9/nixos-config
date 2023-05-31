@@ -14,9 +14,9 @@ let
     debug_info = true;
 
     ip_urls = [
+      "https://ip4.seeip.org"
       "https://api.ipify.org"
       "https://myip.biturl.top"
-      "https://ip4.seeip.org"
       "https://ipecho.net/plain"
       "https://api-ipv4.ip.sb/ip"
     ];

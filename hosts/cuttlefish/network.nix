@@ -7,6 +7,7 @@
 with lib;
 let
   MACs = {
+    # Gets 32:1e:1c:d7:56:1a on boot somehow??
     cuttlefish = "d8:bb:c1:c8:5c:da";
   };
 in
