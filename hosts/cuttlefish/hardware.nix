@@ -178,24 +178,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/slowcache/iso" =
-    {
-      device = "slowcache/iso";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slowcache/media/video/movies" =
-    {
-      device = "slowcache/media/video/movies";
-      fsType = "zfs";
-    };
-
-  fileSystems."/slowcache/media/video/tv" =
-    {
-      device = "slowcache/media/video/tv";
-      fsType = "zfs";
-    };
-
   fileSystems."/var/lib/containerd/io.containerd.content.v1.content" =
     {
       device = "fast/kubernetes/containerd/content";

@@ -34,14 +34,9 @@ in
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
       kernelModules = [ "nct6775" ];
 
-      zfs.extraPools = [
-        #"slow"
-      ];
-
       zfs.requestEncryptionCredentials = [
         "fast"
         "slow"
-        "slowcache"
       ];
 
       # Must load network module on boot for SSH access

@@ -18,10 +18,6 @@ with lib;
           hostPath = "/slow/media/video";
         };
 
-        "/media/video-optimized" = {
-          hostPath = "/slowcache/media/video";
-        };
-
         "/media/audio/music" = {
           hostPath = "/slow/media/audio/Music";
         };
