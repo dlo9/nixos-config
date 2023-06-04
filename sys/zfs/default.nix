@@ -114,7 +114,21 @@ in
     boot = {
       initrd.supportedFilesystems = [ "vfat" ];
       initrd.extraFiles = {
-        "/root/.profile".source = zfs-helper-ssh-prompt;
+        # "/root/.profile".source = zfs-helper-ssh-prompt;
+        "/etc/profile".source = pkgs.writeTextFile {
+          name = "profile";
+          text = ''
+            # Only execute this file once per shell.
+            if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+            __ETC_PROFILE_SOURCED=1
+
+            # Prevent this file from being sourced by interactive non-login child shells.
+            export __ETC_PROFILE_DONE=1
+
+            # Complete any password prompts (e.g. for unlocking disks)
+            systemd-tty-ask-password-agent --query
+          '';
+        };
       };
 
       initrd.extraUtilsCommands = foldl' (x: y: x + "\n" + y) "" [

@@ -7,12 +7,10 @@ let
 in
 {
   config = {
-    networking = {
-      # Use systemd networking, but also keep scripted networking since it's currently only way to get
-      # the network working during boot
-      useDHCP = true;
-      useNetworkd = true;
-    };
+    # Initrd network should be the same as after boot
+    boot.initrd.systemd.network = config.systemd.network;
+
+    networking.useNetworkd = true;
 
     services.resolved.domains = [
       "lan"
@@ -29,7 +27,7 @@ in
 
       networks = {
         "35-wired" = {
-          name = "en*";
+          matchConfig.Name = [ "en*" "eth*" ];
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 1024;
         };

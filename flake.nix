@@ -205,6 +205,12 @@
             users.david = import ./home;
             users.root.home.stateVersion = "22.11";
 
+            sharedModules = [{
+              # Add nix environment variables to home manager. This is necessary for NIX_LD
+              # to work on non-interactive login (e.g., running vscode remotely)
+              home.sessionVariables = (mapAttrs (n: v: (mkOptionDefault v)) config.environment.variables);
+            }];
+
             # Pass extra arguments to home.nix
             extraSpecialArgs = {
               inherit inputs;

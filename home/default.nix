@@ -32,7 +32,7 @@ in
       ];
 
       sessionVariables = {
-        EDITOR = "${config.programs.vim.package}/bin/vim";
+        EDITOR = "vim";
         SOPS_AGE_KEY_FILE = "/var/sops-age-keys.txt";
       };
 
@@ -390,6 +390,10 @@ in
             };
           }
         ];
+
+        # loginShellInit = ''
+        #   source ${config.home.sessionVariablesPackage}/hm-session-vars.sh
+        # '';
 
         interactiveShellInit = ''
           # Theme

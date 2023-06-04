@@ -9,7 +9,8 @@
 
   config = {
     # Enable systemd in init
-    # boot.initrd.systemd.enable = true;
+    boot.initrd.systemd.enable = true;
+    boot.initrd.kernelModules = ["macvlan" "bridge"];
 
     # Enable emergency access, even with root account locked
     # TODO: sync this with systemd.enableEmergencyMode
