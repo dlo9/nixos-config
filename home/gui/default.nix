@@ -165,9 +165,6 @@ in
       vscode = {
         enable = true;
 
-        # vscode can't be updated by the user, so the popup just becomes annoying
-        enableUpdateCheck = false;
-
         # Allow extension installations/updates
         mutableExtensionsDir = true;
 
@@ -179,10 +176,6 @@ in
           # https://nixos.wiki/wiki/Visual_Studio_Code#Nix-sourced_VS_Code_to_NixOS_host
           ms-vscode-remote.remote-ssh
         ];
-
-        userSettings = {
-          "workbench.colorTheme" = "Default Dark+";
-        };
       };
     };
 
@@ -292,9 +285,6 @@ in
       # Scanning
       gnome.simple-scan
 
-      # Keyring GUI
-      gnome.seahorse
-
       # Networking utils
       wpa_supplicant_gui
       inetutils
@@ -317,17 +307,6 @@ in
       # Screenshots
       # Disabled since this isn't working on sway right now
       #flameshot.enable = true;
-
-      # FUTURE: this doesn't work
-      # https://github.com/nix-community/home-manager/issues/1454
-      gnome-keyring = {
-        enable = true;
-        components = [
-          "pkcs11"
-          "secrets"
-          "ssh"
-        ];
-      };
     };
 
     systemd.user.startServices = "sd-switch";

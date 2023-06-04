@@ -123,5 +123,7 @@ in
 
     # Keyring
     services.gnome.gnome-keyring.enable = true;
+    programs.seahorse.enable = true;
+    programs.ssh.enableAskPassword = true;
   };
 }
