@@ -57,12 +57,6 @@ in
     ];
 
     programs = {
-      # Notifications
-      mako = {
-        enable = true;
-        extraConfig = (readFile (config.scheme inputs.base16-mako));
-      };
-
       swaylock.settings = with config.scheme.withHashtag; let
         # https://github.com/Misterio77/dotfiles/blob/sway/home/.config/sway/swaylock.sh
         insideColor = base01;
@@ -198,6 +192,12 @@ in
     };
 
     services = {
+      # Notifications
+      mako = {
+        enable = true;
+        extraConfig = (readFile (config.scheme inputs.base16-mako));
+      };
+
       # Idle config for sway
       #   - 5m: lock the screen
       #   - 10m: turn off the screen
@@ -292,7 +292,7 @@ in
             # Right monitor
             DVI-D-1 = { resolution = "2560x1440"; position = "2560,0"; };
             HDMI-A-1 = { resolution = "2560x1440"; position = "2560,0"; };
-            HDMI-A-2 = { resolution = "2560x1440"; position = "2560,0";  };
+            HDMI-A-2 = { resolution = "2560x1440"; position = "2560,0"; };
           };
 
           workspaceOutputAssign = [

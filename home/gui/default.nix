@@ -41,34 +41,36 @@ in
       firefox = {
         enable = true;
 
-        # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
-        extensions = with nur.repos.rycee.firefox-addons; [
-          #amazon-band-detector
-          auto-tab-discard
-          bitwarden
-          #base16
-          facebook-container
-          #highlight-all
-          honey
-          #surfshark
-          tab-session-manager
-          tree-style-tab
-          ublock-origin
-          vimium
-        ];
-
         profiles = {
+          # Set dev edition profile to the same as default release
           dev-edition-default = {
-            # To change an existing profile called `48gm70ji.default-release` into default:
-            #   cd ~/.mozilla/firefox; rg -l 48gm70ji default | xargs -I {} sed -i 's#48gm70ji.default-release#default#g' {}
             path = "default";
             id = 1;
           };
 
+          # To change an existing profile called `48gm70ji.default-release` into default:
+          # cd ~/.mozilla/firefox; rg -l 48gm70ji default | xargs -I {} sed -i 's#48gm70ji.default-release#default#g' {}
           default-release = {
             id = 0;
             isDefault = true;
             path = "default";
+
+            # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
+            extensions = with nur.repos.rycee.firefox-addons; [
+              #amazon-band-detector
+              auto-tab-discard
+              bitwarden
+              #base16
+              facebook-container
+              #highlight-all
+              honey
+              #surfshark
+              tab-session-manager
+              tree-style-tab
+              ublock-origin
+              vimium
+            ];
+
             search = {
               force = true;
               default = "DuckDuckGo";
@@ -163,8 +165,10 @@ in
       vscode = {
         enable = true;
 
-        # Necessary for extensions for now
-        # https://github.com/nix-community/home-manager/issues/2798
+        # vscode can't be updated by the user, so the popup just becomes annoying
+        enableUpdateCheck = false;
+
+        # Allow extension installations/updates
         mutableExtensionsDir = true;
 
         extensions = with pkgs.vscode-extensions // sysCfg.pkgs.vscode-extensions; [

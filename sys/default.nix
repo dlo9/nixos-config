@@ -75,19 +75,6 @@ in
       '';
     };
 
-    nixpkgs = {
-      config.allowUnfree = true;
-      overlays = [
-        (final: prev: {
-          # Makes "pkgs.unstable" available in configuration.nix
-          unstable = import inputs.nixpkgs-unstable {
-            system = prev.system;
-            config.allowUnfree = true;
-          };
-        })
-      ];
-    };
-
     # Enable zram
     #zramSwap.enable = true;
 
@@ -101,7 +88,6 @@ in
       enable = false;
       dockerCompat = true;
       dockerSocket.enable = true;
-      defaultNetwork.dnsname.enable = true;
     };
 
     # Timezone

@@ -2,7 +2,12 @@
   inputs = {
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
+
+    # Old release for EOL kernel 6.2. 6.1 doesn't support Intel ARC, and 6.3 doesn't support ZFS.
+    # 6.2 was removed in https://github.com/NixOS/nixpkgs/commit/10d5a682701d1bfd16e62459026d0df54cc3d314
+    # TODO: Remove once 6.3 supports ZFS
+    nixpkgs-kernel.url = github:NixOS/nixpkgs/119e81ec259b81583da60a006428fe569d12f01d;
 
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -20,7 +25,7 @@
 
     # Home manager
     home-manager = {
-      url = github:nix-community/home-manager/release-22.11;
+      url = github:nix-community/home-manager/release-23.05;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -167,6 +172,29 @@
 
         # Docker-compose in Nix
         inputs.arion.nixosModules.arion
+
+        # Nixpkgs overlays
+        ({ config, inputs, ... }: {
+          nixpkgs = {
+            config.allowUnfree = true;
+
+            overlays = [
+              (final: prev: {
+                # Makes "pkgs.unstable" available in configuration.nix
+                unstable = import inputs.nixpkgs-unstable {
+                  system = prev.system;
+                  config.allowUnfree = true;
+                };
+
+                # Makes "pkgs.unstable" available in configuration.nix
+                kernel = import inputs.nixpkgs-kernel {
+                  system = prev.system;
+                  config.allowUnfree = true;
+                };
+              })
+            ];
+          };
+        })
 
         # Home-manager configuration
         ({ config, inputs, ... }: {

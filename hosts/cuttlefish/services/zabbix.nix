@@ -23,9 +23,6 @@ with lib;
     services.zabbixServer = {
       enable = true;
 
-      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
-      package = pkgs.unstable.zabbix.server;
-
       # listen.port = "10051";
       # openFirewall = false;
       # settings = {};
@@ -44,16 +41,10 @@ with lib;
 
       server = "localhost";
 
-      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
-      package = pkgs.unstable.zabbix.agent;
-
     };
 
     services.zabbixWebCaddy = {
       enable = true;
-
-      # FUTURE: Use stable version when 23.05 is released (unstable necessary due to PHP incomatabilities with Zabbix 5.0)
-      package = pkgs.unstable.zabbix.web;
 
       database = {
         type = "pgsql";

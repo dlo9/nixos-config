@@ -12,8 +12,6 @@ with lib;
     services.netdata = {
       enable = true;
 
-      package = pkgs.unstable.netdata;
-
       config = {
         web = {
           "default port" = "19999";
