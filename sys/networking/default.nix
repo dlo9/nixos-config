@@ -46,13 +46,6 @@ in
         sopsFile = sysCfg.secrets.hostSecretsFile;
       };
 
-      # "ssh-keys/${user}/rsa" = {
-      #   path = "${userHome}/.ssh/id_rsa";
-      #   owner = user;
-      #   group = config.users.users.${user}.group;
-      #   sopsFile = sysCfg.secrets.hostSecretsFile;
-      # };
-
       wireless-env = mkIf cfg.wireless { };
     };
 
@@ -69,7 +62,6 @@ in
 
     home-manager.users.${user}.home.file = {
       ".ssh/id_ed25519.pub".text = hostExports.ssh-keys.${user}.ed25519;
-      # ".ssh/rsa.pub".text = hostExports.ssh-keys.${user}.rsa;
     };
 
     # Host
@@ -89,16 +81,8 @@ in
     ### Authorized SSH Keys ###
     ###########################
 
-    # Only the master key can log in as root
-    users.users.root.openssh.authorizedKeys.keys = flatten [
-      inputs.mergedExports.ssh-keys.host.ed25519
-      masterSshKey
-    ];
-
     users.users.${user}.openssh.authorizedKeys.keys = flatten [
-      inputs.mergedExports.ssh-keys.host.ed25519
       inputs.mergedExports.ssh-keys.${user}.ed25519
-      # inputs.mergedExports.ssh-keys.${user}.rsa
       masterSshKey
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
     ];
@@ -149,12 +133,15 @@ in
       wantedBy = [ "multi-user.target" ];
     };
 
-
     #####################
     ### Remote access ###
     #####################
 
-    services.openssh.enable = true;
+    services.openssh = {
+      enable = true;
+      settings.PermitRootLogin = "no";
+    };
+
     programs.mosh.enable = true;
     programs.mosh.withUtempter = false;
 
@@ -163,9 +150,6 @@ in
     ############
 
     networking.fqdn = "${networking.hostName}";
-
-    # Don't wait for network availability to boot
-    networking.dhcpcd.wait = mkDefault "background";
 
     # If set to the default (true), the firewall can break some tailscale and kubernetes configs
     networking.firewall.checkReversePath = mkDefault "loose";

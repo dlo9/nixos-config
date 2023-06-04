@@ -5,18 +5,6 @@ with lib;
 let
   sysCfg = config.sys;
   cfg = sysCfg.zfs;
-
-  zfs-helper = pkgs.writeTextFile {
-    name = "zfs-helper";
-    executable = true;
-    destination = "/bin/zfs-helper";
-    text = builtins.readFile ./zfs-helper.sh;
-  };
-
-  zfs-helper-ssh-prompt = pkgs.writeTextFile {
-    name = "zfs-helper-ssh-prompt";
-    text = "zfs-helper onBootPrompt";
-  };
 in
 {
   options = {
@@ -45,15 +33,6 @@ in
 
     sys.zfs = {
       enable = mkEnableOption "ZFS tools" // { default = true; };
-
-      network-modules = mkOption {
-        type = types.listOf types.nonEmptyStr;
-        default = [ ];
-        description = "The wifi module to load at boot time";
-      };
-
-      # TODO: Doesn't work yet, iwlwifi fails on the last step of the 4-way handshake
-      initrd-wireless = mkEnableOption "wifi connections in initrd" // { default = false; };
     };
   };
 
@@ -83,88 +62,78 @@ in
 
     environment.systemPackages = with pkgs; [
       zfs
-      zfs-helper
     ];
 
-    # On safe shutdown, save key to file for reboot
-    # TODO: enable/disable: https://discourse.nixos.org/t/using-mkif-with-nested-if/5221
-    powerManagement.powerDownCommands = "zfs-helper onShutdown";
-    systemd.services.zfs-helper-shutdown = {
-      description = "Save ZFS keys on scheduled shutdown";
-      path = [
-        pkgs.mount
-        pkgs.umount
-      ];
-
-      after = [ "final.target" ];
-      wantedBy = [ "final.target" ];
-
-      unitConfig = {
-        DefaultDependencies = false;
-      };
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = ''${zfs-helper}/bin/zfs-helper onShutdown'';
-      };
-    };
-
     # Unlock ZFS with SSH at boot
-    # TODO: enable/disable
-    boot = {
-      initrd.supportedFilesystems = [ "vfat" ];
-      initrd.extraFiles = {
-        # "/root/.profile".source = zfs-helper-ssh-prompt;
-        "/etc/profile".source = pkgs.writeTextFile {
-          name = "profile";
-          text = ''
-            # Only execute this file once per shell.
-            if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
-            __ETC_PROFILE_SOURCED=1
+    boot.initrd = {
+      # supportedFilesystems = [ config.fileSystems."/boot/efi".fsType ];
+      # systemd.mounts = [{
+      #   what = config.fileSystems."/boot/efi".device;
+      #   type = config.fileSystems."/boot/efi".fsType;
+      #   where = "/boot/efi";
+      # }];
 
-            # Prevent this file from being sourced by interactive non-login child shells.
-            export __ETC_PROFILE_DONE=1
+      # systemd.services.zfs-autoload =
+      #   let
+      #     pool-name = "pool";
+      #   in
+      #   {
+      #     requires = [
+      #       "boot-efi.mount"
+      #       "systemd-udev-settle.service"
+      #     ];
 
-            # Complete any password prompts (e.g. for unlocking disks)
-            systemd-tty-ask-password-agent --query
-          '';
-        };
+      #     after = [
+      #       "boot-efi.mount"
+      #       "systemd-udev-settle.service"
+      #       "systemd-modules-load.service"
+      #     ];
+
+      #     # Name comes from initrd creation: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/tasks/filesystems/zfs.nix
+      #     wantedBy = [ "zfs-import-${pool-name}.service" ];
+      #     before = [ "zfs-import-${pool-name}.service" ];
+
+      #     unitConfig.DefaultDependencies = "no";
+
+      #     serviceConfig = {
+      #       Type = "oneshot";
+      #       RemainAfterExit = true;
+      #     };
+
+      #     script = ''
+      #       if [[ -d /boot/efi/zfs-keys ]]; then
+      #         # TODO: doesn't work for filesystems since they contain /
+      #         for path in /boot/efi/zfs-keys/*; do
+      #           filesystem="$(basename "$path")"
+      #           echo "Auto-importing key for $filesystem from $path"
+      #           zfs load-key -L "$path" "$filesystem"
+
+      #           #rm "$path"
+      #         done
+      #       fi
+      #     '';
+      #   };
+
+      systemd.contents = {
+        "/etc/profile".text = ''
+          # Only execute this file once per shell.
+          if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+          __ETC_PROFILE_SOURCED=1
+
+          # Prevent this file from being sourced by interactive non-login child shells.
+          export __ETC_PROFILE_DONE=1
+
+          # Complete any password prompts (e.g. for unlocking disks)
+          systemd-tty-ask-password-agent --query
+        '';
       };
 
-      initrd.extraUtilsCommands = foldl' (x: y: x + "\n" + y) "" [
-        "copy_bin_and_libs ${zfs-helper}/bin/zfs-helper"
-        #(optionalString cfg.initrd-wireless "copy_bin_and_libs ${pkgs.wpa_supplicant}/bin/wpa_supplicant")
-      ];
-
-      initrd.extraUtilsCommandsTest = foldl' (x: y: x + "\n" + y) "" [
-        "$out/bin/zfs-helper version"
-        #(optionalString cfg.initrd-wireless "$out/bin/wpa_supplicant -v")
-      ];
-
-      # To debug, use: wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &
-      initrd.postDeviceCommands = foldl' (x: y: x + "\n" + y) "" [
-        # (optionalString cfg.initrd-wireless "wpa_supplicant -iwlo1 -dd -K -c ${/var/wpa_supplicant.conf} > /tmp/wifi.log &")
-        "zfs-helper onBoot >/dev/null &"
-      ];
-
-      initrd.availableKernelModules = cfg.network-modules;
-
-      initrd.network = {
-        # Make sure you have added the kernel module for your network driver to `boot.initrd.availableKernelModules`,
-        enable = mkDefault true;
-        ssh = {
-          enable = true;
-          port = 22;
-
-          hostKeys = [
-            # TODO: this doesn't work since this path is a symlink
-            #/etc/ssh/ssh_host_rsa_key
-            /var/ssh_host_rsa_key
-          ];
-
-          # TODO: disable password auth (if not already?)
-          authorizedKeys = config.users.users.${sysCfg.user}.openssh.authorizedKeys.keys;
-        };
+      # SSH uses the host root key. This exposes the key in initrd, which is okay only because root login is disabled
+      # after the system is booted
+      network.ssh = {
+        enable = true;
+        hostKeys = [ /run/secrets/ssh-keys/host/ed25519 ];
+        authorizedKeys = config.users.users.${sysCfg.user}.openssh.authorizedKeys.keys;
       };
     };
 

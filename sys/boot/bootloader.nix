@@ -21,7 +21,7 @@ in
         timeout = 1;
         grub = {
           enable = mkDefault true;
-          configurationLimit = 5;
+          configurationLimit = 8;
           splashImage = null; # I want all the text
           zfsSupport = true;
           useOSProber = mkDefault true;

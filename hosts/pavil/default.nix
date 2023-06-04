@@ -16,6 +16,8 @@ with lib;
       { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
     ];
 
+    boot.initrd.availableKernelModules = [ "r8152" ];
+
     # Bluetooth
     services.blueman.enable = true;
     hardware.bluetooth = {

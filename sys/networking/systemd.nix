@@ -11,6 +11,7 @@ in
     boot.initrd.systemd.network = config.systemd.network;
 
     networking.useNetworkd = true;
+    networking.dhcpcd.enable = false;
 
     services.resolved.domains = [
       "lan"
