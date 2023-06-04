@@ -52,7 +52,7 @@ in
         defaultFonts = {
           serif = [ "NotoSerif Nerd Font" "" ];
           sansSerif = [ "NotoSans Nerd Font" "DejaVu Sans" ];
-          monospace = [ "Noto Nerd Font Mono" ];
+          monospace = [ "NotoSansM Nerd Font Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };
       };

@@ -138,7 +138,7 @@ in
       port = 7681;
       interface = "mynet";
       clientOptions = {
-        fontFamily = "NotoSansMono Nerd Font";
+        fontFamily = "NotoSansM Nerd Font Mono";
         fontSize = "14";
       };
     };

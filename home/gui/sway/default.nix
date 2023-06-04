@@ -71,7 +71,7 @@ in
         indicator-caps-lock = true;
         image = "${wallpaper}";
         scaling = "fill";
-        font = "NotoSansMono Nerd Font";
+        font = "NotoSansM Nerd Font Mono";
         font-size = 20;
         indicator-radius = 115;
 
@@ -137,7 +137,7 @@ in
 
         "wofi/style.css".text = ''
           *{
-            font-family: NotoSansMono Nerd Font;
+            font-family: NotoSansM Nerd Font Mono;
             font-size: 14px;
           }
 
@@ -166,7 +166,7 @@ in
 
         "wofi/style.widgets.css".text = ''
           *{
-            font-family: NotoSansMono Nerd Font;
+            font-family: NotoSansM Nerd Font Mono;
             font-size: 14px;
           }
 
@@ -266,7 +266,7 @@ in
           ];
 
           fonts = {
-            names = [ "NotoSansMono Nerd Font" ];
+            names = [ "NotoSansM Nerd Font Mono" ];
             style = "Regular";
             size = 11.0;
           };

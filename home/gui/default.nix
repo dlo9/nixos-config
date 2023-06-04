@@ -144,7 +144,7 @@ in
           window.opacity = 0.9;
           decorations = "full";
           font = {
-            normal.family = "NotoSansMono Nerd Font";
+            normal.family = "NotoSansM Nerd Font Mono";
             #size = 11;
           };
 
@@ -179,6 +179,10 @@ in
           # https://nixos.wiki/wiki/Visual_Studio_Code#Nix-sourced_VS_Code_to_NixOS_host
           ms-vscode-remote.remote-ssh
         ];
+
+        userSettings = {
+          "workbench.colorTheme" = "Default Dark+";
+        };
       };
     };
 
