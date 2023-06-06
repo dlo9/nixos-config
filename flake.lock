@@ -74,19 +74,19 @@
         "type": "github"
       }
     },
-    "base16-fish": {
+    "base16-fish-shell": {
       "flake": false,
       "locked": {
-        "lastModified": 1622559957,
-        "narHash": "sha256-PebymhVYbL8trDVVXxCvZgc0S5VxI7I1Hv4RMSquTpA=",
-        "owner": "tomyun",
-        "repo": "base16-fish",
-        "rev": "2f6dd973a9075dabccd26f1cded09508180bf5fe",
+        "lastModified": 1638317847,
+        "narHash": "sha256-Bf6V/sF0NqUC2iCNXMZWM3ijpicnJhMpoKZSwOuiS3s=",
+        "owner": "FabioAntunes",
+        "repo": "base16-fish-shell",
+        "rev": "d358af9a724715efd0d31b417ba56e622a239612",
         "type": "github"
       },
       "original": {
-        "owner": "tomyun",
-        "repo": "base16-fish",
+        "owner": "FabioAntunes",
+        "repo": "base16-fish-shell",
         "type": "github"
       }
     },
@@ -485,7 +485,7 @@
         "base16": "base16",
         "base16-alacritty": "base16-alacritty",
         "base16-atelier": "base16-atelier",
-        "base16-fish": "base16-fish",
+        "base16-fish-shell": "base16-fish-shell",
         "base16-gtk": "base16-gtk",
         "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",

@@ -376,34 +376,30 @@ in
       fish = {
         enable = true;
 
-        interactiveShellInit = ''
-          # Theme
-          # Babelfish can't handle the official shell theme
-          source "${config.scheme inputs.base16-fish}"
-          base16-${config.scheme.scheme-slug}
-
-          # Keep fish when using nix-shell
-          any-nix-shell fish --info-right | source
-
-          # Cheatsheet
-          # Use Ctrl + G to open
-          navi widget fish | source
-        '';
-
-        functions = {
-          # Autocorrect
-          # From `thefuck --alias`. It's slow, so use the rendered command to speed up
-          # shell startup
-          fuck = ''
-            set -l fucked_up_command $history[1]
-            env TF_SHELL=fish TF_ALIAS=fuck PYTHONIOENCODING=utf-8 thefuck $fucked_up_command THEFUCK_ARGUMENT_PLACEHOLDER $argv | read -l unfucked_command
-            if [ "$unfucked_command" != "" ]
-              eval $unfucked_command
-              builtin history delete --exact --case-sensitive -- $fucked_up_command
-              builtin history merge
+        interactiveShellInit =
+          let
+            any-nix-shell-fish = pkgs.runCommandLocal "any-nix-shell.fish" { } "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right > $out";
+            navi-fish = pkgs.runCommandLocal "navi.fish" { } "${pkgs.navi}/bin/navi widget fish > $out";
+          in
+          ''
+            # Theme
+            # Babelfish can't handle the official shell theme
+            for f in ${inputs.base16-fish-shell}/functions/__*.fish
+              source $f
             end
+
+            source ${config.scheme inputs.base16-fish-shell}
+            base16-${config.scheme.scheme-slug}
+
+            # Keep fish when using nix-shell
+            source ${any-nix-shell-fish}
+
+            # Cheatsheet
+            # Use Ctrl + G to open
+            source ${navi-fish}
           '';
 
+        functions = {
           fish_user_key_bindings = ''
             # Ctrl-Backspace
             bind \e\[3^ kill-word
@@ -606,9 +602,6 @@ in
       # Terminal recorder
       vhs
       ttyd
-
-      # Autocorrect
-      thefuck
 
       # Nix utils
       any-nix-shell # Doesn't change the interactive shell when using nix-shell

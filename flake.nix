@@ -90,8 +90,8 @@
       flake = false;
     };
 
-    base16-fish = {
-      url = github:tomyun/base16-fish;
+    base16-fish-shell = {
+      url = github:FabioAntunes/base16-fish-shell;
       flake = false;
     };
 
