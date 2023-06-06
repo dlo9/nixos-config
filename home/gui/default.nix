@@ -25,6 +25,9 @@ in
     };
 
     programs = {
+      # Utils
+      feh.enable = true;
+
       ####################
       ### Web browsers ###
       ####################

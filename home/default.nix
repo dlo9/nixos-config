@@ -122,6 +122,7 @@ in
           unbind %
         '';
       };
+
       vim = {
         enable = true;
 
@@ -391,13 +392,9 @@ in
           }
         ];
 
-        # loginShellInit = ''
-        #   source ${config.home.sessionVariablesPackage}/hm-session-vars.sh
-        # '';
-
         interactiveShellInit = ''
           # Theme
-          fenv "source ${config.scheme inputs.base16-shell}"
+          fenv source "${config.scheme inputs.base16-shell}"
 
           # Keep fish when using nix-shell
           any-nix-shell fish --info-right | source
