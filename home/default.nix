@@ -376,6 +376,14 @@ in
       fish = {
         enable = true;
 
+        shellInit = ''
+          # Unexport Homemanager variable
+          # This variable is exported, but other guards (e.g. /etc/profile) aren't. When jumping
+          # onto a box with mosh this can cause global variables to override user ones. By unexporting,
+          # we source variables every time per shell. This matches fish's config guard as well.
+          set -gu __HM_SESS_VARS_SOURCED $__HM_SESS_VARS_SOURCED
+        '';
+
         interactiveShellInit =
           let
             any-nix-shell-fish = pkgs.runCommandLocal "any-nix-shell.fish" { } "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right > $out";
