@@ -25,7 +25,10 @@
 
     # Home manager
     home-manager = {
-      url = github:nix-community/home-manager/release-23.05;
+      # TODO: change back when babelfish commit is in the stable release:
+      # https://github.com/nix-community/home-manager/commit/53ccbe017079d5fba2b605cb9f9584629bebd03a
+      #url = github:nix-community/home-manager/release-23.05;
+      url = github:nix-community/home-manager/53ccbe017079d5fba2b605cb9f9584629bebd03a;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -84,6 +87,11 @@
     # https://github.com/chriskempson/base16#template-repositories
     base16-shell = {
       url = github:chriskempson/base16-shell;
+      flake = false;
+    };
+
+    base16-fish = {
+      url = github:tomyun/base16-fish;
       flake = false;
     };
 

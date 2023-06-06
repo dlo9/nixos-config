@@ -376,25 +376,11 @@ in
       fish = {
         enable = true;
 
-        # FUTURE: use pkgs.fishPlugins.foreign-env
-        # https://github.com/nix-community/home-manager/issues/2451
-        plugins = [
-          {
-            # Necessary for sourcing the POSIX shell script for base16-shell
-            name = "foreign-env";
-
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "plugin-foreign-env";
-              rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
-              sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
-            };
-          }
-        ];
-
         interactiveShellInit = ''
           # Theme
-          fenv source "${config.scheme inputs.base16-shell}"
+          # Babelfish can't handle the official shell theme
+          source "${config.scheme inputs.base16-fish}"
+          base16-${config.scheme.scheme-slug}
 
           # Keep fish when using nix-shell
           any-nix-shell fish --info-right | source
@@ -592,6 +578,9 @@ in
     home.packages = with pkgs // sysCfg.pkgs; [
       jq
       go-task
+
+      # bash to fish converter
+      babelfish
 
       # Modern alternatives without aliases
       fd # Modern `find` alternative

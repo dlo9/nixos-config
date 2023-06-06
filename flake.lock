@@ -74,6 +74,22 @@
         "type": "github"
       }
     },
+    "base16-fish": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1622559957,
+        "narHash": "sha256-PebymhVYbL8trDVVXxCvZgc0S5VxI7I1Hv4RMSquTpA=",
+        "owner": "tomyun",
+        "repo": "base16-fish",
+        "rev": "2f6dd973a9075dabccd26f1cded09508180bf5fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tomyun",
+        "repo": "base16-fish",
+        "type": "github"
+      }
+    },
     "base16-gtk": {
       "flake": false,
       "locked": {
@@ -302,17 +318,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1685599623,
-        "narHash": "sha256-Tob4CMOVHue0D3RzguDBCtUmX5ji2PsdbQDbIOIKvsc=",
+        "lastModified": 1685570487,
+        "narHash": "sha256-vNIS1V9Jrkt2WDh78Hdlm+gD8f71ZBWpne0JwduZl1s=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "93db05480c0c0f30382d3e80779e8386dcb4f9dd",
+        "rev": "53ccbe017079d5fba2b605cb9f9584629bebd03a",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-23.05",
         "repo": "home-manager",
+        "rev": "53ccbe017079d5fba2b605cb9f9584629bebd03a",
         "type": "github"
       }
     },
@@ -469,6 +485,7 @@
         "base16": "base16",
         "base16-alacritty": "base16-alacritty",
         "base16-atelier": "base16-atelier",
+        "base16-fish": "base16-fish",
         "base16-gtk": "base16-gtk",
         "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",
