@@ -25,6 +25,9 @@ in
       clang # C compiler
       jq
       yq
+
+      kubectl
+      helm
     ];
 
     # Allow running unpatched binaries, including vscode-serer
