@@ -386,7 +386,6 @@ in
 
         interactiveShellInit =
           let
-            any-nix-shell-fish = pkgs.runCommandLocal "any-nix-shell.fish" { } "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right > $out";
             navi-fish = pkgs.runCommandLocal "navi.fish" { } "${pkgs.navi}/bin/navi widget fish > $out";
           in
           ''
@@ -400,7 +399,7 @@ in
             base16-${config.scheme.scheme-slug}
 
             # Keep fish when using nix-shell
-            source ${any-nix-shell-fish}
+            ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
 
             # Cheatsheet
             # Use Ctrl + G to open
@@ -580,7 +579,6 @@ in
     };
 
     home.packages = with pkgs // sysCfg.pkgs; [
-      jq
       go-task
 
       # bash to fish converter
@@ -601,6 +599,9 @@ in
       gping
       procs
       viddy
+
+      # Some dev tools
+      yq-go
 
       # Cheatsheet-like helpers
       navi

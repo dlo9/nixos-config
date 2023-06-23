@@ -24,10 +24,7 @@ in
       libvirt
       clang # C compiler
       jq
-      yq
-
-      kubectl
-      helm
+      yq-go
     ];
 
     # Allow running unpatched binaries, including vscode-serer
