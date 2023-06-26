@@ -291,6 +291,9 @@ in
       # Networking utils
       wpa_supplicant_gui
       inetutils
+
+      # HDD info
+      smartmontools
     ];
 
     services = {

@@ -139,7 +139,7 @@
       hostFile = hostName: fileName: ./hosts/${hostName}/${ fileName };
       hostFileExists = hostName: fileName: pathExists (hostFile hostName fileName);
 
-      # Recursively merge an attribut set. If all elements at a path are:
+      # Recursively merge an attribute set. If all elements at a path are:
       #   attrs: recursively apply
       #   lists: flatten into a unique list
       #   mixed: merge into a unique list
