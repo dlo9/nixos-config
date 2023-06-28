@@ -7,7 +7,7 @@
     # Old release for EOL kernel 6.2. 6.1 doesn't support Intel ARC, and 6.3 doesn't support ZFS.
     # 6.2 was removed in https://github.com/NixOS/nixpkgs/commit/10d5a682701d1bfd16e62459026d0df54cc3d314
     # TODO: Remove once 6.3 supports ZFS
-    nixpkgs-kernel.url = github:NixOS/nixpkgs/119e81ec259b81583da60a006428fe569d12f01d;
+    nixpkgs-kernel.url = github:NixOS/nixpkgs/nixpkgs-unstable;
 
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
