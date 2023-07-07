@@ -100,6 +100,30 @@
       fsType = "zfs";
     };
 
+  fileSystems."/services/fast/photoprism-config" =
+    {
+      device = "fast/services/photoprism/config";
+      fsType = "zfs";
+    };
+
+  fileSystems."/services/fast/photoprism-mariadb" =
+    {
+      device = "fast/services/photoprism/mariadb";
+      fsType = "zfs";
+    };
+
+  fileSystems."/services/plex/config" =
+    {
+      device = "fast/services/plex/config";
+      fsType = "zfs";
+    };
+
+  fileSystems."/services/readarr/config" =
+    {
+      device = "fast/services/readarr/config";
+      fsType = "zfs";
+    };
+
   fileSystems."/slow/backup/chelsea" =
     {
       device = "slow/backup/chelsea";
