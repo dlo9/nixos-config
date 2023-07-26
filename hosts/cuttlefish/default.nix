@@ -39,6 +39,8 @@ in
         "slow"
       ];
 
+      initrd.supportedFilesystems = [ "ext4" ];
+
       # Must load network module on boot for SSH access
       # lspci -v | grep -iA8 'network\|ethernet'
       initrd.availableKernelModules = [ "r8169" ];
