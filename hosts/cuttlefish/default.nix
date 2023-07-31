@@ -30,6 +30,9 @@ in
     # Remove this when OpenZFS has added overlay support in 2.2: https://github.com/openzfs/zfs/pull/9414
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
+    fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs".options = [ "nofail" ];
+    fileSystems."/var/lib/docker/overlay2".options = [ "nofail" ];
+
     boot = {
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
       kernelModules = [ "nct6775" ];
