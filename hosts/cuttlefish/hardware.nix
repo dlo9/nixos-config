@@ -9,7 +9,7 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "mpt3sas" "xhci_pci" "ahci" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "mpt3sas" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
@@ -25,7 +25,7 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" =
@@ -211,12 +211,6 @@
   fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" =
     {
       device = "/dev/disk/by-uuid/bc8b3a3d-a573-4996-bc04-2a4ff209aa2f";
-      fsType = "ext4";
-    };
-
-  fileSystems."/var/lib/containers" =
-    {
-      device = "/dev/disk/by-uuid/2cd34af9-d45c-4019-a196-769b5bbdcf05";
       fsType = "ext4";
     };
 
