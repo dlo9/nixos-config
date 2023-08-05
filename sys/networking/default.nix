@@ -104,8 +104,11 @@ in
       environmentFile = config.sops.secrets.wireless-env.path;
       networks = {
         internet.psk = "@INTERNET@";
-        "?".psk = "@INTERNET@";
-        #iot.psk = "@IOT@";
+        "?" = {
+          psk = "@INTERNET@";
+          priority = 10;
+        };
+        iot.psk = "@IOT@";
         BossAdams.psk = "@BOSS_ADAMS@";
         "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
         "pretty fly for a wifi-5G".psk = "@PRETTY_FLY_FOR_A_WIFI@";
