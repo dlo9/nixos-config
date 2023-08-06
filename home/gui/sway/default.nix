@@ -293,6 +293,10 @@ in
             DVI-D-1 = { resolution = "2560x1440"; position = "2560,0"; };
             HDMI-A-1 = { resolution = "2560x1440"; position = "2560,0"; };
             HDMI-A-2 = { resolution = "2560x1440"; position = "2560,0"; };
+            DP-2 = { resolution = "2560x1440"; position = "2560,0"; };
+
+            # Laptop screen
+            eDP-1 = { resolution = "1920x1080"; position = "1600,1440"; };
           };
 
           workspaceOutputAssign = [
