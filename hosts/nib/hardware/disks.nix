@@ -42,7 +42,6 @@ in
             name = "swap";
             start = toString efiSize + "MiB";
             end = toString (efiSize + swapSize) + "MiB";
-            # part-type = "primary";
             content = {
               type = "swap";
               randomEncryption = true;

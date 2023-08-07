@@ -28,11 +28,6 @@
     hardware.cpu.intel.updateMicrocode = true;
     hardware.cpu.amd.updateMicrocode = true;
 
-    boot.kernelModules = [
-      "kvm-intel"
-      "kvm-amd"
-    ];
-
     # MINIX Neo Z83-4 Max uses a Broadcom wifi module which uses upstream firmware, but does not have the right name
     # (in `dmesg` look for `brcmfmac43455-sdio.MINIX-Z83-4.txt`)
     hardware.firmware = [

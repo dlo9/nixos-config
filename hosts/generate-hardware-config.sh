@@ -5,7 +5,7 @@ set -e -o pipefail
 root="${1:-/}"
 hostname="${2:-$(hostname)}"
 dir="$(dirname "$0")"
-config="$dir/$hostname/hardware.nix"
+config="$dir/$hostname/generated-hardware.nix"
 
 touch "$config"
 

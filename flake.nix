@@ -52,9 +52,7 @@
 
     # Disk partitioning
     disko = {
-      #url = "github:nix-community/disko";
-      url = "github:dlo9/disko";
-      #url = "path:/home/david/code/disko";
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
