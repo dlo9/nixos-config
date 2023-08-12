@@ -294,6 +294,8 @@ in
 
       # HDD info
       smartmontools
+
+      unstable.anytype
     ];
 
     services = {

@@ -243,18 +243,7 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "pavil" ({ config, pkgs, ... }: {
-            imports = [
-              ./hosts/portable/partition.nix
-            ];
-
-            partitionScript.baseName = "portable";
-
-            # Testing
-            environment.systemPackages = with pkgs; with config.sys.pkgs; [
-              genie-client
-            ];
-          });
+          modules = defaultModules "pavil" { };
         };
 
         nebula = nixosSystem {
@@ -270,6 +259,13 @@
           system = "x86_64-linux";
           modules = defaultModules "ace" { };
           #modules = defaultModules "ace" ./hosts/portable/partition.nix;
+        };
+
+        nib = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "nib" { };
         };
 
         cuttlefish = nixosSystem {

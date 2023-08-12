@@ -1,8 +1,13 @@
 { config, inputs, lib, pkgs, modulesPath, ... }:
 
 {
-  # imports = [
-  # ];
+  imports = [
+    ./hardware
+  ];
+
+  sys = {
+    gaming.enable = false;
+  };
 
   nixpkgs.hostPlatform = "x86_64-linux";
   powerManagement.cpuFreqGovernor = "ondemand";

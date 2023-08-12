@@ -195,9 +195,6 @@ in
       #   '';
       # };
 
-      steam-tui = callPackage ./steam-tui.nix { withWine = true; };
-      genie-client = callPackage ./genie-client.nix { };
-      sunshine = callPackage ./sunshine.nix { };
       nss-docker = callPackage ./nss-docker.nix { };
       caddy = callPackage ./caddy.nix { };
     };
