@@ -3,14 +3,16 @@
 set -e
 
 usage() {
-  echo "create-host-config <hostname> <admin username> <description>"
+  echo "create-host-config <hostname> <admin username> <zfs password> <description>"
 }
 
 hostname="$1"
 admin="$2"
-description="$3"
+zfsKey="$3"
+description="$4"
+installerHost="$(hostname)"
 
-if [ -z "$hostname" ] || [ -z "$admin" ]; then
+if [ -z "$hostname" ] || [ -z "$admin" ] || [ -z "$zfsKey" ] || [ -z "$description" ]; then
   usage
   exit 1
 fi
@@ -109,6 +111,24 @@ ssh-keys:
 EOF
 
 sops -e -i "$hostDir/secrets.yaml"
+
+# Add installer secrets file to sops
+cat << EOF >> "$repoDir/.sops.yaml"
+
+  - path_regex: ^hosts/$hostname/install.secrets.yaml\$
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)\$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *$hostname
+      - *$installerHost
+EOF
+
+# Create installer secrets
+cat << EOF >> "$hostDir/install.secrets.yaml"
+zfs-key: $zfsKey
+sops-key: $ageKeyPrivate
+EOF
 
 ###########################
 ### Hardware Generation ###

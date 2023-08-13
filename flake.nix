@@ -340,6 +340,13 @@
           modules = defaultModules "drywell" { };
         };
 
+        installer-test = nixosSystem {
+          inherit specialArgs;
+
+          system = "x86_64-linux";
+          modules = defaultModules "installer-test" { };
+        };
+
         # Installer test
         installer = buildSystem "installer" "x86_64-linux" [
           ({ config, ... }: {

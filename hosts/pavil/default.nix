@@ -12,6 +12,25 @@ with lib;
   ];
 
   config = {
+    # Qemu UEFI
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [
+            (pkgs.OVMFFull.override {
+              secureBoot = true;
+              tpmSupport = true;
+              csmSupport = true;
+            }).fd
+          ];
+        };
+      };
+    };
+
     boot.loader.grub.mirroredBoots = [
       { devices = [ "nodev" ]; efiSysMountPoint = "/boot/efi"; path = "/boot/efi/EFI"; }
     ];

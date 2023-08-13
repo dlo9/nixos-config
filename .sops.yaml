@@ -98,7 +98,7 @@ creation_rules:
       - *bitwarden
       - *nib
 
-  - path_regex: ^install.secrets.yaml$
+  - path_regex: install.secrets.yaml$
     unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
     key_groups:
     - age:
