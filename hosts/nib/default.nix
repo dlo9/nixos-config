@@ -8,4 +8,6 @@
   sys = {
     gaming.enable = false;
   };
+
+  services.smartd.enable = lib.mkForce false;
 }
