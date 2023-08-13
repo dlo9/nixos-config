@@ -34,5 +34,12 @@
 
   # Fix random hangs
   # https://nixos.wiki/wiki/Bootloader#Installing_x86_64_NixOS_on_IA-32_UEFI
-  boot.kernelParams = [ "intel_idle.max_cstate=1" ];
+  # https://forum.porteus.org/viewtopic.php?t=8432
+  boot.kernelParams = [
+    "pnpbios=off"
+    "noacpi"
+    "intel_idle.max_cstate=1"
+    "delay=5"
+    "i915.fastboot=0"
+  ];
 }
