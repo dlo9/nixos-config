@@ -10,6 +10,9 @@ in
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.nixos-hardware.nixosModules.common-gpu-intel
+    inputs.nixos-hardware.nixosModules.common-pc
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.disko.nixosModules.disko
     ./generated.nix
     (import ./disks.nix { inherit adminUser disk; })
