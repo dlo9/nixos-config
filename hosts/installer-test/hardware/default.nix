@@ -1,4 +1,3 @@
-# Hardware: https://www.minix.us/z83-4-mx
 { config, inputs, lib, pkgs, modulesPath, ... }:
 
 

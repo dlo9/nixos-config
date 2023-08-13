@@ -11,6 +11,11 @@ in
 {
   config = {
     disko.enableConfig = true;
+
+    boot.postBootCommands = ''
+      chown david:users /home/david
+    '';
+
     disko.devices = {
       # Fast should be an SSD and the main boot device
       disk.fast = {
@@ -149,9 +154,6 @@ in
 
             "home/${adminUser}" = {
               type = "zfs_fs";
-              # options = {
-              #   mountpoint = "/home/${adminUser}";
-              # };
             };
 
             ######################

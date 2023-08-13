@@ -9,8 +9,4 @@
     gaming.enable = false;
     # graphical.enable = false;
   };
-
-  boot.postBootCommands = ''
-    chown david:users /home/david
-  '';
 }
