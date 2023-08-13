@@ -1,6 +1,0 @@
-#!/usr/bin/env -S expect -f
-
-# Sync files between the host and test vm
-source lib.exp
-source inputs.exp
-syncInstaller $hostSshPort $configDir

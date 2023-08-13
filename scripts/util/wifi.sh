@@ -1,4 +1,4 @@
-!#/bin/sh
+#!/bin/sh
 
 set -e
 
@@ -22,4 +22,3 @@ fi
 trap "rm -f /tmp/wifi_config" EXIT INT
 wpa_passphrase "$wifi_name" "$wifi_password" > /tmp/wifi_config
 wpa_supplicant -i "$wifi_interface" -c /tmp/wifi_config
-

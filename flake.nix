@@ -253,14 +253,6 @@
           modules = defaultModules "nebula" { };
         };
 
-        ace = nixosSystem {
-          inherit specialArgs;
-
-          system = "x86_64-linux";
-          modules = defaultModules "ace" { };
-          #modules = defaultModules "ace" ./hosts/portable/partition.nix;
-        };
-
         nib = nixosSystem {
           inherit specialArgs;
 
