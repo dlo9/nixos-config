@@ -31,4 +31,8 @@
     "r8169" # Realtek ethernet
     "iwlwifi" # Intel wifi
   ];
+
+  # Fix random hangs
+  # https://nixos.wiki/wiki/Bootloader#Installing_x86_64_NixOS_on_IA-32_UEFI
+  boot.kernelParams = [ "intel_idle.max_cstate=1" ];
 }
