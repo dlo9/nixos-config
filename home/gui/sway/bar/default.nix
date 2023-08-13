@@ -26,9 +26,9 @@ in
             backlight = {
               format = "{icon} {percent}%";
               format-icons = [
-                ""
-                ""
-                ""
+                "󰃞"
+                "󰃟"
+                "󰃠"
               ];
 
               on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl -c backlight set 1%-";
@@ -37,7 +37,7 @@ in
 
             battery = {
               format = "{icon}  {capacity}%";
-              format-charging = " {capacity}%";
+              format-charging = "󰃨 {capacity}%";
               format-icons = [
                 ""
                 ""
@@ -54,8 +54,8 @@ in
             };
 
             clock = {
-              format = " {:%H:%M:%S}";
-              format-alt = " {:%e %b %Y}";
+              format = "󰥔 {:%H:%M:%S}";
+              format-alt = "󰃭 {:%e %b %Y}";
               interval = 1;
               tooltip-format = "{:%H:%M:%S, %a, %B %d, %Y}";
             };
@@ -71,7 +71,7 @@ in
             };
 
             "custom/files" = {
-              format = " ";
+              format = "󰉋 ";
               on-click = "exec thunar";
               tooltip = false;
             };
@@ -95,7 +95,7 @@ in
             };
 
             "custom/displays" = {
-              format = " ";
+              format = "󰍹 ";
               on-click = "exec ${pkgs.wdisplays}/bin/wdisplays";
               tooltip = false;
             };
@@ -113,7 +113,7 @@ in
             };
 
             disk = {
-              format = " {percentage_used}%";
+              format = "󰋊 {percentage_used}%";
               interval = 5;
               on-click = "alactritty -e 'df -h'";
               path = "/";
@@ -164,35 +164,35 @@ in
 
             network = {
               format-disconnected = "⚠ Disconnected";
-              format-ethernet = " {ifname} 李 {bandwidthTotalBytes:>0}";
-              format-wifi = "  {essid} 李 {bandwidthTotalBytes:>0}";
+              format-ethernet = " {ifname} 󰓢 {bandwidthTotalBytes:>0}";
+              format-wifi = "  {essid} 󰓢 {bandwidthTotalBytes:>0}";
               interval = 1;
               on-click = "alacritty -e nmtui";
-              tooltip-format = "{ifname}: {ipaddr}\n{essid} ({signalStrength}%) \n祝 {bandwidthUpBytes:>0}  {bandwidthDownBytes:>0}";
+              tooltip-format = "{ifname}: {ipaddr}\n{essid} ({signalStrength}%) \n󰕒 {bandwidthUpBytes:>0} 󰇚 {bandwidthDownBytes:>0}";
             };
 
             "network#vpn" = {
-              format = "嬨";
+              format = "󰖂";
               interface = "tailscale0";
-              tooltip-format = "{ifname}: {ipaddr}/{cidr}\n祝 {bandwidthUpBytes:>2}  {bandwidthDownBytes:>2}";
+              tooltip-format = "{ifname}: {ipaddr}/{cidr}\n󰕒 {bandwidthUpBytes:>2} 󰇚 {bandwidthDownBytes:>2}";
             };
 
             position = "top";
             pulseaudio = {
               format = "{icon} {volume}%";
               format-bluetooth = "{icon} {volume}%  {format_source}";
-              format-bluetooth-muted = " {icon}  {format_source}";
+              format-bluetooth-muted = "󰆪 {icon}  {format_source}";
               format-icons = {
                 car = "";
                 default = [ "" ];
-                hands-free = "וֹ";
-                headphone = "";
-                headset = "  ";
+                hands-free = "󰙌";
+                headphone = "󰋋";
+                headset = " 󰋎 ";
                 phone = "";
                 portable = "";
               };
 
-              format-muted = "婢 {format_source}";
+              format-muted = "󰖁 {format_source}";
               format-source = "{volume}% ";
               format-source-muted = "";
               on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
