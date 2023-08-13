@@ -41,5 +41,6 @@
     "intel_idle.max_cstate=1"
     "delay=5"
     "i915.fastboot=0"
+    "intel_pstate=passive"
   ];
 }
