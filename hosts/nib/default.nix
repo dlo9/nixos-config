@@ -7,7 +7,10 @@
 
   sys = {
     gaming.enable = false;
+    low-power = true;
   };
+
+  zramSwap.enable = true;
 
   services.smartd.enable = lib.mkForce false;
   virtualisation.docker.enable = lib.mkForce false;
