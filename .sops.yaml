@@ -14,6 +14,7 @@ age-keys: &age-keys
   - &limb-1 age1egxva7myft04uzkfurq4altj92neuchtggw62z55p3tt3ddlnvxsf6ersm
   - &nib age1szk33dt0yyeru746p0elrym3hpc5hr6w6lqz0hd8xhrdt44k3sdqmpx0lk
   - &installer-test age185nwxyqzcghmdq5pjcad8aswgjmujd8pauet0urmum57uxx07ecs7dgt6g
+  - &mallow age1u20gs4lje4skk96xc4uftxdcvudd39c6c3y7ag4mu4qclwh6ny2qecjlaj
 
 creation_rules:
   #######################
@@ -111,3 +112,18 @@ creation_rules:
     - age:
       - *bitwarden
       - *installer-test
+
+  - path_regex: ^hosts/mallow/secrets.yaml$
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *mallow
+
+  - path_regex: ^hosts/mallow/install.secrets.yaml$
+    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *mallow
+      - *pavil
