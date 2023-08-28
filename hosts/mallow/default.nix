@@ -33,6 +33,21 @@ with lib; {
       ]))
 
       rnix-lsp # Nix language server
+
+      # Use a new launcher since spotlight doesn't find nix GUI applications:
+      # https://github.com/nix-community/home-manager/issues/1341
+      raycast
+
+      # Fonts
+      # Nerdfonts is huge, so only install specific fonts
+      # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
+      (nerdfonts.override {
+        fonts = [
+          "Noto"
+        ];
+      })
+
+      noto-fonts-emoji
     ];
 
     programs.ssh = {
