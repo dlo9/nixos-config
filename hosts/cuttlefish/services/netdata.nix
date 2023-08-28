@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with builtins;
-with lib;
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with builtins;
+with lib; {
   config = {
     sops.secrets."services/netdata/health_alarm_notify.conf" = {
       sopsFile = config.sys.secrets.hostSecretsFile;

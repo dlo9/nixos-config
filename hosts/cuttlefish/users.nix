@@ -1,9 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-let
-  media-id = 568;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  media-id = 568;
+in {
   config = {
     users = {
       groups = {

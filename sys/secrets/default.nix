@@ -1,18 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with lib;
-with types;
-
-let
-  cfg = config.sys.secrets;
-in
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib;
+with types; let
+  cfg = config.sys.secrets;
+in {
   imports = [
     inputs.sops-nix.nixosModules.sops
   ];
 
   options.sys.secrets = {
-    enable = mkEnableOption "secrets management" // { default = true; };
+    enable = mkEnableOption "secrets management" // {default = true;};
 
     hostSecretsFile = mkOption {
       type = path;
@@ -24,13 +26,13 @@ in
   config = mkIf cfg.enable {
     sops = {
       defaultSopsFile = ./shared.yaml;
-      gnupg.sshKeyPaths = [ ]; # Disable GPG, otherwise it'll search for
+      gnupg.sshKeyPaths = []; # Disable GPG, otherwise it'll search for
 
       age = {
         # This file must be in the filesystems mounted within the initfs.
         # I put it in the root filesystem since that's mounted first.
         keyFile = "/var/sops-age-keys.txt";
-        sshKeyPaths = [ ];
+        sshKeyPaths = [];
       };
     };
   };

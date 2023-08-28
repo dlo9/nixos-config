@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with builtins;
-with lib;
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with builtins;
+with lib; {
   config = {
     # Containers
     containers.jellyfin = {
@@ -22,13 +25,16 @@ with lib;
           hostPath = "/slow/media/audio/Music";
         };
 
-        "/run/opengl-driver" = { };
+        "/run/opengl-driver" = {};
 
-        "/dev/dri/renderD128" = { };
+        "/dev/dri/renderD128" = {};
       };
 
       allowedDevices = [
-        { modifier = "rw"; node = "/dev/dri/renderD128"; }
+        {
+          modifier = "rw";
+          node = "/dev/dri/renderD128";
+        }
       ];
 
       extraFlags = [
@@ -49,7 +55,7 @@ with lib;
 
       config = {
         system.stateVersion = "22.05";
-        networking.firewall.allowedTCPPorts = [ 8096 ];
+        networking.firewall.allowedTCPPorts = [8096];
 
         services.jellyfin = {
           enable = true;

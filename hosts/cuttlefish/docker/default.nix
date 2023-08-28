@@ -1,5 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ./node-red.nix
   ];
@@ -10,8 +15,7 @@
     virtualisation.oci-containers.backend = "docker";
     # environment.etc."cni/net.d".enable = false;
 
-    environment.systemPackages = [ config.sys.pkgs.nss-docker ];
-    system.nssDatabases.hosts = [ "docker" ];
-
+    environment.systemPackages = [config.sys.pkgs.nss-docker];
+    system.nssDatabases.hosts = ["docker"];
   };
 }

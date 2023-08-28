@@ -1,16 +1,16 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 # Clean with:
 # sudo rm -rf /var/lib/kubernetes/ /var/lib/etcd/ /var/lib/cfssl/ /var/lib/kubelet/ /etc/kube-flannel/ /etc/kubernetes/ /var/lib/containerd/ /etc/cni/ /run/containerd/ /run/flannel/ /run/kubernetes/
-
-with lib;
-
-let
+with lib; let
   cfg = config.sys.kubernetes;
-in
-{
+in {
   options.sys.kubernetes = with types; {
-    enable = mkEnableOption "kubernetes" // { default = false; };
+    enable = mkEnableOption "kubernetes" // {default = false;};
 
     masterHostname = mkOption {
       type = nonEmptyStr;
@@ -89,7 +89,7 @@ in
     };
 
     services.kubernetes = {
-      roles = [ "master" "node" ];
+      roles = ["master" "node"];
       masterAddress = cfg.masterHostname;
 
       # Refresh kubernetes certificates with:

@@ -1,23 +1,24 @@
 # Home manager configuration
 # - Manual: https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
 # - Config: https://rycee.gitlab.io/home-manager/options.html
-
-{ config, pkgs, lib, inputs, ... }:
-
-with lib;
-with types;
-
-let
-  cfg = config.home;
-in
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib;
+with types; let
+  cfg = config.home;
+in {
   imports = [
     inputs.base16.homeManagerModule
     ./gui
   ];
 
   options.home = {
-    enable = mkEnableOption "user home management" // { default = true; };
+    enable = mkEnableOption "user home management" // {default = true;};
   };
 
   config = mkIf cfg.enable {
@@ -137,8 +138,8 @@ in
           tabstop = 2;
         };
 
-
-        plugins = with pkgs.vimPlugins; with pkgs; [
+        plugins = with pkgs.vimPlugins;
+        with pkgs; [
           # Statusline
           vim-airline
 
@@ -384,27 +385,25 @@ in
           set -gu __HM_SESS_VARS_SOURCED $__HM_SESS_VARS_SOURCED
         '';
 
-        interactiveShellInit =
-          let
-            navi-fish = pkgs.runCommandLocal "navi.fish" { } "${pkgs.navi}/bin/navi widget fish > $out";
-          in
-          ''
-            # Theme
-            # Babelfish can't handle the official shell theme
-            for f in ${inputs.base16-fish-shell}/functions/__*.fish
-              source $f
-            end
+        interactiveShellInit = let
+          navi-fish = pkgs.runCommandLocal "navi.fish" {} "${pkgs.navi}/bin/navi widget fish > $out";
+        in ''
+          # Theme
+          # Babelfish can't handle the official shell theme
+          for f in ${inputs.base16-fish-shell}/functions/__*.fish
+            source $f
+          end
 
-            source ${config.scheme inputs.base16-fish-shell}
-            base16-${config.scheme.scheme-slug}
+          source ${config.scheme inputs.base16-fish-shell}
+          base16-${config.scheme.scheme-slug}
 
-            # Keep fish when using nix-shell
-            ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
+          # Keep fish when using nix-shell
+          ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
 
-            # Cheatsheet
-            # Use Ctrl + G to open
-            source ${navi-fish}
-          '';
+          # Cheatsheet
+          # Use Ctrl + G to open
+          source ${navi-fish}
+        '';
 
         functions = {
           fish_user_key_bindings = ''
@@ -492,82 +491,82 @@ in
         ################
 
         "wrap.yaml".text = ''
-            variables:
-              CUTTLEFISH_SSH_PORT: 32085
-              CUTTLEFISH_SSH_URL: ssh.sigpanic.com
+          variables:
+            CUTTLEFISH_SSH_PORT: 32085
+            CUTTLEFISH_SSH_URL: ssh.sigpanic.com
 
-              DRYWELL_SSH_PORT: 57332
-              DRYWELL_SSH_URL: drywell.sigpanic.com
+            DRYWELL_SSH_PORT: 57332
+            DRYWELL_SSH_URL: drywell.sigpanic.com
 
-            aliases:
-              - alias: drywell
-                program: ssh
+          aliases:
+            - alias: drywell
+              program: ssh
 
-                keywords:
-                  - keys: [--local]
-                    values: [192.168.1.200]
-                  - keys: [--remote]
-                    values: [-p, $DRYWELL_SSH_PORT, $DRYWELL_SSH_URL]
+              keywords:
+                - keys: [--local]
+                  values: [192.168.1.200]
+                - keys: [--remote]
+                  values: [-p, $DRYWELL_SSH_PORT, $DRYWELL_SSH_URL]
 
-              - alias: cuttlefish
-                program: ssh
+            - alias: cuttlefish
+              program: ssh
 
-                keywords:
-                  - keys: [--local]
-                    values: [192.168.1.230]
-                  - keys: [--remote]
-                    values: [-p, $CUTTLEFISH_SSH_PORT, $CUTTLEFISH_SSH_URL]
+              keywords:
+                - keys: [--local]
+                  values: [192.168.1.230]
+                - keys: [--remote]
+                  values: [-p, $CUTTLEFISH_SSH_PORT, $CUTTLEFISH_SSH_URL]
 
-              # System yadm
-              # Clone via: syadm clone -w / <repo>
-              - alias: syadm
-                program: sudo
+            # System yadm
+            # Clone via: syadm clone -w / <repo>
+            - alias: syadm
+              program: sudo
 
-                arguments:
-                  - key: /etc/yadm/data
-                  - key: --yadm-data
-                  - key: /etc/yadm/config
-                  - key: --yadm-dir
-                  - key: yadm
-                  - key: GIT_SSH_COMMAND=ssh -i $HOME/.ssh/id_rsa
-                  - key: HOME=$HOME
+              arguments:
+                - key: /etc/yadm/data
+                - key: --yadm-data
+                - key: /etc/yadm/config
+                - key: --yadm-dir
+                - key: yadm
+                - key: GIT_SSH_COMMAND=ssh -i $HOME/.ssh/id_rsa
+                - key: HOME=$HOME
 
-              - alias: a
-                program: awk
+            - alias: a
+              program: awk
 
-                keywords:
-                  - keys: [--unique, -u]
-                    values: ['!a[\$0]++']
+              keywords:
+                - keys: [--unique, -u]
+                  values: ['!a[\$0]++']
 
-              - alias: theme
-                program: sh
+            - alias: theme
+              program: sh
 
-                arguments:
-                  - key: -c
+              arguments:
+                - key: -c
 
-                keywords:
-                  - keys: [--iterate]
-                    values:
-                      - |
-                        for theme in \$(flavours list | awk -v RS=' ' '!/-light/'); do
-                          echo \$theme
-                          flavours apply \$theme
-                          sleep 1
-                        done
-                  - keys: [--iterate-random]
-                    values:
-                      - |
-                        for theme in \$(flavours list | awk -v RS=' ' '!/-light/' | sort -R); do
-                          echo \$theme
-                          flavours apply \$theme
-                          sleep 1
-                        done
-                  - keys: [--apply]
-                    values: ['flavours apply \$(cat ~/.local/share/flavours/lastscheme)']
-                  - keys: [--show]
-                    values:
-                      - flavours info "\$(flavours current)" | awk '!a[\$0]++'
-          '';
+              keywords:
+                - keys: [--iterate]
+                  values:
+                    - |
+                      for theme in \$(flavours list | awk -v RS=' ' '!/-light/'); do
+                        echo \$theme
+                        flavours apply \$theme
+                        sleep 1
+                      done
+                - keys: [--iterate-random]
+                  values:
+                    - |
+                      for theme in \$(flavours list | awk -v RS=' ' '!/-light/' | sort -R); do
+                        echo \$theme
+                        flavours apply \$theme
+                        sleep 1
+                      done
+                - keys: [--apply]
+                  values: ['flavours apply \$(cat ~/.local/share/flavours/lastscheme)']
+                - keys: [--show]
+                  values:
+                    - flavours info "\$(flavours current)" | awk '!a[\$0]++'
+        '';
       };
     };
 

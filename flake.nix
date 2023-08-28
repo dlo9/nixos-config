@@ -16,6 +16,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # flake-utils.url = "github:numtide/flake-utils";
+
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -136,31 +138,35 @@
     # };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs:
     with nixpkgs.lib;
-    with builtins;
-
-    let
-      optionalModule = (optionalFile: args: (optionalAttrs (pathExists optionalFile) (import optionalFile args)));
+    with builtins; let
+      optionalModule = optionalFile: args: (optionalAttrs (pathExists optionalFile) (import optionalFile args));
 
       # Returns an array of the hostnames under `./hosts/`
       hosts = attrNames (filterAttrs (n: v: v == "directory") (readDir ./hosts));
 
-      hostFile = hostName: fileName: ./hosts/${hostName}/${ fileName };
+      hostFile = hostName: fileName: ./hosts/${hostName}/${fileName};
       hostFileExists = hostName: fileName: pathExists (hostFile hostName fileName);
 
       # Recursively merge an attribute set. If all elements at a path are:
       #   attrs: recursively apply
       #   lists: flatten into a unique list
       #   mixed: merge into a unique list
-      recursiveAttrsToList =
-        let
-          f = zipAttrsWith (name: values:
-            if all isAttrs values then f values
-            else if all isList values then unique (concatLists values)
+      recursiveAttrsToList = let
+        f = zipAttrsWith (
+          name: values:
+            if all isAttrs values
+            then f values
+            else if all isList values
+            then unique (concatLists values)
             else unique values
-          );
-        in
+        );
+      in
         f;
 
       # A combined AttrSet of all host exports
@@ -174,7 +180,7 @@
         # Host-specific config
         ./hosts/${hostName}
 
-        { networking.hostName = hostName; }
+        {networking.hostName = hostName;}
       ];
 
       overlays = {
@@ -183,18 +189,13 @@
         # default = final: prev: import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; };
         # default = final: prev: prev.lib.recursiveUpdate prev (import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; });
         default = final: prev:
-          with prev;
-
-          let
-            pkgs' = recurseIntoAttrs (callPackage ./pkgs { });
+          with prev; let
+            pkgs' = recurseIntoAttrs (callPackage ./pkgs {});
           in
             # prev.lib.recursiveUpdate pkgs pkgs';
             # prev.lib.mapAttrs ;
             {
               vimPlugins = prev.vimPlugins // pkgs'.vimPlugins;
-              # vimPlugins = prev.vimPlugins.extend (final: prev: pkgs'.vimPlugins);
-              # vimPlugins = prev.vimPlugins // { vim-yadi = pkgs'.vimPlugins.vim-yadi;};
-              vscode-extensions = prev.vscode-extensions // pkgs'.vscode-extensions;
               tmuxPlugins = prev.tmuxPlugins // pkgs'.tmuxPlugins;
               # lib = prev.lib // pkgs'.lib;
 
@@ -205,12 +206,12 @@
               fromYAML = pkgs'.fromYAML;
             };
 
-          # (recurseIntoAttrs (callPackage ./pkgs { }));
-          # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
-          # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
+        # (recurseIntoAttrs (callPackage ./pkgs { }));
+        # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
+        # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
 
-          # pkgs = prev.lib.recursiveUpdate prev.pkgs (prev.pkgs.callPackage ./pkgs { });
-          # recurseIntoAttrs (callPackage ./vim-plugins { })
+        # pkgs = prev.lib.recursiveUpdate prev.pkgs (prev.pkgs.callPackage ./pkgs { });
+        # recurseIntoAttrs (callPackage ./vim-plugins { })
 
         unstable = system: final: prev: {
           unstable = import inputs.nixpkgs-unstable {
@@ -227,42 +228,49 @@
         };
       };
 
-      defaultModules = (hostName: extraSettings: [
-        # Custom system modules
-        ./sys
+      defaultModules = hostName: extraSettings:
+        [
+          # Custom system modules
+          ./sys
 
-        # Nix User repo
-        inputs.nur.nixosModules.nur
+          # Nix User repo
+          inputs.nur.nixosModules.nur
 
-        # Docker-compose in Nix
-        inputs.arion.nixosModules.arion
+          # Docker-compose in Nix
+          inputs.arion.nixosModules.arion
 
-        # Nixpkgs overlays
-        ({ config, inputs, ... }: {
-          nixpkgs = {
-            config.allowUnfree = true;
+          # Nixpkgs overlays
+          ({
+            config,
+            inputs,
+            ...
+          }: {
+            nixpkgs = {
+              config.allowUnfree = true;
 
-            overlays = with overlays; [
-              default
-              (unstable "x86_64-linux")
-              (kernel "x86_64-linux")
-            ];
-          };
-        })
+              overlays = with overlays; [
+                default
+                (unstable "x86_64-linux")
+                (kernel "x86_64-linux")
+              ];
+            };
+          })
 
-        # Home-manager configuration
-       ./home/nixos-module.nix
+          # Home-manager configuration
+          ./home/nixos-module.nix
 
-        # Passed-in module
-        extraSettings
-      ] ++ (hostModules hostName));
+          # Passed-in module
+          extraSettings
+        ]
+        ++ (hostModules hostName);
 
       # Pass extra arguments to modules
-      specialArgs.inputs = inputs // {
+      specialArgs.inputs =
+        inputs
+        // {
           inherit exports hostFile mergedExports;
-      };
-    in
-    {
+        };
+    in {
       # https://daiderd.com/nix-darwin/manual/index.html
       darwinConfigurations = with inputs.nix-darwin.lib; {
         mallow = darwinSystem {
@@ -276,7 +284,11 @@
             ./hosts/mallow
 
             # Nixpkgs overlays
-            ({ config, inputs, ... }: {
+            ({
+              config,
+              inputs,
+              ...
+            }: {
               nixpkgs = {
                 config.allowUnfree = true;
 
@@ -289,12 +301,16 @@
             })
 
             # Home-manager configuration
-          ./home/darwin-module.nix
+            ./home/darwin-module.nix
 
-            ({ config, inputs, pkgs, ... }: {
-
+            ({
+              config,
+              inputs,
+              pkgs,
+              ...
+            }: {
               programs.fish.enable = true;
-              environment.shells = [ pkgs.fish ];
+              environment.shells = [pkgs.fish];
               users.users.dorchard = {
                 home = "/Users/dorchard";
                 uid = 503;
@@ -311,21 +327,21 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "pavil" { };
+          modules = defaultModules "pavil" {};
         };
 
         nib = nixosSystem {
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "nib" { };
+          modules = defaultModules "nib" {};
         };
 
         cuttlefish = nixosSystem {
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "cuttlefish" { };
+          modules = defaultModules "cuttlefish" {};
         };
 
         # https://mobile.nixos.org/devices/motorola-potter.html
@@ -335,9 +351,11 @@
           inherit specialArgs;
 
           system = "aarch64-linux";
-          modules = (defaultModules "moto" { }) ++ [
-            (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "motorola-potter"; })
-          ];
+          modules =
+            (defaultModules "moto" {})
+            ++ [
+              (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
+            ];
         };
 
         # Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
@@ -348,9 +366,11 @@
           inherit specialArgs;
 
           system = "aarch64-linux";
-          modules = (defaultModules "rpi3" { }) ++ [
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          ];
+          modules =
+            (defaultModules "rpi3" {})
+            ++ [
+              "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            ];
         };
 
         # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
@@ -361,14 +381,14 @@
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "drywell" { };
+          modules = defaultModules "drywell" {};
         };
 
         installer-test = nixosSystem {
           inherit specialArgs;
 
           system = "x86_64-linux";
-          modules = defaultModules "installer-test" { };
+          modules = defaultModules "installer-test" {};
         };
       };
 
@@ -381,5 +401,8 @@
       # };
 
       inherit overlays;
+
+      # formatter = flake-utils.lib.eachDefaultSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
     };
 }

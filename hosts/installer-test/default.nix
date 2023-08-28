@@ -1,6 +1,11 @@
-{ config, inputs, lib, pkgs, modulesPath, ... }:
-
 {
+  config,
+  inputs,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: {
   imports = [
     ./hardware
   ];

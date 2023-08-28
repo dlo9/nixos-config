@@ -1,21 +1,23 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with lib;
 with types;
-with builtins;
-
-let
+with builtins; let
   cfg = config.home.gui;
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
-in
-{
+in {
   imports = [
     ./sway
   ];
 
   options.home.gui = {
-    enable = mkEnableOption "user graphical programs" // { default = true; };
-    bluetooth.enable = mkEnableOption "bluetooth applet" // { default = false; };
+    enable = mkEnableOption "user graphical programs" // {default = true;};
+    bluetooth.enable = mkEnableOption "bluetooth applet" // {default = false;};
   };
 
   config = mkIf cfg.enable {
@@ -39,7 +41,7 @@ in
       chromium = {
         enable = isLinux;
         extensions = [
-          { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+          {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
         ];
       };
 
@@ -86,23 +88,31 @@ in
 
               engines = {
                 "Nix Packages" = {
-                  urls = [{
-                    template = "https://search.nixos.org/packages";
-                    params = [
-                      { name = "type"; value = "packages"; }
-                      { name = "query"; value = "{searchTerms}"; }
-                    ];
-                  }];
+                  urls = [
+                    {
+                      template = "https://search.nixos.org/packages";
+                      params = [
+                        {
+                          name = "type";
+                          value = "packages";
+                        }
+                        {
+                          name = "query";
+                          value = "{searchTerms}";
+                        }
+                      ];
+                    }
+                  ];
 
                   icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                  definedAliases = [ "@np" ];
+                  definedAliases = ["@np"];
                 };
 
                 "NixOS Wiki" = {
-                  urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
+                  urls = [{template = "https://nixos.wiki/index.php?search={searchTerms}";}];
                   iconUpdateURL = "https://nixos.wiki/favicon.png";
                   updateInterval = 24 * 60 * 60 * 1000; # every day
-                  definedAliases = [ "@nw" ];
+                  definedAliases = ["@nw"];
                 };
               };
             };
@@ -145,26 +155,28 @@ in
         enable = true;
 
         # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
-        settings = {
-          window.opacity = 0.9;
-          decorations = "full";
-          font = {
-            normal.family = "NotoSansM Nerd Font Mono";
-            #size = 11;
-          };
-
-          save_to_clipboard = true;
-          cursor.style = {
-            shape = "Block";
-            blinking = "Always";
-            shell = {
-              program = config.programs.fish.package;
-              args = [ "--login" ];
+        settings =
+          {
+            window.opacity = 0.9;
+            decorations = "full";
+            font = {
+              normal.family = "NotoSansM Nerd Font Mono";
+              #size = 11;
             };
-          };
 
-          mouse.hide_when_typing = false;
-        } // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
+            save_to_clipboard = true;
+            cursor.style = {
+              shape = "Block";
+              blinking = "Always";
+              shell = {
+                program = config.programs.fish.package;
+                args = ["--login"];
+              };
+            };
+
+            mouse.hide_when_typing = false;
+          }
+          // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
       };
 
       vscode = {
@@ -174,7 +186,6 @@ in
         mutableExtensionsDir = true;
 
         extensions = with pkgs.vscode-extensions; [
-          shan.code-settings-sync
           jnoortheen.nix-ide
 
           # Enables SSH into a Nix remote host:
@@ -218,18 +229,17 @@ in
         #package = pkgs.vimix-gtk-themes;
 
         name = "FlatColor-base16";
-        package =
-          let
-            gtk2-theme = config.scheme {
-              templateRepo = inputs.base16-gtk;
-              target = "gtk-2";
-            };
+        package = let
+          gtk2-theme = config.scheme {
+            templateRepo = inputs.base16-gtk;
+            target = "gtk-2";
+          };
 
-            gtk3-theme = config.scheme {
-              templateRepo = inputs.base16-gtk;
-              target = "gtk-3";
-            };
-          in
+          gtk3-theme = config.scheme {
+            templateRepo = inputs.base16-gtk;
+            target = "gtk-3";
+          };
+        in
           pkgs.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
             # Build instructions: https://github.com/tinted-theming/base16-gtk-flatcolor
             # This builds, but doesn't seem to work very well?
@@ -255,52 +265,53 @@ in
       };
     };
 
-    home.packages = with pkgs; flatten [
-      (optionals isLinux [
-        # For debugging themes
-        lxappearance-xwayland
+    home.packages = with pkgs;
+      flatten [
+        (optionals isLinux [
+          # For debugging themes
+          lxappearance-xwayland
 
-        # File manager
-        cinnamon.nemo
+          # File manager
+          cinnamon.nemo
 
-        # USB installer
-        ventoy-bin
+          # USB installer
+          ventoy-bin
 
-        # Display tool
-        ddcutil
+          # Display tool
+          ddcutil
 
-        #kopia # Backups
+          #kopia # Backups
 
-        # Signal
-        signal-desktop
+          # Signal
+          signal-desktop
 
-        #geekbench5
+          #geekbench5
 
-        # Scanning
-        gnome.simple-scan
+          # Scanning
+          gnome.simple-scan
 
-        # Networking utils
-        wpa_supplicant_gui
-        inetutils
+          # Networking utils
+          wpa_supplicant_gui
+          inetutils
 
-        # HDD info
-        smartmontools
+          # HDD info
+          smartmontools
 
-        unstable.anytype
-      ])
+          unstable.anytype
+        ])
 
-      [
-        # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
-        dconf
+        [
+          # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
+          dconf
 
-        # So that links open in a browser when clicked from other applications
-        # (e.g. vscode)
-        xdg-utils
+          # So that links open in a browser when clicked from other applications
+          # (e.g. vscode)
+          xdg-utils
 
-        # Notes app
-        obsidian
-      ]
-    ];
+          # Notes app
+          obsidian
+        ]
+      ];
 
     services = {
       # Bluetooth controls

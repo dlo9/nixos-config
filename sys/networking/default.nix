@@ -1,23 +1,25 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib; let
   cfg = config.sys.networking;
   hostExports = inputs.exports.${config.networking.hostName};
   user = config.sys.user;
   userHome = config.users.users.${user}.home;
   masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
-in
-{
+in {
   imports = [
     ./systemd.nix
   ];
 
   options.sys.networking = {
-    enable = mkEnableOption "networking" // { default = true; };
-    wireless = mkEnableOption "wireless networking" // { default = true; };
-    authenticateTailscale = mkEnableOption "authenticate tailscale" // { default = false; };
+    enable = mkEnableOption "networking" // {default = true;};
+    wireless = mkEnableOption "wireless networking" // {default = true;};
+    authenticateTailscale = mkEnableOption "authenticate tailscale" // {default = false;};
   };
 
   config = mkIf cfg.enable {
@@ -45,7 +47,7 @@ in
         sopsFile = config.sys.secrets.hostSecretsFile;
       };
 
-      wireless-env = mkIf cfg.wireless { };
+      wireless-env = mkIf cfg.wireless {};
     };
 
     # Necessary for distributed builds
@@ -132,7 +134,7 @@ in
       script = ''
         tailscale up --auth-key "file:${config.sops.secrets.tailscale-auth-key.path}"
       '';
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
 
     #####################

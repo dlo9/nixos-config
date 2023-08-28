@@ -1,14 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with builtins;
-with lib;
-
-let
- webdav-david = pkgs.writeText "webdav-david" ''
-   david
- '';
-in
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with builtins;
+with lib; let
+  webdav-david = pkgs.writeText "webdav-david" ''
+    david
+  '';
+in {
   config = {
     security.pam.services.nginx-david = {
       #unixAuth = true;
@@ -43,17 +45,17 @@ in
     # https://nixos.wiki/wiki/Nginx#Authentication_via_PAM
     security.pam.services.nginx.setEnvironment = false;
     systemd.services.nginx.serviceConfig = {
-      ReadWritePaths = [ "/webdav" ];
+      ReadWritePaths = ["/webdav"];
       #SupplementaryGroups = [ "shadow" "1000" ];
       #SupplementaryGroups = [ "shadow" "users" ];
 
-      SupplementaryGroups = [ "shadow" ];
+      SupplementaryGroups = ["shadow"];
       NoNewPrivileges = lib.mkForce false;
       PrivateDevices = lib.mkForce false;
       ProtectHostname = lib.mkForce false;
       ProtectKernelTunables = lib.mkForce false;
       ProtectKernelModules = lib.mkForce false;
-      RestrictAddressFamilies = lib.mkForce [ ];
+      RestrictAddressFamilies = lib.mkForce [];
       LockPersonality = lib.mkForce false;
       MemoryDenyWriteExecute = lib.mkForce false;
       RestrictRealtime = lib.mkForce false;

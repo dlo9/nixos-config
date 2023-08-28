@@ -1,15 +1,17 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with lib;
 with types;
-with builtins;
-
-let
+with builtins; let
   cfg = config.home.gui.sway.waybar;
-in
-{
+in {
   options.home.gui.sway.waybar = {
-    enable = mkEnableOption "waybar" // { default = config.home.gui.enable; };
+    enable = mkEnableOption "waybar" // {default = config.home.gui.enable;};
   };
 
   config = mkIf cfg.enable {
@@ -184,7 +186,7 @@ in
               format-bluetooth-muted = "󰆪 {icon}  {format_source}";
               format-icons = {
                 car = "";
-                default = [ "" ];
+                default = [""];
                 hands-free = "󰙌";
                 headphone = "󰋋";
                 headset = " 󰋎 ";

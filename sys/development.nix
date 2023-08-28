@@ -1,18 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.development;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.sys.development;
+in {
   options.sys.development = {
-    enable = mkEnableOption "development tools" // { default = true; };
+    enable = mkEnableOption "development tools" // {default = true;};
   };
 
   config = mkIf cfg.enable {
     #boot.binfmt.emulatedSystems = [ "aarch64-linux i686-linux x86_64-linux" ];
-    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
     programs.adb.enable = true;
 

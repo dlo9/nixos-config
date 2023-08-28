@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.maintenance;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.sys.maintenance;
+in {
   options.sys.maintenance = {
-    enable = mkEnableOption "system maintenance" // { default = true; };
-    autoUpgrade = mkEnableOption "automatic system upgrades" // { default = false; };
+    enable = mkEnableOption "system maintenance" // {default = true;};
+    autoUpgrade = mkEnableOption "automatic system upgrades" // {default = false;};
   };
 
   config = mkIf cfg.enable {
@@ -18,7 +19,7 @@ in
       enable = cfg.autoUpgrade;
       allowReboot = mkDefault false;
       flake = "path:///etc/nixos#${config.networking.hostName}";
-      flags = [ "--recreate-lock-file" "--commit-lock-file" ];
+      flags = ["--recreate-lock-file" "--commit-lock-file"];
       dates = "Sat, 02:00";
     };
 
@@ -37,7 +38,7 @@ in
 
       optimise = {
         automatic = true;
-        dates = [ "Sat, 03:00" ];
+        dates = ["Sat, 03:00"];
       };
     };
 

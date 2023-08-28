@@ -1,15 +1,17 @@
-{ config, pkgs, lib, ... }:
-
-let
-  media-id = 568;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  media-id = 568;
+in {
   config = {
     # Enable nvidia
     sys.graphical.nvidia = true;
 
     # Add seatd for GPU access
-    users.users.david.extraGroups = [ "render" ];
+    users.users.david.extraGroups = ["render"];
 
     # Enable steam
     sys.gaming.enable = true;
@@ -22,7 +24,10 @@ in
 
     # Override sway default
     home-manager.users.david.wayland.windowManager.sway.config.output = {
-      HDMI-A-1 = { resolution = "1280x720"; position = "0,0"; };
+      HDMI-A-1 = {
+        resolution = "1280x720";
+        position = "0,0";
+      };
     };
 
     # Works (but not performant) with:
@@ -94,7 +99,7 @@ in
         47987
         47988
         47989
-        47990  # Web UI
+        47990 # Web UI
         48010
       ];
 

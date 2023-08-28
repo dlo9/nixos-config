@@ -1,12 +1,14 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with builtins;
-with lib;
-
-let
-  useACMEHost = "sigpanic.com";
-in
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with builtins;
+with lib; let
+  useACMEHost = "sigpanic.com";
+in {
   config = {
     # DNS provider auth
     sops.secrets.cloudflare-dns = {

@@ -1,12 +1,15 @@
 # Hardware: https://www.minix.us/z83-4-mx
-{ config, inputs, lib, pkgs, modulesPath, ... }:
-
-
-let
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: let
   disk = "/dev/disk/by-id/mmc-BJTD4R_0xddfc5f3b";
   adminUser = "david";
-in
-{
+in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.nixos-hardware.nixosModules.common-cpu-intel
@@ -15,10 +18,9 @@ in
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.disko.nixosModules.disko
     ./generated.nix
-    (import ./disks.nix { inherit adminUser disk; })
+    (import ./disks.nix {inherit adminUser disk;})
     ./quirks.nix
   ];
-
 
   boot = {
     zfs.requestEncryptionCredentials = [

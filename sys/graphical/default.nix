@@ -1,32 +1,34 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.graphical;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.sys.graphical;
+in {
   imports = [
     ./polkit.nix
     ./nvidia
   ];
 
   options.sys.graphical = {
-    enable = mkEnableOption "graphical shell" // { default = true; };
+    enable = mkEnableOption "graphical shell" // {default = true;};
   };
 
   config = mkIf cfg.enable {
     # Allow swaylock
-    security.pam.services.swaylock = { };
+    security.pam.services.swaylock = {};
 
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = "${config.sys.user}";
     environment.loginShellInit = mkDefault ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-        ${if (elem "nvidia" config.services.xserver.videoDrivers)
-          then "exec env WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu"
-          else "exec sway"
-        }
+        ${
+        if (elem "nvidia" config.services.xserver.videoDrivers)
+        then "exec env WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu"
+        else "exec sway"
+      }
       fi
     '';
 
@@ -49,10 +51,10 @@ in
 
       fontconfig = {
         defaultFonts = {
-          serif = [ "NotoSerif Nerd Font" "" ];
-          sansSerif = [ "NotoSans Nerd Font" "DejaVu Sans" ];
-          monospace = [ "NotoSansM Nerd Font Mono" ];
-          emoji = [ "Noto Color Emoji" ];
+          serif = ["NotoSerif Nerd Font" ""];
+          sansSerif = ["NotoSans Nerd Font" "DejaVu Sans"];
+          monospace = ["NotoSansM Nerd Font Mono"];
+          emoji = ["Noto Color Emoji"];
         };
       };
     };
@@ -84,7 +86,7 @@ in
 
     # Enable i2c for the main user to control monitors via software
     hardware.i2c.enable = true;
-    users.users."${config.sys.user}".extraGroups = [ config.hardware.i2c.group ];
+    users.users."${config.sys.user}".extraGroups = [config.hardware.i2c.group];
 
     # Printing
     # To add a printer, go to:

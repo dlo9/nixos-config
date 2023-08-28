@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with builtins;
-with lib;
-
-let
+with lib; let
   # nix-shell -p terraform-providers.htpasswd --run "htpasswd -nB david"
   # nix-shell -p apacheHttpd --run "htpasswd -nB david"
   htpasswd = pkgs.writeText "htpasswd" ''
@@ -18,8 +21,7 @@ let
     "chelsea-cuttlefish" = "/slow/smb/chelsea";
     "backup/chelsea" = "/slow/backup/chelsea";
   };
-in
-{
+in {
   config = {
     # PAM auth
     #security.pam.services.webdav = {
@@ -34,7 +36,7 @@ in
       # https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml
       settings = {
         server = {
-          listen = [ "0.0.0.0:12345" "[::]:12345" ];
+          listen = ["0.0.0.0:12345" "[::]:12345"];
         };
 
         # PAM auth (doesn't seem to work)
@@ -67,9 +69,9 @@ in
 
         location = [
           {
-            route = [ "/(*path)" ];
+            route = ["/(*path)"];
             directory = webdav-root;
-            methods = [ "webdav-rw" ];
+            methods = ["webdav-rw"];
 
             # TODO: make defaults
             handler = "filesystem";

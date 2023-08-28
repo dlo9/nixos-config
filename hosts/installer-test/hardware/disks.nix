@@ -1,14 +1,14 @@
-{ disk, adminUser }:
-
-let
+{
+  disk,
+  adminUser,
+}: let
   # Partition sizes
   efiSize = "1G";
   swapSize = "4G";
 
   # ZFS sizes
-  reserved = "1G";  # Reserved space for emergency deletions
-in
-{
+  reserved = "1G"; # Reserved space for emergency deletions
+in {
   config = {
     disko.enableConfig = true;
 
@@ -94,103 +94,103 @@ in
           zfs mount
         '';
 
-        datasets =
-          let
-            emptyParent = {
-              canmount = "off";
-              mountpoint = "none";
-            };
-          in
-          {
-            # type = "zfs_fs";
-            reserved = {
-              type = "zfs_fs";
+        datasets = let
+          emptyParent = {
+            canmount = "off";
+            mountpoint = "none";
+          };
+        in {
+          # type = "zfs_fs";
+          reserved = {
+            type = "zfs_fs";
 
-              options = emptyParent // {
+            options =
+              emptyParent
+              // {
                 refreservation = reserved;
               };
-            };
+          };
 
-            ############
-            ### Root ###
-            ############
+          ############
+          ### Root ###
+          ############
 
-            nixos = {
-              type = "zfs_fs";
-              options = emptyParent;
-            };
+          nixos = {
+            type = "zfs_fs";
+            options = emptyParent;
+          };
 
-            "nixos/root" = {
-              type = "zfs_fs";
-              options = {
-                canmount = "noauto";
-                mountpoint = "/";
-              };
-
+          "nixos/root" = {
+            type = "zfs_fs";
+            options = {
+              canmount = "noauto";
               mountpoint = "/";
             };
 
-            "nixos/nix" = {
-              type = "zfs_fs";
-              options = {
-                canmount = "noauto";
-                mountpoint = "/nix";
-              };
+            mountpoint = "/";
+          };
 
+          "nixos/nix" = {
+            type = "zfs_fs";
+            options = {
+              canmount = "noauto";
               mountpoint = "/nix";
             };
 
-            ###################
-            ### Users Homes ###
-            ###################
+            mountpoint = "/nix";
+          };
 
-            home = {
-              type = "zfs_fs";
-              options = {
-                canmount = "off";
-                mountpoint = "/home";
-              };
-            };
+          ###################
+          ### Users Homes ###
+          ###################
 
-            "home/${adminUser}" = {
-              type = "zfs_fs";
-            };
-
-            ######################
-            ### Virtualization ###
-            ######################
-
-            virtualization = {
-              type = "zfs_fs";
-              options = emptyParent;
-            };
-
-            "virtualization/containerd" = {
-              type = "zfs_fs";
-              options = emptyParent;
-            };
-
-            "virtualization/containerd/content" = {
-              type = "zfs_fs";
-              options = {
-                mountpoint = "/var/lib/containerd/io.containerd.content.v1.content";
-              };
-            };
-
-            "virtualization/docker" = {
-              type = "zfs_fs";
-              options = {
-                mountpoint = "/var/lib/docker";
-              };
-            };
-
-            zfs = {
-              type = "zfs_fs";
-              options = {
-                mountpoint = "/zfs";
-              };
+          home = {
+            type = "zfs_fs";
+            options = {
+              canmount = "off";
+              mountpoint = "/home";
             };
           };
+
+          "home/${adminUser}" = {
+            type = "zfs_fs";
+          };
+
+          ######################
+          ### Virtualization ###
+          ######################
+
+          virtualization = {
+            type = "zfs_fs";
+            options = emptyParent;
+          };
+
+          "virtualization/containerd" = {
+            type = "zfs_fs";
+            options = emptyParent;
+          };
+
+          "virtualization/containerd/content" = {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "/var/lib/containerd/io.containerd.content.v1.content";
+            };
+          };
+
+          "virtualization/docker" = {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "/var/lib/docker";
+            };
+          };
+
+          zfs = {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "/zfs";
+            };
+          };
+        };
       };
     };
   };

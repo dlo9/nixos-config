@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   options.sys.gaming = {
-    enable = mkEnableOption "gaming programs" // { default = config.sys.graphical.enable; };
+    enable = mkEnableOption "gaming programs" // {default = config.sys.graphical.enable;};
   };
 
   config = mkIf sys.gaming.enable {

@@ -1,8 +1,11 @@
-{ config, inputs, pkgs, lib, ... }:
-
-with lib;
-
 {
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   imports = [
     ./docker
     ./hardware.nix
@@ -27,26 +30,34 @@ with lib;
     # Remove this when OpenZFS has added overlay support in 2.2: https://github.com/openzfs/zfs/pull/9414
     virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
-    fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs".options = [ "nofail" ];
-    fileSystems."/var/lib/docker/overlay2".options = [ "nofail" ];
+    fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs".options = ["nofail"];
+    fileSystems."/var/lib/docker/overlay2".options = ["nofail"];
 
     boot = {
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
-      kernelModules = [ "nct6775" ];
+      kernelModules = ["nct6775"];
 
       zfs.requestEncryptionCredentials = [
         "fast"
         "slow"
       ];
 
-      initrd.supportedFilesystems = [ "ext4" ];
+      initrd.supportedFilesystems = ["ext4"];
 
       # Must load network module on boot for SSH access
       # lspci -v | grep -iA8 'network\|ethernet'
-      initrd.availableKernelModules = [ "r8169" ];
+      initrd.availableKernelModules = ["r8169"];
       loader.grub.mirroredBoots = [
-        { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA1384E" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
-        { devices = [ "/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA19AD2" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
+        {
+          devices = ["/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA1384E"];
+          efiSysMountPoint = "/boot/efi0";
+          path = "/boot/efi0/EFI";
+        }
+        {
+          devices = ["/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA19AD2"];
+          efiSysMountPoint = "/boot/efi1";
+          path = "/boot/efi1/EFI";
+        }
       ];
     };
 
@@ -80,7 +91,7 @@ with lib;
       #maintenance.autoUpgrade = true;
     };
 
-    boot.blacklistedKernelModules = [ "nouveau" ];
+    boot.blacklistedKernelModules = ["nouveau"];
 
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
@@ -134,7 +145,7 @@ with lib;
 
     # Web shell
     # Only accessable from "mynet", which is the k8s node network
-    networking.firewall.interfaces.mynet.allowedTCPPorts = [ 7681 ];
+    networking.firewall.interfaces.mynet.allowedTCPPorts = [7681];
     services.ttyd = {
       enable = true;
       port = 7681;

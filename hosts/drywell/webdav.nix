@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with builtins;
-with lib;
-
-let
+with lib; let
   # nix-shell -p terraform-providers.htpasswd --run "htpasswd -nB david"
   htpasswd = pkgs.writeText "htpasswd" ''
     david:$2y$05$pe8DCM.Q8ojQZtYUnM.HP..Lw3IOfpywuVD6QLD5yZ3QNVm0ZyOPi
@@ -19,8 +22,7 @@ let
     "backup/sue" = "/slow/backup/sue";
     "backup/michael" = "/slow/backup/michael";
   };
-in
-{
+in {
   config = {
     services.webdav-server-rs = {
       enable = true;
@@ -28,7 +30,7 @@ in
       # https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml
       settings = {
         server = {
-          listen = [ "0.0.0.0:12345" "[::]:12345" ];
+          listen = ["0.0.0.0:12345" "[::]:12345"];
         };
 
         # htpasswd auth
@@ -49,9 +51,9 @@ in
 
         location = [
           {
-            route = [ "/(*path)" ];
+            route = ["/(*path)"];
             directory = webdav-root;
-            methods = [ "webdav-rw" ];
+            methods = ["webdav-rw"];
 
             # TODO: make defaults
             handler = "filesystem";

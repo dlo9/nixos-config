@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   imports = [
     ./certs.nix
     ./ddns.nix
@@ -20,7 +18,7 @@
     # Networking
     networking.nat = {
       enable = true;
-      internalInterfaces = [ "ve-+" ];
+      internalInterfaces = ["ve-+"];
       externalInterface = "cuttlefish";
     };
   };

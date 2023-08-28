@@ -1,11 +1,11 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.networking;
-in
 {
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.sys.networking;
+in {
   config = {
     # Initrd network should be the same as after boot
     boot.initrd.systemd.network = config.systemd.network;
@@ -28,7 +28,7 @@ in
 
       networks = {
         "35-wired" = {
-          matchConfig.Name = [ "en*" "eth*" ];
+          matchConfig.Name = ["en*" "eth*"];
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 1024;
         };

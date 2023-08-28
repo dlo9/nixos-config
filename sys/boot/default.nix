@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   imports = [
     ./bootloader.nix
     # Don't enable this!! See file for details
@@ -14,6 +12,6 @@
 
     # Enable emergency access, even with root account locked
     # TODO: sync this with systemd.enableEmergencyMode
-    boot.kernelParams = [ "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1" ];
+    boot.kernelParams = ["systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"];
   };
 }

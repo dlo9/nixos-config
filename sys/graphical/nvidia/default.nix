@@ -1,21 +1,22 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   unlock = import ./unlock.nix;
   cfg = config.sys.graphical;
-in
-{
+in {
   options.sys.graphical = {
-    nvidia = mkEnableOption "nvidia GPU" // { default = false; };
+    nvidia = mkEnableOption "nvidia GPU" // {default = false;};
   };
 
   config = mkIf cfg.nvidia {
     # Required to remedy weird crash when using nvidia in docker
     # systemd.enableUnifiedCgroupHierarchy = false;
 
-    boot.blacklistedKernelModules = [ "nouveau" ];
+    boot.blacklistedKernelModules = ["nouveau"];
 
     # https://nixos.wiki/wiki/Chromium#Enabling_native_Wayland_support
     environment.sessionVariables.NIXOS_OZONE_WL = "1";

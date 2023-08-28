@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
-with builtins;
-with lib;
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with builtins;
+with lib; {
   imports = [
     ./ddns.nix
     ./hardware.nix
@@ -20,10 +23,14 @@ with lib;
       # TODO: kubernetes
     };
 
-    boot.kernelParams = [ "nomodeset" ];
+    boot.kernelParams = ["nomodeset"];
     boot.loader = {
       grub.mirroredBoots = [
-        { devices = [ "/dev/disk/by-id/nvme-Force_MP500_17037932000122530025" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
+        {
+          devices = ["/dev/disk/by-id/nvme-Force_MP500_17037932000122530025"];
+          efiSysMountPoint = "/boot/efi0";
+          path = "/boot/efi0/EFI";
+        }
         #{ devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
       ];
     };
@@ -78,22 +85,20 @@ with lib;
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`
-      extraConfig =
-        let
-          tailscaleCidr = "100.64.0.0/10";
-        in
-        ''
-          workgroup = WORKGROUP
-          server string = drywell
-          netbios name = drywell
-          security = user
-          #use sendfile = yes
-          #max protocol = smb2
-          hosts allow = ${tailscaleCidr} 192.168. 127.0.0.1 localhost
-          hosts deny = 0.0.0.0/0
-          guest account = nobody
-          map to guest = bad user
-        '';
+      extraConfig = let
+        tailscaleCidr = "100.64.0.0/10";
+      in ''
+        workgroup = WORKGROUP
+        server string = drywell
+        netbios name = drywell
+        security = user
+        #use sendfile = yes
+        #max protocol = smb2
+        hosts allow = ${tailscaleCidr} 192.168. 127.0.0.1 localhost
+        hosts deny = 0.0.0.0/0
+        guest account = nobody
+        map to guest = bad user
+      '';
     };
 
     # Users
@@ -103,18 +108,18 @@ with lib;
         isNormalUser = true;
         hashedPassword = "$6$S/H.nEE7XEPdyO6v$ENulPNgv2WGmwdCD7zluMNasQ/wPFdc61wjxC2/aFXcl9dLvbMzzeSeVI9V5dxycJaojJRFUtqKYNPJIX767P1";
         createHome = false;
-        extraGroups = [ "samba" ];
+        extraGroups = ["samba"];
       };
 
       sue = {
         uid = 1002;
         isNormalUser = true;
         createHome = false;
-        extraGroups = [ "samba" ];
+        extraGroups = ["samba"];
       };
     };
 
-    users.groups.samba = { };
-    users.users.david.extraGroups = [ "samba" ];
+    users.groups.samba = {};
+    users.users.david.extraGroups = ["samba"];
   };
 }

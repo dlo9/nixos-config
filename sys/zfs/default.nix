@@ -1,37 +1,44 @@
-{ config, pkgs, lib, utils, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.zfs;
-in
 {
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
+with lib; let
+  cfg = config.sys.zfs;
+in {
   options = {
     # This configures zfs datasets to be managed by zfs utilities after boot as opposed to Nix. These are the recommended options
     # in the Nix ZFS wiki, and so this automatically adds them so that hardware config doesn't need to be modified.
-    fileSystems = with types; mkOption {
-      type = attrsOf (submodule ({ name, config, ... }: {
-        options.zfsUtils = mkOption {
-          description = "Let zfsutils manage the mount. The option is ignored if the filesystem type is not ZFS or it's the root mount.";
-          type = bool;
-          default = cfg.enable;
+    fileSystems = with types;
+      mkOption {
+        type = attrsOf (submodule ({
+          name,
+          config,
+          ...
+        }: {
+          options.zfsUtils = mkOption {
+            description = "Let zfsutils manage the mount. The option is ignored if the filesystem type is not ZFS or it's the root mount.";
+            type = bool;
+            default = cfg.enable;
 
-          # When visible, it triggers a build of the nixos man pages with each rebuild (which takes a *long* time).
-          visible = false;
-        };
+            # When visible, it triggers a build of the nixos man pages with each rebuild (which takes a *long* time).
+            visible = false;
+          };
 
-        # Any filesystems marked "neededForBoot" need to have mountpoint=legacy since initrd will mount them manually:
-        # https://search.nixos.org/options?channel=22.11&show=fileSystems.%3Cname%3E.neededForBoot
-        config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name utils.pathsNeededForBoot)) [
-          "zfsutil"
-          "X-mount.mkdir"
-          "nofail"
-        ];
-      }));
-    };
+          # Any filesystems marked "neededForBoot" need to have mountpoint=legacy since initrd will mount them manually:
+          # https://search.nixos.org/options?channel=22.11&show=fileSystems.%3Cname%3E.neededForBoot
+          config.options = mkIf (config.zfsUtils && config.fsType == "zfs" && !(builtins.elem name utils.pathsNeededForBoot)) [
+            "zfsutil"
+            "X-mount.mkdir"
+            "nofail"
+          ];
+        }));
+      };
 
     sys.zfs = {
-      enable = mkEnableOption "ZFS tools" // { default = true; };
+      enable = mkEnableOption "ZFS tools" // {default = true;};
     };
   };
 
@@ -50,7 +57,7 @@ in
 
       # Hibernation on ZFS can cause corruption
       # Plus, this doesn't work with randomly encrypted swap
-      kernelParams = [ "nohibernate" ];
+      kernelParams = ["nohibernate"];
     };
 
     services.zfs = {
@@ -131,7 +138,7 @@ in
       # after the system is booted
       network.ssh = {
         enable = true;
-        hostKeys = [ /run/secrets/ssh-keys/host/ed25519 ];
+        hostKeys = [/run/secrets/ssh-keys/host/ed25519];
         authorizedKeys = config.users.users.${config.sys.user}.openssh.authorizedKeys.keys;
       };
     };
@@ -165,12 +172,12 @@ in
       };
     };
 
-    sops.secrets.postfix-auth = { };
+    sops.secrets.postfix-auth = {};
     services.zfs.zed = {
       settings = {
         ZED_DEBUG_LOG = "/tmp/zed.debug.log";
 
-        ZED_EMAIL_ADDR = [ "if_nas@fastmail.com" ];
+        ZED_EMAIL_ADDR = ["if_nas@fastmail.com"];
         ZED_EMAIL_PROG = "sendmail";
         ZED_EMAIL_OPTS = "'@ADDRESS@'";
 

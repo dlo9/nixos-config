@@ -1,8 +1,10 @@
-{ pkgs, lib, inputs, ... }:
-
-with lib;
-
 {
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib; {
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
@@ -29,6 +31,8 @@ with lib;
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]))
+
+      rnix-lsp # Nix language server
     ];
 
     programs.ssh = {

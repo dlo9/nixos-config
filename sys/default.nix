@@ -1,11 +1,13 @@
-{ config, lib, pkgs, inputs, ... }:
-
-with lib;
-
-let
-  cfg = config.sys;
-in
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib; let
+  cfg = config.sys;
+in {
   imports = [
     ./boot
     ./graphical
@@ -28,7 +30,7 @@ in
       default = "david";
     };
 
-    low-power = mkEnableOption "low power mode" // { default = false; };
+    low-power = mkEnableOption "low power mode" // {default = false;};
   };
 
   config = {
@@ -39,13 +41,15 @@ in
     # Binary caches
     nix = {
       settings = {
-        substituters = [
-          # Default priority is 50, lower number is higher priority
-          "https://cache.nixos.org?priority=50"
-          "https://nix-community.cachix.org?priority=50"
-          "https://cuda-maintainers.cachix.org?priority=60"
-          "daemon?priority=10"
-        ] ++ lib.optional (!config.services.nix-serve.enable) "https://nix-serve.sigpanic.com?priority=100";
+        substituters =
+          [
+            # Default priority is 50, lower number is higher priority
+            "https://cache.nixos.org?priority=50"
+            "https://nix-community.cachix.org?priority=50"
+            "https://cuda-maintainers.cachix.org?priority=60"
+            "daemon?priority=10"
+          ]
+          ++ lib.optional (!config.services.nix-serve.enable) "https://nix-serve.sigpanic.com?priority=100";
 
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -55,15 +59,17 @@ in
       };
 
       # Use cuttlefish as a remote builder
-      buildMachines = mkIf cfg.low-power [{
-        hostName = "cuttlefish";
-        systems = [ "x86_64-linux" "aarch64-linux" ];
+      buildMachines = mkIf cfg.low-power [
+        {
+          hostName = "cuttlefish";
+          systems = ["x86_64-linux" "aarch64-linux"];
 
-        maxJobs = 4;
-        speedFactor = 1;
-        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-        mandatoryFeatures = [ ];
-      }];
+          maxJobs = 4;
+          speedFactor = 1;
+          supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+          mandatoryFeatures = [];
+        }
+      ];
 
       distributedBuilds = true;
 
@@ -99,7 +105,7 @@ in
         "gammastep" = {
           isAllowed = true;
           isSystem = false;
-          users = [ "1000" ];
+          users = ["1000"];
         };
       };
     };
@@ -131,7 +137,7 @@ in
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
     programs.fish.enable = true;
-    environment.shells = [ pkgs.fish ];
+    environment.shells = [pkgs.fish];
 
     # Packages
     environment.systemPackages = with pkgs // cfg.pkgs; [

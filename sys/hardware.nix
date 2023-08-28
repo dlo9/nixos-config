@@ -1,13 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.hardware;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.sys.hardware;
+in {
   options.sys.hardware = {
-    isX64 = mkEnableOption "options for x86_64 systems" // { default = pkgs.stdenv.isx86_64; };
+    isX64 = mkEnableOption "options for x86_64 systems" // {default = pkgs.stdenv.isx86_64;};
   };
 
   config = {

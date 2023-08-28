@@ -1,17 +1,19 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with builtins;
-with lib;
-
-let
+with lib; let
   # lspci -nn | grep -i nvidia
   # sudo virsh net-start default
   gpuIDs = [
     "10de:1b81" # Graphics
     "10de:10f0" # Audio
   ];
-in
-{
+in {
   config = {
     boot = {
       # Nvidia GPU passthrough
@@ -46,7 +48,8 @@ in
               secureBoot = true;
               tpmSupport = true;
               csmSupport = true;
-            }).fd
+            })
+            .fd
           ];
         };
       };
@@ -58,6 +61,6 @@ in
     #   looking-glass-client
     # ];
 
-    users.users."${config.sys.user}".extraGroups = [ "libvirtd" ];
+    users.users."${config.sys.user}".extraGroups = ["libvirtd"];
   };
 }

@@ -1,6 +1,9 @@
-{ config, pkgs, inputs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}: let
   # Size in MiB
   biosSize = 1;
   efiSize = 1024;
@@ -25,7 +28,7 @@ let
             part-type = "primary";
             start = "24K";
             end = toString biosSize + "MiB";
-            flags = [ "bios_grub" ];
+            flags = ["bios_grub"];
             content.type = "noop";
           }
 
@@ -33,7 +36,7 @@ let
           {
             type = "partition";
             part-type = "primary";
-            start = toString (biosSize) + "MiB";
+            start = toString biosSize + "MiB";
             end = toString (biosSize + efiSize) + "MiB";
             bootable = true;
             content = {
@@ -242,8 +245,7 @@ let
       };
     };
   };
-in
-{
+in {
   config = {
     environment.systemPackages = with pkgs; [
       parted

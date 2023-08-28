@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with builtins;
-with lib;
-
-let
+with lib; let
   configFile = pkgs.writeText "godns.json" (toJSON {
     provider = "Cloudflare";
     login_token = "API Token";
@@ -30,8 +33,7 @@ let
   });
 
   RuntimeDirectory = "godns";
-in
-{
+in {
   config = {
     # DNS provider auth
     sops.secrets.cloudflare-ddns = {
@@ -40,9 +42,9 @@ in
 
     systemd.services.godns = {
       description = "Dynamic DNS Client";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      restartTriggers = [ configFile ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      restartTriggers = [configFile];
 
       serviceConfig = {
         DynamicUser = true;

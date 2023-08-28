@@ -1,11 +1,8 @@
-
-{fetchFromGitHub,
-  tmuxPlugins
-  }:
-
-with tmuxPlugins;
-
 {
+  fetchFromGitHub,
+  tmuxPlugins,
+}:
+with tmuxPlugins; {
   tmux-themepack = mkTmuxPlugin {
     pluginName = "tmux-themepack";
     rtpFilePath = "themepack.tmux";
@@ -18,4 +15,3 @@ with tmuxPlugins;
     };
   };
 }
-

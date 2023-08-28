@@ -1,13 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.sys.boot;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.sys.boot;
+in {
   options.sys.boot = {
-    enable = mkEnableOption "boot" // { default = true; };
+    enable = mkEnableOption "boot" // {default = true;};
   };
 
   config = mkIf cfg.enable {

@@ -1,17 +1,18 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 # Resources:
 # - [systemd example](https://gist.github.com/maddes-b/e487d1f95f73f5d40805315f0232d5d9)
 # - [Bridge vs Macvlan](https://hicu.be/bridge-vs-macvlan)
-
-with lib;
-let
+with lib; let
   MACs = {
     # Gets 32:1e:1c:d7:56:1a on boot somehow??
     cuttlefish = "d8:bb:c1:c8:5c:da";
   };
-in
-{
+in {
   config = {
     # Enable IP forwarding for tailscale, kubernetes, and VMs
     boot.kernel.sysctl = {
