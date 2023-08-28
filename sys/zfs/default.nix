@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.zfs;
+  cfg = config.sys.zfs;
 in
 {
   options = {
@@ -133,7 +132,7 @@ in
       network.ssh = {
         enable = true;
         hostKeys = [ /run/secrets/ssh-keys/host/ed25519 ];
-        authorizedKeys = config.users.users.${sysCfg.user}.openssh.authorizedKeys.keys;
+        authorizedKeys = config.users.users.${config.sys.user}.openssh.authorizedKeys.keys;
       };
     };
 

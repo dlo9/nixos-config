@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  parentCfg = sysCfg.graphical;
+  parentCfg = config.sys.graphical;
   cfg = parentCfg.polkit;
 in
 {
@@ -13,7 +12,7 @@ in
 
     user = mkOption {
       type = types.nonEmptyStr;
-      default = sysCfg.user;
+      default = config.sys.user;
       description = "The user for which polkit will be started when they login";
     };
 

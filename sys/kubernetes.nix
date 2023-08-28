@@ -6,8 +6,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.kubernetes;
+  cfg = config.sys.kubernetes;
 in
 {
   options.sys.kubernetes = with types; {
@@ -34,7 +33,7 @@ in
 
     admin = mkOption {
       type = nonEmptyStr;
-      default = sysCfg.user;
+      default = config.sys.user;
       description = "User to grant administrator access";
     };
   };

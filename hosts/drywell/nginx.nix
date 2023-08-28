@@ -5,12 +5,11 @@ with lib;
 
 let
   useACMEHost = "drywell.sigpanic.com";
-  sysCfg = config.sys;
 in
 {
   config = {
     sops.secrets.cloudflare-dns = {
-      sopsFile = sysCfg.secrets.hostSecretsFile;
+      sopsFile = config.sys.secrets.hostSecretsFile;
     };
 
     security.acme = {

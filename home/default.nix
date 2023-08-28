@@ -2,7 +2,7 @@
 # - Manual: https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
 # - Config: https://rycee.gitlab.io/home-manager/options.html
 
-{ config, pkgs, lib, inputs, sysCfg, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 with types;
@@ -37,7 +37,7 @@ in
       };
 
       shellAliases = {
-        k = "kubectl";
+        # k = "kubectl";
 
         # Use modern alternatives to classic unix tools
         # https://github.com/ibraheemdev/modern-unix
@@ -104,7 +104,7 @@ in
         # Spawn a new session when attaching and none exist
         newSession = true;
 
-        plugins = with pkgs.tmuxPlugins // sysCfg.pkgs.tmuxPlugins; [
+        plugins = with pkgs.tmuxPlugins; [
           {
             plugin = tmux-themepack;
             extraConfig = "set -g @themepack 'powerline/double/purple'";
@@ -138,7 +138,7 @@ in
         };
 
 
-        plugins = with pkgs.vimPlugins // sysCfg.pkgs.vimPlugins; [
+        plugins = with pkgs.vimPlugins; with pkgs; [
           # Statusline
           vim-airline
 
@@ -491,13 +491,7 @@ in
         ##### Wrap #####
         ################
 
-        "wrap.yaml" = {
-          onChange = ''
-            # This runs without our additional PATH variables, so absolute path must be given
-            [ -f $HOME/.cargo/bin/wrap ] && $HOME/.cargo/bin/wrap --alias
-          '';
-
-          text = ''
+        "wrap.yaml".text = ''
             variables:
               CUTTLEFISH_SSH_PORT: 32085
               CUTTLEFISH_SSH_URL: ssh.sigpanic.com
@@ -574,11 +568,10 @@ in
                     values:
                       - flavours info "\$(flavours current)" | awk '!a[\$0]++'
           '';
-        };
       };
     };
 
-    home.packages = with pkgs // sysCfg.pkgs; [
+    home.packages = with pkgs; [
       go-task
 
       # bash to fish converter

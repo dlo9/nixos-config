@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.graphical;
+  cfg = config.sys.graphical;
 in
 {
   imports = [
@@ -21,7 +20,7 @@ in
     security.pam.services.swaylock = { };
 
     # Auto-login since whole-disk encryption is already required
-    services.getty.autologinUser = "${sysCfg.user}";
+    services.getty.autologinUser = "${config.sys.user}";
     environment.loginShellInit = mkDefault ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
         ${if (elem "nvidia" config.services.xserver.videoDrivers)
@@ -85,7 +84,7 @@ in
 
     # Enable i2c for the main user to control monitors via software
     hardware.i2c.enable = true;
-    users.users."${sysCfg.user}".extraGroups = [ config.hardware.i2c.group ];
+    users.users."${config.sys.user}".extraGroups = [ config.hardware.i2c.group ];
 
     # Printing
     # To add a printer, go to:

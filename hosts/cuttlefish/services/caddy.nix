@@ -6,7 +6,6 @@ with lib;
 let
   useACMEHost = "sigpanic.com";
   listenAddresses = [ "0.0.0.0" ];
-  sysCfg = config.sys;
 
   autheliaForwardAuth = ''
     forward_auth http://192.168.1.230:1080 {

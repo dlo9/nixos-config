@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.boot;
+  cfg = config.sys.boot;
 in
 {
   options.sys.boot = {

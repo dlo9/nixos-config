@@ -2,9 +2,6 @@
 
 with lib;
 
-let
-  sysCfg = config.sys;
-in
 {
   imports = [
     ./docker
@@ -114,7 +111,7 @@ in
 
     # Nix cache
     sops.secrets.nix-serve-private-key = {
-      sopsFile = sysCfg.secrets.hostSecretsFile;
+      sopsFile = config.sys.secrets.hostSecretsFile;
     };
 
     services.nix-serve = {

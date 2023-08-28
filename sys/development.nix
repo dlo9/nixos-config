@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.development;
+  cfg = config.sys.development;
 in
 {
   options.sys.development = {
@@ -17,7 +16,7 @@ in
 
     programs.adb.enable = true;
 
-    environment.systemPackages = with pkgs // sysCfg.pkgs; [
+    environment.systemPackages = with pkgs; [
       cargo
       qemu_kvm
       OVMF

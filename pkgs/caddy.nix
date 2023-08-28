@@ -6,6 +6,7 @@
 , testers
 , installShellFiles
 }:
+
 let
   version = "2.7.0-beta.1";
   dist = fetchFromGitHub {
@@ -15,6 +16,7 @@ let
     hash = "sha256-1CjrONP6W1DYsKMezfjf0/JeV1GrrvBYbx93LDUGJvk=";
   };
 in
+
 buildGoModule {
   pname = "caddy";
   inherit version;

@@ -6,7 +6,6 @@ with lib;
 
 let
   pool-name = "pool";
-  sysCfg = config.sys;
 in
 {
   config = {
@@ -52,7 +51,7 @@ in
           ''}
         '';
 
-        authorizedKeys = config.users.users.${sysCfg.user}.openssh.authorizedKeys.keys;
+        authorizedKeys = config.users.users.${config.sys.user}.openssh.authorizedKeys.keys;
         shell = "/bin/ash";
       in
       {

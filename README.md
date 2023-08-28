@@ -10,6 +10,16 @@ env SOPS_AGE_KEY=MY_MASTER_KEY ./scripts/util/create-host-config <hostname> <adm
 # Installing
 - Add a new host config via [Adding a new host](#adding-a-new-host)
 
+## Darwin
+To install on a darwin system, use:
+```sh
+# Install for the first time
+nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake "./#$(hostname)" --fallback
+
+# Rebuild
+darwin-rebuild switch
+```
+
 ### The fancy way
 This method installs the NixOS configuration from this repo directly -- it's fancy, but
 makes it more difficult to manage long-term on the host.

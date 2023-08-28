@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.hardware;
+  cfg = config.sys.hardware;
 in
 {
   options.sys.hardware = {

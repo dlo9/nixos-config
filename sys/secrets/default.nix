@@ -4,8 +4,7 @@ with lib;
 with types;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.secrets;
+  cfg = config.sys.secrets;
 in
 {
   imports = [

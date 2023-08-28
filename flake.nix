@@ -9,6 +9,13 @@
     # TODO: Remove once 6.3 supports ZFS
     nixpkgs-kernel.url = github:NixOS/nixpkgs/nixpkgs-unstable;
 
+    # Darwin settings
+    nixpkgs-darwin.url = github:NixOS/nixpkgs/nixpkgs-23.05-darwin;
+    nix-darwin = {
+      url = github:LnL7/nix-darwin/release-23.05;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -30,6 +37,15 @@
       #url = github:nix-community/home-manager/release-23.05;
       url = github:nix-community/home-manager/53ccbe017079d5fba2b605cb9f9584629bebd03a;
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Home manager
+    home-manager-darwin = {
+      # TODO: change back when babelfish commit is in the stable release:
+      # https://github.com/nix-community/home-manager/commit/53ccbe017079d5fba2b605cb9f9584629bebd03a
+      #url = github:nix-community/home-manager/release-23.05;
+      url = github:nix-community/home-manager/53ccbe017079d5fba2b605cb9f9584629bebd03a;
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     # Docker-compose in Nix
@@ -57,17 +73,13 @@
     };
 
     mobile-nixos = {
-      # path:/home/david/code/mobile-nixos
       url = github:NixOS/mobile-nixos;
       flake = false;
     };
 
     # Theming
     # A decent alternative (can generate color from picture): https://git.sr.ht/~misterio/nix-colors
-    base16 = {
-      url = github:SenchoPens/base16.nix;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    base16.url = github:SenchoPens/base16.nix/v1.1.1;
 
     # Main theme
     # https://github.com/chriskempson/base16#scheme-repositories
@@ -118,10 +130,10 @@
       flake = false;
     };
 
-    base16-gtk = {
-      url = github:Misterio77/base16-gtk-flatcolor;
-      flake = false;
-    };
+    # base16-gtk = {
+    #   url = github:tinted-theming/base16-gtk-flatcolor;
+    #   flake = false;
+    # };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -165,13 +177,59 @@
         { networking.hostName = hostName; }
       ];
 
+      overlays = {
+        # default = final: prev:
+        #   prev.lib.recursiveUpdate prev (prev.pkgs.callPackage ./pkgs {});
+        # default = final: prev: import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; };
+        # default = final: prev: prev.lib.recursiveUpdate prev (import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; });
+        default = final: prev:
+          with prev;
+
+          let
+            pkgs' = recurseIntoAttrs (callPackage ./pkgs { });
+          in
+            # prev.lib.recursiveUpdate pkgs pkgs';
+            # prev.lib.mapAttrs ;
+            {
+              vimPlugins = prev.vimPlugins // pkgs'.vimPlugins;
+              # vimPlugins = prev.vimPlugins.extend (final: prev: pkgs'.vimPlugins);
+              # vimPlugins = prev.vimPlugins // { vim-yadi = pkgs'.vimPlugins.vim-yadi;};
+              vscode-extensions = prev.vscode-extensions // pkgs'.vscode-extensions;
+              tmuxPlugins = prev.tmuxPlugins // pkgs'.tmuxPlugins;
+              # lib = prev.lib // pkgs'.lib;
+
+              flatcolor-gtk-theme = pkgs'.flatcolor-gtk-theme;
+              lxappearance-xwayland = pkgs'.lxappearance-xwayland;
+              nss-docker = pkgs'.nss-docker;
+              caddy = pkgs'.caddy;
+              fromYAML = pkgs'.fromYAML;
+            };
+
+          # (recurseIntoAttrs (callPackage ./pkgs { }));
+          # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
+          # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
+
+          # pkgs = prev.lib.recursiveUpdate prev.pkgs (prev.pkgs.callPackage ./pkgs { });
+          # recurseIntoAttrs (callPackage ./vim-plugins { })
+
+        unstable = system: final: prev: {
+          unstable = import inputs.nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = prev.config.allowUnfree;
+          };
+        };
+
+        kernel = system: final: prev: {
+          kernel = import inputs.nixpkgs-kernel {
+            inherit system;
+            config.allowUnfree = prev.config.allowUnfree;
+          };
+        };
+      };
+
       defaultModules = (hostName: extraSettings: [
         # Custom system modules
         ./sys
-
-        # Home-manager module
-        # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
-        inputs.home-manager.nixosModules.home-manager
 
         # Nix User repo
         inputs.nur.nixosModules.nur
@@ -184,73 +242,76 @@
           nixpkgs = {
             config.allowUnfree = true;
 
-            overlays = [
-              (final: prev: {
-                # Makes "pkgs.unstable" available in configuration.nix
-                unstable = import inputs.nixpkgs-unstable {
-                  system = prev.system;
-                  config.allowUnfree = true;
-                };
-
-                # Makes "pkgs.unstable" available in configuration.nix
-                kernel = import inputs.nixpkgs-kernel {
-                  system = prev.system;
-                  config.allowUnfree = true;
-                };
-              })
+            overlays = with overlays; [
+              default
+              (unstable "x86_64-linux")
+              (kernel "x86_64-linux")
             ];
           };
         })
 
         # Home-manager configuration
-        ({ config, inputs, ... }: {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            backupFileExtension = "home-manager-backup";
-            users.david = import ./home;
-            users.root.home.stateVersion = "22.11";
-
-            sharedModules = [{
-              # Add nix environment variables to home manager. This is necessary for NIX_LD
-              # to work on non-interactive login (e.g., running vscode remotely)
-              home.sessionVariables = (mapAttrs (n: v: (mkOptionDefault v)) config.environment.variables);
-            }];
-
-            # Pass extra arguments to home.nix
-            extraSpecialArgs = {
-              inherit inputs;
-              sysCfg = config.sys;
-              nur = config.nur;
-            };
-          };
-        })
+       ./home/nixos-module.nix
 
         # Passed-in module
         extraSettings
       ] ++ (hostModules hostName));
 
       # Pass extra arguments to modules
-      specialArgs = {
-        inputs = inputs // {
+      specialArgs.inputs = inputs // {
           inherit exports hostFile mergedExports;
-        };
       };
     in
     {
+      # https://daiderd.com/nix-darwin/manual/index.html
+      darwinConfigurations = with inputs.nix-darwin.lib; {
+        mallow = darwinSystem {
+          specialArgs = {
+            inherit inputs;
+          };
+
+          system = "aarch64-darwin";
+
+          modules = [
+            ./hosts/mallow
+
+            # Nixpkgs overlays
+            ({ config, inputs, ... }: {
+              nixpkgs = {
+                config.allowUnfree = true;
+
+                overlays = with overlays; [
+                  inputs.nix-darwin.overlays.default
+                  default
+                  (unstable "aarch64-darwin")
+                ];
+              };
+            })
+
+            # Home-manager configuration
+          ./home/darwin-module.nix
+
+            ({ config, inputs, pkgs, ... }: {
+
+              programs.fish.enable = true;
+              environment.shells = [ pkgs.fish ];
+              users.users.dorchard = {
+                home = "/Users/dorchard";
+                uid = 503;
+                gid = 20;
+                shell = pkgs.fish;
+              };
+            })
+          ];
+        };
+      };
+
       nixosConfigurations = with nixpkgs.lib; rec {
         pavil = nixosSystem {
           inherit specialArgs;
 
           system = "x86_64-linux";
           modules = defaultModules "pavil" { };
-        };
-
-        nebula = nixosSystem {
-          inherit specialArgs;
-
-          system = "x86_64-linux";
-          modules = defaultModules "nebula" { };
         };
 
         nib = nixosSystem {
@@ -296,35 +357,6 @@
         # Impure needed to access host paths without putting in the nix store
         rpi3-image = rpi3.config.system.build.sdImage;
 
-        # Portable, can be used as a bootstrap image
-        portable-i686 = nixosSystem {
-          inherit specialArgs;
-
-          system = "i686-linux";
-          modules = defaultModules "portable" { };
-        };
-
-        portable-x86_64 = nixosSystem {
-          inherit specialArgs;
-
-          system = "x86_64-linux";
-          modules = defaultModules "portable" { };
-        };
-
-        portable = nixosSystem {
-          inherit specialArgs;
-
-          system = "x86_64-linux";
-          modules = defaultModules "portable" { };
-        };
-
-        portable-aarch64 = nixosSystem {
-          inherit specialArgs;
-
-          system = "aarch64-linux";
-          modules = defaultModules "portable" { };
-        };
-
         drywell = nixosSystem {
           inherit specialArgs;
 
@@ -338,38 +370,16 @@
           system = "x86_64-linux";
           modules = defaultModules "installer-test" { };
         };
-
-        # Installer test
-        installer = buildSystem "installer" "x86_64-linux" [
-          ({ config, ... }: {
-            boot.loader = {
-              grub.mirroredBoots = [
-                { devices = [ "/dev/disk/by-path/virtio-pci-0000:00:04.0" ]; efiSysMountPoint = "/boot/efi0"; path = "/boot/efi0/EFI"; }
-                { devices = [ "/dev/disk/by-path/virtio-pci-0000:00:05.0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
-                # TODO: test
-                #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00001"; }
-                #{ devices = [ "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00002" ]; efiSysMountPoint = "/boot/efi/ata-QEMU_HARDDISK_QM00002"; }
-              ];
-
-              # TODO: only for installing
-              efi.canTouchEfiVariables = false;
-              grub.efiInstallAsRemovable = true;
-            };
-
-            services.qemuGuest.enable = true;
-            services.spice-vdagentd.enable = true;
-            boot.kernelParams = [ "nomodeset" ];
-          })
-        ];
       };
 
-      packages.x86_64-linux = {
-        vmware = inputs.nixos-generators.nixosGenerate {
-          system = "x86_64-linux";
-          modules = [
-          ];
-          format = "iso";
-        };
-      };
+      # packages.x86_64-linux = {
+      #   vmware = inputs.nixos-generators.nixosGenerate {
+      #     system = "x86_64-linux";
+      #     modules = [ ];
+      #     format = "iso";
+      #   };
+      # };
+
+      inherit overlays;
     };
 }

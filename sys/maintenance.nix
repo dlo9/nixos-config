@@ -3,8 +3,7 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.maintenance;
+  cfg = config.sys.maintenance;
 in
 {
   options.sys.maintenance = {

@@ -4,8 +4,6 @@ with builtins;
 with lib;
 
 let
-  sysCfg = config.sys;
-
   # lspci -nn | grep -i nvidia
   # sudo virsh net-start default
   gpuIDs = [
@@ -60,6 +58,6 @@ in
     #   looking-glass-client
     # ];
 
-    users.users."${sysCfg.user}".extraGroups = [ "libvirtd" ];
+    users.users."${config.sys.user}".extraGroups = [ "libvirtd" ];
   };
 }

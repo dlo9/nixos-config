@@ -3,10 +3,9 @@
 with lib;
 
 let
-  sysCfg = config.sys;
-  cfg = sysCfg.networking;
+  cfg = config.sys.networking;
   hostExports = inputs.exports.${config.networking.hostName};
-  user = sysCfg.user;
+  user = config.sys.user;
   userHome = config.users.users.${user}.home;
   masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
 in
@@ -30,12 +29,12 @@ in
       # Host
       "ssh-keys/host/ed25519" = {
         path = "/etc/ssh/ssh_host_ed25519_key";
-        sopsFile = sysCfg.secrets.hostSecretsFile;
+        sopsFile = config.sys.secrets.hostSecretsFile;
       };
 
       "ssh-keys/host/rsa" = {
         path = "/etc/ssh/ssh_host_rsa_key";
-        sopsFile = sysCfg.secrets.hostSecretsFile;
+        sopsFile = config.sys.secrets.hostSecretsFile;
       };
 
       # User
@@ -43,7 +42,7 @@ in
         path = "${userHome}/.ssh/id_ed25519";
         owner = user;
         group = config.users.users.${user}.group;
-        sopsFile = sysCfg.secrets.hostSecretsFile;
+        sopsFile = config.sys.secrets.hostSecretsFile;
       };
 
       wireless-env = mkIf cfg.wireless { };
@@ -126,7 +125,7 @@ in
     services.tailscale.enable = true;
 
     sops.secrets.tailscale-auth-key = mkIf cfg.authenticateTailscale {
-      sopsFile = sysCfg.secrets.hostSecretsFile;
+      sopsFile = config.sys.secrets.hostSecretsFile;
     };
 
     systemd.services.tailscale-anthenticate = mkIf cfg.authenticateTailscale {

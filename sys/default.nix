@@ -10,7 +10,6 @@ in
     ./boot
     ./graphical
     ./networking
-    ./pkgs
     ./secrets
     ./zfs
 
@@ -18,7 +17,6 @@ in
     ./gaming.nix
     ./hardware.nix
     ./kubernetes.nix
-    ./lib.nix
     ./maintenance.nix
   ];
 

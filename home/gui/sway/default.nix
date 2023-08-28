@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, sysCfg, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 with types;
@@ -47,7 +47,7 @@ in
   ];
 
   options.home.gui.sway = {
-    enable = mkEnableOption "sway window manager" // { default = sysCfg.graphical.enable; };
+    enable = mkEnableOption "sway window manager" // { default = config.home.gui.enable; };
   };
 
   config = mkIf cfg.enable {

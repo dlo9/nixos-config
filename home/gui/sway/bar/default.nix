@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, sysCfg, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 with types;
@@ -9,7 +9,7 @@ let
 in
 {
   options.home.gui.sway.waybar = {
-    enable = mkEnableOption "waybar" // { default = sysCfg.graphical.enable; };
+    enable = mkEnableOption "waybar" // { default = config.home.gui.enable; };
   };
 
   config = mkIf cfg.enable {

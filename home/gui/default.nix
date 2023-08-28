@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, sysCfg, nur, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 with types;
@@ -6,6 +6,7 @@ with builtins;
 
 let
   cfg = config.home.gui;
+  isLinux = pkgs.stdenv.hostPlatform.isLinux;
 in
 {
   imports = [
@@ -13,36 +14,37 @@ in
   ];
 
   options.home.gui = {
-    enable = mkEnableOption "user graphical programs" // { default = sysCfg.graphical.enable; };
-    bluetooth.enable = mkEnableOption "bluetooth applet" // { default = true; };
+    enable = mkEnableOption "user graphical programs" // { default = true; };
+    bluetooth.enable = mkEnableOption "bluetooth applet" // { default = false; };
   };
 
   config = mkIf cfg.enable {
     home.pointerCursor = {
       name = "Numix-Cursor-Light";
       package = pkgs.numix-cursor-theme;
-      gtk.enable = true;
+      gtk.enable = isLinux;
+      x11.enable = false;
     };
 
     programs = {
       # Utils
-      feh.enable = true;
+      feh.enable = isLinux;
 
       ####################
       ### Web browsers ###
       ####################
 
-      qutebrowser.enable = true;
+      qutebrowser.enable = isLinux;
 
       chromium = {
-        enable = true;
+        enable = isLinux;
         extensions = [
           { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
         ];
       };
 
       firefox = {
-        enable = true;
+        enable = isLinux;
 
         profiles = {
           # Set dev edition profile to the same as default release
@@ -59,7 +61,7 @@ in
             path = "default";
 
             # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
-            extensions = with nur.repos.rycee.firefox-addons; [
+            extensions = with config.nur.repos.rycee.firefox-addons; [
               #amazon-band-detector
               auto-tab-discard
               bitwarden
@@ -134,7 +136,7 @@ in
         };
       };
 
-      vim.plugins = with pkgs.vimPlugins // sysCfg.pkgs.vimPlugins; [
+      vim.plugins = with pkgs.vimPlugins; [
         # Fix copy to system clipboard on wayland
         vim-wayland-clipboard
       ];
@@ -162,7 +164,7 @@ in
           };
 
           mouse.hide_when_typing = false;
-        } // (sysCfg.lib.fromYAML (config.scheme inputs.base16-alacritty));
+        } // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
       };
 
       vscode = {
@@ -171,7 +173,7 @@ in
         # Allow extension installations/updates
         mutableExtensionsDir = true;
 
-        extensions = with pkgs.vscode-extensions // sysCfg.pkgs.vscode-extensions; [
+        extensions = with pkgs.vscode-extensions; [
           shan.code-settings-sync
           jnoortheen.nix-ide
 
@@ -202,7 +204,7 @@ in
     };
 
     gtk = {
-      enable = true;
+      enable = isLinux;
 
       iconTheme = {
         #package = pkgs.vimix-icon-theme;
@@ -228,8 +230,8 @@ in
               target = "gtk-3";
             };
           in
-          sysCfg.pkgs.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
-            # Build instructions: https://github.com/Misterio77/base16-gtk-flatcolor
+          pkgs.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
+            # Build instructions: https://github.com/tinted-theming/base16-gtk-flatcolor
             # This builds, but doesn't seem to work very well?
             postInstall = ''
               # Base theme info
@@ -253,49 +255,51 @@ in
       };
     };
 
-    home.packages = with pkgs // sysCfg.pkgs; [
-      # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
-      dconf
+    home.packages = with pkgs; flatten [
+      (optionals isLinux [
+        # For debugging themes
+        lxappearance-xwayland
 
-      # For debugging themes
-      lxappearance-xwayland
+        # File manager
+        cinnamon.nemo
 
-      # So that links open in a browser when clicked from other applications
-      # (e.g. vscode)
-      xdg-utils
+        # USB installer
+        ventoy-bin
 
-      # File manager
-      cinnamon.nemo
-      #xfce.thunar
-      #xfce.thunar-volman
-      #xfce.thunar-archive-plugin
+        # Display tool
+        ddcutil
 
-      # USB installer
-      ventoy-bin
+        #kopia # Backups
 
-      # Testing
-      kopia # Backup tool
-      ddcutil
+        # Signal
+        signal-desktop
 
-      # Signal
-      signal-desktop
+        #geekbench5
 
-      # Notes app
-      obsidian
+        # Scanning
+        gnome.simple-scan
 
-      #geekbench5
+        # Networking utils
+        wpa_supplicant_gui
+        inetutils
 
-      # Scanning
-      gnome.simple-scan
+        # HDD info
+        smartmontools
 
-      # Networking utils
-      wpa_supplicant_gui
-      inetutils
+        unstable.anytype
+      ])
 
-      # HDD info
-      smartmontools
+      [
+        # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
+        dconf
 
-      unstable.anytype
+        # So that links open in a browser when clicked from other applications
+        # (e.g. vscode)
+        xdg-utils
+
+        # Notes app
+        obsidian
+      ]
     ];
 
     services = {
@@ -304,13 +308,13 @@ in
 
       # Enable red-shifted nightime display
       gammastep = {
-        enable = true;
+        enable = isLinux;
         provider = "geoclue2";
         tray = true;
       };
 
       # File syncing
-      syncthing.enable = true;
+      syncthing.enable = isLinux;
 
       # Screenshots
       # Disabled since this isn't working on sway right now
