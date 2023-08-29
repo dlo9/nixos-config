@@ -67,6 +67,7 @@ in {
         userEmail = "if_coding@fastmail.com";
 
         difftastic.enable = false;
+        lfs.enable = true;
 
         ignores = [
           # Temporary files
@@ -571,7 +572,12 @@ in {
     };
 
     home.packages = with pkgs; [
-      go-task
+      # Terminal
+      fish
+      tmux
+      starship
+      zoxide
+      nodejs # For vim plugins
 
       # bash to fish converter
       babelfish
@@ -594,6 +600,8 @@ in {
 
       # Some dev tools
       yq-go
+      jq
+      shellcheck
 
       # Cheatsheet-like helpers
       navi
@@ -607,6 +615,14 @@ in {
       # Nix utils
       any-nix-shell # Doesn't change the interactive shell when using nix-shell
       nix-prefetch
+
+      # Other utils
+      go-task
+      pv
+      sops
+      p7zip
+      zstd
+      age
     ];
   };
 }

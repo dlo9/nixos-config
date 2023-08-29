@@ -182,6 +182,10 @@ in {
       vscode = {
         enable = true;
 
+        # Don't enable these settings, or all settings must be managed by nix
+        # enableUpdateCheck = false;
+        # enableExtensionUpdateCheck = false;
+
         # Allow extension installations/updates
         mutableExtensionsDir = true;
 

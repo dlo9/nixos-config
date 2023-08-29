@@ -143,22 +143,15 @@ in {
     environment.systemPackages = with pkgs // cfg.pkgs; [
       # Terminal
       fish
-      tmux
-      starship
-      zoxide
 
       # Linux utils
       vim
       nodejs # Vim plugins
       curl
-      ripgrep
       lshw
-      pv
-      p7zip
       file
 
       # Nix utils
-      git
       nix-diff
       nix-tree
       rnix-lsp # Nix language server
@@ -168,11 +161,6 @@ in {
       lsof
       pciutils # lspci
       gptfdisk # Disk partitioning (sgdisk)
-
-      # NixOS secrets
-      sops
-      age
-      ssh-to-age
     ];
 
     # This value determines the NixOS release from which the default
