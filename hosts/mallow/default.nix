@@ -1,9 +1,16 @@
-{ pkgs
+{ config
+, pkgs
 , lib
 , inputs
 , ...
 }:
-with lib; {
+
+with lib;
+
+let
+  barHeight = "26";
+in
+{
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
@@ -20,10 +27,31 @@ with lib; {
   homebrew = {
     enable = true;
 
+    # Workaround for EULA
+    # https://github.com/microsoft/homebrew-mssql-release/issues/86
+    extraConfig = ''
+      module Utils
+        ENV['HOMEBREW_ACCEPT_EULA']='y'
+      end
+
+      brew "mssql-tools18"
+    '';
+
+    taps = [
+      {
+        name = "microsoft/mssql-release";
+        clone_target = "https://github.com/Microsoft/homebrew-mssql-release";
+        force_auto_update = true;
+      }
+    ];
+
     brews = [
       "kafka"
       "pyenv"
       "jenv"
+
+      "unixodbc"
+      "msodbcsql18"
     ];
 
     casks = [
@@ -69,6 +97,9 @@ with lib; {
 
       # Window creation
       window_origin_display = "focused";
+
+      # Spacebar integration
+      external_bar = "all:${barHeight}:0";
     };
 
     extraConfig = ''
@@ -93,113 +124,126 @@ with lib; {
   services.spacebar = {
     enable = true;
     package = pkgs.spacebar;
-    # config = {};
-    extraConfig = ''
-      #!/usr/bin/env sh
+    config =
+    let
+      icon_color = "0xFF458588";
+      foreground_color = "0xFFA8A8A8";
+      background_color = config.services.yabai.config.normal_window_border_color;
+    in
+    {
+      display = "all";
+      position = "top";
+      height = barHeight;
 
-      spacebar -m config position             top
-      spacebar -m config height               26
-      spacebar -m config title                on
-      spacebar -m config spaces               on
-      spacebar -m config clock                on
-      spacebar -m config power                on
-      spacebar -m config padding_left         20
-      spacebar -m config padding_right        20
-      spacebar -m config spacing_left         25
-      spacebar -m config spacing_right        15
-      spacebar -m config text_font            "NotoSansM Nerd Font Mono:Bold:12.0"
-      spacebar -m config icon_font            "NotoSansM Nerd Font Mono:Solid:12.0"
-      spacebar -m config background_color     0xff202020
-      spacebar -m config foreground_color     0xffa8a8a8
-      spacebar -m config space_icon_color     0xff458588
-      spacebar -m config power_icon_color     0xffcd950c
-      spacebar -m config battery_icon_color   0xffd75f5f
-      spacebar -m config dnd_icon_color       0xffa8a8a8
-      spacebar -m config clock_icon_color     0xffa8a8a8
-      spacebar -m config power_icon_strip      
-      spacebar -m config space_icon_strip     I II III IV V VI VII VIII IX X
-      spacebar -m config space_icon           
-      spacebar -m config clock_icon           
-      spacebar -m config dnd_icon             
-      spacebar -m config clock_format         "%d/%m/%y %R"
-      spacebar -m config right_shell          on
-      spacebar -m config right_shell_icon     
-      spacebar -m config right_shell_command  "whoami"
+      title = "on";
 
-      echo "spacebar configuration loaded.."
-    '';
+      padding_left = "20";
+      padding_right = "20";
+      spacing_left = "25";
+      spacing_right = "15";
+
+      text_font = ''"NotoMono Nerd Font Mono:Regular:12.0"'';
+      icon_font = ''"NotoMono Nerd Font Mono:Regular:14.0"'';
+
+      inherit background_color foreground_color;
+
+      power = "on";
+      power_icon_color = icon_color;
+      battery_icon_color = icon_color;
+      power_icon_strip = "󱐥 󰚥";
+
+      spaces = "on";
+      space_icon = "";
+      space_icon_color = icon_color;
+      spaces_for_all_displays = "off";
+      space_icon_strip = "1 2 3 4 5 6 7 8 9 10";
+
+      dnd = "on";
+      dnd_icon = "";
+      dnd_icon_color = icon_color;
+
+      clock = "on";
+      clock_icon = "";
+      clock_icon_color = icon_color;
+      clock_format = ''"%d/%m/%y %R"'';
+
+      # right_shell = "on";
+      # right_shell_icon = "";
+      # right_shell_icon_color = icon_color;
+      # right_shell_command = ''echo hi'';
+    };
   };
 
   services.skhd =
     let
       modifier = "alt";
     in
-  {
-    # Don't forget to disable "Secure Keyboard Entry" by opening the terminal application
-    enable = true;
-    skhdConfig = ''
-      # To debug "secure keyboard entry" error:
-      # https://github.com/koekeishiya/skhd/issues/48
-      # ioreg -l -w 0 | perl -nle 'print $1 if /"kCGSSessionSecureInputPID"=(\d+)/' | uniq | xargs -I{} ps -p {} -o comm=
+    {
+      # Don't forget to disable "Secure Keyboard Entry" by opening the terminal application
+      enable = true;
+      skhdConfig = ''
+        # To debug "secure keyboard entry" error:
+        # https://github.com/koekeishiya/skhd/issues/48
+        # ioreg -l -w 0 | perl -nle 'print $1 if /"kCGSSessionSecureInputPID"=(\d+)/' | uniq | xargs -I{} ps -p {} -o comm=
 
-      # Focus window
-      ${modifier} - left : yabai -m window --focus west || yabai -m display --focus west
-      ${modifier} - right : yabai -m window --focus east || yabai -m display --focus east
-      ${modifier} - up : yabai -m window --focus north || yabai -m display --focus north
-      ${modifier} - down : yabai -m window --focus south || yabai -m display --focus south
+        # Focus window
+        ${modifier} - left : yabai -m window --focus west || yabai -m display --focus west
+        ${modifier} - right : yabai -m window --focus east || yabai -m display --focus east
+        ${modifier} - up : yabai -m window --focus north || yabai -m display --focus north
+        ${modifier} - down : yabai -m window --focus south || yabai -m display --focus south
 
-      # Move managed window
-      ${modifier} - space : yabai -m window --toggle split
-      ${modifier} + shift - left : yabai -m window --swap west || (yabai -m window --display west && yabai -m display --focus west)
-      ${modifier} + shift - right : yabai -m window --swap east || (yabai -m window --display east && yabai -m display --focus east)
-      ${modifier} + shift - up : yabai -m window --swap north || (yabai -m window --display north && yabai -m display --focus north)
-      ${modifier} + shift - down : yabai -m window --swap south || (yabai -m window --display south && yabai -m display --focus south)
+        # Move managed window
+        ${modifier} - space : yabai -m window --toggle split
+        ${modifier} + shift - left : yabai -m window --swap west || (yabai -m window --display west && yabai -m display --focus west)
+        ${modifier} + shift - right : yabai -m window --swap east || (yabai -m window --display east && yabai -m display --focus east)
+        ${modifier} + shift - up : yabai -m window --swap north || (yabai -m window --display north && yabai -m display --focus north)
+        ${modifier} + shift - down : yabai -m window --swap south || (yabai -m window --display south && yabai -m display --focus south)
 
-      # Fullscreen
-      ${modifier} - f : yabai -m window --toggle native-fullscreen
+        # Fullscreen
+        ${modifier} - f : yabai -m window --toggle native-fullscreen
 
-      # Close
-      ${modifier} + shift - q : yabai -m window --close
+        # Close
+        ${modifier} + shift - q : yabai -m window --close
 
-      # Terminal
-      ${modifier} - return : ${pkgs.alacritty}/bin/alacritty
+        # Terminal
+        ${modifier} - return : ${pkgs.alacritty}/bin/alacritty
 
-      # Resizing
-      ${modifier} + ctrl - left : yabai -m window --resize left:-100:0 || yabai -m window --resize right:-100:0
-      ${modifier} + ctrl - right : yabai -m window --resize right:100:0 || yabai -m window --resize left:100:0
-      ${modifier} + ctrl - up : yabai -m window --resize top:0:-100 || yabai -m window --resize bottom:0:-100
-      ${modifier} + ctrl - down : yabai -m window --resize bottom:0:100 || yabai -m window --resize top:0:100
+        # Resizing
+        ${modifier} + ctrl - left : yabai -m window --resize left:-100:0 || yabai -m window --resize right:-100:0
+        ${modifier} + ctrl - right : yabai -m window --resize right:100:0 || yabai -m window --resize left:100:0
+        ${modifier} + ctrl - up : yabai -m window --resize top:0:-100 || yabai -m window --resize bottom:0:-100
+        ${modifier} + ctrl - down : yabai -m window --resize bottom:0:100 || yabai -m window --resize top:0:100
 
-      # Toggle focus & center window
-      ${modifier} + shift - space : yabai -m window --toggle float && yabai -m window --grid 4:4:1:1:2:2 && yabai -m window --focus
+        # Toggle focus & center window
+        ${modifier} + shift - space : yabai -m window --toggle float && yabai -m window --grid 4:4:1:1:2:2 && yabai -m window --focus
 
-      # Focus monitor
-      ${modifier} - 1 : yabai -m display --focus 1
-      ${modifier} - 2 : yabai -m display --focus 2
-      ${modifier} - 3 : yabai -m display --focus 3
+        # Focus monitor
+        ${modifier} - 1 : yabai -m display --focus 1
+        ${modifier} - 2 : yabai -m display --focus 2
+        ${modifier} - 3 : yabai -m display --focus 3
 
-      # Send window to monitor
-      ${modifier} + shift - 1 : yabai -m window --display 1 && yabai -m display --focus 1
-      ${modifier} + shift - 2 : yabai -m window --display 2 && yabai -m display --focus 2
-      ${modifier} + shift - 3 : yabai -m window --display 3 && yabai -m display --focus 3
+        # Send window to monitor
+        ${modifier} + shift - 1 : yabai -m window --display 1 && yabai -m display --focus 1
+        ${modifier} + shift - 2 : yabai -m window --display 2 && yabai -m display --focus 2
+        ${modifier} + shift - 3 : yabai -m window --display 3 && yabai -m display --focus 3
 
-      # Set split direction
-      ${modifier} - v : yabai -m window --insert south
-      ${modifier} - h : yabai -m window --insert east
+        # Set split direction
+        ${modifier} - v : yabai -m window --insert south
+        ${modifier} - h : yabai -m window --insert east
 
-      # Reset split ratio
-      ${modifier} + ctrl - r : yabai -m window --ratio abs:0.5
+        # Reset split ratio
+        ${modifier} + ctrl - r : yabai -m window --ratio abs:0.5
 
-      # Restart yabai
-      ${modifier} + shift - r : pkill yabai; yabai &
+        # Restart yabai
+        ${modifier} + shift - r : pkill yabai; pkill spacebar
 
-      # Enable/disable yabai tiling
-      ${modifier} + shift - e : if [ "$(yabai -m config layout)" == "bsp" ]; then yabai -m config layout float; else yabai -m config layout bsp; fi
+        # Enable/disable yabai tiling
+        ${modifier} + shift - e : if [ "$(yabai -m config layout)" == "bsp" ]; then yabai -m config layout float; else yabai -m config layout bsp; fi
 
-      # Toggle dock visibility
-      cmd - d: osascript -e 'tell application "System Events" to set the autohide of the dock preferences to not (get the autohide of the dock preferences)'
-    '';
-  };
+        # Toggle dock visibility
+        cmd - d: osascript -e 'tell application "System Events" to set the autohide of the dock preferences to not (get the autohide of the dock preferences)'
+      '';
+    };
 
   home-manager.users.dorchard = {
     xdg.configFile."wrap.yaml" = {
@@ -270,6 +314,11 @@ with lib; {
       mongosh
       openldap
       terraform
+      rustup
+
+      # SQL Server
+      # unixODBC
+      # unixODBCDrivers.msodbcsql17
 
       # Window manager/hotkeys
       skhd
