@@ -89,6 +89,22 @@
         "type": "github"
       }
     },
+    "base16-gtk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1689667569,
+        "narHash": "sha256-ujVt0JpM6QPPftM2gU9IlRoWSt16APwROt4Y83SvyWo=",
+        "owner": "tinted-theming",
+        "repo": "base16-gtk-flatcolor",
+        "rev": "65817e4c60f8d48973b1baf17cc302df64216e20",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "base16-gtk-flatcolor",
+        "type": "github"
+      }
+    },
     "base16-mako": {
       "flake": false,
       "locked": {
@@ -541,6 +557,7 @@
         "base16-alacritty": "base16-alacritty",
         "base16-atelier": "base16-atelier",
         "base16-fish-shell": "base16-fish-shell",
+        "base16-gtk": "base16-gtk",
         "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",
         "base16-sway": "base16-sway",

@@ -1,13 +1,13 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
+{ config
+, lib
+, pkgs
+, inputs
+, ...
 }:
 with lib; let
   cfg = config.sys;
-in {
+in
+{
   imports = [
     ./boot
     ./graphical
@@ -30,7 +30,7 @@ in {
       default = "david";
     };
 
-    low-power = mkEnableOption "low power mode" // {default = false;};
+    low-power = mkEnableOption "low power mode" // { default = false; };
   };
 
   config = {
@@ -62,12 +62,12 @@ in {
       buildMachines = mkIf cfg.low-power [
         {
           hostName = "cuttlefish";
-          systems = ["x86_64-linux" "aarch64-linux"];
+          systems = [ "x86_64-linux" "aarch64-linux" ];
 
           maxJobs = 4;
           speedFactor = 1;
-          supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-          mandatoryFeatures = [];
+          supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+          mandatoryFeatures = [ ];
         }
       ];
 
@@ -105,7 +105,7 @@ in {
         "gammastep" = {
           isAllowed = true;
           isSystem = false;
-          users = ["1000"];
+          users = [ "1000" ];
         };
       };
     };
@@ -137,10 +137,10 @@ in {
     # Shells
     environment.binsh = "${pkgs.dash}/bin/dash";
     programs.fish.enable = true;
-    environment.shells = [pkgs.fish];
+    environment.shells = [ pkgs.fish ];
 
     # Packages
-    environment.systemPackages = with pkgs // cfg.pkgs; [
+    environment.systemPackages = with pkgs; [
       # Terminal
       fish
 
