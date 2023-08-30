@@ -402,14 +402,16 @@
 
       inherit overlays;
 
-      packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellScript "rebuild" ''darwin-rebuild switch --flake ".#$(hostname)"'';
+      packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellScript "rebuild" ''
+        darwin-rebuild switch --flake ".#$(hostname)"
+        nix fmt
+      '';
 
       apps.aarch64-darwin.default = {
         type = "app";
         program = "${packages.aarch64-darwin.rebuild}";
       };
 
-      # formatter = inputs.flake-utils.lib.eachDefaultSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
-      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+      formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
     };
 }
