@@ -16,18 +16,19 @@ in {
 
     extraOptions = ''
       experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
     '';
 
     gc = {
       automatic = true;
 
       interval = {
-        Hour = 3;
+        Hour = 12;
         Minute = 15;
       };
 
       options = "--delete-older-than 14d";
-
       user = "dorchard";
     };
   };
@@ -181,7 +182,7 @@ in {
       clock = "on";
       clock_icon = "";
       clock_icon_color = icon_color;
-      clock_format = ''"%d/%m/%y %R"'';
+      clock_format = ''"%Y-%m-%d %H:%M:%S"'';
 
       # right_shell = "on";
       # right_shell_icon = "";
@@ -260,102 +261,5 @@ in {
     '';
   };
 
-  home-manager.users.dorchard = {
-    xdg.configFile."wrap.yaml" = {
-      text = mkForce null;
-      source = ./wrap.yaml;
-    };
-
-    home.packages = with pkgs; [
-      kubectl
-
-      # gcloud components install gke-gcloud-auth-plugin
-      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
-        gke-gcloud-auth-plugin
-      ]))
-
-      rnix-lsp # Nix language server
-
-      # Use a new launcher since spotlight doesn't find nix GUI applications:
-      # https://github.com/nix-community/home-manager/issues/1341
-      raycast
-
-      # Fonts
-      # Nerdfonts is huge, so only install specific fonts
-      # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
-      (nerdfonts.override {
-        fonts = [
-          "Noto"
-        ];
-      })
-
-      noto-fonts-emoji
-
-      # Java tools
-      visualvm
-      jetbrains.idea-ultimate
-      gradle
-      groovy
-      google-java-format
-      maven
-
-      # Golang
-      go
-      protobuf
-
-      # Kafka
-      kcat
-      kafkactl
-
-      # Python
-      # python38
-      # python39
-      # python310Full
-      # python311
-      # python312
-
-      # Shell tools
-      gnused
-      coreutils-prefixed
-      gawk
-
-      # Bazel
-      bazelisk
-      bazel-buildtools
-
-      # Other tools
-      ansible
-      # nodejs
-      mongosh
-      openldap
-      terraform
-      rustup
-
-      # SQL Server
-      # unixODBC
-      # unixODBCDrivers.msodbcsql17
-
-      # Window manager/hotkeys
-      skhd
-
-      # Business apps
-      slack
-      zoom-us
-    ];
-
-    home.sessionVariables = {
-      # Java versions
-      JAVA_HOME = "${pkgs.jdk}/lib/openjdk";
-      JAVA_8_HOME = "${pkgs.jdk8}/lib/openjdk";
-      JAVA_11_HOME = "${pkgs.jdk11}/lib/openjdk";
-    };
-
-    programs.ssh = {
-      enable = true;
-      matchBlocks."d1lrtcappprd?".extraOptions = {
-        HostKeyAlgorithms = "+ssh-rsa";
-        PubkeyAcceptedAlgorithms = "+ssh-rsa";
-      };
-    };
-  };
+  home-manager.users.dorchard = import ./home.nix;
 }

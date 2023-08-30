@@ -403,7 +403,7 @@
       inherit overlays;
 
       packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellScript "rebuild" ''
-        darwin-rebuild switch --flake ".#$(hostname)"
+        darwin-rebuild switch --flake ".#$(hostname)" && \
         nix fmt
       '';
 
