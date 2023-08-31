@@ -402,6 +402,22 @@
 
       inherit overlays;
 
+      packages.x86_64-linux.rebuild = nixpkgs.legacyPackages.x86_64-linux.writeShellApplication {
+        name = "rebuild";
+        text = ''
+          # Move to the flake root
+          while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
+            cd ..
+          done
+
+          # Rebuild
+          sudo nixos-rebuild switch
+
+          # Format
+          nix fmt
+        '';
+      };
+
       packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellApplication {
         name = "rebuild";
         text = ''
@@ -424,10 +440,14 @@
         '';
       };
 
-      apps.aarch64-darwin.default = {
-        type = "app";
-        program = "${packages.aarch64-darwin.rebuild}/bin/rebuild";
-      };
+      apps = inputs.flake-utils.lib.eachDefaultSystemMap (
+        system: {
+          default = {
+            type = "app";
+            program = "${packages.${system}.rebuild}/bin/rebuild";
+          };
+        }
+      );
 
       formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
     };

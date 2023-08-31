@@ -41,6 +41,8 @@ in {
     # Binary caches
     nix = {
       settings = {
+        trusted-users = ["@wheel"];
+
         substituters =
           [
             # Default priority is 50, lower number is higher priority
