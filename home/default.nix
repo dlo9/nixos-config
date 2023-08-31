@@ -576,7 +576,6 @@ in {
       fish
       tmux
       starship
-      zoxide
       nodejs # For vim plugins
 
       # bash to fish converter

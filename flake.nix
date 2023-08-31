@@ -402,14 +402,31 @@
 
       inherit overlays;
 
-      packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellScript "rebuild" ''
-        darwin-rebuild switch --flake ".#$(hostname)" && \
-        nix fmt
-      '';
+      packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellApplication {
+        name = "rebuild";
+        text = ''
+          # Move to the flake root
+          while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
+            cd ..
+          done
+
+          # Copy cert file already on the machine
+          certSource="/etc/ssl/afscerts/ca-certificates.crt"
+          if [ -f "$certSource" ]; then
+            cp "$certSource" "hosts/mallow/ca-certificates.crt"
+          fi
+
+          # Rebuild
+          darwin-rebuild switch --flake ".#$(hostname)"
+
+          # Format
+          nix fmt
+        '';
+      };
 
       apps.aarch64-darwin.default = {
         type = "app";
-        program = "${packages.aarch64-darwin.rebuild}";
+        program = "${packages.aarch64-darwin.rebuild}/bin/rebuild";
       };
 
       formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);

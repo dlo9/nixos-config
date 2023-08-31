@@ -95,9 +95,47 @@ in {
 
   home.sessionVariables = {
     # Java versions
-    JAVA_HOME = "${pkgs.jdk}/lib/openjdk";
-    JAVA_8_HOME = "${pkgs.jdk8}/lib/openjdk";
-    JAVA_11_HOME = "${pkgs.jdk11}/lib/openjdk";
+    # JAVA_HOME = pkgs.jdk;
+    # JAVA_8_HOME = pkgs.jdk8;
+    # JAVA_11_HOME = pkgs.jdk11;
+
+    # HOMEBREW_CURLRC = "1";
+    RUST_BACKTRACE = "1";
+    TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
+    USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
+  };
+
+  home.sessionPath = [
+    "/Users/dorchard/.wrap/shims"
+    "/Users/dorchard/.local/bin"
+    "/Users/dorchard/code/dorchard/adhoc/bin"
+    "/Users/dorchard/.cargo/bin"
+    "/Users/dorchard/.jenv/bin"
+    "/Users/dorchard/go/bin"
+    "/opt/homebrew/bin"
+  ];
+
+  programs.fish.interactiveShellInit = ''
+    # Jenv rehash is really slow -- exclude it from the init process
+    # so that new tmux windows don't take 1s+ to create
+    jenv init - fish | command grep -Ev 'jenv rehash|refresh-plugins' | source | eval &
+  '';
+
+  programs.fish.functions = {
+    convert-logs-timestamp = ''
+      jq '.ts |= (. | tostring [0:10] | tonumber | localtime | strftime("%Y-%m-%dT%H:%M:%S%z"))' $argv
+    '';
+
+    get-random = ''
+      while true
+        uuidgen | tr -d '\n' | pbcopy
+        sleep 0.2
+      end
+    '';
+
+    unfix = ''
+      tr '\001\002' '|?' $argv
+    '';
   };
 
   programs.ssh = {
@@ -112,5 +150,62 @@ in {
     setWallpaper = ''
       osascript -e 'tell application "System Events" to tell every desktop to set picture to "${wallpaper}"'
     '';
+
+    setupJenv = ''
+      PATH="$PATH:/opt/homebrew/bin"
+
+      # The export plugin needs to be run to auto-export $JAVA_HOME.
+      jenv sh-enable-plugin export >/dev/null
+
+      jenv add ${pkgs.jdk19}
+      jenv add ${pkgs.jdk8}
+      jenv add ${pkgs.jdk11}
+      jenv global 19
+
+      jenv rehash
+    '';
   };
+
+  home.file = {
+    # Silence "last login" text when a new terminal is opened
+    ".hushlogin".text = "";
+  };
+
+  home.shellAliases = let
+    team = "trade-processing";
+    gitops = "~/code/gitops";
+    app = "${gitops}/deploy/app";
+    afsapi = "${gitops}/deploy/afsapi";
+    infra = "~/code/apexinternal-gitops/kubernetes/infra/team/trade-processing/overlays";
+
+    env-dirs = env: {
+      "${env}" = "pushd ${app}/${env}/${team}";
+      "${env}-afs" = "pushd ${afsapi}/${env}/${team}";
+      "${env}-infra" = "pushd ${infra}/${env}/releases";
+    };
+  in
+    {
+      gitops = "pushd ${gitops}";
+
+      mono = "pushd ~/code/source";
+      tp = "pushd ~/code/trade-processing";
+
+      braggart = "pushd ~/code/braggart";
+      hero = "pushd ~/code/herodotus";
+      hippo = "pushd ~/code/hippocrates";
+
+      rtce = "pushd ~/code/rtce";
+      rtceprod = "pushd ~/code/rtceprod/servers/Gateways/Customer/FBI";
+
+      vesper = "pushd ~/code/vesper";
+      vesperconfig = "pushd ~/code/vesper/config";
+
+      adhoc = "pushd ~/code/dorchard/adhoc";
+      queries = "pushd ~/code/dorchard/adhoc/queries";
+      g = "pushd ~/g";
+    }
+    // (env-dirs "dev")
+    // (env-dirs "stg")
+    // (env-dirs "uat")
+    // (env-dirs "prd");
 }
