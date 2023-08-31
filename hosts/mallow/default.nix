@@ -215,8 +215,8 @@ in {
       ${modifier} + shift - down : yabai -m window --swap south || (yabai -m window --display south && yabai -m display --focus south)
 
       # Fullscreen
-      ${modifier} - f : yabai -m window --toggle zoom-fullscreen
-      ${modifier} + shift - f : yabai -m window --toggle native-fullscreen
+      ${modifier} - f : yabai -m window --toggle native-fullscreen
+      ${modifier} + shift - f : yabai -m window --toggle zoom-fullscreen
 
       # Close
       ${modifier} + shift - q : yabai -m window --close
