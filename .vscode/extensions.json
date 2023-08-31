@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"jnoortheen.nix-ide",
+		"kamadorueda.alejandra"
+	],
+
+	"unwantedRecommendations": [ ]
+}
