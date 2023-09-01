@@ -91,6 +91,7 @@ in {
     # Business apps
     slack
     zoom-us
+    teams
   ];
 
   home.sessionVariables = {

@@ -469,7 +469,7 @@
         aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
 
         x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
-        aarch64-darwin.rebuild = rebuild-darwin "aarch64-linux";
+        aarch64-darwin.rebuild = rebuild-darwin "aarch64-darwin";
       };
 
       apps = inputs.flake-utils.lib.eachDefaultSystemMap (
