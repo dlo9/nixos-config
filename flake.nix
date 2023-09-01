@@ -402,42 +402,74 @@
 
       inherit overlays;
 
-      packages.x86_64-linux.rebuild = nixpkgs.legacyPackages.x86_64-linux.writeShellApplication {
-        name = "rebuild";
-        text = ''
-          # Move to the flake root
+      packages = let
+        change-to-flake-root = ''
           while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
             cd ..
           done
-
-          # Rebuild
-          sudo nixos-rebuild switch
-
-          # Format
-          nix fmt
         '';
-      };
 
-      packages.aarch64-darwin.rebuild = nixpkgs.legacyPackages.aarch64-darwin.writeShellApplication {
-        name = "rebuild";
-        text = ''
-          # Move to the flake root
-          while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
-            cd ..
-          done
+        generate-hardware = ''
+          config="hosts/$(hostname)/hardware/generated.nix"
+          mkdir "$(dirname "$config")"
+          touch "$config"
 
-          # Copy cert file already on the machine
-          certSource="/etc/ssl/afscerts/ca-certificates.crt"
-          if [ -f "$certSource" ]; then
-            cp "$certSource" "hosts/mallow/ca-certificates.crt"
-          fi
+          # Must use `sudo` so that all mounts are visible
+          sudo nixos-generate-config --show-hardware-config | \
+            scripts/maintenance/process-hardware-config.awk > "$config"
 
-          # Rebuild
-          darwin-rebuild switch --flake ".#$(hostname)"
-
-          # Format
-          nix fmt
+          nix fmt "$config"
         '';
+
+        generate-hardware-linux = system:
+          nixpkgs.legacyPackages.${system}.writeShellApplication {
+            name = "generate-hardware";
+            text = ''
+              ${change-to-flake-root}
+              ${generate-hardware}
+            '';
+          };
+
+        rebuild-linux = system:
+          nixpkgs.legacyPackages.${system}.writeShellApplication {
+            name = "rebuild";
+            text = ''
+              ${change-to-flake-root}
+              ${generate-hardware}
+
+              # Rebuild
+              sudo nixos-rebuild switch
+
+              # Format
+              nix fmt
+            '';
+          };
+
+        rebuild-darwin = system:
+          nixpkgs.legacyPackages.${system}.writeShellApplication {
+            name = "rebuild";
+            text = ''
+              ${change-to-flake-root}
+
+              # Copy cert file already on the machine
+              certSource="/etc/ssl/afscerts/ca-certificates.crt"
+              if [ -f "$certSource" ]; then
+                cp "$certSource" "hosts/mallow/ca-certificates.crt"
+              fi
+
+              # Rebuild
+              darwin-rebuild switch --flake ".#$(hostname)"
+
+              # Format
+              nix fmt
+            '';
+          };
+      in {
+        x86_64-linux.rebuild = rebuild-linux "x86_64-linux";
+        aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
+
+        x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
+        aarch64-darwin.rebuild = rebuild-darwin "aarch64-linux";
       };
 
       apps = inputs.flake-utils.lib.eachDefaultSystemMap (
@@ -445,6 +477,11 @@
           default = {
             type = "app";
             program = "${packages.${system}.rebuild}/bin/rebuild";
+          };
+
+          generate-hardware = {
+            type = "app";
+            program = "${packages.${system}.generate-hardware}/bin/generate-hardware";
           };
         }
       );

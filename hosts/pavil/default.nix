@@ -7,11 +7,7 @@
 }:
 with lib; {
   imports = [
-    ./hardware.nix
-    inputs.vscode-server.nixosModule
-    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
-    inputs.nixos-hardware.nixosModules.common-cpu-amd
-    inputs.nixos-hardware.nixosModules.common-gpu-amd
+    ./hardware
   ];
 
   config = {
