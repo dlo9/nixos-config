@@ -94,11 +94,12 @@ in {
     teams
   ];
 
-  home.sessionVariables = {
+  home.sessionVariables = rec {
     # Java versions
-    # JAVA_HOME = pkgs.jdk;
-    # JAVA_8_HOME = pkgs.jdk8;
-    # JAVA_11_HOME = pkgs.jdk11;
+    JAVA_HOME_8 = pkgs.jdk8;
+    JAVA_HOME_11 = pkgs.jdk11;
+    JAVA_HOME_17 = pkgs.jdk17;
+    JAVA_HOME_19 = pkgs.jdk19;
 
     # HOMEBREW_CURLRC = "1";
     RUST_BACKTRACE = "1";
@@ -158,9 +159,10 @@ in {
       # The export plugin needs to be run to auto-export $JAVA_HOME.
       jenv sh-enable-plugin export >/dev/null
 
-      jenv add ${pkgs.jdk19}
       jenv add ${pkgs.jdk8}
       jenv add ${pkgs.jdk11}
+      jenv add ${pkgs.jdk17}
+      jenv add ${pkgs.jdk19}
       jenv global 19
 
       jenv rehash

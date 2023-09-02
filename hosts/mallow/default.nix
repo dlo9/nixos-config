@@ -275,6 +275,8 @@ in {
       AppleShowAllFiles = true;
     };
 
+    finder.ShowPathbar = true;
+
     dock = {
       autohide = true;
       tilesize = 16;
