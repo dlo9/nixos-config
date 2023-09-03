@@ -1,3 +1,7 @@
+- Show battery life in waybar (use `acpi -b`?)
+
+
+
 - Test auto-update with flake
 - Add root user config?
 - Nix-store dataset

@@ -1,0 +1,75 @@
+variables:
+  CUTTLEFISH_SSH_PORT: 32085
+  CUTTLEFISH_SSH_URL: ssh.sigpanic.com
+
+  DRYWELL_SSH_PORT: 57332
+  DRYWELL_SSH_URL: drywell.sigpanic.com
+
+aliases:
+  - alias: drywell
+    program: ssh
+
+    keywords:
+      - keys: [--local]
+        values: [192.168.1.200]
+      - keys: [--remote]
+        values: [-p, $DRYWELL_SSH_PORT, $DRYWELL_SSH_URL]
+
+  - alias: cuttlefish
+    program: ssh
+
+    keywords:
+      - keys: [--local]
+        values: [192.168.1.230]
+      - keys: [--remote]
+        values: [-p, $CUTTLEFISH_SSH_PORT, $CUTTLEFISH_SSH_URL]
+
+  # System yadm
+  # Clone via: syadm clone -w / <repo>
+  - alias: syadm
+    program: sudo
+
+    arguments:
+      - key: /etc/yadm/data
+      - key: --yadm-data
+      - key: /etc/yadm/config
+      - key: --yadm-dir
+      - key: yadm
+      - key: GIT_SSH_COMMAND=ssh -i $HOME/.ssh/id_rsa
+      - key: HOME=$HOME
+
+  - alias: a
+    program: awk
+
+    keywords:
+      - keys: [--unique, -u]
+        values: ['!a[\$0]++']
+
+  - alias: theme
+    program: sh
+
+    arguments:
+      - key: -c
+
+    keywords:
+      - keys: [--iterate]
+        values:
+          - |
+            for theme in \$(flavours list | awk -v RS=' ' '!/-light/'); do
+              echo \$theme
+              flavours apply \$theme
+              sleep 1
+            done
+      - keys: [--iterate-random]
+        values:
+          - |
+            for theme in \$(flavours list | awk -v RS=' ' '!/-light/' | sort -R); do
+              echo \$theme
+              flavours apply \$theme
+              sleep 1
+            done
+      - keys: [--apply]
+        values: ['flavours apply \$(cat ~/.local/share/flavours/lastscheme)']
+      - keys: [--show]
+        values:
+          - flavours info "\$(flavours current)" | awk '!a[\$0]++'

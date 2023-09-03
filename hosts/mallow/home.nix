@@ -4,17 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
-  wallpaper = pkgs.fetchurl {
-    name = "spaceman";
-    url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
-    sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
-  };
-in {
-  xdg.configFile."wrap.yaml" = {
-    text = mkForce null;
-    source = ./wrap.yaml;
-  };
+with lib; {
+  xdg.configFile."wrap.yaml".source = ./wrap.yaml;
 
   home.packages = with pkgs; [
     kubectl
@@ -150,7 +141,7 @@ in {
 
   home.activation = {
     setWallpaper = ''
-      osascript -e 'tell application "System Events" to tell every desktop to set picture to "${wallpaper}"'
+      osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.wallpapers.default}"'
     '';
 
     setupJenv = ''

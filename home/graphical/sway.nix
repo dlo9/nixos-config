@@ -3,56 +3,13 @@
   pkgs,
   lib,
   inputs,
+  isLinux,
   ...
 }:
 with lib;
 with types;
-with builtins; let
-  cfg = config.home.gui.sway;
-
-  wallpaper = fetchurl {
-    # name = "spaceman";
-    # url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
-    # sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
-
-    name = "elementary-os-7";
-    url = "https://raw.githubusercontent.com/elementary/wallpapers/3f36a60cbb9b8b2a37d0bc5129365ac2ac7acf98/backgrounds/Photo%20of%20Valley.jpg";
-    sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
-
-    # name = "pink-sunset";
-    # url = https://cutewallpaper.org/22/retro-neon-race-4k-wallpapers/285729412.jpg;
-    # sha256 = lib.fakeHash;
-
-    # name = "mushroom";
-    # url = "https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/f21eae05-9d02-40a7-ac60-a728c961eba0/BRONZE%C2%A9Antonio+Coelho_Foggy+morning.jpg";
-    # sha256 = lib.fakeHash;
-
-    # name = "mountain-milky-way";
-    # url = "https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/10757377-0072-4864-bcf9-17bc4df0d252/GOLD%C2%A9Jake+Mosher_The+Grand+Tetons.jpg";
-    # sha256 = lib.fakeHash;
-
-    # name = "mountain-reflection";
-    # url = "https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/956426d5-8a84-493d-af76-fee19de5a29d/SILVER%C2%A9Beatrice+Wong_Parallel+universe.jpg";
-    # sha256 = lib.fakeHash;
-
-    # name = "lightning-cloud";
-    # url = "https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/63ff2ce8-8b10-48a1-8825-250f8d7f6759/BRONZE%C2%A9Miki+Spitzer_Storm+clouds+over+a+farm.jpg";
-    # sha256 = lib.fakeHash;
-
-    # name = "birds-with-red-background";
-    # url = "https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/f31fc21f-e6cd-407d-bc72-1a856ab56c75/BRONZE%C2%A9Silke+Hullmann_On+their+way+to+Mars.jpg";
-    # sha256 = lib.fakeHash;
-  };
-in {
-  imports = [
-    ./bar
-  ];
-
-  options.home.gui.sway = {
-    enable = mkEnableOption "sway window manager" // {default = config.home.gui.enable;};
-  };
-
-  config = mkIf cfg.enable {
+with builtins; {
+  config = mkIf config.graphical.enable {
     home.packages = with pkgs; [
       # Clipboard
       wl-clipboard
@@ -70,7 +27,7 @@ in {
         textColor = base07;
       in {
         indicator-caps-lock = true;
-        image = "${wallpaper}";
+        image = "${config.wallpapers.default}";
         scaling = "fill";
         font = "NotoSansM Nerd Font Mono";
         font-size = 20;
@@ -195,7 +152,7 @@ in {
     services = {
       # Notifications
       mako = {
-        enable = true;
+        enable = mkDefault isLinux;
         extraConfig = readFile (config.scheme inputs.base16-mako);
       };
 
@@ -242,7 +199,7 @@ in {
     wayland.windowManager.sway = let
       modifier = "Mod1";
     in {
-      enable = true;
+      enable = mkDefault isLinux;
 
       xwayland = true;
 
@@ -346,7 +303,7 @@ in {
         # See available outputs with: swaymsg -t get_outputs
         output = mkDefault {
           "*" = {
-            bg = "${wallpaper} fill";
+            bg = "${config.wallpapers.default} fill";
             adaptive_sync = "on";
           };
           #HEADLESS-1 = { resolution = "1920x1080"; position = "0,0"; };
@@ -542,7 +499,7 @@ in {
           "${modifier}+Return" = "exec ${terminal}";
 
           # Open the power menu
-          "${modifier}+Shift+e" = "exec ${pkgs.callPackage ./bar/power.nix {}}/bin/power.sh";
+          "${modifier}+Shift+e" = "exec ${pkgs.callPackage ./waybar/power.nix {}}/bin/power.sh";
 
           # Kill focused window
           "${modifier}+Shift+q" = "kill";

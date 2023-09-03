@@ -10,7 +10,6 @@
     nixpkgs-kernel.url = github:NixOS/nixpkgs/nixpkgs-unstable;
 
     # Darwin settings
-    nixpkgs-darwin.url = github:NixOS/nixpkgs/nixpkgs-23.05-darwin;
     nix-darwin = {
       url = github:LnL7/nix-darwin/release-23.05;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,15 +38,6 @@
       #url = github:nix-community/home-manager/release-23.05;
       url = github:nix-community/home-manager/53ccbe017079d5fba2b605cb9f9584629bebd03a;
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Home manager
-    home-manager-darwin = {
-      # TODO: change back when babelfish commit is in the stable release:
-      # https://github.com/nix-community/home-manager/commit/53ccbe017079d5fba2b605cb9f9584629bebd03a
-      #url = github:nix-community/home-manager/release-23.05;
-      url = github:nix-community/home-manager/53ccbe017079d5fba2b605cb9f9584629bebd03a;
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     # Docker-compose in Nix
@@ -257,7 +247,7 @@
           })
 
           # Home-manager configuration
-          ./home/nixos-module.nix
+          ./home/system-module.nix
 
           # Passed-in module
           extraSettings
@@ -301,7 +291,7 @@
             })
 
             # Home-manager configuration
-            ./home/darwin-module.nix
+            ./home/system-module.nix
 
             ({
               config,

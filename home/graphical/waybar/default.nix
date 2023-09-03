@@ -3,22 +3,15 @@
   pkgs,
   lib,
   inputs,
+  isLinux,
   ...
 }:
-with lib;
-with types;
-with builtins; let
-  cfg = config.home.gui.sway.waybar;
-in {
-  options.home.gui.sway.waybar = {
-    enable = mkEnableOption "waybar" // {default = config.home.gui.enable;};
-  };
-
-  config = mkIf cfg.enable {
+with lib; {
+  config = mkIf config.graphical.enable {
     programs = {
       # System bar
       waybar = {
-        enable = true;
+        enable = mkDefault isLinux;
 
         # https://github.com/Alexays/Waybar/wiki/Configuration
         # Number formatting: https://fmt.dev/latest/syntax.html#format-specification-mini-language

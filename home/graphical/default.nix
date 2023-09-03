@@ -3,154 +3,32 @@
   pkgs,
   lib,
   inputs,
+  isLinux,
   ...
 }:
-with lib;
-with types;
-with builtins; let
-  cfg = config.home.gui;
-  isLinux = pkgs.stdenv.hostPlatform.isLinux;
-in {
+with lib; {
   imports = [
-    ./sway
+    ./sway.nix
+    ./waybar
+    ./web.nix
   ];
 
-  options.home.gui = {
-    enable = mkEnableOption "user graphical programs" // {default = true;};
-    bluetooth.enable = mkEnableOption "bluetooth applet" // {default = false;};
-  };
-
-  config = mkIf cfg.enable {
-    home.pointerCursor = {
-      name = "Numix-Cursor-Light";
-      package = pkgs.numix-cursor-theme;
-      gtk.enable = isLinux;
-      x11.enable = false;
-    };
+  config = mkIf config.graphical.enable {
+    home.pointerCursor =
+      if isLinux
+      then {
+        name = "Numix-Cursor-Light";
+        package = pkgs.numix-cursor-theme;
+        gtk.enable = true;
+        x11.enable = true;
+      }
+      else null;
 
     programs = {
-      # Utils
-      feh.enable = isLinux;
+      # Image viewer
+      feh.enable = mkDefault isLinux;
 
-      ####################
-      ### Web browsers ###
-      ####################
-
-      qutebrowser.enable = isLinux;
-
-      chromium = {
-        enable = isLinux;
-        extensions = [
-          {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
-        ];
-      };
-
-      firefox = {
-        enable = isLinux;
-
-        profiles = {
-          # Set dev edition profile to the same as default release
-          dev-edition-default = {
-            path = "default";
-            id = 1;
-          };
-
-          # To change an existing profile called `48gm70ji.default-release` into default:
-          # cd ~/.mozilla/firefox; rg -l 48gm70ji default | xargs -I {} sed -i 's#48gm70ji.default-release#default#g' {}
-          default-release = {
-            id = 0;
-            isDefault = true;
-            path = "default";
-
-            # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
-            extensions = with config.nur.repos.rycee.firefox-addons; [
-              #amazon-band-detector
-              auto-tab-discard
-              bitwarden
-              #base16
-              facebook-container
-              #highlight-all
-              honey
-              #surfshark
-              tab-session-manager
-              tree-style-tab
-              ublock-origin
-              vimium
-            ];
-
-            search = {
-              force = true;
-              default = "DuckDuckGo";
-              order = [
-                "DuckDuckGo"
-                "Google"
-              ];
-
-              engines = {
-                "Nix Packages" = {
-                  urls = [
-                    {
-                      template = "https://search.nixos.org/packages";
-                      params = [
-                        {
-                          name = "type";
-                          value = "packages";
-                        }
-                        {
-                          name = "query";
-                          value = "{searchTerms}";
-                        }
-                      ];
-                    }
-                  ];
-
-                  icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                  definedAliases = ["@np"];
-                };
-
-                "NixOS Wiki" = {
-                  urls = [{template = "https://nixos.wiki/index.php?search={searchTerms}";}];
-                  iconUpdateURL = "https://nixos.wiki/favicon.png";
-                  updateInterval = 24 * 60 * 60 * 1000; # every day
-                  definedAliases = ["@nw"];
-                };
-              };
-            };
-
-            settings = {
-              # See userChrome below
-              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-            };
-
-            # https://gist.github.com/ruanbekker/f800e098936b27c7cf956c56005fe362
-            userChrome = ''
-              #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
-                opacity: 0;
-                pointer-events: none;
-              }
-
-              #main-window:not([tabsintitlebar="true"]) #TabsToolbar {
-                visibility: collapse !important;
-              }
-
-              #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
-                display: none;
-              }
-
-              .tab {
-                margin-left: 1px;
-                margin-right: 1px;
-              }
-            '';
-          };
-        };
-      };
-
-      vim.plugins = with pkgs.vimPlugins; [
-        # Fix copy to system clipboard on wayland
-        vim-wayland-clipboard
-      ];
-
+      # Terminal
       alacritty = {
         enable = true;
 
@@ -179,6 +57,7 @@ in {
           // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
       };
 
+      # IDE
       vscode = {
         enable = true;
 
@@ -197,29 +76,30 @@ in {
           ms-vscode-remote.remote-ssh
         ];
       };
+
+      # Other
+      vim.plugins = with pkgs.vimPlugins; [
+        # Fix copy to system clipboard on wayland
+        vim-wayland-clipboard
+      ];
     };
 
     xdg = {
-      enable = true;
+      enable = mkDefault isLinux;
 
       # Default applications
       mimeApps = {
-        enable = true;
+        enable = mkDefault isLinux;
 
         # See desktop files in /run/current-system/sw/share/applications
         defaultApplications = {
-          "text/html" = "firefox.desktop";
           "application/pdf" = "org.pwmt.zathura.desktop";
-          "x-scheme-handler/http" = "firefox.desktop";
-          "x-scheme-handler/https" = "firefox.desktop";
-          "x-scheme-handler/about" = "firefox.desktop";
-          "x-scheme-handler/unknown" = "firefox.desktop";
         };
       };
     };
 
     gtk = {
-      enable = isLinux;
+      enable = mkDefault isLinux;
 
       iconTheme = {
         #package = pkgs.vimix-icon-theme;
@@ -319,23 +199,24 @@ in {
 
     services = {
       # Bluetooth controls
-      blueman-applet.enable = cfg.bluetooth.enable;
+      blueman-applet.enable = mkDefault isLinux;
 
       # Enable red-shifted nightime display
       gammastep = {
-        enable = isLinux;
+        enable = mkDefault isLinux;
         provider = "geoclue2";
         tray = true;
       };
 
       # File syncing
-      syncthing.enable = isLinux;
+      syncthing.enable = mkDefault isLinux;
 
       # Screenshots
       # Disabled since this isn't working on sway right now
-      #flameshot.enable = true;
+      #flameshot.enable = mkDefault isLinux;
     };
 
+    # Restart systemd services that have changed
     systemd.user.startServices = "sd-switch";
   };
 }
