@@ -53,7 +53,7 @@ creation_rules:
       - *drywell
 
   - path_regex: ^hosts/pavil/secrets.yaml$
-    unencrypted_regex: ^_
+    unencrypted_regex: ^(exports|enable)$
     key_groups:
     - age:
       - *bitwarden
