@@ -18,40 +18,7 @@ in {
   ];
 
   config = {
-    ########################
-    ### Private SSH Keys ###
-    ########################
-
-    sops.secrets = mkMerge (mapAttrsToList (name: value: let
-        keyType = removesuffix ".pub" name;
-      in {
-        "ssh-keys/host/${keyType}".path = "/etc/ssh/ssh_host_${keyType}_key";
-      })
-      hostExports.ssh);
-
-    sops.secrets = mkMerge (mapAttrsToList (name: value: let
-        keyType = removesuffix ".pub" name;
-      in {
-        "ssh-keys/host/${keyType}".path = "/etc/ssh/ssh_host_${keyType}_key";
-      })
-      hostExports.ssh.host);
-
     sops.secrets = {
-      # Host
-      "ssh-keys/host/ed25519".path = "/etc/ssh/ssh_host_ed25519_key";
-
-      "ssh-keys/host/rsa" = {
-        path = "/etc/ssh/ssh_host_rsa_key";
-      };
-
-      # User
-      "ssh-keys/${user}/ed25519" = {
-        path = "${userHome}/.ssh/id_ed25519";
-        owner = user;
-        group = config.users.users.${user}.group;
-        sopsFile = config.sys.secrets.hostSecretsFile;
-      };
-
       wireless-env = mkIf cfg.wireless {};
     };
 
@@ -66,29 +33,29 @@ in {
     ### Public SSH Keys ###
     #######################
 
-    home-manager.users.${user}.home.file = {
-      ".ssh/id_ed25519.pub".text = hostExports.ssh-keys.${user}.ed25519;
-    };
+    # home-manager.users.${user}.home.file = {
+    #   ".ssh/id_ed25519.pub".text = hostExports.ssh-keys.${user}.ed25519;
+    # };
 
     # Host
-    environment.etc = {
-      "/etc/ssh/ssh_host_ed25519_key.pub" = {
-        text = hostExports.ssh-keys.host.ed25519;
-        mode = "0644";
-      };
+    # environment.etc = {
+    #   "/etc/ssh/ssh_host_ed25519_key.pub" = {
+    #     text = hostExports.ssh-keys.host.ed25519;
+    #     mode = "0644";
+    #   };
 
-      "/etc/ssh/ssh_host_rsa_key.pub" = {
-        text = hostExports.ssh-keys.host.rsa;
-        mode = "0644";
-      };
-    };
+    #   "/etc/ssh/ssh_host_rsa_key.pub" = {
+    #     text = hostExports.ssh-keys.host.rsa;
+    #     mode = "0644";
+    #   };
+    # };
 
     ###########################
     ### Authorized SSH Keys ###
     ###########################
 
     users.users.${user}.openssh.authorizedKeys.keys = flatten [
-      inputs.mergedExports.ssh-keys.${user}.ed25519
+      # inputs.mergedExports.ssh-keys.${user}.ed25519
       masterSshKey
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
     ];

@@ -135,44 +135,6 @@
   } @ inputs:
     with nixpkgs.lib;
     with builtins; let
-      optionalModule = optionalFile: args: (optionalAttrs (pathExists optionalFile) (import optionalFile args));
-
-      # Returns an array of the hostnames under `./hosts/`
-      hosts = attrNames (filterAttrs (n: v: v == "directory") (readDir ./hosts));
-
-      hostFile = hostName: fileName: ./hosts/${hostName}/${fileName};
-      hostFileExists = hostName: fileName: pathExists (hostFile hostName fileName);
-
-      # Recursively merge an attribute set. If all elements at a path are:
-      #   attrs: recursively apply
-      #   lists: flatten into a unique list
-      #   mixed: merge into a unique list
-      recursiveAttrsToList = let
-        f = zipAttrsWith (
-          name: values:
-            if all isAttrs values
-            then f values
-            else if all isList values
-            then unique (concatLists values)
-            else unique values
-        );
-      in
-        f;
-
-      # A combined AttrSet of all host exports
-      # TODO: pretty redundant
-      hostExport = hostName: optionalAttrs (hostFileExists hostName "exports.nix") (import (hostFile hostName "exports.nix"));
-      hostExportAttr = hostName: nameValuePair hostName (hostExport hostName);
-      exports = listToAttrs (forEach hosts hostExportAttr);
-      mergedExports = recursiveAttrsToList (forEach hosts hostExport);
-
-      hostModules = hostName: [
-        # Host-specific config
-        ./hosts/${hostName}
-
-        {networking.hostName = hostName;}
-      ];
-
       overlays = {
         # default = final: prev:
         #   prev.lib.recursiveUpdate prev (prev.pkgs.callPackage ./pkgs {});
@@ -218,48 +180,42 @@
         };
       };
 
-      defaultModules = hostName: extraSettings:
-        [
-          # Custom system modules
-          ./sys
+      defaultModules = hostName: extraSettings: [
+        # Custom system modules
+        ./sys
 
-          # Nix User repo
-          inputs.nur.nixosModules.nur
+        # Nix User repo
+        inputs.nur.nixosModules.nur
 
-          # Docker-compose in Nix
-          inputs.arion.nixosModules.arion
+        # Docker-compose in Nix
+        inputs.arion.nixosModules.arion
 
-          # Nixpkgs overlays
-          ({
-            config,
-            inputs,
-            ...
-          }: {
-            nixpkgs = {
-              config.allowUnfree = true;
+        # Nixpkgs overlays
+        ({
+          config,
+          inputs,
+          ...
+        }: {
+          nixpkgs = {
+            config.allowUnfree = true;
 
-              overlays = with overlays; [
-                default
-                (unstable "x86_64-linux")
-                (kernel "x86_64-linux")
-              ];
-            };
-          })
+            overlays = with overlays; [
+              default
+              (unstable "x86_64-linux")
+              (kernel "x86_64-linux")
+            ];
+          };
+        })
 
-          # Home-manager configuration
-          ./home/system-module.nix
+        # Home-manager configuration
+        ./home/system-module.nix
 
-          # Passed-in module
-          extraSettings
-        ]
-        ++ (hostModules hostName);
+        # Passed-in module
+        extraSettings
+      ];
 
       # Pass extra arguments to modules
-      specialArgs.inputs =
-        inputs
-        // {
-          inherit exports hostFile mergedExports;
-        };
+      specialArgs = {inherit inputs;};
     in rec {
       # https://daiderd.com/nix-darwin/manual/index.html
       darwinConfigurations = with inputs.nix-darwin.lib; {
