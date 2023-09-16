@@ -11,6 +11,12 @@ with lib; {
   ];
 
   config = {
+    # Users
+    home-manager.users.${user} = mkMerge [
+      "${inputs.self}/home"
+      ./home.nix
+    ];
+
     # Qemu UEFI
     virtualisation.libvirtd = {
       enable = true;

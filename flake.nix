@@ -271,6 +271,13 @@
           system = "aarch64-darwin";
 
           modules = [
+            # System
+            ./system/darwin
+
+            # Home-manager
+            ./home/system-module.nix
+
+            # Host
             ./hosts/mallow
 
             # Nixpkgs overlays
@@ -280,6 +287,7 @@
               ...
             }: {
               nixpkgs = {
+                hostPlatform = "aarch64-darwin";
                 config.allowUnfree = true;
 
                 overlays = with overlays; [
@@ -287,25 +295,6 @@
                   default
                   (unstable "aarch64-darwin")
                 ];
-              };
-            })
-
-            # Home-manager configuration
-            ./home/system-module.nix
-
-            ({
-              config,
-              inputs,
-              pkgs,
-              ...
-            }: {
-              programs.fish.enable = true;
-              environment.shells = [pkgs.fish];
-              users.users.dorchard = {
-                home = "/Users/dorchard";
-                uid = 503;
-                gid = 20;
-                shell = pkgs.fish;
               };
             })
           ];

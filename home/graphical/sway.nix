@@ -10,11 +10,6 @@ with lib;
 with types;
 with builtins; {
   config = mkIf config.graphical.enable {
-    home.packages = with pkgs; [
-      # Clipboard
-      wl-clipboard
-    ];
-
     programs = {
       swaylock.settings = with config.scheme.withHashtag; let
         # https://github.com/Misterio77/dotfiles/blob/sway/home/.config/sway/swaylock.sh
@@ -55,7 +50,7 @@ with builtins; {
     };
 
     xdg = {
-      enable = true;
+      enable = mkDefault true;
 
       configFile = {
         ################################

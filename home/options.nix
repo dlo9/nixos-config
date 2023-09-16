@@ -9,9 +9,9 @@ with lib;
 with types;
 with builtins; {
   options = {
-    graphical = {
-      enable = mkEnableOption "user graphical programs" // {default = true;};
-    };
+    graphical.enable = mkEnableOption "graphical programs";
+
+    developer-tools.enable = mkEnableOption "developer tools";
 
     wallpapers = mkOption {
       type = attrsOf package;

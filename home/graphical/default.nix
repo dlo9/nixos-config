@@ -8,6 +8,7 @@
 }:
 with lib; {
   imports = [
+    ./developer-tools.nix
     ./sway.nix
     ./waybar
     ./web.nix
@@ -55,26 +56,6 @@ with lib; {
             mouse.hide_when_typing = false;
           }
           // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
-      };
-
-      # IDE
-      vscode = {
-        enable = true;
-
-        # Don't enable these settings, or all settings must be managed by nix
-        # enableUpdateCheck = false;
-        # enableExtensionUpdateCheck = false;
-
-        # Allow extension installations/updates
-        mutableExtensionsDir = true;
-
-        extensions = with pkgs.vscode-extensions; [
-          jnoortheen.nix-ide
-
-          # Enables SSH into a Nix remote host:
-          # https://nixos.wiki/wiki/Visual_Studio_Code#Nix-sourced_VS_Code_to_NixOS_host
-          ms-vscode-remote.remote-ssh
-        ];
       };
 
       # Other
@@ -152,6 +133,9 @@ with lib; {
     home.packages = with pkgs;
       flatten [
         (optionals isLinux [
+          # Clipboard helper
+          wl-clipboard
+
           # For debugging themes
           lxappearance-xwayland
 
@@ -181,10 +165,38 @@ with lib; {
           # HDD info
           smartmontools
 
+          # Notes app
           unstable.anytype
+
+          # Video player
+          mpv
+
+          # PDF viewers
+          okular
+          zathura
+
+          # Key tester
+          wev
+
+          # Partitioning
+          gparted
+
+          # Monitor control
+          ddcui
         ])
 
         [
+          # Fonts
+          # Nerdfonts is huge, so only install specific fonts
+          # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
+          (nerdfonts.override {
+            fonts = [
+              "Noto"
+            ];
+          })
+
+          noto-fonts-emoji
+
           # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
           dconf
 
@@ -212,8 +224,7 @@ with lib; {
       syncthing.enable = mkDefault isLinux;
 
       # Screenshots
-      # Disabled since this isn't working on sway right now
-      #flameshot.enable = mkDefault isLinux;
+      flameshot.enable = mkDefault isLinux;
     };
 
     # Restart systemd services that have changed
