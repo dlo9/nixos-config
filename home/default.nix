@@ -15,7 +15,6 @@ with lib; {
     ./cli
     ./graphical
     ./options.nix
-    ./vim.nix
   ];
 
   scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";

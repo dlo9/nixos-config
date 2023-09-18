@@ -32,6 +32,7 @@ with lib; {
     extraSpecialArgs = {
       inherit inputs;
       isLinux = pkgs.stdenv.isLinux;
+      isDarwin = pkgs.stdenv.isDarwin;
     };
   };
 }

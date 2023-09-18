@@ -14,9 +14,9 @@ in
 
     config = {
       # Set public ssh key
-      home-manager.users.${user}.home.file = {
-        ".ssh/id_ed25519.pub".text = hostExports."${user}-ssh-key".ed25519;
-      };
+      # home-manager.users.${user}.home.file = {
+      #   ".ssh/id_ed25519.pub".text = config.hostExports."${user}-ssh-key".ed25519;
+      # };
 
       environment.etc = {
         "/etc/ssh/ssh_host_ed25519_key.pub" = {
@@ -26,10 +26,17 @@ in
       };
 
       # Users
-      home-manager.users.${user} = mkMerge [
-        "${inputs.self}/home"
-        ./home.nix
-      ];
+      home-manager.users.${user} = mkMerge ([
+          "${inputs.self}/home"
+          ./home.nix
+        ]
+        ++ [
+          {
+            home.file = {
+              ".ssh/id_ed25519.pub".text = config.hostExports."${user}-ssh-key".ed25519;
+            };
+          }
+        ]);
 
       # Qemu UEFI
       virtualisation.libvirtd = {

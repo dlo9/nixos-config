@@ -1,6 +1,8 @@
 {
   lib,
   pkgs,
+  isLinux,
+  isDarwin,
   ...
 }:
 with lib; {
@@ -11,8 +13,8 @@ with lib; {
       ./options.nix
       ./secrets.nix
     ]
-    ++ (optional pkgs.stdenv.isDarwin ./darwin)
-    ++ (optional pkgs.stdenv.isLinux ./nixos);
+    ++ (optional isDarwin ./darwin)
+    ++ (optional isLinux ./nixos);
 
   # Shells
   programs.fish.enable = true;

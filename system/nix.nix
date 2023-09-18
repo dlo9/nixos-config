@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  isSigpanicNixServe = config.services.nix-serve.enable ? false;
+  isSigpanicNixServe = config.services.nix-serve.enable or false;
 in {
   nix = {
     # Binary caches

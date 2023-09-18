@@ -1,7 +1,7 @@
 {lib, ...}:
 with lib; {
   boot = {
-    boot.initrd = {
+    initrd = {
       # Enable systemd in init
       systemd.enable = mkDefault true;
 

@@ -180,9 +180,12 @@
         };
       };
 
-      defaultModules = hostName: extraSettings: [
-        # Custom system modules
-        ./sys
+      linuxModules = [
+        # System modules
+        ./system
+
+        # Host modules
+        ./hosts
 
         # Nix User repo
         inputs.nur.nixosModules.nur
@@ -206,22 +209,22 @@
             ];
           };
         })
-
-        # Home-manager configuration
-        ./home/system-module.nix
-
-        # Passed-in module
-        extraSettings
       ];
 
       # Pass extra arguments to modules
-      specialArgs = {inherit inputs;};
+      specialArgs = {
+        inherit inputs;
+        isDarwin = false;
+        isLinux = true;
+      };
     in rec {
       # https://daiderd.com/nix-darwin/manual/index.html
       darwinConfigurations = with inputs.nix-darwin.lib; {
         mallow = darwinSystem {
           specialArgs = {
             inherit inputs;
+            isDarwin = true;
+            isLinux = false;
           };
 
           system = "aarch64-darwin";
@@ -259,10 +262,10 @@
 
       nixosConfigurations = with nixpkgs.lib; rec {
         pavil = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostName = "pavil";};
 
           system = "x86_64-linux";
-          modules = defaultModules "pavil" {};
+          modules = linuxModules ++ [./hosts/pavil];
         };
 
         nib = nixosSystem {

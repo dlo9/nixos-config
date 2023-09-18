@@ -1,44 +1,41 @@
 {
   lib,
   pkgs,
+  hostName,
+  inputs,
   ...
 }:
 with lib;
 with types; let
-  hosts = attrNames (filterAttrs (n: v: v == "directory") (readDir ./.));
+  hosts = attrNames (filterAttrs (n: v: v == "directory") (builtins.readDir ./.));
 
   importExports = sopsFile: let
     fileToExports = mapAttrs' (
       key: value:
-        if (builtins.isAttrs value && (value.enable ? false))
-        then (value.exports ? {})
+        if (builtins.isAttrs value && (value.enable or false))
+        then (value.exports or {})
         else {}
     );
     removeNulls = filterAttrs (name: value: value != null);
-    contents = fromYAML sopsFile;
+    contents = pkgs.fromYAML sopsFile;
   in
     removeNulls (fileToExports contents);
 
   importSecrets = sopsFile: let
     fileToSecrets = mapAttrs' (
       key: value:
-        if (builtins.isAttrs value && (value.enable ? false))
+        if (builtins.isAttrs value && (value.enable or false))
         then {"${key}/contents" = value.attrs // {inherit sopsFile;};}
         else null
     );
     removeNulls = filterAttrs (name: value: value != null);
-    contents = fromYAML sopsFile;
+    contents = pkgs.fromYAML sopsFile;
   in
     removeNulls (fileToSecrets contents);
 in {
-  imports = [
-    ./hosts/${hostName}
-  ];
-
   options = {
     hostExports = mkOption {
       description = "exported host configurations";
-      # type = attrsOf (submodule (import ./host.nix));
       type = attrsOf anything;
     };
   };
@@ -46,18 +43,12 @@ in {
   config = {
     networking.hostName = hostName;
 
-    sops.secrets = builtins.listToAttrs (
-      map (host: {
-        name = host;
-        value = importSecrets "./${host}/secrets.yaml";
-      })
-      hosts
-    );
+    sops.secrets = importSecrets "${inputs.self}/hosts/${hostName}/secrets.yaml";
 
     hostExports = builtins.listToAttrs (
       map (host: {
         name = host;
-        value = importExports "./${host}/secrets.yaml";
+        value = importExports "${inputs.self}/hosts/${host}/secrets.yaml";
       })
       hosts
     );
