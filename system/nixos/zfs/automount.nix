@@ -20,7 +20,7 @@ with lib; {
 
             # Any filesystems marked "neededForBoot" need to have mountpoint=legacy since initrd will mount them manually:
             # https://search.nixos.org/options?channel=22.11&show=fileSystems.%3Cname%3E.neededForBoot
-            default = mkDefault (config.fsType == "zfs" && !(builtins.elem name utils.pathsNeededForBoot));
+            default = config.fsType == "zfs" && !(builtins.elem name utils.pathsNeededForBoot);
 
             # When visible, it triggers a *long* build of the nixos man pages with each rebuild
             visible = false;

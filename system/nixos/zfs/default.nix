@@ -11,7 +11,7 @@ with lib; {
   ];
 
   config = mkIf config.boot.zfs.enabled {
-    boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_6_4;
+    # boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_6_4;
 
     # Derive `hostId`, which must be set for `zpool import`, from hostname
     # If instead it should be static for a host, then generate with `tr -dc 0-9a-f < /dev/urandom | head -c 8`

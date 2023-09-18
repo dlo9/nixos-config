@@ -11,7 +11,7 @@ with lib; {
     ./polkit.nix
   ];
 
-  config = mkIf graphical.enable {
+  config = mkIf config.graphical.enable {
     # Allow swaylock
     security.pam.services.swaylock = {};
 

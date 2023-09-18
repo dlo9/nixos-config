@@ -8,6 +8,7 @@
 with lib; {
   imports = [
     ./graphical
+    ./zfs
 
     ./admin.nix
     ./boot.nix

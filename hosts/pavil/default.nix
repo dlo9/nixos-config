@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  hostName,
   ...
 }: let
   user = "david";
@@ -20,7 +21,7 @@ in
 
       environment.etc = {
         "/etc/ssh/ssh_host_ed25519_key.pub" = {
-          text = hostExports.host-ssh-key;
+          text = config.hostExports.${hostName}.host-ssh-key.pub;
           mode = "0644";
         };
       };
@@ -33,7 +34,7 @@ in
         ++ [
           {
             home.file = {
-              ".ssh/id_ed25519.pub".text = config.hostExports."${user}-ssh-key".ed25519;
+              ".ssh/id_ed25519.pub".text = config.hostExports.${hostName}."${user}-ssh-key".pub;
             };
           }
         ]);

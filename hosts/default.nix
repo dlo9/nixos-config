@@ -7,31 +7,52 @@
 }:
 with lib;
 with types; let
-  hosts = attrNames (filterAttrs (n: v: v == "directory") (builtins.readDir ./.));
+  hostYaml = host: "${inputs.self}/hosts/${host}/secrets.yaml";
+  hostYamlExists = host: pathExists (hostYaml host);
+
+  hosts = attrNames (filterAttrs (name: value: value == "directory" && (hostYamlExists name)) (builtins.readDir ./.));
+
+  jsonTrace = value: builtins.trace (builtins.toJSON value) value;
 
   importExports = sopsFile: let
-    fileToExports = mapAttrs' (
-      key: value:
-        if (builtins.isAttrs value && (value.enable or false))
-        then (value.exports or {})
-        else {}
+    # mapExports = baseName: name: value: {
+    #   inherit value;
+    #   name = "${baseName}-${name}";
+    # };
+    attrToExports = mapAttrs' (
+      name: value: {
+        inherit name;
+        # value = mapAttrs' (mapExports name) value.exports;
+        value = value.exports;
+      }
     );
-    removeNulls = filterAttrs (name: value: value != null);
+
+    isEnabled = name: value:
+      (value.enable or false)
+      && (builtins.isAttrs (value.exports or ""));
+
     contents = pkgs.fromYAML sopsFile;
+    enabledContents = filterAttrs isEnabled contents;
   in
-    removeNulls (fileToExports contents);
+    attrToExports enabledContents;
 
   importSecrets = sopsFile: let
-    fileToSecrets = mapAttrs' (
-      key: value:
-        if (builtins.isAttrs value && (value.enable or false))
-        then {"${key}/contents" = value.attrs // {inherit sopsFile;};}
-        else null
+    attrToSecrets = mapAttrs' (
+      # TODO: doesn't work with empty contents?
+      key: value: {
+        name = "${key}/contents";
+        value = (value.sopsNix or {}) // {inherit sopsFile;};
+      }
     );
-    removeNulls = filterAttrs (name: value: value != null);
+
+    isEnabled = name: value:
+      (value.enable or false)
+      && (value ? contents);
+
     contents = pkgs.fromYAML sopsFile;
+    enabledContents = filterAttrs isEnabled contents;
   in
-    removeNulls (fileToSecrets contents);
+    attrToSecrets enabledContents;
 in {
   options = {
     hostExports = mkOption {
@@ -43,12 +64,14 @@ in {
   config = {
     networking.hostName = hostName;
 
-    sops.secrets = importSecrets "${inputs.self}/hosts/${hostName}/secrets.yaml";
+    # Set secrets for the current host
+    sops.secrets = optionalAttrs (hostYamlExists hostName) (importSecrets (hostYaml hostName));
 
+    # Export values for all hosts
     hostExports = builtins.listToAttrs (
       map (host: {
         name = host;
-        value = importExports "${inputs.self}/hosts/${host}/secrets.yaml";
+        value = importExports (hostYaml host);
       })
       hosts
     );

@@ -11,7 +11,8 @@
 
     # Darwin settings
     nix-darwin = {
-      url = github:LnL7/nix-darwin/release-23.05;
+      # url = github:LnL7/nix-darwin/release-23.05;
+      url = github:LnL7/nix-darwin;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

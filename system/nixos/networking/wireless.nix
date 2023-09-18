@@ -26,6 +26,7 @@ with lib; {
       LGFAK.psk = "@LGFAK@";
       "gh 42".psk = "@GH_42@";
       "Menehune House & Cottage".psk = "@MENEHUNE@";
+      BlueWaveHeights = "@BLUE_WAVE_HEIGHTS@";
     };
   };
 }
