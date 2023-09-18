@@ -489,7 +489,7 @@ with builtins; {
         terminal = "alacritty";
         menu = "${pkgs.wofi}/bin/wofi -c ~/.config/wofi/config -I";
 
-        keybindings = lib.mkOptionDefault {
+        keybindings = mkDefault {
           # Open terminal
           "${modifier}+Return" = "exec ${terminal}";
 

@@ -6,8 +6,6 @@
 }:
 with lib; {
   imports = [
-    ./nvidia
-
     ./polkit.nix
   ];
 
@@ -16,7 +14,7 @@ with lib; {
     security.pam.services.swaylock = {};
 
     # Auto-login since whole-disk encryption is already required
-    services.getty.autologinUser = "${config.sys.user}";
+    services.getty.autologinUser = mkIf ((builtins.length config.adminUsers) > 0) (builtins.elemAt config.adminUsers 0);
 
     # TODO: move this to home-manager
     environment.loginShellInit = mkDefault ''

@@ -14,6 +14,11 @@ in
     ];
 
     config = {
+      graphical.enable = true;
+      developer-tools.enable = true;
+      gaming.enable = true;
+      adminUsers = ["david"];
+
       # Set public ssh key
       # home-manager.users.${user}.home.file = {
       #   ".ssh/id_ed25519.pub".text = config.hostExports."${user}-ssh-key".ed25519;

@@ -10,13 +10,13 @@ with lib; let
     boot.initrd.network.ssh.authorizedKeys = config.users.users.${user}.openssh.authorizedKeys.keys;
   };
 in {
-  # config = mkMerge (map adminConfig config.admin-users);
+  # config = mkMerge (map adminConfig config.adminUsers);
 
   config = {
     users.users = listToAttrs (map (user: {
         name = user;
         value = {extraGroups = optional config.hardware.i2c.enable config.hardware.i2c.group;};
       })
-      config.admin-users);
+      config.adminUsers);
   };
 }

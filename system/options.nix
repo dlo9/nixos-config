@@ -9,7 +9,7 @@ with lib;
 with types;
 with builtins; {
   options = {
-    admin-users = mkOption {
+    adminUsers = mkOption {
       type = listOf nonEmptyStr;
       default = [];
     };

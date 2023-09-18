@@ -23,5 +23,5 @@
     };
   };
 
-  admin-users = ["david"];
+  adminUsers = ["david"];
 }
