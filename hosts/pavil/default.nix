@@ -18,7 +18,9 @@ with lib; {
 
     # SSH config
     users.users.david.openssh.authorizedKeys.keys = [
-      config.hostExports.pavil.david-ssh-key.pub
+      # config.hostExports.pavil.david-ssh-key.pub
+      config.hostExports.cuttlefish.david-ssh-key.pub
+      config.hostExports.nib.david-ssh-key.pub
     ];
 
     environment.etc = {

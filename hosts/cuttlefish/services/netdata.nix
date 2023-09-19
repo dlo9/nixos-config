@@ -8,10 +8,6 @@
 with builtins;
 with lib; {
   config = {
-    sops.secrets."services/netdata/health_alarm_notify.conf" = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
-
     services.netdata = {
       enable = true;
 
@@ -22,7 +18,7 @@ with lib; {
       };
 
       configDir = {
-        "health_alarm_notify.conf" = config.sops.secrets."services/netdata/health_alarm_notify.conf".path;
+        "health_alarm_notify.conf" = config.sops.secrets."netdata-health_alarm_notify.conf".path;
 
         # Enable systemd scraping
         "go.d.conf" = pkgs.writeText "go.d.conf" ''

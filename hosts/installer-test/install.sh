@@ -13,7 +13,7 @@ trap cleanup EXIT
 
 # Decrypt your private key from the password store and copy it to the temporary directory
 install -d -m755 "$tmp/var"
-sops -d --extract '["sops-key"]' install.secrets.yaml > "$tmp/var/sops-age-keys.txt"
+sops -d --extract '["age-key"]["contents"]' secrets.yaml > "$tmp/var/sops-age-keys.txt"
 chmod 600 "$tmp/var/sops-age-keys.txt"
 
 install -d -m755 "$tmp/etc"
@@ -22,7 +22,7 @@ cp -r /etc/nixos "$tmp/etc"
 # On the install image, run:
 #  sudo passwd
 nix run github:numtide/nixos-anywhere -- \
-  --disk-encryption-keys /tmp/zfs.key <(sops -d --extract '["zfs-key"]' install.secrets.yaml) \
+  --disk-encryption-keys /tmp/zfs.key <(sops -d --extract '["zfs-key"]["contents"]' secrets.yaml) \
   --extra-files "$tmp" \
   --debug \
   --flake '.#installer-test' \

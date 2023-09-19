@@ -1,5 +1,4 @@
 # TODO: auto-generate this file
-
 age-keys: &everyone
   # Master key
   - &bitwarden age10nwesuk0gr9nvfdcz3t4la6kp39cwrftn7z7chqyc4935gjjke7sa7hm7v
@@ -18,19 +17,7 @@ creation_rules:
   ##### Shared keys #####
   #######################
 
-  - path_regex: ^sys/secrets/age-keys.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted)$
-    key_groups:
-    - age:
-      - *bitwarden
-
-  - path_regex: ^sys/secrets/shared.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted)$
-    key_groups:
-    - age: *everyone
-
   - path_regex: ^system/nixos/networking/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted)$
     key_groups:
     - age: *everyone
 
@@ -39,14 +26,14 @@ creation_rules:
   #####################
 
   - path_regex: ^hosts/cuttlefish/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
       - *cuttlefish
 
   - path_regex: ^hosts/drywell/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
@@ -60,44 +47,29 @@ creation_rules:
       - *pavil
 
   - path_regex: ^hosts/rpi3/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
       - *rpi3
 
   - path_regex: ^hosts/nib/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
       - *nib
 
-  - path_regex: install.secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
-    key_groups:
-    - age:
-      - *bitwarden
-      - *pavil
-
   - path_regex: ^hosts/installer-test/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
       - *installer-test
 
   - path_regex: ^hosts/mallow/secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
     - age:
       - *bitwarden
       - *mallow
-
-  - path_regex: ^hosts/mallow/install.secrets.yaml$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)$
-    key_groups:
-    - age:
-      - *bitwarden
-      - *mallow
-      - *pavil

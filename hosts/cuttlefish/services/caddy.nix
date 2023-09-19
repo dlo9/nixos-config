@@ -36,10 +36,7 @@ in {
     ];
 
     # Secrets
-    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets."services/caddy/env".path;
-    sops.secrets."services/caddy/env" = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets."caddy-env".path;
 
     # Actual caddy definition
     services.caddy = {

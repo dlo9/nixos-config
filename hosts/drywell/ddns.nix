@@ -36,10 +36,6 @@ with lib; let
 in {
   config = {
     # DNS provider auth
-    sops.secrets.cloudflare-ddns = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
-
     systemd.services.godns = {
       description = "Dynamic DNS Client";
       wantedBy = ["multi-user.target"];

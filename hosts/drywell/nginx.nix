@@ -10,10 +10,6 @@ with lib; let
   useACMEHost = "drywell.sigpanic.com";
 in {
   config = {
-    sops.secrets.cloudflare-dns = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
-
     security.acme = {
       acceptTerms = true;
 

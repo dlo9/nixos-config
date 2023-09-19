@@ -10,11 +10,6 @@ with lib; let
   useACMEHost = "sigpanic.com";
 in {
   config = {
-    # DNS provider auth
-    sops.secrets.cloudflare-dns = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
-
     # ACME definition
     security.acme = {
       acceptTerms = true;

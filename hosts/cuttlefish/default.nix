@@ -120,10 +120,6 @@ with lib; {
     };
 
     # Nix cache
-    sops.secrets.nix-serve-private-key = {
-      sopsFile = config.sys.secrets.hostSecretsFile;
-    };
-
     services.nix-serve = {
       enable = true;
       port = 5000;
