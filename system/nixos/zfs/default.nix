@@ -104,7 +104,7 @@ with lib; {
       # after the system is booted
       network.ssh = {
         enable = mkDefault true;
-        hostKeys = [/run/secrets/ssh-keys/host/ed25519];
+        hostKeys = [/run/secrets/host-ssh-key];
       };
     };
   };
