@@ -28,10 +28,29 @@ with lib; {
       nix-ld.enable = mkDefault true;
     };
 
-    environment.systemPackages = with pkgs; [
-      qemu_kvm
-      OVMF
-      libvirt
-    ];
+    # environment.systemPackages = with pkgs; [
+    #   qemu_kvm
+    #   OVMF
+    #   libvirt
+    # ];
+
+    virtualisation.libvirtd = {
+      enable = mkDefault true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = mkDefault true;
+        ovmf = {
+          enable = mkDefault true;
+          packages = [
+            (pkgs.OVMFFull.override {
+              secureBoot = mkDefault true;
+              tpmSupport = mkDefault true;
+              csmSupport = mkDefault true;
+            })
+            .fd
+          ];
+        };
+      };
+    };
   };
 }

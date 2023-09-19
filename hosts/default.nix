@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  hostName,
+  hostname,
   inputs,
   ...
 }:
@@ -15,14 +15,9 @@ with types; let
   jsonTrace = value: builtins.trace (builtins.toJSON value) value;
 
   importExports = sopsFile: let
-    # mapExports = baseName: name: value: {
-    #   inherit value;
-    #   name = "${baseName}-${name}";
-    # };
     attrToExports = mapAttrs' (
       name: value: {
         inherit name;
-        # value = mapAttrs' (mapExports name) value.exports;
         value = value.exports;
       }
     );
@@ -38,7 +33,6 @@ with types; let
 
   importSecrets = sopsFile: let
     attrToSecrets = mapAttrs' (
-      # TODO: doesn't work with empty contents?
       name: value: {
         inherit name;
 
@@ -61,20 +55,20 @@ with types; let
     attrToSecrets enabledContents;
 in {
   options = {
-    hostExports = mkOption {
+    hosts = mkOption {
       description = "exported host configurations";
       type = attrsOf anything;
     };
   };
 
   config = {
-    networking.hostName = hostName;
+    networking.hostName = hostname;
 
     # Set secrets for the current host
-    sops.secrets = optionalAttrs (hostYamlExists hostName) (importSecrets (hostYaml hostName));
+    sops.secrets = optionalAttrs (hostYamlExists hostname) (importSecrets (hostYaml hostname));
 
     # Export values for all hosts
-    hostExports = builtins.listToAttrs (
+    hosts = builtins.listToAttrs (
       map (host: {
         name = host;
         value = importExports (hostYaml host);

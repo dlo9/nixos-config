@@ -263,7 +263,7 @@
 
       nixosConfigurations = with nixpkgs.lib; rec {
         pavil = nixosSystem {
-          specialArgs = specialArgs // {hostName = "pavil";};
+          specialArgs = specialArgs // {hostname = "pavil";};
 
           system = "x86_64-linux";
           modules = linuxModules ++ [./hosts/pavil];

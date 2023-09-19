@@ -3,7 +3,7 @@
   pkgs,
   lib,
   inputs,
-  hostName,
+  hostname,
   ...
 }:
 with lib; {
@@ -18,50 +18,19 @@ with lib; {
 
     # SSH config
     users.users.david.openssh.authorizedKeys.keys = [
-      # config.hostExports.pavil.david-ssh-key.pub
-      config.hostExports.cuttlefish.david-ssh-key.pub
-      config.hostExports.nib.david-ssh-key.pub
+      config.hosts.bitwarden.ssh-key.pub
+      config.hosts.pixie.ssh-key.pub
     ];
 
     environment.etc = {
       "/etc/ssh/ssh_host_ed25519_key.pub" = {
-        text = config.hostExports.${hostName}.host-ssh-key.pub;
+        text = config.hosts.${hostname}.host-ssh-key.pub;
         mode = "0644";
       };
     };
 
     # Users
-    home-manager.users.david = mkMerge ([
-        "${inputs.self}/home"
-        ./home.nix
-      ]
-      ++ [
-        {
-          home.file = {
-            ".ssh/id_ed25519.pub".text = config.hostExports.${hostName}.david-ssh-key.pub;
-          };
-        }
-      ]);
-
-    # Qemu UEFI
-    virtualisation.libvirtd = {
-      enable = true;
-      qemu = {
-        package = pkgs.qemu_kvm;
-        swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [
-            (pkgs.OVMFFull.override {
-              secureBoot = true;
-              tpmSupport = true;
-              csmSupport = true;
-            })
-            .fd
-          ];
-        };
-      };
-    };
+    home-manager.users.david = import ./home.nix;
 
     boot.loader.grub.mirroredBoots = [
       {
@@ -91,7 +60,7 @@ with lib; {
       virt-manager
 
       # ADB fire tablet stuff
-      gnome.zenity
+      #gnome.zenity
 
       # Backups
       kopia

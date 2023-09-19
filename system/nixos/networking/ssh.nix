@@ -7,7 +7,7 @@
 }:
 with lib; let
   masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
-  hostExports = config.hosts.${config.networking.hostName};
+  hosts = config.hosts.${config.networking.hostName};
 in {
   imports = [
     ./systemd.nix

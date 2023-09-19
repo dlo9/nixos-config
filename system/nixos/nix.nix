@@ -29,7 +29,7 @@ with lib; {
     # Use cuttlefish as a remote builder
     buildMachines = mkIf config.low-power.enable [
       {
-        hostName = "cuttlefish";
+        hostname = "cuttlefish";
         systems = ["x86_64-linux" "aarch64-linux"];
 
         maxJobs = 4;

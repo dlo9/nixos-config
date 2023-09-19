@@ -11,7 +11,7 @@
   reservedSize = "15G";
   containerdSize = "30G";
 
-  hostName = "drywell";
+  hostname = "drywell";
   admin = "david";
 
   disk-config = {
@@ -249,8 +249,8 @@ in {
   config = {
     environment.systemPackages = with pkgs; [
       parted
-      (writeScriptBin "${hostName}-partition" (inputs.disko.lib.create disk-config))
-      (writeScriptBin "${hostName}-mount" (inputs.disko.lib.mount disk-config))
+      (writeScriptBin "${hostname}-partition" (inputs.disko.lib.create disk-config))
+      (writeScriptBin "${hostname}-mount" (inputs.disko.lib.mount disk-config))
     ];
   };
 }
