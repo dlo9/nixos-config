@@ -43,9 +43,9 @@ with lib; {
           enable = mkDefault true;
           packages = [
             (pkgs.OVMFFull.override {
-              secureBoot = mkDefault true;
-              tpmSupport = mkDefault true;
-              csmSupport = mkDefault true;
+              secureBoot = true;
+              tpmSupport = true;
+              csmSupport = true;
             })
             .fd
           ];

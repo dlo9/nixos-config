@@ -3,15 +3,16 @@
   pkgs,
   lib,
   inputs,
+  osConfig,
   ...
 }:
 with lib;
 with types;
 with builtins; {
   options = {
-    graphical.enable = mkEnableOption "graphical programs";
+    graphical.enable = mkEnableOption "graphical programs" // {default = osConfig.graphical.enable;};
 
-    developer-tools.enable = mkEnableOption "developer tools";
+    developer-tools.enable = mkEnableOption "developer tools" // {default = osConfig.developer-tools.enable;};
 
     wallpapers = mkOption {
       type = attrsOf package;

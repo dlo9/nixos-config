@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  hostname,
   inputs,
   osConfig,
   ...
@@ -16,11 +15,8 @@ with lib; {
     virt-manager # Virtualization management
   ];
 
-  graphical.enable = true;
-  developer-tools.enable = true;
-
   # SSH
   home.file = {
-    ".ssh/id_ed25519.pub".text = osConfig.hosts.${hostname}.david-ssh-key.pub;
+    ".ssh/id_ed25519.pub".text = osConfig.hosts.${osConfig.networking.hostName}.david-ssh-key.pub;
   };
 }
