@@ -9,14 +9,12 @@ with lib; let
 
     boot.initrd.network.ssh.authorizedKeys = config.users.users.${user}.openssh.authorizedKeys.keys;
   };
-in {
-  # config = mkMerge (map adminConfig config.adminUsers);
 
-  config = {
-    users.users = listToAttrs (map (user: {
-        name = user;
-        value = {extraGroups = optional config.hardware.i2c.enable config.hardware.i2c.group;};
-      })
-      config.adminUsers);
-  };
+  # TODO: move into overlay
+  mkMergeTopLevel = names: attrs:
+    getAttrs names (
+      mapAttrs (k: v: mkMerge v) (foldAttrs (n: a: [n] ++ a) [] attrs)
+    );
+in {
+  config = mkMergeTopLevel ["users" "boot"] (map adminConfig config.adminUsers);
 }

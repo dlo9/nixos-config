@@ -39,9 +39,15 @@ with types; let
   importSecrets = sopsFile: let
     attrToSecrets = mapAttrs' (
       # TODO: doesn't work with empty contents?
-      key: value: {
-        name = "${key}/contents";
-        value = (value.sopsNix or {}) // {inherit sopsFile;};
+      name: value: {
+        inherit name;
+
+        value =
+          (value.sopsNix or {})
+          // {
+            inherit sopsFile;
+            key = "${name}/contents";
+          };
       }
     );
 
