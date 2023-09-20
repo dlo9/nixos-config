@@ -181,9 +181,6 @@ with lib; {
       rtce = "pushd ~/code/rtce";
       rtceprod = "pushd ~/code/rtceprod/servers/Gateways/Customer/FBI";
 
-      vesper = "pushd ~/code/vesper";
-      vesperconfig = "pushd ~/code/vesper/config";
-
       adhoc = "pushd ~/code/dorchard/adhoc";
       queries = "pushd ~/code/dorchard/adhoc/queries";
       g = "pushd ~/g";
