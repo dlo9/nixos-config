@@ -30,7 +30,7 @@
       power = "on";
       power_icon_color = icon_color;
       battery_icon_color = icon_color;
-      power_icon_strip = "󱐥 󰚥";
+      power_icon_strip = "󰁹 󰚥";
 
       spaces = "on";
       space_icon = "";
