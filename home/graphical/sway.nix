@@ -9,7 +9,7 @@
 with lib;
 with types;
 with builtins; {
-  config = mkIf config.graphical.enable {
+  config = mkIf (config.graphical.enable && isLinux) {
     programs = {
       swaylock.settings = with config.scheme.withHashtag; let
         # https://github.com/Misterio77/dotfiles/blob/sway/home/.config/sway/swaylock.sh

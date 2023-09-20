@@ -66,7 +66,7 @@ with lib; {
     };
 
     xdg = {
-      enable = mkDefault isLinux;
+      enable = mkDefault true;
 
       # Default applications
       mimeApps = {
