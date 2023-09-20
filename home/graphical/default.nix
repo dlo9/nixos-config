@@ -160,7 +160,6 @@ with lib; {
 
           # Networking utils
           wpa_supplicant_gui
-          inetutils
 
           # HDD info
           smartmontools
@@ -206,6 +205,9 @@ with lib; {
 
           # Notes app
           obsidian
+
+          # Networking utils (telnet)
+          inetutils
         ]
       ];
 
