@@ -18,6 +18,8 @@ with lib; {
     ./hardware.nix
     ./nix.nix
     ./users.nix
+
+    inputs.home-manager.nixosModules.home-manager
   ];
 
   # Timezone

@@ -1,11 +1,16 @@
 {
-  services.nix-daemon.enable = true;
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
+  services.nix-daemon.enable = mkDefault true;
 
   nix = {
-    package = pkgs.nix;
+    package = mkDefault pkgs.nix;
 
     gc = {
-      automatic = true;
+      automatic = mkDefault true;
 
       interval = {
         Hour = 12;

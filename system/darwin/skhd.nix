@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   services.skhd = let
     modifier = "alt";
   in {

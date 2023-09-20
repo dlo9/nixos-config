@@ -54,6 +54,9 @@ with types; let
   in
     attrToSecrets enabledContents;
 in {
+  imports = [
+    "${inputs.self}/hosts/${hostname}"
+  ];
   options = {
     hosts = mkOption {
       description = "exported host configurations";

@@ -57,10 +57,7 @@ in {
   };
 
   # Users
-  home-manager.users.${user} = mkMerge [
-    "${inputs.self}/home"
-    ./home.nix
-  ];
+  home-manager.users.${user} = import ./home.nix;
 
   users.users.${user} = {
     home = "/Users/${user}";

@@ -2,9 +2,14 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 with lib; {
+  imports = [
+    "${inputs.self}/home"
+  ];
+
   xdg.configFile."wrap.yaml".source = ./wrap.yaml;
 
   home.packages = with pkgs; [

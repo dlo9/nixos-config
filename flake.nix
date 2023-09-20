@@ -212,6 +212,35 @@
         })
       ];
 
+      darwinModules = [
+        # System modules
+        ./system
+
+        # Host modules
+        ./hosts
+
+        # Nix User repo
+        inputs.nur.nixosModules.nur
+
+        # Nixpkgs overlays
+        ({
+          config,
+          inputs,
+          ...
+        }: {
+          nixpkgs = {
+            hostPlatform = "aarch64-darwin";
+            config.allowUnfree = true;
+
+            overlays = with overlays; [
+              inputs.nix-darwin.overlays.default
+              default
+              (unstable "aarch64-darwin")
+            ];
+          };
+        })
+      ];
+
       # Pass extra arguments to modules
       specialArgs = {
         inherit inputs;
@@ -226,72 +255,43 @@
             inherit inputs;
             isDarwin = true;
             isLinux = false;
+            hostname = "mallow";
           };
 
           system = "aarch64-darwin";
-
-          modules = [
-            # System
-            ./system/darwin
-
-            # Home-manager
-            ./home/system-module.nix
-
-            # Host
-            ./hosts/mallow
-
-            # Nixpkgs overlays
-            ({
-              config,
-              inputs,
-              ...
-            }: {
-              nixpkgs = {
-                hostPlatform = "aarch64-darwin";
-                config.allowUnfree = true;
-
-                overlays = with overlays; [
-                  inputs.nix-darwin.overlays.default
-                  default
-                  (unstable "aarch64-darwin")
-                ];
-              };
-            })
-          ];
+          modules = darwinModules;
         };
       };
 
       nixosConfigurations = with nixpkgs.lib; rec {
         pavil = nixosSystem {
           specialArgs = specialArgs // {hostname = "pavil";};
-
           system = "x86_64-linux";
-          modules = linuxModules ++ [./hosts/pavil];
+          modules = linuxModules;
         };
 
         nib = nixosSystem {
-          inherit specialArgs;
-
+          specialArgs = specialArgs // {hostname = "nib";};
           system = "x86_64-linux";
-          modules = defaultModules "nib" {};
+          modules = linuxModules;
         };
 
         cuttlefish = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostname = "cuttlefish";};
 
           system = "x86_64-linux";
-          modules = defaultModules "cuttlefish" {};
+          modules = linuxModules;
         };
 
         # https://mobile.nixos.org/devices/motorola-potter.html
         # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
         # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
         moto = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostname = "moto";};
 
           system = "aarch64-linux";
           modules =
-            (defaultModules "moto" {})
+            linuxModules
             ++ [
               (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
             ];
@@ -302,11 +302,11 @@
         moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
 
         rpi3 = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostname = "rpi3";};
 
           system = "aarch64-linux";
           modules =
-            (defaultModules "rpi3" {})
+            linuxModules
             ++ [
               "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ];
@@ -317,17 +317,17 @@
         rpi3-image = rpi3.config.system.build.sdImage;
 
         drywell = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostname = "drywell";};
 
           system = "x86_64-linux";
-          modules = defaultModules "drywell" {};
+          modules = linuxModules;
         };
 
         installer-test = nixosSystem {
-          inherit specialArgs;
+          specialArgs = specialArgs // {hostname = "installer-test";};
 
           system = "x86_64-linux";
-          modules = defaultModules "installer-test" {};
+          modules = linuxModules;
         };
       };
 

@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   services.yabai = {
     enable = true;
 
@@ -34,7 +34,7 @@
       window_origin_display = "focused";
 
       # Spacebar integration
-      external_bar = "all:${config.services.spacebar.height}:0";
+      external_bar = "all:${config.services.spacebar.config.height}:0";
     };
 
     extraConfig = ''

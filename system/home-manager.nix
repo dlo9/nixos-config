@@ -3,14 +3,11 @@
   inputs,
   lib,
   pkgs,
+  isLinux,
+  isDarwin,
   ...
 }:
 with lib; {
-  imports = [
-    # https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
-    inputs.home-manager.nixosModules.home-manager
-  ];
-
   home-manager = {
     useGlobalPkgs = mkDefault true;
     useUserPackages = mkDefault true;
@@ -30,9 +27,7 @@ with lib; {
 
     # Pass extra arguments to home.nix
     extraSpecialArgs = {
-      inherit inputs;
-      isLinux = pkgs.stdenv.isLinux;
-      isDarwin = pkgs.stdenv.isDarwin;
+      inherit inputs isLinux isDarwin;
     };
   };
 }
