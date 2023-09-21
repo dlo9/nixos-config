@@ -10,7 +10,7 @@ age-keys: &everyone
   - &rpi3 age189fhnxddwst08ug2j644nqd9vtxf2tp2kr3ygmutruayvzt7ss9sd3jf4m
   - &nib age1szk33dt0yyeru746p0elrym3hpc5hr6w6lqz0hd8xhrdt44k3sdqmpx0lk
   - &installer-test age185nwxyqzcghmdq5pjcad8aswgjmujd8pauet0urmum57uxx07ecs7dgt6g
-  - &mallow age1u20gs4lje4skk96xc4uftxdcvudd39c6c3y7ag4mu4qclwh6ny2qecjlaj
+  - &mallow age1h8cp3pwklm5tfcr5udxj7q8yfkfww368f0c4uymzfkzr5r5qpv4q82fkxy
   - &pixie age1zx9kfxfre3zyuazgr4wkrh0gqdudqj3e6gcuts3mr9ly8jkfmctsl9pqnk
 
 creation_rules:
