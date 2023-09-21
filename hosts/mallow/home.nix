@@ -76,6 +76,10 @@ with lib; {
   ];
 
   home.sessionVariables = rec {
+    # Wipe path to prevent system binaries (e.g., vim) from coming before home-manager ones
+    # https://github.com/nix-community/home-manager/issues/3324
+    PATH = "";
+
     # Java versions
     JAVA_HOME_8 = pkgs.jdk8;
     JAVA_HOME_11 = pkgs.jdk11;
@@ -89,13 +93,24 @@ with lib; {
   };
 
   home.sessionPath = [
-    "/Users/dorchard/.wrap/shims"
-    "/Users/dorchard/.local/bin"
-    "/Users/dorchard/code/dorchard/adhoc/bin"
-    "/Users/dorchard/.cargo/bin"
-    "/Users/dorchard/.jenv/bin"
-    "/Users/dorchard/go/bin"
+    "$HOME/code/dorchard/adhoc/bin"
+    "$HOME/.jenv/bin"
+    "$HOME/go/bin"
     "/opt/homebrew/bin"
+
+    # Add nix paths
+    "$HOME/.nix-profile/bin"
+    "/etc/profiles/per-user/dorchard/bin"
+    "/run/current-system/sw/bin"
+    "/nix/var/nix/profiles/default/bin"
+
+    # Re-add system paths (see home.sessionVariables)
+    "/usr/local/bin"
+    "/System/Cryptexes/App/usr/bin"
+    "/usr/bin"
+    "/bin"
+    "/usr/sbin"
+    "/sbin"
   ];
 
   programs.fish.interactiveShellInit = ''
@@ -148,6 +163,11 @@ with lib; {
 
       jenv rehash
     '';
+
+    # TODO: store ~/.config/gcloud/configurations/config_default instead?
+    # setupGcloud = ''
+    #   gcloud config set core/custom_ca_certs_file
+    # '';
   };
 
   home.file = {

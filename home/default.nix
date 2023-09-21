@@ -25,6 +25,7 @@ with lib; {
 
     sessionPath = [
       "$HOME/.local/bin"
+      "$HOME/.wrap/shims"
     ];
 
     sessionVariables = {
