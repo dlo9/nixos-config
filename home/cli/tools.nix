@@ -68,6 +68,9 @@ with lib; {
         p7zip
         zstd
         age
+
+        # TODO: remove when upgrading to 23.11 in favor of programs.yazi
+        pkgs.unstable.yazi
       ]
       ++
       # Linux only
@@ -127,5 +130,11 @@ with lib; {
         push.autoSetupRemote = true;
       };
     };
+
+    # TODO: enable when upgrading to 23.11
+    # yazi = {
+    #   enable = true;
+    #   # TODO: theme, settings, keymap
+    # };
   };
 }
