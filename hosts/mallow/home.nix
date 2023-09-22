@@ -26,7 +26,7 @@ with lib; {
 
     # Java tools
     visualvm
-    jetbrains.idea-ultimate
+    pkgs.unstable.jetbrains.idea-ultimate
     gradle
     groovy
     google-java-format

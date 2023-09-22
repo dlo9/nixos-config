@@ -10,6 +10,7 @@ with lib; {
       # IDE
       vscode = {
         enable = true;
+        package = pkgs.unstable.vscode;
 
         # Don't enable these settings, or all settings must be managed by nix
         # enableUpdateCheck = false;
