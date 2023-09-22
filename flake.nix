@@ -133,298 +133,269 @@
     self,
     nixpkgs,
     ...
-  } @ inputs:
-    with nixpkgs.lib;
-    with builtins; let
-      overlays = {
-        # default = final: prev:
-        #   prev.lib.recursiveUpdate prev (prev.pkgs.callPackage ./pkgs {});
-        # default = final: prev: import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; };
-        # default = final: prev: prev.lib.recursiveUpdate prev (import ./pkgs { lib = prev.pkgs.lib; callPackage = prev.pkgs.callPackage; });
-        default = final: prev:
-          with prev; let
-            pkgs' = recurseIntoAttrs (callPackage ./pkgs {});
-          in
-            # prev.lib.recursiveUpdate pkgs pkgs';
-            # prev.lib.mapAttrs ;
-            {
-              vimPlugins = prev.vimPlugins // pkgs'.vimPlugins;
-              tmuxPlugins = prev.tmuxPlugins // pkgs'.tmuxPlugins;
-              # lib = prev.lib // pkgs'.lib;
+  } @ inputs: let
+    overlays = {
+      dlo9 = final: prev: {dlo9 = import ./pkgs {pkgs = prev;};};
 
-              flatcolor-gtk-theme = pkgs'.flatcolor-gtk-theme;
-              lxappearance-xwayland = pkgs'.lxappearance-xwayland;
-              nss-docker = pkgs'.nss-docker;
-              caddy = pkgs'.caddy;
-              fromYAML = pkgs'.fromYAML;
-            };
-
-        # (recurseIntoAttrs (callPackage ./pkgs { }));
-        # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
-        # prev.lib.recursiveUpdate prev (prev.lib.recurseIntoAttrs (prev.callPackage ./pkgs { }));
-
-        # pkgs = prev.lib.recursiveUpdate prev.pkgs (prev.pkgs.callPackage ./pkgs { });
-        # recurseIntoAttrs (callPackage ./vim-plugins { })
-
-        unstable = system: final: prev: {
-          unstable = import inputs.nixpkgs-unstable {
-            inherit system;
-            config.allowUnfree = prev.config.allowUnfree;
-          };
-        };
-
-        kernel = system: final: prev: {
-          kernel = import inputs.nixpkgs-kernel {
-            inherit system;
-            config.allowUnfree = prev.config.allowUnfree;
-          };
+      unstable = system: final: prev: {
+        unstable = import inputs.nixpkgs-unstable {
+          inherit system;
+          config.allowUnfree = prev.config.allowUnfree;
         };
       };
 
-      linuxModules = [
-        # System modules
-        ./system
-
-        # Host modules
-        ./hosts
-
-        # Nix User repo
-        inputs.nur.nixosModules.nur
-
-        # Docker-compose in Nix
-        inputs.arion.nixosModules.arion
-
-        # Nixpkgs overlays
-        ({
-          config,
-          inputs,
-          ...
-        }: {
-          nixpkgs = {
-            config.allowUnfree = true;
-
-            overlays = with overlays; [
-              default
-              (unstable "x86_64-linux")
-              (kernel "x86_64-linux")
-            ];
-          };
-        })
-      ];
-
-      darwinModules = [
-        # System modules
-        ./system
-
-        # Host modules
-        ./hosts
-
-        # Nix User repo
-        inputs.nur.nixosModules.nur
-
-        # Nixpkgs overlays
-        ({
-          config,
-          inputs,
-          ...
-        }: {
-          nixpkgs = {
-            hostPlatform = "aarch64-darwin";
-            config.allowUnfree = true;
-
-            overlays = with overlays; [
-              inputs.nix-darwin.overlays.default
-              default
-              (unstable "aarch64-darwin")
-            ];
-          };
-        })
-      ];
-
-      # Pass extra arguments to modules
-      specialArgs = {
-        inherit inputs;
-        isDarwin = false;
-        isLinux = true;
-      };
-    in rec {
-      # https://daiderd.com/nix-darwin/manual/index.html
-      darwinConfigurations = with inputs.nix-darwin.lib; {
-        mallow = darwinSystem {
-          specialArgs = {
-            inherit inputs;
-            isDarwin = true;
-            isLinux = false;
-            hostname = "mallow";
-          };
-
-          system = "aarch64-darwin";
-          modules = darwinModules;
+      kernel = system: final: prev: {
+        kernel = import inputs.nixpkgs-kernel {
+          inherit system;
+          config.allowUnfree = prev.config.allowUnfree;
         };
       };
-
-      nixosConfigurations = with nixpkgs.lib; rec {
-        pavil = nixosSystem {
-          specialArgs = specialArgs // {hostname = "pavil";};
-          system = "x86_64-linux";
-          modules = linuxModules;
-        };
-
-        nib = nixosSystem {
-          specialArgs = specialArgs // {hostname = "nib";};
-          system = "x86_64-linux";
-          modules = linuxModules;
-        };
-
-        cuttlefish = nixosSystem {
-          specialArgs = specialArgs // {hostname = "cuttlefish";};
-
-          system = "x86_64-linux";
-          modules = linuxModules;
-        };
-
-        # https://mobile.nixos.org/devices/motorola-potter.html
-        # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
-        # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
-        moto = nixosSystem {
-          specialArgs = specialArgs // {hostname = "moto";};
-
-          system = "aarch64-linux";
-          modules =
-            linuxModules
-            ++ [
-              (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
-            ];
-        };
-
-        # Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
-        # Impure needed to access host paths without putting in the nix store
-        moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
-
-        rpi3 = nixosSystem {
-          specialArgs = specialArgs // {hostname = "rpi3";};
-
-          system = "aarch64-linux";
-          modules =
-            linuxModules
-            ++ [
-              "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            ];
-        };
-
-        # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
-        # Impure needed to access host paths without putting in the nix store
-        rpi3-image = rpi3.config.system.build.sdImage;
-
-        drywell = nixosSystem {
-          specialArgs = specialArgs // {hostname = "drywell";};
-
-          system = "x86_64-linux";
-          modules = linuxModules;
-        };
-
-        installer-test = nixosSystem {
-          specialArgs = specialArgs // {hostname = "installer-test";};
-
-          system = "x86_64-linux";
-          modules = linuxModules;
-        };
-      };
-
-      # packages.x86_64-linux = {
-      #   vmware = inputs.nixos-generators.nixosGenerate {
-      #     system = "x86_64-linux";
-      #     modules = [ ];
-      #     format = "iso";
-      #   };
-      # };
-
-      inherit overlays;
-
-      packages = let
-        change-to-flake-root = ''
-          while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
-            cd ..
-          done
-        '';
-
-        generate-hardware = ''
-          config="hosts/$(hostname)/hardware/generated.nix"
-          mkdir "$(dirname "$config")"
-          touch "$config"
-
-          # Must use `sudo` so that all mounts are visible
-          sudo nixos-generate-config --show-hardware-config | \
-            scripts/maintenance/process-hardware-config.awk > "$config"
-
-          nix fmt "$config"
-        '';
-
-        generate-hardware-linux = system:
-          nixpkgs.legacyPackages.${system}.writeShellApplication {
-            name = "generate-hardware";
-            text = ''
-              ${change-to-flake-root}
-              ${generate-hardware}
-            '';
-          };
-
-        rebuild-linux = system:
-          nixpkgs.legacyPackages.${system}.writeShellApplication {
-            name = "rebuild";
-            text = ''
-              ${change-to-flake-root}
-              ${generate-hardware}
-
-              # Rebuild
-              sudo nixos-rebuild switch
-
-              # Format
-              nix fmt
-            '';
-          };
-
-        rebuild-darwin = system:
-          nixpkgs.legacyPackages.${system}.writeShellApplication {
-            name = "rebuild";
-            text = ''
-              ${change-to-flake-root}
-
-              # Copy cert file already on the machine
-              certSource="/Users/dorchard/code/source/hack/ssl/certs.ca-certificates.crt"
-              if [ -f "$certSource" ]; then
-                cp "$certSource" "hosts/mallow/ca-certificates.crt"
-              fi
-
-              # Rebuild
-              darwin-rebuild switch --flake ".#$(hostname)"
-
-              # Format
-              nix fmt
-            '';
-          };
-      in {
-        x86_64-linux.rebuild = rebuild-linux "x86_64-linux";
-        aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
-
-        x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
-        aarch64-darwin.rebuild = rebuild-darwin "aarch64-darwin";
-      };
-
-      apps = inputs.flake-utils.lib.eachDefaultSystemMap (
-        system: {
-          default = {
-            type = "app";
-            program = "${packages.${system}.rebuild}/bin/rebuild";
-          };
-
-          generate-hardware = {
-            type = "app";
-            program = "${packages.${system}.generate-hardware}/bin/generate-hardware";
-          };
-        }
-      );
-
-      formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
     };
+
+    linuxModules = [
+      # System modules
+      ./system
+
+      # Host modules
+      ./hosts
+
+      # Nix User repo
+      inputs.nur.nixosModules.nur
+
+      # Docker-compose in Nix
+      inputs.arion.nixosModules.arion
+
+      # Nixpkgs overlays
+      ({
+        config,
+        inputs,
+        ...
+      }: {
+        nixpkgs = {
+          config.allowUnfree = true;
+
+          overlays = with overlays; [
+            dlo9
+            (unstable "x86_64-linux")
+            (kernel "x86_64-linux")
+          ];
+        };
+      })
+    ];
+
+    darwinModules = [
+      # System modules
+      ./system
+
+      # Host modules
+      ./hosts
+
+      # Nix User repo
+      inputs.nur.nixosModules.nur
+
+      # Nixpkgs overlays
+      ({
+        config,
+        inputs,
+        ...
+      }: {
+        nixpkgs = {
+          hostPlatform = "aarch64-darwin";
+          config.allowUnfree = true;
+
+          overlays = with overlays; [
+            inputs.nix-darwin.overlays.default
+            dlo9
+            (unstable "aarch64-darwin")
+          ];
+        };
+      })
+    ];
+
+    # Pass extra arguments to modules
+    specialArgs = {
+      inherit inputs;
+      isDarwin = false;
+      isLinux = true;
+    };
+  in rec {
+    # https://daiderd.com/nix-darwin/manual/index.html
+    darwinConfigurations = with inputs.nix-darwin.lib; {
+      mallow = darwinSystem {
+        specialArgs = {
+          inherit inputs;
+          isDarwin = true;
+          isLinux = false;
+          hostname = "mallow";
+        };
+
+        system = "aarch64-darwin";
+        modules = darwinModules;
+      };
+    };
+
+    nixosConfigurations = with nixpkgs.lib; rec {
+      pavil = nixosSystem {
+        specialArgs = specialArgs // {hostname = "pavil";};
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+
+      nib = nixosSystem {
+        specialArgs = specialArgs // {hostname = "nib";};
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+
+      cuttlefish = nixosSystem {
+        specialArgs = specialArgs // {hostname = "cuttlefish";};
+
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+
+      # https://mobile.nixos.org/devices/motorola-potter.html
+      # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
+      # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
+      moto = nixosSystem {
+        specialArgs = specialArgs // {hostname = "moto";};
+
+        system = "aarch64-linux";
+        modules =
+          linuxModules
+          ++ [
+            (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
+          ];
+      };
+
+      # Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
+      # Impure needed to access host paths without putting in the nix store
+      moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
+
+      rpi3 = nixosSystem {
+        specialArgs = specialArgs // {hostname = "rpi3";};
+
+        system = "aarch64-linux";
+        modules =
+          linuxModules
+          ++ [
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          ];
+      };
+
+      # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
+      # Impure needed to access host paths without putting in the nix store
+      rpi3-image = rpi3.config.system.build.sdImage;
+
+      drywell = nixosSystem {
+        specialArgs = specialArgs // {hostname = "drywell";};
+
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+
+      installer-test = nixosSystem {
+        specialArgs = specialArgs // {hostname = "installer-test";};
+
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+    };
+
+    # packages.x86_64-linux = {
+    #   vmware = inputs.nixos-generators.nixosGenerate {
+    #     system = "x86_64-linux";
+    #     modules = [ ];
+    #     format = "iso";
+    #   };
+    # };
+
+    inherit overlays;
+
+    packages = let
+      change-to-flake-root = ''
+        while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
+          cd ..
+        done
+      '';
+
+      generate-hardware = ''
+        config="hosts/$(hostname)/hardware/generated.nix"
+        mkdir "$(dirname "$config")"
+        touch "$config"
+
+        # Must use `sudo` so that all mounts are visible
+        sudo nixos-generate-config --show-hardware-config | \
+          scripts/maintenance/process-hardware-config.awk > "$config"
+
+        nix fmt "$config"
+      '';
+
+      generate-hardware-linux = system:
+        nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "generate-hardware";
+          text = ''
+            ${change-to-flake-root}
+            ${generate-hardware}
+          '';
+        };
+
+      rebuild-linux = system:
+        nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "rebuild";
+          text = ''
+            ${change-to-flake-root}
+            ${generate-hardware}
+
+            # Rebuild
+            sudo nixos-rebuild switch
+
+            # Format
+            nix fmt
+          '';
+        };
+
+      rebuild-darwin = system:
+        nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "rebuild";
+          text = ''
+            ${change-to-flake-root}
+
+            # Copy cert file already on the machine
+            certSource="/etc/ssl/afscerts/ca-certificates.crt"
+            if [ -f "$certSource" ]; then
+              cp "$certSource" "hosts/mallow/ca-certificates.crt"
+            fi
+
+            # Rebuild
+            darwin-rebuild switch --flake ".#$(hostname)"
+
+            # Format
+            nix fmt
+          '';
+        };
+    in {
+      x86_64-linux.rebuild = rebuild-linux "x86_64-linux";
+      aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
+
+      x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
+      aarch64-darwin.rebuild = rebuild-darwin "aarch64-darwin";
+    };
+
+    apps = inputs.flake-utils.lib.eachDefaultSystemMap (
+      system: {
+        default = {
+          type = "app";
+          program = "${packages.${system}.rebuild}/bin/rebuild";
+        };
+
+        generate-hardware = {
+          type = "app";
+          program = "${packages.${system}.generate-hardware}/bin/generate-hardware";
+        };
+      }
+    );
+
+    formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
+  };
 }

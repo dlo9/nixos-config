@@ -55,7 +55,7 @@ with lib; {
 
             mouse.hide_when_typing = false;
           }
-          // (pkgs.fromYAML (config.scheme inputs.base16-alacritty));
+          // (pkgs.dlo9.lib.fromYAML (config.scheme inputs.base16-alacritty));
       };
 
       # Other
@@ -105,7 +105,7 @@ with lib; {
             target = "gtk-3";
           };
         in
-          pkgs.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
+          pkgs.dlo9.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
             # Build instructions: https://github.com/tinted-theming/base16-gtk-flatcolor
             # This builds, but doesn't seem to work very well?
             postInstall = ''
@@ -137,7 +137,7 @@ with lib; {
           wl-clipboard
 
           # For debugging themes
-          lxappearance-xwayland
+          pkgs.dlo9.lxappearance-xwayland
 
           # File manager
           cinnamon.nemo

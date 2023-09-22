@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/jasperro/FlatColor";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    # maintainers = [ dlo9 ];
+    maintainers = with maintainers; [dlo9];
   };
 }

@@ -23,7 +23,7 @@ with lib; {
     };
 
     plugins = with pkgs.vimPlugins;
-    with pkgs; [
+    with pkgs.dlo9.vimPlugins; [
       # Statusline
       vim-airline
 

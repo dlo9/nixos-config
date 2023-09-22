@@ -12,8 +12,6 @@ with types; let
 
   hosts = attrNames (filterAttrs (name: value: value == "directory" && (hostYamlExists name)) (builtins.readDir ./.));
 
-  jsonTrace = value: builtins.trace (builtins.toJSON value) value;
-
   importExports = sopsFile: let
     attrToExports = mapAttrs' (
       name: value: {
@@ -26,7 +24,7 @@ with types; let
       (value.enable or false)
       && (builtins.isAttrs (value.exports or ""));
 
-    contents = pkgs.fromYAML sopsFile;
+    contents = pkgs.dlo9.lib.fromYAML sopsFile;
     enabledContents = filterAttrs isEnabled contents;
   in
     attrToExports enabledContents;
@@ -49,7 +47,7 @@ with types; let
       (value.enable or false)
       && (value ? contents);
 
-    contents = pkgs.fromYAML sopsFile;
+    contents = pkgs.dlo9.lib.fromYAML sopsFile;
     enabledContents = filterAttrs isEnabled contents;
   in
     attrToSecrets enabledContents;

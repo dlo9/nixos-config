@@ -83,7 +83,7 @@ with lib; {
       # Spawn a new session when attaching and none exist
       newSession = true;
 
-      plugins = with pkgs.tmuxPlugins; [
+      plugins = with pkgs.dlo9.tmuxPlugins; [
         {
           plugin = tmux-themepack;
           extraConfig = "set -g @themepack 'powerline/double/purple'";
