@@ -90,6 +90,7 @@ with lib; {
     RUST_BACKTRACE = "1";
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
+    NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
   };
 
   home.sessionPath = [

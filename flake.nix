@@ -391,7 +391,7 @@
               ${change-to-flake-root}
 
               # Copy cert file already on the machine
-              certSource="/etc/ssl/afscerts/ca-certificates.crt"
+              certSource="/Users/dorchard/code/source/hack/ssl/certs.ca-certificates.crt"
               if [ -f "$certSource" ]; then
                 cp "$certSource" "hosts/mallow/ca-certificates.crt"
               fi
