@@ -14,6 +14,16 @@ with builtins; {
 
     developer-tools.enable = mkEnableOption "developer tools" // {default = osConfig.developer-tools.enable;};
 
+    font.family = mkOption {
+      type = nonEmptyStr;
+      default = osConfig.font.family;
+    };
+
+    font.size = mkOption {
+      type = ints.positive;
+      default = osConfig.font.size;
+    };
+
     wallpapers = mkOption {
       type = attrsOf package;
       readOnly = true;

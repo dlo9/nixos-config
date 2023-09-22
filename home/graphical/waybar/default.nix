@@ -226,6 +226,20 @@ with lib; {
 
           ${readFile (config.scheme inputs.base16-waybar)}
 
+          * {
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
+
+            /* Slanted */
+            border-radius: 0.3em 0.9em;
+
+            /* None */
+            /*border-radius: 0;*/
+
+            outline: none;
+            border-color: transparent;
+          }
+
           ${readFile ./bar.css}
         '';
       };

@@ -39,8 +39,8 @@ with lib; {
             window.opacity = 0.9;
             decorations = "full";
             font = {
-              normal.family = "NotoSansM Nerd Font Mono";
-              #size = 11;
+              normal.family = config.font.family;
+              size = config.font.size;
             };
 
             save_to_clipboard = true;
@@ -195,6 +195,8 @@ with lib; {
           })
 
           noto-fonts-emoji
+
+          b612
 
           # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
           dconf

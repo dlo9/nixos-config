@@ -24,7 +24,7 @@ with builtins; {
         indicator-caps-lock = true;
         image = "${config.wallpapers.default}";
         scaling = "fill";
-        font = "NotoSansM Nerd Font Mono";
+        font = config.font.family;
         font-size = 20;
         indicator-radius = 115;
 
@@ -90,8 +90,8 @@ with builtins; {
 
         "wofi/style.css".text = ''
           *{
-            font-family: NotoSansM Nerd Font Mono;
-            font-size: 14px;
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
           }
 
           window {
@@ -119,8 +119,8 @@ with builtins; {
 
         "wofi/style.widgets.css".text = ''
           *{
-            font-family: NotoSansM Nerd Font Mono;
-            font-size: 14px;
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
           }
 
           #window {
@@ -281,9 +281,9 @@ with builtins; {
         ];
 
         fonts = {
-          names = ["NotoSansM Nerd Font Mono"];
+          names = [config.font.family];
           style = "Regular";
-          size = 11.0;
+          size = config.font.size;
         };
 
         gaps = {

@@ -146,8 +146,8 @@ with lib; {
       port = 7681;
       interface = "mynet";
       clientOptions = {
-        fontFamily = "NotoSansM Nerd Font Mono";
-        fontSize = "14";
+        fontFamily = config.font.family;
+        fontSize = builtins.toString config.font.size;
       };
     };
   };

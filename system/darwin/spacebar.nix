@@ -22,8 +22,8 @@
       spacing_left = "25";
       spacing_right = "15";
 
-      text_font = ''"NotoMono Nerd Font Mono:Regular:12.0"'';
-      icon_font = ''"NotoMono Nerd Font Mono:Regular:14.0"'';
+      text_font = ''"${config.font.family}:Regular:${builtins.toString config.font.size}"'';
+      icon_font = ''"${config.font.family}:Regular:${builtins.toString config.font.size}"'';
 
       inherit background_color foreground_color;
 

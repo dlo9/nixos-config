@@ -2,20 +2,6 @@
 /***** Global/Bar *****/
 /**********************/
 
-* {
-  font-family: NotoSansM Nerd Font Mono;
-  font-size: 14px;
-
-  /* Slanted */
-  border-radius: 0.3em 0.9em;
-
-  /* None */
-  /*border-radius: 0;*/
-
-  outline: none;
-  border-color: transparent;
-}
-
 #waybar {
   background: @base00;
 }
@@ -137,6 +123,7 @@ label {
 }
 
 /* Fix tooltip background */
-tooltip, tooltip label {
+tooltip,
+tooltip label {
   background: @base02;
 }
