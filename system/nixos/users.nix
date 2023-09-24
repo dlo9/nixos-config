@@ -19,6 +19,7 @@
         "adbusers" # Android ADB
         "scanner" # Scanning
         "lp" # Printing
+        "libvirtd"
       ];
     };
   };

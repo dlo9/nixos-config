@@ -7,6 +7,8 @@
   media-id = 568;
 in {
   config = {
+    home-manager.users.david = import ./home.nix;
+
     users = {
       groups = {
         media.gid = media-id;

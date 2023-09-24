@@ -45,7 +45,7 @@ in {
       # Add modules via:
       # https://github.com/NixOS/nixpkgs/issues/14671#issuecomment-1253111596
       # https://github.com/caddyserver/caddy/blob/master/cmd/caddy/main.go
-      package = config.sys.pkgs.caddy;
+      package = pkgs.dlo9.caddy;
 
       virtualHosts = {
         keycloak = {

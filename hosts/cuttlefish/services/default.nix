@@ -1,10 +1,11 @@
 {...}: {
   imports = [
+    ./caddy.nix
     ./certs.nix
     ./ddns.nix
     ./jellyfin.nix
+    ./kubernetes.nix
     ./netdata.nix
-    ./caddy.nix
   ];
 
   config = {

@@ -15,7 +15,7 @@
     virtualisation.oci-containers.backend = "docker";
     # environment.etc."cni/net.d".enable = false;
 
-    environment.systemPackages = [config.sys.pkgs.nss-docker];
+    environment.systemPackages = [pkgs.dlo9.nss-docker];
     system.nssDatabases.hosts = ["docker"];
   };
 }

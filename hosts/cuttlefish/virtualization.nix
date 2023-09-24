@@ -32,35 +32,5 @@ in {
         ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs)
       ];
     };
-
-    # hardware.opengl.enable = true;
-    # virtualisation.spiceUSBRedirection.enable = true;
-
-    virtualisation.libvirtd = {
-      enable = true;
-      qemu = {
-        package = pkgs.qemu_kvm;
-        swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [
-            (pkgs.OVMFFull.override {
-              secureBoot = true;
-              tpmSupport = true;
-              csmSupport = true;
-            })
-            .fd
-          ];
-        };
-      };
-    };
-
-    # programs.dconf.enable = true;
-    # environment.systemPackages = with pkgs; [
-    #   virt-manager
-    #   looking-glass-client
-    # ];
-
-    users.users."${config.sys.user}".extraGroups = ["libvirtd"];
   };
 }

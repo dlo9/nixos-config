@@ -3,27 +3,43 @@
   inputs,
   pkgs,
   lib,
+  hostname,
   ...
 }:
 with lib; {
   imports = [
     ./docker
-    ./hardware.nix
-    ./users.nix
-    ./network.nix
-    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
-    inputs.nixos-hardware.nixosModules.common-cpu-amd
-    inputs.nixos-hardware.nixosModules.common-gpu-intel
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
-    inputs.nixos-hardware.nixosModules.common-hidpi
+    ./hardware
     ./services
+
+    ./network.nix
+    ./users.nix
     ./virtualization.nix
-    #./vnc.nix
     ./webdav.nix
     ./zrepl.nix
   ];
 
   config = {
+    # SSH config
+    users.users.david.openssh.authorizedKeys.keys = [
+      config.hosts.bitwarden.ssh-key.pub
+      config.hosts.pixie.ssh-key.pub
+      config.hosts.pavil.david-ssh-key.pub
+      config.hosts.nib.david-ssh-key.pub
+      config.hosts.drywell.david-ssh-key.pub
+    ];
+
+    environment.etc = {
+      "/etc/ssh/ssh_host_ed25519_key.pub" = {
+        text = config.hosts.${hostname}.host-ssh-key.pub;
+        mode = "0644";
+      };
+    };
+
+    graphical.enable = true;
+    developer-tools.enable = true;
+    gaming.enable = false;
+
     # Ues overlay2 Docker storage driver for better performance. For this to work,
     # /var/lib/docker/overlay2 MUST be a non-zfs mount (e.g., ext4 zvol)
     # Remove this when OpenZFS has added overlay support in 2.2: https://github.com/openzfs/zfs/pull/9414
@@ -84,11 +100,6 @@ with lib; {
     #     intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
     #   ];
     # };
-
-    sys = {
-      kubernetes.enable = true;
-      #maintenance.autoUpgrade = true;
-    };
 
     boot.blacklistedKernelModules = ["nouveau"];
 
