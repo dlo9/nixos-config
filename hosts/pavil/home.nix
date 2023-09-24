@@ -19,4 +19,6 @@ with lib; {
   home.file = {
     ".ssh/id_ed25519.pub".text = osConfig.hosts.${osConfig.networking.hostName}.david-ssh-key.pub;
   };
+
+  programs.alacritty.settings.font.size = 11.0;
 }

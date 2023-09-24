@@ -39,8 +39,8 @@ with lib; {
             window.opacity = 0.9;
             decorations = "full";
             font = {
-              normal.family = config.font.family;
-              size = config.font.size;
+              normal.family = mkDefault config.font.family;
+              size = mkDefault config.font.size;
             };
 
             save_to_clipboard = true;

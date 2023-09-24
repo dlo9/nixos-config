@@ -283,7 +283,7 @@ with builtins; {
         fonts = {
           names = [config.font.family];
           style = "Regular";
-          size = config.font.size;
+          size = mkDefault (config.font.size + 0.0);
         };
 
         gaps = {
