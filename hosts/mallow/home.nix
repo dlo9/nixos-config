@@ -61,6 +61,7 @@ with lib; {
     mongosh
     openldap
     terraform
+    flyway
 
     # SQL Server
     # unixODBC
