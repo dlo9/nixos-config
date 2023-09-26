@@ -56,6 +56,9 @@ with lib; {
     bazelisk
     bazel-buildtools
 
+    # Link bazel to bazelisk
+    (runCommand "my-bazel" {} ''mkdir -p $out/bin; ln -s ${bazelisk}/bin/bazelisk $out/bin/bazel'')
+
     # Other tools
     ansible
     mongosh
