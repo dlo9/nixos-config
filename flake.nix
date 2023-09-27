@@ -6,8 +6,10 @@
 
     # Old release for EOL kernel 6.2. 6.1 doesn't support Intel ARC, and 6.3 doesn't support ZFS.
     # 6.2 was removed in https://github.com/NixOS/nixpkgs/commit/10d5a682701d1bfd16e62459026d0df54cc3d314
-    # TODO: Remove once 6.3 supports ZFS
-    nixpkgs-kernel.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    # TODO: Remove once 6.3+ supports ZFS
+    # https://hydra.nixos.org/jobset/nixos/release-23.05/evals?page=3
+    # https://hydra.nixos.org/eval/1798020#tabs-inputs
+    nixpkgs-kernel.url = github:NixOS/nixpkgs/391e8db1f06c3f74c2d313a73135515023af3993;
 
     # Darwin settings
     nix-darwin = {
@@ -321,8 +323,7 @@
 
       generate-hardware = ''
         config="hosts/$(hostname)/hardware/generated.nix"
-        mkdir "$(dirname "$config")"
-        touch "$config"
+        mkdir -p "$(dirname "$config")"
 
         # Must use `sudo` so that all mounts are visible
         sudo nixos-generate-config --show-hardware-config | \
@@ -377,6 +378,8 @@
     in {
       x86_64-linux.rebuild = rebuild-linux "x86_64-linux";
       aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
+      x86_64-linux.generate-hardware = generate-hardware-linux "x86_64-linux";
+      aarch64-linux.generate-hardware = generate-hardware-linux "aarch64-linux";
 
       x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
       aarch64-darwin.rebuild = rebuild-darwin "aarch64-darwin";

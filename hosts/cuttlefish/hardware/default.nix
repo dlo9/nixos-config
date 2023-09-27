@@ -13,7 +13,7 @@
     common-gpu-nvidia-disable
     common-hidpi
 
-    # ./quirks.nix
+    ./quirks.nix
     ./generated.nix
   ];
 }
