@@ -111,6 +111,10 @@ with lib; {
         line_break.disabled = true;
         time.disabled = false;
         cmd_duration.min_time = 1000;
+        docker_context.disabled = true;
+        gradle.disabled = true;
+        java.disabled = true;
+        gcloud.disabled = true;
 
         status = {
           disabled = false;
