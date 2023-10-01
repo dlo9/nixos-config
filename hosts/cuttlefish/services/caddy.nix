@@ -91,6 +91,14 @@ in {
           '';
         };
 
+        recipes = {
+          inherit useACMEHost;
+          serverAliases = ["recipes.sigpanic.com"];
+          extraConfig = ''
+            redir https://food.sigpanic.com{uri} permanent
+          '';
+        };
+
         traefik = {
           inherit useACMEHost;
           serverAliases = ["*.sigpanic.com"];
