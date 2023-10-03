@@ -67,6 +67,10 @@ in {
                 "slow/replication<"
                 "slow/backup/drywell<"
 
+                # Caches
+                "fast/nixos/nix<"
+                "slow/media/video/optimized<"
+
                 # Tdarr temp
                 "fast/kubernetes/storage/pvc-f81c171e-9ef3-4d0c-8377-9e7854747171"
               ];
@@ -78,8 +82,6 @@ in {
                 "fast/home/david/.cache<"
                 "fast/home/david/code<"
                 "fast/home/david/Downloads<"
-                "fast/nixos/nix<"
-                "slow/media/video/optimized<"
                 "slowcache<"
 
                 # Container cache
