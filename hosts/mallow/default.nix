@@ -56,6 +56,9 @@ in {
       "jdk-mission-control"
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
+
+      # Team fun
+      "steam"
     ];
   };
 
