@@ -182,6 +182,9 @@ with lib; {
 
           # Monitor control
           ddcui
+
+          # USB flasher
+          popsicle
         ])
 
         [
