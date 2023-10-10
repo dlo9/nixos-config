@@ -185,6 +185,9 @@ with lib; {
 
           # USB flasher
           popsicle
+
+          # GUI-ish bluetooth control
+          bluetuith
         ])
 
         [

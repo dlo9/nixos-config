@@ -82,6 +82,7 @@ with lib; {
         lsof
         pciutils # lspci
         gptfdisk # Disk partitioning (sgdisk)
+        inxi # Hardware info
       ]);
   };
 
