@@ -18,8 +18,8 @@
   boot.extraModulePackages = [];
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf";}
     {device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454";}
+    {device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -57,26 +57,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/fast/docker/containers/authentik" = {
-    device = "fast/docker/containers/authentik";
-    fsType = "zfs";
-  };
-
-  fileSystems."/fast/docker/containers/checkmk" = {
-    device = "fast/docker/containers/checkmk";
-    fsType = "zfs";
-  };
-
-  fileSystems."/fast/docker/containers/keycloak" = {
-    device = "fast/docker/containers/keycloak";
-    fsType = "zfs";
-  };
-
-  fileSystems."/fast/docker/containers/node-red" = {
-    device = "fast/docker/containers/node-red";
-    fsType = "zfs";
-  };
-
   fileSystems."/home/david" = {
     device = "fast/home/david";
     fsType = "zfs";
@@ -92,6 +72,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/authentik/postgres" = {
+    device = "fast/services/authentik/postgres";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/fast/photoprism-config" = {
     device = "fast/services/photoprism/config";
     fsType = "zfs";
@@ -99,6 +84,21 @@
 
   fileSystems."/services/fast/photoprism-mariadb" = {
     device = "fast/services/photoprism/mariadb";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/linkding/data" = {
+    device = "fast/services/linkding/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/linkwarden/data" = {
+    device = "fast/services/linkwarden/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/linkwarden/postgres" = {
+    device = "fast/services/linkwarden/postgres";
     fsType = "zfs";
   };
 
@@ -114,6 +114,11 @@
 
   fileSystems."/slow/backup/chelsea" = {
     device = "slow/backup/chelsea";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/backup/sue-old-laptop" = {
+    device = "slow/backup/sue-old-laptop";
     fsType = "zfs";
   };
 
