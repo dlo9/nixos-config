@@ -203,6 +203,7 @@ with lib; {
           noto-fonts-emoji
 
           b612
+          open-sans
 
           # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
           dconf
