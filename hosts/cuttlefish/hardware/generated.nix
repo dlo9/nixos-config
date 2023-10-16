@@ -77,6 +77,31 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/bazarr/config" = {
+    device = "fast/services/bazarr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/calibre-server/config" = {
+    device = "fast/services/calibre-server/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/deluge/config" = {
+    device = "fast/services/deluge/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/deluge/downloads" = {
+    device = "slow/services/deluge/downloads";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/diun/data" = {
+    device = "fast/services/diun/data";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/fast/photoprism-config" = {
     device = "fast/services/photoprism/config";
     fsType = "zfs";
@@ -84,6 +109,31 @@
 
   fileSystems."/services/fast/photoprism-mariadb" = {
     device = "fast/services/photoprism/mariadb";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/feedpushr/data" = {
+    device = "fast/services/feedpushr/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/fresh-rss/data" = {
+    device = "fast/services/fresh-rss/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/ghost/content" = {
+    device = "fast/services/ghost/content";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/gitea/data" = {
+    device = "fast/services/gitea/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/home-assistant/config" = {
+    device = "fast/services/home-assistant/config";
     fsType = "zfs";
   };
 
@@ -102,13 +152,98 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/miniflux/data" = {
+    device = "fast/services/miniflux/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/miniflux/postgres" = {
+    device = "fast/services/miniflux/postgres";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/nextcloud/data" = {
+    device = "fast/services/nextcloud/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/nextcloud/mariadb" = {
+    device = "fast/services/nextcloud/mariadb";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/node-red/data" = {
+    device = "fast/services/node-red/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/overseerr/config" = {
+    device = "fast/services/overseerr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/pihole/config" = {
+    device = "fast/services/pihole/config";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/plex/config" = {
     device = "fast/services/plex/config";
     fsType = "zfs";
   };
 
+  fileSystems."/services/plextraktsync/config" = {
+    device = "fast/services/plextraktsync/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/prometheus/data" = {
+    device = "fast/services/prometheus/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/prowlarr/config" = {
+    device = "fast/services/prowlarr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/radarr/config" = {
+    device = "fast/services/radarr/config";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/readarr/config" = {
     device = "fast/services/readarr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/readflow/postgres" = {
+    device = "fast/services/readflow/postgres";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/recipes/config" = {
+    device = "fast/services/recipes/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/recipes/media" = {
+    device = "fast/services/recipes/media";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/smartd/config" = {
+    device = "fast/services/smartd/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/sonarr/config" = {
+    device = "fast/services/sonarr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/syncthing/config" = {
+    device = "fast/services/syncthing/config";
     fsType = "zfs";
   };
 
