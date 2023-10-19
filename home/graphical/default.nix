@@ -188,6 +188,8 @@ with lib; {
 
           # GUI-ish bluetooth control
           bluetuith
+
+          zoom-us
         ])
 
         [
