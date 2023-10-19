@@ -71,4 +71,29 @@ in {
     gid = 20;
     shell = pkgs.fish;
   };
+
+  # Launch raycast on start
+  environment.userLaunchAgents."raycast.plist".text = ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>EnvironmentVariables</key>
+      <dict>
+        <key>PATH</key>
+        <string>$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin</string>
+      </dict>
+      <key>KeepAlive</key>
+      <true/>
+      <key>Label</key>
+      <string>raycast</string>
+      <key>ProcessType</key>
+      <string>Interactive</string>
+      <key>ProgramArguments</key>
+      <array>
+        <string>${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast</string>
+      </array>
+    </dict>
+    </plist>
+  '';
 }
