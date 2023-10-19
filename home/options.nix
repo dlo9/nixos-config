@@ -43,11 +43,12 @@ with builtins; {
           sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
         };
 
-        pink-sunset = fetchurl {
-          name = "pink-sunset";
-          url = https://cutewallpaper.org/22/retro-neon-race-4k-wallpapers/285729412.jpg;
-          sha256 = "0p6z31gh552rk4w99gbvr3hvwadfrv6h97k41qdbb9mxy7wc9brz";
-        };
+        # Hash keeps changing
+        #pink-sunset = fetchurl {
+        #  name = "pink-sunset";
+        #  url = https://cutewallpaper.org/22/retro-neon-race-4k-wallpapers/285729412.jpg;
+        #  sha256 = "0p6z31gh552rk4w99gbvr3hvwadfrv6h97k41qdbb9mxy7wc9brz";
+        #};
 
         mushroom = fetchurl {
           name = "mushroom";
