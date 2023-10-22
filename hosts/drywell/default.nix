@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  hostname,
   ...
 }:
 with builtins;
@@ -10,6 +11,8 @@ with lib; {
   imports = [
     ./hardware
     ./services
+
+    ./users.nix
   ];
 
   config = {
@@ -27,10 +30,6 @@ with lib; {
         mode = "0644";
       };
     };
-
-    graphical.enable = true;
-    developer-tools.enable = true;
-    gaming.enable = false;
 
     boot.kernelParams = ["nomodeset"];
     boot.loader = {
@@ -109,26 +108,5 @@ with lib; {
         map to guest = bad user
       '';
     };
-
-    # Users
-    users.users = {
-      michael = {
-        uid = 1001;
-        isNormalUser = true;
-        hashedPassword = "$6$S/H.nEE7XEPdyO6v$ENulPNgv2WGmwdCD7zluMNasQ/wPFdc61wjxC2/aFXcl9dLvbMzzeSeVI9V5dxycJaojJRFUtqKYNPJIX767P1";
-        createHome = false;
-        extraGroups = ["samba"];
-      };
-
-      sue = {
-        uid = 1002;
-        isNormalUser = true;
-        createHome = false;
-        extraGroups = ["samba"];
-      };
-    };
-
-    users.groups.samba = {};
-    users.users.david.extraGroups = ["samba"];
   };
 }
