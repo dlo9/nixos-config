@@ -8,20 +8,29 @@
 with builtins;
 with lib; {
   imports = [
-    ./ddns.nix
-    ./hardware.nix
-    ./webdav.nix
-    ./nginx.nix
-    ./zrepl.nix
+    ./hardware
+    ./services
   ];
 
   config = {
-    sys = {
-      gaming.enable = false;
-      development.enable = false;
-      graphical.enable = false;
-      # TODO: kubernetes
+    # SSH config
+    users.users.david.openssh.authorizedKeys.keys = [
+      config.hosts.bitwarden.ssh-key.pub
+      config.hosts.cuttlefish.david-ssh-key.pub
+      config.hosts.pixie.ssh-key.pub
+      config.hosts.pavil.david-ssh-key.pub
+    ];
+
+    environment.etc = {
+      "/etc/ssh/ssh_host_ed25519_key.pub" = {
+        text = config.hosts.${hostname}.host-ssh-key.pub;
+        mode = "0644";
+      };
     };
+
+    graphical.enable = true;
+    developer-tools.enable = true;
+    gaming.enable = false;
 
     boot.kernelParams = ["nomodeset"];
     boot.loader = {
