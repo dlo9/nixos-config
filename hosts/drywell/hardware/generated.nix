@@ -74,21 +74,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/var/lib/containerd/io.containerd.content.v1.content" = {
-    device = "fast/containers/containerd/content";
-    fsType = "zfs";
-  };
-
-  fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" = {
-    device = "/dev/disk/by-uuid/87ef142b-9216-4572-8b3f-5f8d0e8d507e";
-    fsType = "ext4";
-  };
-
-  fileSystems."/var/lib/docker" = {
-    device = "fast/containers/docker";
-    fsType = "zfs";
-  };
-
   fileSystems."/zfs" = {
     device = "fast/zfs";
     fsType = "zfs";
