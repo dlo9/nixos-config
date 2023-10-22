@@ -31,6 +31,9 @@ with lib; {
       };
     };
 
+    # Use to enable vscode-server
+    programs.nix-ld.enable = true;
+
     boot.kernelParams = ["nomodeset"];
     boot.loader = {
       grub.mirroredBoots = [
