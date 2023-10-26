@@ -409,6 +409,11 @@ with builtins; {
             command = "inhibit_idle fullscreen";
           }
 
+          {
+            criteria = {title = ".*";};
+            command = "inhibit_idle fullscreen";
+          }
+
           # Copy progress
           {
             criteria = {title = "File Operation Progress";};
