@@ -13,7 +13,7 @@ with lib; {
       du = "dust";
       df = "duf";
       cat = "bat";
-      ls = "exa";
+      ls = "eza";
       grep = "rg";
       top = "btm";
       htop = "btm";
@@ -36,7 +36,7 @@ with lib; {
         du-dust
         duf
         bat
-        exa
+        eza
         ripgrep
         bottom
         gping

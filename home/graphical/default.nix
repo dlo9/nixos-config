@@ -9,6 +9,7 @@
 with lib; {
   imports = [
     ./developer-tools.nix
+    ./hyprland.nix
     ./sway.nix
     ./waybar
     ./web.nix

@@ -138,8 +138,7 @@ with lib; {
 
             modules-left = [
               "custom/launcher"
-              "sway/workspaces"
-              "sway/mode"
+              "hyprland/workspaces"
             ];
 
             modules-right = [
@@ -195,21 +194,16 @@ with lib; {
               scroll-step = 1;
             };
 
-            "sway/mode" = {
-              format = "{}";
-              tooltip = false;
-            };
-
-            "sway/window" = {
+            "hyprland/window" = {
               format = "{}";
               max-length = 120;
             };
 
-            "sway/workspaces" = {
+            "hyprland/workspaces" = {
               all-outputs = false;
-              disable-markup = false;
-              disable-scroll = true;
-              format = " {icon} ";
+              # disable-markup = false;
+              # disable-scroll = true;
+              # format = " {icon} ";
             };
 
             tray = {

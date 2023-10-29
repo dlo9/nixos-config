@@ -19,20 +19,28 @@ with lib; {
     # TODO: move this to home-manager
     environment.loginShellInit = mkDefault ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-        ${
-        if (elem "nvidia" config.services.xserver.videoDrivers)
-        then "exec env WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu"
-        else "exec sway"
-      }
+        exec Hyprland
       fi
     '';
 
     # Audio
-    hardware.pulseaudio.enable = mkDefault true;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    # Desktop portal
+    xdg.portal = {
+      enable = true;
+      wlr.enable = true;
+    };
 
     # Fonts
     fonts = {
-      fonts = with pkgs; [
+      packages = with pkgs; [
         # Nerdfonts is huge, so only install specific fonts
         # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
         (nerdfonts.override {
