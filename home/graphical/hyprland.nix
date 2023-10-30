@@ -23,12 +23,21 @@ with builtins; {
       };
     };
 
+    programs.eww = {
+      enable = true;
+      configDir = ./eww;
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       plugins = [];
 
       # https://wiki.hyprland.org/Configuring/Variables/
-      settings = {
+      settings = let
+        wpctl = "${pkgs.wireplumber}/bin/wpctl";
+        playerctl = "${pkgs.playerctl}/bin/playerctl";
+        brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+      in {
         # Startup services
         exec-once = [
           # Notifications
@@ -52,12 +61,20 @@ with builtins; {
           "${pkgs.hyprpaper}/bin/hyprpaper"
         ];
 
+        # General
+        decoration.rounding = 5;
+        # decoration.inactive_opacity = 0.7;
+        decoration.dim_inactive = true;
+        gestures.workspace_swipe = true; # 3-finger swipe
+        animation = "global,1,3,default"; # Faster animations
+
         # Monitors
         monitor = [
           ", preferred, auto, 1" # Default
           # "DP-1, highres, 0x0, 1"
         ];
 
+        # Keybindings
         bind = let
           mod = "ALT";
         in [
@@ -119,15 +136,35 @@ with builtins; {
           # Splitting
           # Resizing mods + sizes
           # Parent container selection
-          # Media keys
-          # Laptop lid
+          # Laptop lid: https://wiki.hyprland.org/Configuring/Binds/#switches
           # Passthrough mode
           # Title-based floating rules
           # Picture-in-Picture rules
           # Idle inhibit
           # Monitor directions & sizes
-          # Background
           # Theme
+        ];
+
+        # Repeat when held, and works on lock screen
+        bindel = [
+          # Media keys
+          ", XF86AudioRaiseVolume, exec, ${wpctl} set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+          ", XF86AudioLowerVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+          ", XF86MonBrightnessUp, exec, ${brightnessctl} -c backlight set +5%"
+          ", XF86MonBrightnessDown, exec, ${brightnessctl} -c backlight set 5%-"
+        ];
+
+        # Works on lock screen
+        bindl = [
+          # Media keys
+          ", XF86AudioMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          ", XF86AudioMicMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+
+          ", XF86AudioPlay, exec, ${playerctl} play"
+          ", XF86AudioPause, exec, ${playerctl} pause"
+          ", XF86AudioNext, exec, ${playerctl} next"
+          ", XF86AudioPrev, exec, ${playerctl} previous"
         ];
       };
     };

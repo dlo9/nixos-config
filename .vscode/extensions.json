@@ -1,9 +1,7 @@
 {
-	"recommendations": [
-		"jnoortheen.nix-ide",
-		"kamadorueda.alejandra",
-		"signageos.signageos-vscode-sops"
-	],
+    "recommendations": [
+        "jnoortheen.nix-ide", "kamadorueda.alejandra", "signageos.signageos-vscode-sops", "eww-yuck.yuck"
+    ],
 
-	"unwantedRecommendations": [ ]
+    "unwantedRecommendations": []
 }
