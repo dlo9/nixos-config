@@ -57,7 +57,13 @@ with lib; {
     bazel-buildtools
 
     # Link bazel to bazelisk
-    (runCommand "my-bazel" {} ''mkdir -p $out/bin; ln -s ${bazelisk}/bin/bazelisk $out/bin/bazel'')
+    #(runCommand "my-bazel" {} ''mkdir -p $out/bin; ln -s ${bazelisk}/bin/bazelisk $out/bin/bazel'')
+    (writeShellScriptBin "bazel" ''
+      # Clear java hmoe or else the default_system_javabase flag is set in from CLI but not from IntelliJ,
+      # resulting in different startup opitons
+      export JAVA_HOME=
+      ${bazelisk}/bin/bazelisk "$@"
+    '')
 
     # Other tools
     ansible
