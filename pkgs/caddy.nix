@@ -7,12 +7,12 @@
   testers,
   installShellFiles,
 }: let
-  version = "2.7.0-beta.1";
+  version = "2.7.5";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     rev = "v${version}";
-    hash = "sha256-1CjrONP6W1DYsKMezfjf0/JeV1GrrvBYbx93LDUGJvk=";
+    hash = "sha256-aZ7hdAZJH1PvrX9GQLzLquzzZG3LZSKOvt7sWQhTiR8=";
   };
 in
   buildGoModule {
@@ -23,10 +23,10 @@ in
       owner = "caddyserver";
       repo = "caddy";
       rev = "v${version}";
-      hash = "sha256-wbAbSw/z0FM2UEhG6gks7Dj3HEXDISF+vcjc5wzYNH8=";
+      hash = "sha256-0IZZ7mkEzZI2Y8ed//m0tbBQZ0YcCXA0/b10ntNIXUk=";
     };
 
-    vendorHash = "sha256-PJi5G7FGSAiZ1WyyrxWYBIMzr8zXn+9EXWtmAPQiE7s=";
+    vendorHash = "sha256-YNcQtjPGQ0XMSog+sWlH4lG/QdbdI0Lyh/fUGqQUFaY=";
 
     subPackages = ["cmd/caddy"];
 

@@ -47,16 +47,6 @@
     fsType = "vfat";
   };
 
-  fileSystems."/fast/docker" = {
-    device = "fast/docker";
-    fsType = "zfs";
-  };
-
-  fileSystems."/fast/docker/containers" = {
-    device = "fast/docker/containers";
-    fsType = "zfs";
-  };
-
   fileSystems."/home/david" = {
     device = "fast/home/david";
     fsType = "zfs";
@@ -102,18 +92,13 @@
     fsType = "zfs";
   };
 
-  fileSystems."/services/fast/photoprism-config" = {
-    device = "fast/services/photoprism/config";
-    fsType = "zfs";
-  };
-
-  fileSystems."/services/fast/photoprism-mariadb" = {
-    device = "fast/services/photoprism/mariadb";
-    fsType = "zfs";
-  };
-
   fileSystems."/services/feedpushr/data" = {
     device = "fast/services/feedpushr/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/flame/david" = {
+    device = "fast/services/flame/david";
     fsType = "zfs";
   };
 
@@ -179,6 +164,16 @@
 
   fileSystems."/services/overseerr/config" = {
     device = "fast/services/overseerr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/photoprism/config" = {
+    device = "fast/services/photoprism/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/photoprism/mariadb" = {
+    device = "fast/services/photoprism/mariadb";
     fsType = "zfs";
   };
 
