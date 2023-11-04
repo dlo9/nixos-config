@@ -35,13 +35,5 @@ with lib; {
         '';
       };
     };
-
-    # services.caddy.virtualHosts.netdata = {
-    #   useACMEHost = "sigpanic.com";
-    #   serverAliases = [ "netdata.sigpanic.com" ];
-    #   extraConfig = ''
-    #     reverse_proxy http://localhost:19999
-    #   '';
-    # };
   };
 }

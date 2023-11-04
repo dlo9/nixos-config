@@ -21,6 +21,17 @@ with lib; let
       copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
     }
   '';
+
+  # TODO: Make the available outside this file, so that configs can be adjacent to their services
+  authentikForwardAuth = ''
+    # forward authentication to outpost
+    forward_auth http://192.168.1.230:1080 {
+        header_up Host "authentik.sigpanic.com"
+        uri /outpost.goauthentik.io/auth/caddy
+
+        copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version Remote-User Remote-Groups Remote-Name Remote-Email
+    }
+  '';
 in {
   config = {
     # Give caddy cert access
@@ -96,6 +107,15 @@ in {
           serverAliases = ["recipes.sigpanic.com"];
           extraConfig = ''
             redir https://food.sigpanic.com{uri} permanent
+          '';
+        };
+
+        netdata = {
+          inherit useACMEHost;
+          serverAliases = ["netdata.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://localhost:${config.services.netdata.config.web."default port"}
           '';
         };
 
