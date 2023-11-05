@@ -11,7 +11,22 @@ with lib; {
     services.netdata = {
       enable = true;
 
+      package = (pkgs.netdata.overrideAttrs
+        (oldAttrs: rec {
+          postFixup =
+            oldAttrs.postFixup
+            + ''
+              wrapProgram $out/libexec/netdata/plugins.d/cgroup-name.sh --prefix PATH : ${lib.makeBinPath [pkgs.kubectl]}
+            '';
+        }))
+      .override {withCloud = true;};
+
+      # View the running config at https://netdata.sigpanic.com/netdata.conf
       config = {
+        global = {
+          "error log" = "stderr";
+        };
+
         web = {
           "default port" = "19999";
         };
