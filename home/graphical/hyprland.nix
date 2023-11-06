@@ -88,16 +88,19 @@ with builtins; {
 
         decoration = {
           rounding = 5;
-          # inactive_opacity = 0.7;
           dim_inactive = true;
           dim_strength = 0.4;
+
+          blur = {
+            noise = 0.1;
+          };
         };
 
         gestures = {
           workspace_swipe = true; # 3-finger swipe
         };
 
-        animation = "global,1,1,default"; # Faster animations
+        animation = "global,1,5,default"; # Faster animations
 
         # Monitors
         monitor = [
@@ -210,6 +213,8 @@ with builtins; {
           #   "center, title:(Tree Style Tab)"
           #   "stayfocused, title:(Tree Style Tab)"
           "bordercolor rgb(ff0000), title:(Tree Style Tab)"
+
+          "opacity 0.8 override, class:Alacritty"
         ];
       };
     };
