@@ -28,6 +28,7 @@ with builtins; {
       configDir = ./eww;
     };
 
+    # View logs with: `tail -f /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log`
     wayland.windowManager.hyprland = {
       enable = true;
       plugins = [];
@@ -61,7 +62,16 @@ with builtins; {
           "${pkgs.hyprpaper}/bin/hyprpaper"
         ];
 
+        exec = [
+          "${pkgs.writeShellApplication {
+            name = "hypr-ipc";
+            runtimeInputs = [pkgs.socat];
+            text = builtins.readFile ./hypr-ipc.sh;
+          }}/bin/hypr-ipc"
+        ];
+
         # General
+        misc.disable_hyprland_logo = true;
         decoration.rounding = 5;
         # decoration.inactive_opacity = 0.7;
         decoration.dim_inactive = true;
@@ -165,6 +175,16 @@ with builtins; {
           ", XF86AudioPause, exec, ${playerctl} pause"
           ", XF86AudioNext, exec, ${playerctl} next"
           ", XF86AudioPrev, exec, ${playerctl} previous"
+        ];
+
+        # Window rules
+        windowrulev2 = [
+          #   "nofullscreenrequest, title:(Tree Style Tab)"
+          #   "float, title:(Tree Style Tab)"
+          #   "size 10% 10%, title:(Tree Style Tab)"
+          #   "center, title:(Tree Style Tab)"
+          #   "stayfocused, title:(Tree Style Tab)"
+          "bordercolor rgb(ff0000), title:(Tree Style Tab)"
         ];
       };
     };
