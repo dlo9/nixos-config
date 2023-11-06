@@ -37,8 +37,17 @@ with lib; {
         # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
         settings =
           {
-            window.opacity = 0.9;
+            window = {
+              # opacity = 0.9;
+              dynamic_padding = true;
+              padding = {
+                x = 5;
+                y = 5;
+              };
+            };
+
             decorations = "full";
+
             font = {
               normal.family = mkDefault config.font.family;
               size = mkDefault config.font.size;

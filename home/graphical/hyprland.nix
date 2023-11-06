@@ -10,6 +10,10 @@ with lib;
 with types;
 with builtins; {
   config = mkIf (config.graphical.enable && isLinux) {
+    home.packages = with pkgs; [
+      hyprpicker
+    ];
+
     xdg = {
       enable = mkDefault true;
 
@@ -70,13 +74,30 @@ with builtins; {
           }}/bin/hypr-ipc"
         ];
 
-        # General
-        misc.disable_hyprland_logo = true;
-        decoration.rounding = 5;
-        # decoration.inactive_opacity = 0.7;
-        decoration.dim_inactive = true;
-        gestures.workspace_swipe = true; # 3-finger swipe
-        animation = "global,1,3,default"; # Faster animations
+        general = {
+          "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+          "col.inactive_border" = "rgba(00000000)";
+          cursor_inactive_timeout = 10;
+          resize_on_border = true;
+          border_size = 2;
+        };
+
+        misc = {
+          disable_hyprland_logo = true;
+        };
+
+        decoration = {
+          rounding = 5;
+          # inactive_opacity = 0.7;
+          dim_inactive = true;
+          dim_strength = 0.4;
+        };
+
+        gestures = {
+          workspace_swipe = true; # 3-finger swipe
+        };
+
+        animation = "global,1,1,default"; # Faster animations
 
         # Monitors
         monitor = [
@@ -104,7 +125,7 @@ with builtins; {
           "${mod} + SHIFT, R, forcerendererreload"
 
           # Lock
-          # "${mod} + SHIFT, L, UNIMPLEMENTED"
+          "${mod} + SHIFT, L, exec, ${pkgs.swaylock}/bin/swaylock"
 
           # Move focus
           "${mod}, left, movefocus, l"
@@ -175,6 +196,10 @@ with builtins; {
           ", XF86AudioPause, exec, ${playerctl} pause"
           ", XF86AudioNext, exec, ${playerctl} next"
           ", XF86AudioPrev, exec, ${playerctl} previous"
+
+          # Find names with:
+          # hyprctl devices -j
+          ", switch:Lid Switch, exec, ${pkgs.swaylock}/bin/swaylock"
         ];
 
         # Window rules
