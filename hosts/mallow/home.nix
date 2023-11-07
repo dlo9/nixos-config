@@ -149,7 +149,7 @@ with lib; {
 
   programs.ssh = {
     enable = true;
-    matchBlocks."d1lrtcappprd?".extraOptions = {
+    matchBlocks."d1lrtcapp*".extraOptions = {
       HostKeyAlgorithms = "+ssh-rsa";
       PubkeyAcceptedAlgorithms = "+ssh-rsa";
     };
