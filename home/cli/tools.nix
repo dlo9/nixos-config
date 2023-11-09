@@ -83,6 +83,7 @@ with lib; {
         pciutils # lspci
         gptfdisk # Disk partitioning (sgdisk)
         inxi # Hardware info
+        kmon # Kernel monitor
       ]);
   };
 
