@@ -1,9 +1,18 @@
 {pkgs, ...}: {
+  launchd.user.agents.skhd = {
+    environment.SHELL = "/bin/sh"; # Speed up commands by not using fish
+    serviceConfig = {
+      StandardErrorPath = "/tmp/skhd.err.log";
+      StandardOutPath = "/tmp/skhd.out.log";
+    };
+  };
+
   services.skhd = let
     modifier = "alt";
   in {
     # Don't forget to disable "Secure Keyboard Entry" by opening the terminal application
     enable = true;
+
     skhdConfig = ''
       # To debug "secure keyboard entry" error:
       # https://github.com/koekeishiya/skhd/issues/48
@@ -23,8 +32,8 @@
       ${modifier} + shift - down : yabai -m window --swap south || (yabai -m window --display south && yabai -m display --focus south)
 
       # Fullscreen
-      ${modifier} - f : yabai -m window --toggle native-fullscreen
-      ${modifier} + shift - f : yabai -m window --toggle zoom-fullscreen
+      ${modifier} + shift - f : yabai -m window --toggle native-fullscreen
+      ${modifier} - f : yabai -m window --toggle zoom-fullscreen
 
       # Close
       ${modifier} + shift - q : yabai -m window --close

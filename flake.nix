@@ -207,7 +207,7 @@
     };
   in rec {
     # https://daiderd.com/nix-darwin/manual/index.html
-    darwinConfigurations = with inputs.nix-darwin.lib; {
+    darwinConfigurations = with inputs.nix-darwin.lib; rec {
       mallow = darwinSystem {
         specialArgs = {
           inherit inputs;
@@ -219,6 +219,8 @@
         system = "aarch64-darwin";
         modules = darwinModules;
       };
+
+      YX6MTFK902 = mallow;
     };
 
     nixosConfigurations = with nixpkgs.lib; rec {

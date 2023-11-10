@@ -35,16 +35,21 @@
 
       # Spacebar integration
       external_bar = "all:${config.services.spacebar.config.height}:0";
+
+      # Split
+      # split_ratio = 0.5;
+      auto_balance = "on";
+
+      # mouse_drop_action = "stack";
     };
 
     extraConfig = ''
       # Window rules
-      yabai -m rule --add label=FloatSystemPreferences app="System Preferences" manage=off
-      yabai -m rule --add label=FloatVPN app="Cisco AnyConnect Secure Mobility Client" manage=off
-      yabai -m rule --add label=FloatJAMF app="Jamf Connect Sync" title="Sign In" manage=off
+      # Show running windows with: yabai -m query --windows
+      yabai -m rule --add app="System Settings" manage=off
+      yabai -m rule --add app="Cisco Secure Client" manage=off layer=above
       yabai -m rule --add label=FloatTreeTabConfirmation app="Firefox" title="Close.*tabs?" manage=off
       yabai -m rule --add label=FloatIntelliJIntro app="IntelliJ IDEA" title="Welcome to IntelliJ IDEA" manage=off
-      yabai -m rule --add label=FloatColorMeter app="Digital Color Meter" manage=off
 
       # Steam popups are especially annoying, and mouse focus doesn't seem to know the window name before acting.
       # To work around this, mouse foxus is disabled by default until the window is known to not be Steam-related
