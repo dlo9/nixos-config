@@ -48,6 +48,7 @@
       # Show running windows with: yabai -m query --windows
       yabai -m rule --add app="System Settings" manage=off
       yabai -m rule --add app="Cisco Secure Client" manage=off layer=above
+      yabai -m rule --add app="Cisco AnyConnect Secure Mobility Client" manage=off layer=above
       yabai -m rule --add label=FloatTreeTabConfirmation app="Firefox" title="Close.*tabs?" manage=off
       yabai -m rule --add label=FloatIntelliJIntro app="IntelliJ IDEA" title="Welcome to IntelliJ IDEA" manage=off
 
