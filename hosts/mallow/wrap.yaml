@@ -85,6 +85,13 @@ anchors:
     keys: *prd-old-keys
     values: [--bootstrap-server, $KAFKA_PRD_OLD]
 
+
+  # Recon
+  - &rcn-ascend-keys [--rcn-ascend, --rcn-afs]
+  - &kafka-topics-rcn-ascend
+    keys: *rcn-ascend-keys
+    values: [--bootstrap-server, $KAFKA_RCN_ASCEND, --command-config, $KAFKA_PROPERTIES_RCN]
+
 variables:
   ###########################
   ### Kubernetes contexts ###
@@ -136,12 +143,14 @@ variables:
   KAFKA_PROPERTIES_STG: ~/.config/kafkacat/vm-stg.properties
   KAFKA_PROPERTIES_UAT: ~/.config/kafkacat/vm-uat.properties
   KAFKA_PROPERTIES_PRD: ~/.config/kafkacat/vm-prd.properties
+  KAFKA_PROPERTIES_RCN: ~/.config/kafkacat/vm-rcn.properties
 
   # Certificates
   KAFKA_CA_DEV: ~/.config/kafkacat/vm-dev-ca.pem
   KAFKA_CA_STG: ~/.config/kafkacat/vm-stg-ca.pem
   KAFKA_CA_UAT: ~/.config/kafkacat/vm-uat-ca.pem
   KAFKA_CA_PRD: ~/.config/kafkacat/vm-prd-ca.pem
+  KAFKA_CA_RCN: ~/.config/kafkacat/vm-rcn-ca.pem
 
   # Local
   KAFKA_LOCAL: localhost:31090
@@ -157,6 +166,7 @@ variables:
   KAFKA_STG_ASCEND: kb-ecru-boom-1.stg.gcp.apexclearing.com:9093,kb-ecru-boom-2.stg.gcp.apexclearing.com:9093,kb-ecru-boom-3.stg.gcp.apexclearing.com:9093
   KAFKA_UAT_ASCEND: kb-ecru-boom-1.uat.gcp.apexclearing.com:9093,kb-ecru-boom-2.uat.gcp.apexclearing.com:9093,kb-ecru-boom-3.uat.gcp.apexclearing.com:9093
   KAFKA_PRD_ASCEND: kb-ecru-boom-1.prd.gcp.apexclearing.com:9093,kb-ecru-boom-2.prd.gcp.apexclearing.com:9093,kb-ecru-boom-3.prd.gcp.apexclearing.com:9093
+  KAFKA_RCN_ASCEND: kb-ecru-boom-1.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-2.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-3.rcn.gcp.apexclearing.com:9093
 
   # Old
   KAFKA_DEV_OLD: kafka-1.dev.gcp.apexclearing.com:31090
@@ -361,6 +371,8 @@ aliases:
         values: [-b, $KAFKA_UAT_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_UAT]
       - keys: *prd-ascend-keys
         values: [-b, $KAFKA_PRD_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_PRD]
+      - keys: *rcn-ascend-keys
+        values: [-b, $KAFKA_RCN_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_RCN]
 
       # Old
       - keys: *dev-old-keys
