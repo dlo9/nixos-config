@@ -189,7 +189,7 @@ with lib; {
               format-muted = "󰖁 {format_source}";
               format-source = "{volume}% ";
               format-source-muted = "";
-              on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+              on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
               on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
               scroll-step = 1;
             };
