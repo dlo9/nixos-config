@@ -66,13 +66,13 @@ with builtins; {
           "${pkgs.hyprpaper}/bin/hyprpaper"
         ];
 
-        exec = [
-          "${pkgs.writeShellApplication {
-            name = "hypr-ipc";
-            runtimeInputs = [pkgs.socat];
-            text = builtins.readFile ./hypr-ipc.sh;
-          }}/bin/hypr-ipc"
-        ];
+        # exec = [
+        #   "${pkgs.writeShellApplication {
+        #     name = "hypr-ipc";
+        #     runtimeInputs = [pkgs.socat];
+        #     text = builtins.readFile ./hypr-ipc.sh;
+        #   }}/bin/hypr-ipc"
+        # ];
 
         general = {
           "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";

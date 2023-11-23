@@ -84,6 +84,7 @@ with lib; {
         gptfdisk # Disk partitioning (sgdisk)
         inxi # Hardware info
         kmon # Kernel monitor
+        flashrom
       ]);
   };
 

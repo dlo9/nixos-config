@@ -5,7 +5,7 @@
 }:
 with lib; let
   adminConfig = user: {
-    users.users.${user}.extraGroups = optional config.hardware.i2c.enable config.hardware.i2c.group;
+    users.users.${user}.extraGroups = (optional config.hardware.i2c.enable config.hardware.i2c.group) ++ ["dialout"];
 
     boot.initrd.network.ssh.authorizedKeys = config.users.users.${user}.openssh.authorizedKeys.keys;
   };
