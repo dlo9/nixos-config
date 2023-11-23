@@ -154,8 +154,12 @@ with lib; {
     ];
 
     # Home assistant's voice assistant uses random UDP ports, which we need to allow
-    networking.firewall.allowedUDPPortRanges = [{ from = 0; to = 65535; }];
-
+    networking.firewall.allowedUDPPortRanges = [
+      {
+        from = 0;
+        to = 65535;
+      }
+    ];
 
     # Code Server
     #services.vscode-server.enable = true;

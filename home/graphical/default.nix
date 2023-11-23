@@ -226,6 +226,7 @@ with lib; {
 
           # Notes app
           obsidian
+          appflowy
 
           # Networking utils (telnet)
           inetutils
