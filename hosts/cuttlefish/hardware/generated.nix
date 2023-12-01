@@ -18,8 +18,8 @@
   boot.extraModulePackages = [];
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454";}
     {device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf";}
+    {device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -346,14 +346,19 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/lib/containerd" = {
+    device = "fast/containerd";
+    fsType = "zfs";
+  };
+
   fileSystems."/var/lib/containerd/io.containerd.content.v1.content" = {
-    device = "fast/kubernetes/containerd/content";
+    device = "fast/containerd/content";
     fsType = "zfs";
   };
 
   fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs" = {
-    device = "/dev/disk/by-uuid/bc8b3a3d-a573-4996-bc04-2a4ff209aa2f";
-    fsType = "ext4";
+    device = "fast/containerd/snapshotter";
+    fsType = "zfs";
   };
 
   fileSystems."/var/lib/docker" = {

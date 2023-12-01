@@ -47,8 +47,6 @@ with lib; {
       powerOnBoot = true;
     };
 
-    fileSystems."/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs".options = ["nofail"];
-
     boot = {
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
       kernelModules = ["nct6775"];

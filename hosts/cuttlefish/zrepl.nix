@@ -69,10 +69,6 @@ in {
 
                 # Caches
                 "fast/nixos/nix<"
-                "slow/media/video/optimized<"
-
-                # Tdarr temp
-                "fast/kubernetes/storage/pvc-f81c171e-9ef3-4d0c-8377-9e7854747171"
               ];
             };
 
@@ -85,7 +81,7 @@ in {
                 "slowcache<"
 
                 # Container cache
-                "fast/kubernetes/docker<"
+                "fast/docker<"
                 "fast/kubernetes/containerd<"
               ];
 
