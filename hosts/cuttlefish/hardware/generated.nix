@@ -29,7 +29,6 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" = {
@@ -64,6 +63,11 @@
 
   fileSystems."/services/authentik/postgres" = {
     device = "fast/services/authentik/postgres";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/authentik/redis" = {
+    device = "fast/services/authentik/redis";
     fsType = "zfs";
   };
 
@@ -119,6 +123,36 @@
 
   fileSystems."/services/home-assistant/config" = {
     device = "fast/services/home-assistant/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/home-assistant/matter" = {
+    device = "fast/services/home-assistant/matter";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/home-assistant/openwakeword" = {
+    device = "fast/services/home-assistant/openwakeword";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/home-assistant/piper" = {
+    device = "fast/services/home-assistant/piper";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/home-assistant/whisper" = {
+    device = "fast/services/home-assistant/whisper";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/immich/data" = {
+    device = "fast/services/immich/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/immich/postgres" = {
+    device = "fast/services/immich/postgres";
     fsType = "zfs";
   };
 
@@ -322,9 +356,9 @@
     fsType = "ext4";
   };
 
-  fileSystems."/var/lib/docker/overlay2" = {
-    device = "/dev/disk/by-uuid/f61c326a-b216-46e8-9139-75a2c9d4a1fa";
-    fsType = "ext4";
+  fileSystems."/var/lib/docker" = {
+    device = "fast/docker";
+    fsType = "zfs";
   };
 
   fileSystems."/zfs" = {
