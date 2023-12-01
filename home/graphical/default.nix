@@ -194,7 +194,7 @@ with lib; {
           ddcui
 
           # USB flasher
-          popsicle
+          # popsicle
 
           # GUI-ish bluetooth control
           bluetuith

@@ -61,6 +61,9 @@ in {
     '';
   };
 
+  # TODO: Remove once merged: https://github.com/NixOS/nixpkgs/pull/271299
+  services.certmgr.package = lib.mkForce pkgs.dlo9.certmgr;
+
   services.kubernetes = {
     roles = ["master" "node"];
     masterAddress = masterHostname;

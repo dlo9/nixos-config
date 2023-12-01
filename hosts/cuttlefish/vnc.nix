@@ -17,10 +17,13 @@ in {
     sys.gaming.enable = true;
     security.unprivilegedUsernsClone = true;
 
-    # Enable flatpak for moonlight/subshine
+    # Enable flatpak for moonlight/sunshine
     services.flatpak.enable = true;
-    xdg.portal.enable = true;
-    xdg.portal.wlr.enable = true;
+    xdg.portal = {
+      enable = true;
+      wlr.enable = true;
+      config.common.default = "*";
+    };
 
     # Override sway default
     home-manager.users.david.wayland.windowManager.sway.config.output = {

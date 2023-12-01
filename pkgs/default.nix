@@ -9,4 +9,5 @@ with pkgs; {
 
   nss-docker = callPackage ./nss-docker.nix {};
   caddy = callPackage ./caddy.nix {};
+  certmgr = callPackage ./certmgr.nix {};
 }

@@ -161,9 +161,6 @@ with lib; {
       }
     ];
 
-    # Code Server
-    #services.vscode-server.enable = true;
-
     # Web shell
     # Only accessable from "mynet", which is the k8s node network
     networking.firewall.interfaces.mynet.allowedTCPPorts = [7681];
