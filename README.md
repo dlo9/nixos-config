@@ -185,4 +185,8 @@ dhcpcd "$NETWORK_INTERFACE"
 
 ### Miscellaneous
 ```sh
+# Reset Time
+sudo systemctl stop systemd-timesyncd.service \
+    && sudo timedatectl set-time '2023-12-02 22:53:00 PDT' \
+    && sudo systemctl start systemd-timesyncd.service
 ```
