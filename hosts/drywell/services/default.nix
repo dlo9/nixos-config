@@ -1,7 +1,8 @@
 {
   imports = [
+    ./caddy.nix
+    ./certs.nix
     ./ddns.nix
-    ./nginx.nix
     ./webdav.nix
     ./zrepl.nix
   ];
