@@ -25,9 +25,8 @@ in {
 
       certs."${useACMEHost}" = {
         #ocspMustStaple = true;
-        # group = "nginx";
         extraDomainNames = [
-          "*.sigpanic.com"
+          "*.${useACMEHost}"
         ];
       };
     };
