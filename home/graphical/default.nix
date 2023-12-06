@@ -175,7 +175,8 @@ with lib; {
           smartmontools
 
           # Notes app
-          unstable.anytype
+          anytype
+          appflowy
 
           # Video player
           mpv
@@ -226,7 +227,6 @@ with lib; {
 
           # Notes app
           obsidian
-          appflowy
 
           # Networking utils (telnet)
           inetutils
