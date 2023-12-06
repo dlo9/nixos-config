@@ -87,10 +87,10 @@ anchors:
 
 
   # Recon
-  - &rcn-ascend-keys [--rcn-ascend, --rcn-afs]
-  - &kafka-topics-rcn-ascend
-    keys: *rcn-ascend-keys
-    values: [--bootstrap-server, $KAFKA_RCN_ASCEND, --command-config, $KAFKA_PROPERTIES_RCN]
+  - &rcn-keys [--rcn]
+  - &kafka-topics-rcn
+    keys: *rcn-keys
+    values: [--bootstrap-server, $KAFKA_RCN, --command-config, $KAFKA_PROPERTIES_RCN]
 
 variables:
   ###########################
@@ -134,6 +134,9 @@ variables:
   KUBE_CONTEXT_PRD_ASCEND: gke_apex-vprd-eprd-shared-712561df_us-central1_afsapi-us-ce1-65849e3e
   KUBE_CONTEXT_PRD: $KUBE_CONTEXT_PRD_BLUE
 
+  # Recon
+  KUBE_CONTEXT_RCN: gke_apex-shared-rcn-00_us-central1_afsapi-us-ce1-c6a0bbc0
+
   ######################
   ### Kafka clusters ###
   ######################
@@ -166,7 +169,7 @@ variables:
   KAFKA_STG_ASCEND: kb-ecru-boom-1.stg.gcp.apexclearing.com:9093,kb-ecru-boom-2.stg.gcp.apexclearing.com:9093,kb-ecru-boom-3.stg.gcp.apexclearing.com:9093
   KAFKA_UAT_ASCEND: kb-ecru-boom-1.uat.gcp.apexclearing.com:9093,kb-ecru-boom-2.uat.gcp.apexclearing.com:9093,kb-ecru-boom-3.uat.gcp.apexclearing.com:9093
   KAFKA_PRD_ASCEND: kb-ecru-boom-1.prd.gcp.apexclearing.com:9093,kb-ecru-boom-2.prd.gcp.apexclearing.com:9093,kb-ecru-boom-3.prd.gcp.apexclearing.com:9093
-  KAFKA_RCN_ASCEND: kb-ecru-boom-1.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-2.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-3.rcn.gcp.apexclearing.com:9093
+  KAFKA_RCN: kb-ecru-boom-1.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-2.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-3.rcn.gcp.apexclearing.com:9093
 
   # Old
   KAFKA_DEV_OLD: kafka-1.dev.gcp.apexclearing.com:31090
@@ -251,6 +254,9 @@ aliases:
         values: [--context, $KUBE_CONTEXT_UAT_BLUE]
       - keys: *prd-blue-keys
         values: [--context, $KUBE_CONTEXT_PRD_BLUE]
+
+      - keys: *rcn-keys
+        values: [--context, $KUBE_CONTEXT_RCN]
 
         # RKE
       - keys: [--rke-dev]
@@ -371,8 +377,8 @@ aliases:
         values: [-b, $KAFKA_UAT_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_UAT]
       - keys: *prd-ascend-keys
         values: [-b, $KAFKA_PRD_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_PRD]
-      - keys: *rcn-ascend-keys
-        values: [-b, $KAFKA_RCN_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_RCN]
+      - keys: *rcn-keys
+        values: [-b, $KAFKA_RCN, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_RCN]
 
       # Old
       - keys: *dev-old-keys
