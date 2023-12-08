@@ -131,9 +131,9 @@ with lib; {
       };
     };
 
-     yazi = {
-       enable = true;
-       # TODO: theme, settings, keymap
-     };
+    yazi = {
+      enable = true;
+      # TODO: theme, settings, keymap
+    };
   };
 }

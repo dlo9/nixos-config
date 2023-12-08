@@ -36,6 +36,10 @@ with lib; {
       zfs
     ];
 
+    # Make container snapshotterssuse overlayfs, since autodetection doesn't always work
+    virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "overlayfs";
+    virtualisation.docker.daemon.settings.storage-driver = "overlay2";
+
     # Unlock ZFS with SSH at boot
     boot.initrd = {
       # supportedFilesystems = [ config.fileSystems."/boot/efi".fsType ];
