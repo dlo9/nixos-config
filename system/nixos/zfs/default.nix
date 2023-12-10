@@ -8,6 +8,7 @@
 with lib; {
   imports = [
     ./automount.nix
+    ./zrepl.nix
   ];
 
   config = mkIf config.boot.zfs.enabled {

@@ -21,6 +21,8 @@ with lib; let
   };
 in {
   config = {
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [1111];
+
     # ZFS autosnapshot and replication
     services.zrepl = {
       enable = true;
@@ -166,41 +168,33 @@ in {
           (snapshotJob "short")
           (snapshotJob "local")
 
-          # Pull job for pavil
+          # Connect job
           {
-            name = "pavil replication";
-            type = "pull";
-            root_fs = "slow/replication/pavil"; # This must exist
-            interval = "1h";
-
-            connect = {
-              type = "tcp";
-              address = "pavil:8888";
-            };
+            name = "replication sink";
+            type = "sink";
+            root_fs = "slow/replication";
 
             recv = {
               # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
               placeholder.encryption = "off";
               properties.override = {
                 canmount = "off";
+                mountpoint = "none";
                 refreservation = "none";
+                "org.openzfs.systemd:ignore" = "on";
+                overlay = "off";
               };
             };
 
-            pruning = {
-              keep_sender = [
-                keepNotReplicated
-                retentionPolicies.local.keepPolicy
-                retentionPolicies.short.keepPolicy
-                retentionPolicies.medium.keepPolicy
-                retentionPolicies.long.keepPolicy
-              ];
+            serve = {
+              type = "tcp";
+              listen = "100.97.145.42:1111";
+              listen_freebind = true;
 
-              keep_receiver = [
-                retentionPolicies.short.keepPolicy
-                retentionPolicies.medium.keepPolicy
-                retentionPolicies.long.keepPolicy
-              ];
+              clients = {
+                "100.111.108.84" = "pavil";
+                "100.78.52.90" = "drywell";
+              };
             };
           }
         ];
