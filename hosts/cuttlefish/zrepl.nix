@@ -27,26 +27,6 @@ in {
     services.zrepl = {
       enable = true;
       settings = {
-        global = {
-          logging = [
-            {
-              type = "stdout";
-              level = "warn";
-              format = "human";
-              time = true;
-              color = true;
-            }
-          ];
-
-          monitoring = [
-            {
-              type = "prometheus";
-              listen = ":9091";
-              listen_freebind = true;
-            }
-          ];
-        };
-
         jobs = let
           # listToAttrs where the value is the same for all keys
           listToUnityAttrs = list: value: listToAttrs (forEach list (key: nameValuePair key value));

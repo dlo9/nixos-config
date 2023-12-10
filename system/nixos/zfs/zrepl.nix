@@ -69,10 +69,12 @@ with lib; let
     }
     // (optionalAttrs category.replicate {
       type = "push";
+
       connect = {
         type = "tcp";
         address = cfg.replicateTo;
       };
+
       send = {
         raw = true;
         send_properties = true;

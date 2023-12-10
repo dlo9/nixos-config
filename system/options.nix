@@ -38,6 +38,7 @@ with builtins; {
 
       replicateTo = mkOption {
         type = nullOr nonEmptyStr;
+        default = null;
       };
 
       categories = mkOption {
@@ -87,10 +88,7 @@ with builtins; {
 
       filesystems = mkOption {
         type = attrsOf nonEmptyStr;
-
-        default = {
-          "<" = "long";
-        };
+        default = {};
       };
     };
   };
