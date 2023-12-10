@@ -15,12 +15,12 @@ with lib; let
   '';
 
   webdav-root = pkgs.linkFarm "webdav-root" {
-    "michael" = "/slow/smb/michael";
-    "sue" = "/slow/smb/sue";
-    "sue-server" = "/slow/smb/sue";
+    "michael" = "/slow/documents/michael";
+    "sue" = "/slow/documents/sue";
+    "sue-server" = "/slow/documents/sue";
 
-    "backup/sue" = "/slow/backup/sue";
-    "backup/michael" = "/slow/backup/michael";
+    "backup/sue" = "/slow/backups/sue";
+    "backup/michael" = "/slow/backups/michael";
   };
 in {
   config = {

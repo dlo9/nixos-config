@@ -48,7 +48,7 @@ with lib; {
 
         "fast/home/david/.cache<" = "local";
         "fast/home/david/code<" = "local";
-        "fast/home/david/Downloads<" = "short";
+        # "fast/home/david/Downloads<" = "short";
         "fast/nixos/nix<" = "local";
 
         "slow/smb/chelsea-backup<" = "short";
