@@ -76,7 +76,7 @@ with lib; let
       };
 
       send = {
-        raw = true;
+        encrypted = true;
         send_properties = true;
       };
     }));

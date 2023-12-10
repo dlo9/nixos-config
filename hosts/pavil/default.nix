@@ -80,7 +80,7 @@ with lib; {
     ";
 
     zrepl = {
-      replicateTo = "cuttlefish.dlo9.github.beta.tailscale.net:11111";
+      replicateTo = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
 
       filesystems = {
         "<" = "long";
