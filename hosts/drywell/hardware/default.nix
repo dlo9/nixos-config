@@ -12,4 +12,6 @@
 
     ./generated.nix
   ];
+
+  powerManagement.cpuFreqGovernor = "powersave";
 }

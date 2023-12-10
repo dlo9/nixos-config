@@ -16,6 +16,7 @@ with lib; {
 
     # Containerd uses zfs instead of overlayfs by default, despite documentation
     virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = mkDefault "overlayfs";
+    virtualisation.docker.daemon.settings.storage-driver = mkDefault "overlay2";
 
     # Derive `hostId`, which must be set for `zpool import`, from hostname
     # If instead it should be static for a host, then generate with `tr -dc 0-9a-f < /dev/urandom | head -c 8`
@@ -39,10 +40,6 @@ with lib; {
     environment.systemPackages = with pkgs; [
       zfs
     ];
-
-    # Make container snapshotterssuse overlayfs, since autodetection doesn't always work
-    virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = "overlayfs";
-    virtualisation.docker.daemon.settings.storage-driver = "overlay2";
 
     # Unlock ZFS with SSH at boot
     boot.initrd = {

@@ -17,7 +17,9 @@
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
 
-  swapDevices = [{device = "/dev/disk/by-uuid/ff216402-a66b-4b90-be06-c38582a8c34a";}];
+  swapDevices = [
+    {device = "/dev/disk/by-uuid/ff216402-a66b-4b90-be06-c38582a8c34a";}
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -26,7 +28,6 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" = {
@@ -59,18 +60,28 @@
     fsType = "zfs";
   };
 
-  fileSystems."/slow/backup/michael" = {
-    device = "slow/backup/michael";
+  fileSystems."/slow" = {
+    device = "slow";
     fsType = "zfs";
   };
 
-  fileSystems."/slow/smb" = {
-    device = "slow/smb";
+  fileSystems."/slow/backups/michael" = {
+    device = "slow/backups/michael";
     fsType = "zfs";
   };
 
-  fileSystems."/slow/smb-old" = {
-    device = "slow/smb-old";
+  fileSystems."/slow/backups/sue" = {
+    device = "slow/backups/sue";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/documents/michael" = {
+    device = "slow/documents/michael";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/documents/sue" = {
+    device = "slow/documents/sue";
     fsType = "zfs";
   };
 
