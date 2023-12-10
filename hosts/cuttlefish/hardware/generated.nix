@@ -326,11 +326,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/slow/media/video/transcode" = {
-    device = "slow/media/video/transcode";
-    fsType = "zfs";
-  };
-
   fileSystems."/slow/media/video/tv" = {
     device = "slow/media/video/tv";
     fsType = "zfs";

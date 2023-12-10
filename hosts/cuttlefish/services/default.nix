@@ -6,6 +6,7 @@
     ./jellyfin.nix
     ./kubernetes.nix
     ./netdata.nix
+    ./zrepl.nix
   ];
 
   config = {

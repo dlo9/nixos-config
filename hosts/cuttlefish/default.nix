@@ -16,7 +16,6 @@ with lib; {
     ./users.nix
     ./virtualization.nix
     ./webdav.nix
-    ./zrepl.nix
   ];
 
   config = {

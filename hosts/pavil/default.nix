@@ -89,7 +89,7 @@ with lib; {
         "pool/home/david/code<" = "local";
         "pool/nixos/nix<" = "local";
         "pool/games<" = "local";
-        "pool/reserved<" = "local";
+        "pool/reserved<" = "unmanaged";
       };
     };
   };
