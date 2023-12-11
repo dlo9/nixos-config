@@ -54,15 +54,15 @@ with lib; {
         "slow/smb/chelsea-backup<".local = "week";
 
         # Small services
-        "fast/services" = {
+        "fast/services<" = {
           local = "year";
           remote = "week";
         };
 
         # Large services
-        "fast/services/plex".remote = "unmanaged";
-        "fast/services/photoprism ".remote = "unmanaged";
-        "slow/services/deluge/downloads" = {};
+        "fast/services/plex<".remote = "unmanaged";
+        "fast/services/photoprism<".remote = "unmanaged";
+        "slow/services/deluge/downloads<" = {};
 
         # Container cache
         "fast/docker<".local = "week";

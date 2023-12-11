@@ -53,7 +53,7 @@ with lib; {
           remote = "unmanaged";
         };
 
-        "slow/backups" = {
+        "slow/backups<" = {
           local = "week";
           remote = "unmanaged";
         };
