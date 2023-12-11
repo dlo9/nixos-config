@@ -63,6 +63,39 @@ with lib; let
     });
 
   enable = config.boot.zfs.enabled && cfg.filesystems != {} && policies != [];
+
+  wakeupPruneJobs = let
+    jobs = map ({
+      type,
+      policy,
+    }: "${type}-${policy}") (cartesianProductOfSets {
+      type = ["local" "remote"];
+      policy = policies;
+    });
+
+    commands = map (job: "zrepl signal wakeup ${job}") jobs;
+    dryrunCommands = map (command: "echo ${command}") commands;
+  in "${pkgs.writeShellApplication {
+    name = "wakeup-prune-jobs";
+
+    runtimeInputs = [config.services.zrepl.package];
+
+    text = ''
+      set +o errexit
+      set +o nounset
+      set +o pipefail
+
+      if [[ "$ZREPL_FS" != *"/"* ]] && [[ "$ZREPL_HOOKTYPE" == "post_snapshot" ]]; then
+        if [[ "$ZREPL_DRYRUN" == "true" ]]; then
+          ${concatStringsSep "\n    " dryrunCommands}
+        else
+          ${concatStringsSep "\n    " commands}
+        fi
+      fi
+
+      true
+    '';
+  }}/bin/wakeup-prune-jobs";
 in {
   # ZFS autosnapshot and replication
   config = mkIf enable {
@@ -99,6 +132,13 @@ in {
                 type = "periodic";
                 prefix = prefix;
                 interval = cfg.snapInterval;
+
+                hooks = [
+                  {
+                    type = "command";
+                    path = wakeupPruneJobs;
+                  }
+                ];
               };
             }
           ]
