@@ -31,7 +31,7 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   fileSystems."/" = {
-    device = "pool/nixos/root";
+    device = "fast/nixos/root";
     fsType = "zfs";
   };
 
@@ -41,42 +41,42 @@
   };
 
   fileSystems."/home/david" = {
-    device = "pool/home/david";
+    device = "fast/home/david";
     fsType = "zfs";
   };
 
   fileSystems."/home/david/.cache" = {
-    device = "pool/home/david/.cache";
+    device = "fast/home/david/.cache";
     fsType = "zfs";
   };
 
   fileSystems."/home/david/.local/share/Steam" = {
-    device = "pool/games/steam";
+    device = "fast/games/steam";
     fsType = "zfs";
   };
 
   fileSystems."/home/david/.local/share/lutris" = {
-    device = "pool/games/lutris";
+    device = "fast/games/lutris";
     fsType = "zfs";
   };
 
   fileSystems."/home/david/Downloads" = {
-    device = "pool/home/david/Downloads";
+    device = "fast/home/david/Downloads";
     fsType = "zfs";
   };
 
   fileSystems."/home/david/code" = {
-    device = "pool/home/david/code";
+    device = "fast/home/david/code";
     fsType = "zfs";
   };
 
   fileSystems."/nix" = {
-    device = "pool/nixos/nix";
+    device = "fast/nixos/nix";
     fsType = "zfs";
   };
 
   fileSystems."/root" = {
-    device = "pool/home/root";
+    device = "fast/home/root";
     fsType = "zfs";
   };
 }

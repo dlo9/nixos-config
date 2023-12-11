@@ -84,12 +84,12 @@ with lib; {
 
       filesystems = {
         "<" = "long";
-        "pool/home/david/Downloads<" = "short";
-        "pool/home/david/.cache<" = "local";
-        "pool/home/david/code<" = "local";
-        "pool/nixos/nix<" = "local";
-        "pool/games<" = "local";
-        "pool/reserved<" = "unmanaged";
+        "fast/home/david/Downloads<" = "short";
+        "fast/home/david/.cache<" = "local";
+        "fast/home/david/code<" = "local";
+        "fast/nixos/nix<" = "local";
+        "fast/games<" = "local";
+        "fast/reserved<" = "unmanaged";
       };
     };
   };
