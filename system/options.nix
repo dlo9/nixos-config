@@ -31,64 +31,59 @@ with builtins; {
     };
 
     zrepl = {
-      interval = mkOption {
+      snapInterval = mkOption {
         type = nonEmptyStr;
         default = "15m";
       };
 
-      replicateTo = mkOption {
+      remote = mkOption {
         type = nullOr nonEmptyStr;
         default = null;
       };
 
-      categories = mkOption {
-        type = attrsOf (submodule ({name, ...}: {
+      retentionPolicies = mkOption {
+        type = attrsOf nonEmptyStr;
+
+        default = {
+          # Keep up to 1 year
+          year = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+
+          # Keep up to 1 month
+          month = "1x1h(keep=all) | 23x1h | 30x1d";
+
+          # Keep up to 1 week
+          week = "1x1h(keep=all) | 23x1h | 6x1d";
+        };
+      };
+
+      filesystems = mkOption {
+        type = attrsOf (submodule ({
+          name,
+          config,
+          ...
+        }: {
           options = {
             name = mkOption {
               type = nonEmptyStr;
               default = name;
             };
 
-            prunePolicy = mkOption {
-              type = nonEmptyStr;
+            local = mkOption {
+              type = nullOr nonEmptyStr;
+              default = config.both;
             };
 
-            replicate = mkOption {
-              type = bool;
-              default = true;
+            remote = mkOption {
+              type = nullOr nonEmptyStr;
+              default = config.both;
+            };
 
-              apply = value: value && config.zrepl.replicateTo != null;
+            both = mkOption {
+              type = nullOr nonEmptyStr;
+              default = "unmanaged";
             };
           };
         }));
-
-        default = {
-          # Keep up to 1 year
-          long = {
-            prunePolicy = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
-          };
-
-          # Keep up to 1 month
-          medium = {
-            prunePolicy = "1x1h(keep=all) | 23x1h | 30x1d";
-          };
-
-          # Keep up to 1 week
-          short = {
-            prunePolicy = "1x1h(keep=all) | 23x1h | 6x1d";
-          };
-
-          # Keep up to 1 week, but don't replicate
-          local = {
-            prunePolicy = "1x1h(keep=all) | 23x1h | 6x1d";
-            replicate = false;
-          };
-        };
-      };
-
-      filesystems = mkOption {
-        type = attrsOf nonEmptyStr;
-        default = {};
       };
     };
   };

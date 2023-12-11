@@ -41,27 +41,38 @@ with lib; {
     ];
 
     zrepl = {
-      # replicateTo = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
+      remote = "drywell.dlo9.github.beta.tailscale.net:1111";
 
       filesystems = {
-        "<" = "long";
+        "<".local = "year";
 
-        "fast/home/david/.cache<" = "local";
-        "fast/home/david/code<" = "local";
-        # "fast/home/david/Downloads<" = "short";
-        "fast/nixos/nix<" = "local";
+        "fast/home/david/.cache<".local = "week";
+        "fast/home/david/code<".local = "week";
+        "fast/home/david/Downloads<".local = "week";
+        "fast/nixos/nix<".local = "week";
 
-        "slow/smb/chelsea-backup<" = "short";
+        "slow/smb/chelsea-backup<".local = "week";
+
+        # Small services
+        "fast/services" = {
+          local = "year";
+          remote = "week";
+        };
+
+        # Large services
+        "fast/services/plex".remote = "unmanaged";
+        "fast/services/photoprism ".remote = "unmanaged";
+        "slow/services/deluge/downloads" = {};
 
         # Container cache
-        "fast/docker<" = "local";
-        "fast/kubernetes/containerd<" = "local";
+        "fast/docker<".local = "week";
+        "fast/containerd<".local = "week";
 
         # Unmanaged
-        "slow/trash<" = "unmanaged";
-        "slow/replication<" = "unmanaged";
-        "slow/backup/drywell<" = "unmanaged";
-        "fast/reserved<" = "unmanaged";
+        "slow/trash<" = {};
+        "slow/replication<" = {};
+        "slow/backup/drywell<" = {};
+        "fast/reserved<" = {};
       };
     };
   };

@@ -80,16 +80,16 @@ with lib; {
     ";
 
     zrepl = {
-      replicateTo = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
+      remote = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
 
       filesystems = {
-        "<" = "long";
-        "fast/home/david/Downloads<" = "short";
-        "fast/home/david/.cache<" = "local";
-        "fast/home/david/code<" = "local";
-        "fast/nixos/nix<" = "local";
-        "fast/games<" = "local";
-        "fast/reserved<" = "unmanaged";
+        "<".both = "year";
+        "fast/home/david/Downloads<".both = "week";
+        "fast/home/david/.cache<".local = "week";
+        "fast/home/david/code<".local = "week";
+        "fast/nixos/nix<".local = "week";
+        "fast/games<".local = "week";
+        "fast/reserved<" = {};
       };
     };
   };

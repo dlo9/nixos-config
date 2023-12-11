@@ -8,82 +8,61 @@ with lib; let
   cfg = config.zrepl;
 
   prefix = "zrepl_";
-  categoryPrefix = category: "${prefix + category}_";
+  regex = "^${prefix}.*";
 
-  keeps = {
-    unreplicated = {
-      type = "not_replicated";
-    };
-
-    all = {
-      type = "regex";
-      regex = ".*";
-    };
-
-    manual = {
-      type = "regex";
-      regex = "^${prefix}.*";
-      negate = true;
-    };
-  };
-
-  filters = category: mapAttrs (filesystem: fsCategory: fsCategory == category.name) cfg.filesystems;
-
-  keep = category: [
+  keep = policy: [
     {
       # Prune category-related snapshots as appropriate
+      inherit regex;
       type = "grid";
-      grid = category.prunePolicy;
-      regex = "^${categoryPrefix category.name}.*";
+      grid = cfg.retentionPolicies.${policy};
     }
     {
       # Keep all others
+      inherit regex;
       type = "regex";
-      regex = "^${categoryPrefix category.name}.*";
       negate = true;
     }
   ];
 
-  pruning = category:
-    if category.replicate
-    then {
-      keep_sender = keep category;
-      keep_receiver = keep category;
+  keepAll = [
+    {
+      type = "regex";
+      regex = ".*";
     }
-    else {
-      keep = keep category;
-    };
+  ];
 
-  job = category: ({
-      name = "snapshot for ${category.name}-retention";
+  policies = attrNames cfg.retentionPolicies;
+
+  # Type is local or remote
+  job = type: policy:
+    {
+      name = "${type}-${policy}";
       type = "snap";
+      snapshotting.type = "manual";
+      pruning.keep = keep policy;
 
-      filesystems = filters category;
-      pruning = pruning category;
-
-      snapshotting = {
-        type = "periodic";
-        prefix = categoryPrefix category.name;
-        interval = cfg.interval;
-      };
+      filesystems = mapAttrs (name: fs: fs.${type} == policy) cfg.filesystems;
     }
-    // (optionalAttrs category.replicate {
+    // (optionalAttrs (type == "remote") {
       type = "push";
+      pruning = {
+        keep_sender = keepAll;
+        keep_receiver = keep policy;
+      };
 
       connect = {
         type = "tcp";
-        address = cfg.replicateTo;
+        address = cfg.remote;
       };
 
       send = {
         encrypted = true;
         send_properties = true;
       };
-    }));
+    });
 
-  hasFileSystems = job: any id (attrValues job.filesystems);
-
-  enable = config.boot.zfs.enabled && cfg.filesystems != {} && cfg.categories != {};
+  enable = config.boot.zfs.enabled && cfg.filesystems != {} && policies != [];
 in {
   # ZFS autosnapshot and replication
   config = mkIf enable {
@@ -103,7 +82,28 @@ in {
           ];
         };
 
-        jobs = filter hasFileSystems (map job (attrValues cfg.categories));
+        jobs =
+          [
+            {
+              name = "snapshots";
+              type = "snap";
+
+              # Only snapshot filesystems which have a retention policy
+              # (so that "unmanaged" children can be ignored)
+              filesystems = mapAttrs (name: fs: any (policy: elem policy policies) [fs.local fs.remote]) cfg.filesystems;
+
+              # Keep everything
+              pruning.keep = keepAll;
+
+              snapshotting = {
+                type = "periodic";
+                prefix = prefix;
+                interval = cfg.snapInterval;
+              };
+            }
+          ]
+          ++ (map (job "local") policies)
+          ++ (map (job "remote") policies);
       };
     };
   };

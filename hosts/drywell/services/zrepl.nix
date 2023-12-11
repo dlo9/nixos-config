@@ -40,17 +40,28 @@ with lib; {
     ];
 
     zrepl = {
-      replicateTo = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
+      remote = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
 
       filesystems = {
-        "<" = "long";
-        "fast/nixos/nix<" = "local";
-        "slow/backups" = "local";
+        "<" = {
+          local = "year";
+          remote = "month";
+        };
+
+        "fast/nixos/nix<" = {
+          local = "week";
+          remote = "unmanaged";
+        };
+
+        "slow/backups" = {
+          local = "week";
+          remote = "unmanaged";
+        };
 
         # Unmanaged
-        "fast/reserved<" = "unmanaged";
-        "slow/replication<" = "unmanaged";
-        "slow/reserved<" = "unmanaged";
+        "fast/reserved<" = {};
+        "slow/replication<" = {};
+        "slow/reserved<" = {};
       };
     };
   };
