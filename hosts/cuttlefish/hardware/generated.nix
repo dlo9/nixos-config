@@ -226,11 +226,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/services/prometheus/data" = {
-    device = "fast/services/prometheus/data";
-    fsType = "zfs";
-  };
-
   fileSystems."/services/prowlarr/config" = {
     device = "fast/services/prowlarr/config";
     fsType = "zfs";
