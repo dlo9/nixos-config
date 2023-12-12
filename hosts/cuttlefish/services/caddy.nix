@@ -59,18 +59,6 @@ in {
       package = pkgs.dlo9.caddy;
 
       virtualHosts = {
-        keycloak = {
-          inherit useACMEHost;
-          serverAliases = ["keycloak.sigpanic.com"];
-          extraConfig = ''
-            reverse_proxy http://keycloak.containers
-
-            # header {
-            #   X-Frame-Options SAMEORIGIN
-            # }
-          '';
-        };
-
         jellyfin = {
           inherit useACMEHost;
           serverAliases = ["jellyfin.sigpanic.com"];
