@@ -67,19 +67,15 @@ with lib; let
 
   enable = config.boot.zfs.enabled && cfg.filesystems != {} && policies != [];
 
-  wakeupPruneJobs = let
-    jobs = map ({
-      type,
-      policy,
-    }: "${type}-${policy}") (cartesianProductOfSets {
-      type = ["local" "remote"];
-      policy = policies;
-    });
+  jobs = listToAttrs (map (type: {
+    name = type;
+    value = map (policy: "${type}-${policy}") policies;
+  }) ["local" "remote"]);
 
-    commands = map (job: "zrepl signal wakeup ${job}") jobs;
-    dryrunCommands = map (command: "echo ${command}") commands;
-  in "${pkgs.writeShellApplication {
-    name = "wakeup-prune-jobs";
+  wakeupJobCommands = mapAttrs (type: jobs: map (job: "zrepl signal wakeup ${job}") jobs) jobs;
+
+  zreplHook = "${pkgs.writeShellApplication {
+    name = "wakeup-local-jobs";
 
     runtimeInputs = [config.services.zrepl.package];
 
@@ -88,20 +84,29 @@ with lib; let
       set +o nounset
       set +o pipefail
 
-      if [[ "$ZREPL_FS" != *"/"* ]] && [[ "$ZREPL_HOOKTYPE" == "post_snapshot" ]]; then
-        if [[ "$ZREPL_DRYRUN" == "true" ]]; then
-          ${concatStringsSep "\n    " dryrunCommands}
-        else
-          ${concatStringsSep "\n    " commands}
-        fi
+      if [[ "$ZREPL_FS" == *"/"* ]] || [[ "$ZREPL_HOOKTYPE" == "pre_snapshot" ]] || [[ "$ZREPL_DRYRUN" == "true" ]]; then
+        exit 0
       fi
+
+      # Wakes up local jobs only
+      ${concatStringsSep "\n      " wakeupJobCommands.local}
 
       true
     '';
-  }}/bin/wakeup-prune-jobs";
+  }}/bin/wakeup-local-jobs";
 in {
   # ZFS autosnapshot and replication
   config = mkIf enable {
+    systemd.services = {
+      zrepl-replication-trigger = {
+        path = [config.services.zrepl.package];
+
+        script = concatStringsSep "\n" wakeupJobCommands.remote;
+
+        startAt = "daily";
+      };
+    };
+
     services.zrepl = {
       enable = mkDefault enable;
 
@@ -139,7 +144,7 @@ in {
                 hooks = [
                   {
                     type = "command";
-                    path = wakeupPruneJobs;
+                    path = zreplHook;
                   }
                 ];
               };
