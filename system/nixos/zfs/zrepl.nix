@@ -46,6 +46,7 @@ with lib; let
     }
     // (optionalAttrs (type == "remote") {
       type = "push";
+
       pruning = {
         keep_sender = keepAll;
         keep_receiver = keep policy;
@@ -55,6 +56,8 @@ with lib; let
         type = "tcp";
         address = cfg.remote;
       };
+
+      replication.concurrency.steps = 4;
 
       send = {
         encrypted = true;
