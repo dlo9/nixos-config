@@ -145,6 +145,10 @@ nix eval "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.topleve
 
 # Find why a package is required by the system
 nix-tree --derivation "path:.#nixosConfigurations.$(hostname).config.system.build.toplevel"
+
+# Display all zrepl holds on the local system
+# https://serverfault.com/questions/456301/how-to-check-that-all-zfs-snapshots-within-a-pool-are-without-holds-before-destr
+zfs get -Ht snapshot -o name userrefs | xargs zfs holds | rg -v replication
 ```
 
 ### Nix store
