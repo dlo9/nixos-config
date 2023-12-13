@@ -51,6 +51,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/home/david/documents" = {
+    device = "fast/home/david/documents";
+    fsType = "zfs";
+  };
+
   fileSystems."/nix" = {
     device = "fast/nixos/nix";
     fsType = "zfs";
@@ -276,13 +281,8 @@
     fsType = "zfs";
   };
 
-  fileSystems."/slow/backup/sue-old-laptop" = {
-    device = "slow/backup/sue-old-laptop";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/documents" = {
-    device = "slow/documents";
+  fileSystems."/slow/backup/mike-old-pcs" = {
+    device = "slow/backup/mike-old-pcs";
     fsType = "zfs";
   };
 

@@ -46,6 +46,11 @@ with lib; {
       filesystems = {
         "<".local = "year";
 
+        "fast/home<" = {
+          local = "year";
+          remote = "week";
+        };
+
         "fast/home/david/.cache<".local = "week";
         "fast/home/david/code<".local = "week";
         "fast/home/david/Downloads<".local = "week";
