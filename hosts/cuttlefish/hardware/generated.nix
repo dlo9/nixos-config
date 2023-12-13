@@ -296,6 +296,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/slow/games" = {
+    device = "slow/games";
+    fsType = "zfs";
+  };
+
   fileSystems."/slow/media/audio" = {
     device = "slow/media/audio";
     fsType = "zfs";
@@ -333,16 +338,6 @@
 
   fileSystems."/slow/media/video/tv" = {
     device = "slow/media/video/tv";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/old/games" = {
-    device = "slow/games";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/smb/chelsea" = {
-    device = "slow/smb/chelsea";
     fsType = "zfs";
   };
 
