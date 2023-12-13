@@ -15,10 +15,10 @@ with lib; let
   '';
 
   webdav-root = pkgs.linkFarm "webdav-root" {
-    "documents" = "/slow/documents";
+    "documents" = "/home/david/documents";
     "media" = "/slow/media";
 
-    "chelsea-cuttlefish" = "/slow/smb/chelsea";
+    "chelsea-cuttlefish" = "/home/chelsea/documents";
     "backup/chelsea" = "/slow/backup/chelsea";
   };
 in {

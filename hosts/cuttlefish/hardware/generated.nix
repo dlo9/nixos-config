@@ -46,6 +46,16 @@
     fsType = "vfat";
   };
 
+  fileSystems."/home/chelsea" = {
+    device = "fast/home/chelsea";
+    fsType = "zfs";
+  };
+
+  fileSystems."/home/chelsea/documents" = {
+    device = "fast/home/chelsea/documents";
+    fsType = "zfs";
+  };
+
   fileSystems."/home/david" = {
     device = "fast/home/david";
     fsType = "zfs";
