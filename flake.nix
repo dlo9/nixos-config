@@ -2,6 +2,7 @@
   inputs = {
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    nixpkgs-master.url = github:NixOS/nixpkgs/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
 
     # Darwin settings
@@ -131,6 +132,13 @@
           config.allowUnfree = prev.config.allowUnfree;
         };
       };
+
+      master = system: final: prev: {
+        master = import inputs.nixpkgs-master {
+          inherit system;
+          config.allowUnfree = prev.config.allowUnfree;
+        };
+      };
     };
 
     linuxModules = [
@@ -158,6 +166,7 @@
           overlays = with overlays; [
             dlo9
             (unstable "x86_64-linux")
+            (master "x86_64-linux")
           ];
         };
       })
@@ -187,6 +196,7 @@
             inputs.nix-darwin.overlays.default
             dlo9
             (unstable "aarch64-darwin")
+            (master "aarch64-darwin")
           ];
         };
       })
