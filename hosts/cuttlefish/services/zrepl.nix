@@ -51,6 +51,11 @@ with lib; {
           remote = "week";
         };
 
+        "slow/media/photos/immich/library<" = {
+          local = "year";
+          remote = "week";
+        };
+
         "fast/home/david/.cache<".local = "week";
         "fast/home/david/code<".local = "week";
         "fast/home/david/Downloads<".local = "week";
