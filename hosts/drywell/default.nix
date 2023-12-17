@@ -73,18 +73,7 @@ with lib; {
 
       shares = {
         michael = {
-          path = "/slow/smb/michael";
-          browseable = "yes";
-          "read only" = "no";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          "force user" = "michael";
-          "force group" = "users";
-          "valid users" = "+samba";
-        };
-
-        michael-backup = {
-          path = "/slow/backup/michael";
+          path = "/slow/documents/michael";
           browseable = "yes";
           "read only" = "no";
           "create mask" = "0644";
