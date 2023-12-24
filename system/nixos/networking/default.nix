@@ -21,4 +21,6 @@ with lib; {
     allowPing = true;
     pingLimit = "--limit 1/second --limit-burst 10";
   };
+
+  services.davfs2.enable = true;
 }
