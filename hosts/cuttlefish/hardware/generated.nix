@@ -281,11 +281,6 @@
     fsType = "zfs";
   };
 
-  fileSystems."/services/syncthing/config" = {
-    device = "fast/services/syncthing/config";
-    fsType = "zfs";
-  };
-
   fileSystems."/slow/backup/chelsea" = {
     device = "slow/backup/chelsea";
     fsType = "zfs";

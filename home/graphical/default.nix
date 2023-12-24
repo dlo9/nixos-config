@@ -245,9 +245,6 @@ with lib; {
         tray = true;
       };
 
-      # File syncing
-      syncthing.enable = mkDefault isLinux;
-
       # Screenshots
       flameshot.enable = mkDefault isLinux;
     };
