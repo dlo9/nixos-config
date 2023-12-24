@@ -13,6 +13,8 @@ with lib; {
 
       chromium = {
         enable = mkDefault isLinux;
+        package = pkgs.google-chrome;
+
         extensions = [
           {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
         ];
