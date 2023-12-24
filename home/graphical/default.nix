@@ -73,6 +73,8 @@ with lib; {
         # Fix copy to system clipboard on wayland
         vim-wayland-clipboard
       ];
+
+      zathura.enable = true;
     };
 
     xdg = {
@@ -183,7 +185,6 @@ with lib; {
 
           # PDF viewers
           okular
-          zathura
 
           # Key tester
           wev
