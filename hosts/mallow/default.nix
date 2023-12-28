@@ -47,6 +47,7 @@ in {
 
       "unixodbc"
       "msodbcsql18"
+      "ollama"
     ];
 
     casks = [

@@ -227,7 +227,7 @@ with lib; {
           xdg-utils
 
           # Notes app
-          #obsidian
+          obsidian
 
           # Networking utils (telnet)
           inetutils
