@@ -80,13 +80,23 @@ with lib; {
     xdg = {
       enable = mkDefault true;
 
+      desktopEntries = with pkgs; {
+        qimgv = {
+          name = "qimgv";
+          exec = "qimgv -- %F";
+          mimeType = [
+            "image/jpeg"
+          ];
+        };
+      };
+
       # Default applications
       mimeApps = {
         enable = mkDefault isLinux;
 
         # See desktop files in /run/current-system/sw/share/applications
         defaultApplications = {
-          "application/pdf" = "org.pwmt.zathura.desktop";
+          "image/jpeg" = "qimgv.desktop";
         };
       };
     };
@@ -153,6 +163,7 @@ with lib; {
 
           # File manager
           cinnamon.nemo
+          peazip
 
           # USB installer
           ventoy-bin
@@ -202,6 +213,9 @@ with lib; {
           bluetuith
 
           zoom-us
+
+          # Image viewer
+          qimgv
         ])
 
         [
