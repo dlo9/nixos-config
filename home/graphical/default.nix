@@ -216,6 +216,11 @@ with lib; {
 
           # Image viewer
           qimgv
+
+          # Music
+          spotify-tui
+          spotifyd
+          spotify
         ])
 
         [
@@ -241,7 +246,7 @@ with lib; {
           xdg-utils
 
           # Notes app
-          obsidian
+          #obsidian
 
           # Networking utils (telnet)
           inetutils
