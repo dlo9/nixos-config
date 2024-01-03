@@ -57,6 +57,7 @@ in {
       "jdk-mission-control"
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
+      "kreya"
 
       # Team fun
       "steam"

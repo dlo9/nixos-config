@@ -71,6 +71,7 @@ with lib; {
     openldap
     terraform
     flyway
+    obsidian
 
     # SQL Server
     # unixODBC

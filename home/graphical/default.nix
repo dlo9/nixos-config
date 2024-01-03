@@ -80,15 +80,16 @@ with lib; {
     xdg = {
       enable = mkDefault true;
 
-      desktopEntries = with pkgs; {
-        qimgv = {
-          name = "qimgv";
-          exec = "qimgv -- %F";
-          mimeType = [
-            "image/jpeg"
-          ];
+      desktopEntries = with pkgs;
+        optionalAttrs isLinux {
+          qimgv = {
+            name = "qimgv";
+            exec = "qimgv -- %F";
+            mimeType = [
+              "image/jpeg"
+            ];
+          };
         };
-      };
 
       # Default applications
       mimeApps = {
