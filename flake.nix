@@ -227,8 +227,16 @@
     };
 
     nixosConfigurations = with nixpkgs.lib; rec {
-      pavil = nixosSystem {
-        specialArgs = specialArgs // {hostname = "pavil";};
+      bee = nixosSystem {
+        specialArgs = specialArgs // {hostname = "bee";};
+
+        system = "x86_64-linux";
+        modules = linuxModules;
+      };
+
+      cuttlefish = nixosSystem {
+        specialArgs = specialArgs // {hostname = "cuttlefish";};
+
         system = "x86_64-linux";
         modules = linuxModules;
       };
@@ -239,9 +247,8 @@
         modules = linuxModules;
       };
 
-      cuttlefish = nixosSystem {
-        specialArgs = specialArgs // {hostname = "cuttlefish";};
-
+      pavil = nixosSystem {
+        specialArgs = specialArgs // {hostname = "pavil";};
         system = "x86_64-linux";
         modules = linuxModules;
       };

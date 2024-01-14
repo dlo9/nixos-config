@@ -84,6 +84,8 @@ with builtins; {
             };
           };
         }));
+
+        default = {};
       };
     };
   };

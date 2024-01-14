@@ -177,7 +177,7 @@ with lib; {
           # Signal
           signal-desktop
 
-          #geekbench5
+          geekbench_6
 
           # Scanning
           gnome.simple-scan
