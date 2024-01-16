@@ -31,6 +31,7 @@ with lib; {
     groovy
     google-java-format
     maven
+    jd-gui # Decompiler
 
     # Golang
     go
@@ -72,6 +73,7 @@ with lib; {
     terraform
     flyway
     obsidian
+    #postman
 
     # SQL Server
     # unixODBC
