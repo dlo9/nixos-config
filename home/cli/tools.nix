@@ -128,6 +128,7 @@ with lib; {
         pull.ff = "only";
         credential.helper = mkIf isLinux "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
         push.autoSetupRemote = true;
+        merge.conflictStyle = "zdiff3";
       };
     };
 
