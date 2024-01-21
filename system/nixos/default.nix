@@ -22,6 +22,8 @@ with lib; {
     inputs.home-manager.nixosModules.home-manager
   ];
 
+  boot.supportedFilesystems = ["nfs"];
+
   # Timezone
   services.localtimed.enable = true;
 
