@@ -12,14 +12,14 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["nvme" "mpt3sas" "xhci_pci" "ahci" "sd_mod"];
+  boot.initrd.availableKernelModules = ["nvme" "mpt3sas" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf";}
     {device = "/dev/disk/by-uuid/cfabdcdc-e671-43ee-83d9-c487e5376454";}
+    {device = "/dev/disk/by-uuid/2bab50cb-c97d-4e2f-8ffc-0d957b1e7cbf";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -126,6 +126,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/frigate/data" = {
+    device = "slow/services/frigate/data";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/ghost/content" = {
     device = "fast/services/ghost/content";
     fsType = "zfs";
@@ -208,6 +213,16 @@
 
   fileSystems."/services/node-red/data" = {
     device = "fast/services/node-red/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/ollama/data" = {
+    device = "fast/services/ollama/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/ollama/webui" = {
+    device = "fast/services/ollama/webui";
     fsType = "zfs";
   };
 
@@ -313,6 +328,36 @@
 
   fileSystems."/slow/media/photos" = {
     device = "slow/media/photos";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/immich" = {
+    device = "slow/media/photos/immich";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/immich/encoded-video" = {
+    device = "slow/media/photos/immich/encoded-video";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/immich/library" = {
+    device = "slow/media/photos/immich/library";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/immich/thumbs" = {
+    device = "slow/media/photos/immich/thumbs";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/immich/upload" = {
+    device = "slow/media/photos/immich/upload";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/photos/personal" = {
+    device = "slow/media/photos/personal";
     fsType = "zfs";
   };
 
