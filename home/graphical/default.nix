@@ -222,6 +222,10 @@ with lib; {
           spotify-tui
           spotifyd
           spotify
+
+          # VNC
+          # Normal package is missing H.264 encoding
+          pkgs.dlo9.tigervnc
         ])
 
         [
