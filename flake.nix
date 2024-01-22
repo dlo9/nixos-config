@@ -326,7 +326,7 @@
         sudo nixos-generate-config --show-hardware-config | \
           scripts/maintenance/process-hardware-config.awk > "$config"
 
-        nix fmt "$config"
+        nix fmt -- -q "$config"
       '';
 
       generate-hardware-linux = system:
@@ -349,7 +349,7 @@
             sudo nixos-rebuild switch
 
             # Format
-            nix fmt
+            nix fmt -- -q .
           '';
         };
 
@@ -369,7 +369,7 @@
             darwin-rebuild switch --flake ".#$(hostname)"
 
             # Format
-            nix fmt
+            nix fmt -- -q .
           '';
         };
     in {
