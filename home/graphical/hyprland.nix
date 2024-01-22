@@ -33,7 +33,9 @@ with builtins; {
     };
 
     # View logs with: `tail -f /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log`
-    wayland.windowManager.hyprland = {
+    wayland.windowManager.hyprland = let
+      mod = "ALT";
+    in {
       enable = true;
       plugins = [];
 
@@ -109,9 +111,7 @@ with builtins; {
         ];
 
         # Keybindings
-        bind = let
-          mod = "ALT";
-        in [
+        bind = [
           # Open terminal
           "${mod}, RETURN, exec, alacritty"
 
@@ -168,10 +168,7 @@ with builtins; {
 
           # TODO:
           # Splitting
-          # Resizing mods + sizes
           # Parent container selection
-          # Laptop lid: https://wiki.hyprland.org/Configuring/Binds/#switches
-          # Passthrough mode
           # Title-based floating rules
           # Picture-in-Picture rules
           # Idle inhibit
@@ -217,6 +214,40 @@ with builtins; {
           "opacity 0.8 override, class:Alacritty"
         ];
       };
+
+      extraConfig = ''
+        ##################
+        ### Reize Mode ###
+        ##################
+
+        # Switch to resize mode
+        bind=${mod}, R, submap, resize
+        submap=resize
+
+        # sets repeatable binds for resizing the active window
+        binde=, right, resizeactive, 10 0
+        binde=, left, resizeactive, -10 0
+        binde=, up, resizeactive, 0 -10
+        binde=, down, resizeactive, 0 10
+
+        # Exit resize mode
+        bind=, escape, submap, reset
+        bind=${mod}, R, submap, reset
+        submap=reset
+
+        ########################
+        ### Passthrough Mode ###
+        ########################
+
+        # Switch to a passthough mode
+        bind=${mod}, P, submap, passthrough
+        submap=passthrough
+
+        # Exit passthrough mode
+        bind=${mod}, escape, submap, reset
+        bind=${mod}, P, submap, reset
+        submap=reset
+      '';
     };
 
     services = {

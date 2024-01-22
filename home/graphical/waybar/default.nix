@@ -139,6 +139,7 @@ with lib; {
             modules-left = [
               "custom/launcher"
               "hyprland/workspaces"
+              "hyprland/submap"
             ];
 
             modules-right = [
