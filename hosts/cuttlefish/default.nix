@@ -13,6 +13,7 @@ with lib; {
     ./services
 
     ./network.nix
+    ./remote.nix
     ./users.nix
     ./virtualization.nix
     ./webdav.nix
