@@ -65,7 +65,7 @@ with lib; {
 
             mouse.hide_when_typing = false;
           }
-          // (pkgs.dlo9.lib.fromYAML (config.scheme inputs.base16-alacritty));
+          // (importTOML (config.scheme inputs.base16-alacritty));
       };
 
       # Other
