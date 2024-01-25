@@ -15,7 +15,7 @@ with lib; {
     ./network.nix
     ./remote.nix
     ./users.nix
-    ./virtualization.nix
+    #./virtualization.nix
     ./webdav.nix
   ];
 

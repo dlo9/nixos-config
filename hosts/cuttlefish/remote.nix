@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}:
-
-{
+}: {
   config = {
     # Add seatd for GPU access
     users.users.david.extraGroups = ["render"];
