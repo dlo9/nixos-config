@@ -40,7 +40,6 @@ with lib; {
         ripgrep
         bottom
         gping
-        iputils # Required by gping
         procs
         viddy
 
@@ -83,6 +82,7 @@ with lib; {
         inxi # Hardware info
         kmon # Kernel monitor
         flashrom
+        iputils # Required by gping
 
         immich-cli # Bulk image uploading
       ]);

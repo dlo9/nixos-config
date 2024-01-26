@@ -26,7 +26,7 @@ with lib; {
 
     # Java tools
     visualvm
-    pkgs.master.jetbrains.idea-ultimate
+    #pkgs.master.jetbrains.idea-ultimate
     gradle
     groovy
     google-java-format
@@ -60,7 +60,7 @@ with lib; {
     # Link bazel to bazelisk
     #(runCommand "my-bazel" {} ''mkdir -p $out/bin; ln -s ${bazelisk}/bin/bazelisk $out/bin/bazel'')
     (writeShellScriptBin "bazel" ''
-      # Clear java hmoe or else the default_system_javabase flag is set in from CLI but not from IntelliJ,
+      # Clear java home or else the default_system_javabase flag is set in from CLI but not from IntelliJ,
       # resulting in different startup opitons
       export JAVA_HOME=
       ${bazelisk}/bin/bazelisk "$@"

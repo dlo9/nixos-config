@@ -58,6 +58,7 @@ in {
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
       "kreya"
+      "intellij-idea"
 
       # Team fun
       "steam"
