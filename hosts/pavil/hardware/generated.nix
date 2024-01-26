@@ -70,6 +70,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/home/david/documents" = {
+    device = "cuttlefish:/home/david/documents";
+    fsType = "nfs4";
+  };
+
   fileSystems."/nix" = {
     device = "fast/nixos/nix";
     fsType = "zfs";
