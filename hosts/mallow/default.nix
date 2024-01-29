@@ -53,7 +53,6 @@ in {
     casks = [
       "docker"
       "firefox"
-      "google-drive"
       "jdk-mission-control"
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
