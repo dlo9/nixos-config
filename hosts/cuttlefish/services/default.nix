@@ -3,6 +3,7 @@
     ./caddy.nix
     ./certs.nix
     ./ddns.nix
+    ./github.nix
     ./jellyfin.nix
     ./kubernetes.nix
     ./netdata.nix
