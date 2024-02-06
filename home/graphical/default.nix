@@ -190,7 +190,7 @@ with lib; {
 
           # Notes app
           anytype
-          appflowy
+          master.appflowy
 
           # Video player
           mpv
