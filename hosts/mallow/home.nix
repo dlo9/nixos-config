@@ -73,6 +73,7 @@ with lib; {
     terraform
     flyway
     obsidian
+    gh
     #postman
 
     # SQL Server

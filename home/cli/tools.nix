@@ -68,6 +68,7 @@ with lib; {
         p7zip
         zstd
         age
+        glow # Markdown reader
       ]
       ++
       # Linux only
