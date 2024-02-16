@@ -226,6 +226,11 @@ with lib; {
           # VNC
           # Normal package is missing H.264 encoding
           pkgs.dlo9.tigervnc
+
+          # Password manager
+          bitwarden
+
+          libreoffice
         ])
 
         [
