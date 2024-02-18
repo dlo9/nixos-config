@@ -11,9 +11,17 @@ with lib; {
     services.github-runner = {
       enable = true;
       replace = true;
-      tokenFile = config.sops.secrets.github-runner.path;
       ephemeral = true;
-      url = "https://github.com/dlo9";
+
+      tokenFile = config.sops.secrets.github-runner.path;
+      url = "https://github.com/dlo9/wrap";
+
+      extraPackages = with pkgs; [
+        nix
+        curl
+        gnused
+        gawk
+      ];
     };
   };
 }

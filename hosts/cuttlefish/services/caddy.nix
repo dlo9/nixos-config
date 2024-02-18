@@ -75,6 +75,14 @@ in {
           '';
         };
 
+        nix-serve = {
+          inherit useACMEHost;
+          serverAliases = ["nix-serve.sigpanic.com"];
+          extraConfig = ''
+            reverse_proxy http://${config.services.nix-serve.bindAddress}:${toString config.services.nix-serve.port}
+          '';
+        };
+
         sunshine = {
           inherit useACMEHost;
           serverAliases = ["sunshine.sigpanic.com"];
