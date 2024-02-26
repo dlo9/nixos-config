@@ -5,7 +5,10 @@
 }:
 with lib; let
   adminConfig = user: {
-    users.users.${user}.extraGroups = (optional config.hardware.i2c.enable config.hardware.i2c.group) ++ ["dialout"];
+    users.users.${user}.extraGroups =
+      (optional config.hardware.i2c.enable config.hardware.i2c.group)
+      ++ (optional (config.users.groups ? "wireshark") "wireshark")
+      ++ ["dialout"];
 
     boot.initrd.network.ssh.authorizedKeys = config.users.users.${user}.openssh.authorizedKeys.keys;
   };
