@@ -11,9 +11,9 @@ with lib; {
     networking.useNetworkd = mkDefault true;
     networking.dhcpcd.enable = mkDefault false;
 
-    services.resolved.domains = [
-      "lan"
-    ];
+    # services.resolved.domains = [
+    #   "lan"
+    # ];
 
     systemd.network = {
       enable = mkDefault true;
