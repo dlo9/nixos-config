@@ -108,24 +108,23 @@ with lib; {
     ];
 
     # Generate a new (invalid) config: `sudo pwmconfig`
+    # View current CPU temp: `sensors | rg -A3 k10temp-pci-00c3 | rg -o '[0-9\.]+°C'`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`
-    # View current PWM values: `cat /sys/class/hwmon/hwmon5/pwm1`
+    # View current PWM values: `cat /sys/class/hwmon/hwmon3/pwm?`
     # Turn off (almost) all fans:
-    # for i in (seq 1 7); echo 0 | sudo tee /sys/class/hwmon/hwmon5/pwm$i; end
+    # for i in (seq 1 7); echo 0 | sudo tee /sys/class/hwmon/hwmon3/pwm$i; end
     hardware.fancontrol = {
-      enable = false;
-      # Hot core: hwmon0/temp3_input
-      # Cool core: hwmon4/temp3_input
+      enable = true;
       config = ''
         INTERVAL=10
-        DEVPATH=hwmon5=devices/pci0000:00/0000:00:1f.3/i2c-2/2-002d
-        DEVNAME=hwmon5=nct7904
-        FCTEMPS=hwmon5/pwm4=hwmon4/temp3_input hwmon5/pwm3=hwmon4/temp3_input hwmon5/pwm2=hwmon4/temp3_input hwmon5/pwm1=hwmon4/temp3_input
-        FCFANS= hwmon5/pwm4=hwmon5/fan6_input  hwmon5/pwm3=hwmon5/fan6_input  hwmon5/pwm2=hwmon5/fan6_input  hwmon5/pwm1=hwmon5/fan6_input
-        MINTEMP= hwmon5/pwm4=40  hwmon5/pwm3=40  hwmon5/pwm2=40  hwmon5/pwm1=40
-        MAXTEMP= hwmon5/pwm4=80  hwmon5/pwm3=80  hwmon5/pwm2=80  hwmon5/pwm1=80
-        MINSTART=hwmon5/pwm4=50  hwmon5/pwm3=50  hwmon5/pwm2=50  hwmon5/pwm1=50
-        MINSTOP= hwmon5/pwm4=50  hwmon5/pwm3=50  hwmon5/pwm2=50  hwmon5/pwm1=50
+        DEVPATH=hwmon3=devices/platform/nct6775.2592 hwmon4=devices/pci0000:00/0000:00:18.3
+        DEVNAME=hwmon3=nct6797 hwmon4=k10temp
+        FCTEMPS=hwmon3/pwm2=hwmon4/temp1_input hwmon3/pwm3=hwmon4/temp1_input hwmon3/pwm4=hwmon4/temp1_input hwmon3/pwm5=hwmon4/temp1_input hwmon3/pwm6=hwmon4/temp1_input hwmon3/pwm7=hwmon4/temp1_input
+        FCFANS= hwmon3/pwm2=hwmon3/fan2_input  hwmon3/pwm3=hwmon3/fan3_input  hwmon3/pwm4=hwmon3/fan4_input  hwmon3/pwm5=hwmon3/fan5_input  hwmon3/pwm6=hwmon3/fan6_input  hwmon3/pwm7=hwmon3/fan7_input
+        MINTEMP= hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40
+        MAXTEMP= hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60
+        MINSTART=hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100
+        MINSTOP= hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100
       '';
     };
 
