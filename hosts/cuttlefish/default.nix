@@ -121,10 +121,10 @@ with lib; {
         DEVNAME=hwmon3=nct6797 hwmon4=k10temp
         FCTEMPS=hwmon3/pwm2=hwmon4/temp1_input hwmon3/pwm3=hwmon4/temp1_input hwmon3/pwm4=hwmon4/temp1_input hwmon3/pwm5=hwmon4/temp1_input hwmon3/pwm6=hwmon4/temp1_input hwmon3/pwm7=hwmon4/temp1_input
         FCFANS= hwmon3/pwm2=hwmon3/fan2_input  hwmon3/pwm3=hwmon3/fan3_input  hwmon3/pwm4=hwmon3/fan4_input  hwmon3/pwm5=hwmon3/fan5_input  hwmon3/pwm6=hwmon3/fan6_input  hwmon3/pwm7=hwmon3/fan7_input
-        MINTEMP= hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40  hwmon3/pwm7=40
-        MAXTEMP= hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60  hwmon3/pwm7=60
-        MINSTART=hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100
-        MINSTOP= hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100 hwmon3/pwm7=100
+        MINTEMP= hwmon3/pwm2=40  hwmon3/pwm3=40  hwmon3/pwm4=40  hwmon3/pwm5=40  hwmon3/pwm6=40  hwmon3/pwm7=40
+        MAXTEMP= hwmon3/pwm2=60  hwmon3/pwm3=60  hwmon3/pwm4=60  hwmon3/pwm5=60  hwmon3/pwm6=60  hwmon3/pwm7=60
+        MINSTART=hwmon3/pwm2=100 hwmon3/pwm3=100 hwmon3/pwm4=100 hwmon3/pwm5=100 hwmon3/pwm6=100 hwmon3/pwm7=100
+        MINSTOP= hwmon3/pwm2=100 hwmon3/pwm3=100 hwmon3/pwm4=100 hwmon3/pwm5=100 hwmon3/pwm6=100 hwmon3/pwm7=100
       '';
     };
 
