@@ -115,6 +115,10 @@ with lib; {
       inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
         \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+      " Navigate completion list with tab
+      inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+      inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-d>"
+
       """"""""
       "" UI ""
       """"""""
@@ -216,7 +220,7 @@ with lib; {
       map! Oc <c-right>
 
       " Shift-Tab should behave as expected
-      inoremap <Esc>[Z <C-d>
+      "inoremap <S-Tab> <C-d>
 
       " TODO: Haven't reviewed past this line
       " Treat long lines as break lines (useful when moving around in them)
