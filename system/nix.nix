@@ -13,10 +13,9 @@ in {
       substituters =
         [
           # Default priority is 50, lower number is higher priority
-          "https://cache.nixos.org?priority=50"
+          # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
           "https://nix-community.cachix.org?priority=50"
           "https://cuda-maintainers.cachix.org?priority=60"
-          "daemon?priority=10"
         ]
         ++ lib.optional (!isSigpanicNixServe) "https://nix-serve.sigpanic.com?priority=100";
 
