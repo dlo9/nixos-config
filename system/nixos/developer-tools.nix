@@ -45,7 +45,7 @@ with lib; {
             (pkgs.OVMFFull.override {
               secureBoot = true;
               tpmSupport = true;
-              csmSupport = true;
+              #csmSupport = true;
             })
             .fd
           ];
