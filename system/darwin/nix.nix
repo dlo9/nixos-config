@@ -9,6 +9,8 @@ with lib; {
   nix = {
     package = mkDefault pkgs.nix;
 
+    settings.auto-optimise-store = true;
+
     gc = {
       automatic = mkDefault true;
 
