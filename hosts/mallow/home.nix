@@ -219,6 +219,8 @@ with lib; {
       adhoc = "pushd ~/code/dorchard/adhoc";
       queries = "pushd ~/code/dorchard/adhoc/queries";
       g = "pushd ~/g";
+
+      rcn = (env-dirs "rcn").rcn-afs;
     }
     // (env-dirs "dev")
     // (env-dirs "stg")

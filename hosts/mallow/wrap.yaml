@@ -85,7 +85,6 @@ anchors:
     keys: *prd-old-keys
     values: [--bootstrap-server, $KAFKA_PRD_OLD]
 
-
   # Recon
   - &rcn-keys [--rcn]
   - &kafka-topics-rcn
