@@ -106,6 +106,14 @@ in {
           '';
         };
 
+        wedding = {
+          inherit useACMEHost;
+          serverAliases = ["wedding.sigpanic.com"];
+          extraConfig = ''
+            redir https://withjoy.com/chelsea-and-david-eclt69ttx1000r01ys9dgbfoaks/{uri} permanent
+          '';
+        };
+
         netdata = {
           inherit useACMEHost;
           serverAliases = ["netdata.sigpanic.com"];
