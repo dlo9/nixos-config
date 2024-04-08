@@ -9,8 +9,7 @@ with lib; {
     programs.steam.enable = mkDefault true;
 
     environment.systemPackages = with pkgs; [
-      lutris
-      gamehub
+      heroic
       moonlight-qt
     ];
   };
