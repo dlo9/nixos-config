@@ -24,6 +24,8 @@ with lib; {
 
   boot.supportedFilesystems = ["nfs"];
 
+  services.dbus.implementation = "broker";
+
   # Timezone
   services.localtimed.enable = true;
 
