@@ -69,6 +69,7 @@ with lib; {
         zstd
         age
         glow # Markdown reader
+        trippy # Network diagnostics
       ]
       ++
       # Linux only
@@ -86,6 +87,7 @@ with lib; {
         iputils # Required by gping
 
         immich-cli # Bulk image uploading
+        nvtop # GPU monitoring
       ]);
   };
 
