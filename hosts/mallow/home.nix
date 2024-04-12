@@ -105,6 +105,7 @@ with lib; {
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
     NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+    JAVAX_NET_SSL_TRUSTSTORE = "/etc/ssl/certs/java/cacerts";
   };
 
   home.sessionPath = [
