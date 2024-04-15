@@ -21,6 +21,7 @@ in {
         email = "if_coding@fastmail.com";
         dnsProvider = "cloudflare";
         credentialsFile = config.sops.secrets.cloudflare-dns.path;
+        dnsResolver = "1.1.1.1:53";
       };
 
       certs."${useACMEHost}" = {
