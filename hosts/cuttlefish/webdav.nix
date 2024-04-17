@@ -17,6 +17,7 @@ with lib; let
   webdav-root = pkgs.linkFarm "webdav-root" {
     "documents" = "/home/david/documents";
     "media" = "/slow/media";
+    "games" = "/slow/games";
 
     "chelsea-cuttlefish" = "/home/chelsea/documents";
     "backup/chelsea" = "/slow/backup/chelsea";
