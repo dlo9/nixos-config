@@ -58,7 +58,7 @@ with lib; {
         alejandra # Formatter
         nix-diff
         nix-tree
-        rnix-lsp # Nix language server
+        nixd # Nix language server
 
         # Other utils
         curl
