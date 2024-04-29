@@ -16,4 +16,8 @@
     ./quirks.nix
     ./generated.nix
   ];
+
+  hardware.opengl.extraPackages = with pkgs; [
+    intel-compute-runtime
+  ];
 }
