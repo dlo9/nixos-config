@@ -94,6 +94,15 @@ in {
           '';
         };
 
+        router = {
+          inherit useACMEHost;
+          serverAliases = ["router.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://192.168.1.1
+          '';
+        };
+
         wedding = {
           inherit useACMEHost;
           serverAliases = ["wedding.sigpanic.com"];
