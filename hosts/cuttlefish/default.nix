@@ -114,7 +114,7 @@ with lib; {
     # Turn off (almost) all fans:
     # for i in (seq 1 7); echo 0 | sudo tee /sys/class/hwmon/hwmon3/pwm$i; end
     hardware.fancontrol = {
-      enable = true;
+      enable = false;
       config = ''
         INTERVAL=10
         DEVPATH=hwmon3=devices/platform/nct6775.2592 hwmon4=devices/pci0000:00/0000:00:18.3
