@@ -42,4 +42,9 @@ with lib; {
 
   # Enable i2c for the main user to control monitors via software
   hardware.i2c.enable = true;
+
+  systemd.watchdog = {
+    runtimeTime = mkDefault "1min";
+    rebootTime = mkDefault "1min";
+  };
 }
