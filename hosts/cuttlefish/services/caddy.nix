@@ -10,18 +10,6 @@ with lib; let
   useACMEHost = "sigpanic.com";
   listenAddresses = ["0.0.0.0"];
 
-  autheliaForwardAuth = ''
-    forward_auth http://192.168.1.230:1080 {
-      transport http {
-        proxy_protocol v2
-      }
-
-      header_up Host "auth.sigpanic.com"
-      uri /api/verify?rd=https://auth.sigpanic.com
-      copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
-    }
-  '';
-
   # TODO: Make the available outside this file, so that configs can be adjacent to their services
   authentikForwardAuth = ''
     # forward authentication to outpost
@@ -87,7 +75,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["sunshine.sigpanic.com"];
           extraConfig = ''
-            ${autheliaForwardAuth}
+            ${authentikForwardAuth}
 
             reverse_proxy https://winvm.lan:47990 {
               header_up Authorization "Basic {$SUNSHINE_BASIC_AUTH}"
