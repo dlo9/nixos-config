@@ -8,6 +8,16 @@
 with builtins;
 with lib; let
   useACMEHost = "drywell.sigpanic.com";
+
+  authentikForwardAuth = ''
+    # forward authentication to outpost
+    forward_auth https://authentik.sigpanic.com {
+        header_up Host "authentik.sigpanic.com"
+        uri /outpost.goauthentik.io/auth/caddy
+
+        copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version Remote-User Remote-Groups Remote-Name Remote-Email
+    }
+  '';
 in {
   config = {
     # Give caddy cert access
@@ -32,6 +42,15 @@ in {
       package = pkgs.dlo9.caddy;
 
       virtualHosts = {
+        router = {
+          inherit useACMEHost;
+          serverAliases = ["router.${useACMEHost}"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://192.168.1.1
+          '';
+        };
+
         webdav = {
           inherit useACMEHost;
           serverAliases = ["webdav.${useACMEHost}"];
