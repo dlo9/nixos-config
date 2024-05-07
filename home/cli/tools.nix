@@ -13,6 +13,7 @@ with lib; {
       du = "dust";
       df = "duf";
       cat = "bat";
+      cd = "z";
       ls = "eza";
       grep = "rg";
       top = "btm";
