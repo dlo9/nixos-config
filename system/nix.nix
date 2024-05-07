@@ -31,6 +31,9 @@ in {
       builders-use-substitutes = true
       keep-outputs = true
       keep-derivations = true
+
+      connect-timeout = 5
+      log-lines = 25
     '';
   };
 }
