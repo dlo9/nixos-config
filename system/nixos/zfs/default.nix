@@ -12,8 +12,6 @@ with lib; {
   ];
 
   config = mkIf config.boot.zfs.enabled {
-    boot.kernelPackages = mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
-
     # Containerd uses zfs instead of overlayfs by default, despite documentation
     virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri".containerd.snapshotter = mkDefault "overlayfs";
     virtualisation.docker.daemon.settings.storage-driver = mkDefault "overlay2";
@@ -23,7 +21,10 @@ with lib; {
     networking.hostId = mkDefault (substring 0 8 (builtins.hashString "sha256" config.networking.hostName));
 
     boot = {
+      kernelPackages = mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
+
       zfs.devNodes = mkDefault "/dev/disk/by-id";
+      zfs.package = pkgs.unstable.zfs; # 2.2.4
 
       # Hibernation on ZFS can cause corruption
       # Plus, this doesn't work with randomly encrypted swap
