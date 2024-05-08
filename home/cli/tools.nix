@@ -99,7 +99,7 @@ with lib; {
       enableFishIntegration = config.programs.fish.enable;
 
       settings = {
-        inline_height = 25;
+        # inline_height = 25; # https://github.com/atuinsh/atuin/issues/1289
         style = "compact";
         enter_accept = true;
 
