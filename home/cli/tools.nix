@@ -71,6 +71,7 @@ with lib; {
         age
         glow # Markdown reader
         trippy # Network diagnostics
+        unstable.nix-inspect
       ]
       ++
       # Linux only
