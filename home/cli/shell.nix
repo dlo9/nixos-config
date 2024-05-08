@@ -119,6 +119,9 @@ with lib; {
         nodejs.disabled = true;
         golang.disabled = true;
 
+        scan_timeout = 10;
+        command_timeout = 100;
+
         status = {
           disabled = false;
           pipestatus = true;
