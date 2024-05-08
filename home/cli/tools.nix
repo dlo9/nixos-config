@@ -93,6 +93,21 @@ with lib; {
   };
 
   programs = {
+    atuin = {
+      enable = mkDefault true;
+      enableFishIntegration = config.programs.fish.enable;
+
+      settings = {
+        inline_height = 25;
+        style = "compact";
+        enter_accept = true;
+
+        # Make git commands matching better
+        # toggle with ctrl-r
+        workspaces = true;
+      };
+    };
+
     zoxide = {
       enable = mkDefault true;
       enableFishIntegration = config.programs.fish.enable;
