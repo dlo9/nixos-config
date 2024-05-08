@@ -115,6 +115,9 @@ with lib; {
         gradle.disabled = true;
         java.disabled = true;
         gcloud.disabled = true;
+        python.disabled = true;
+        nodejs.disabled = true;
+        golang.disabled = true;
 
         status = {
           disabled = false;
