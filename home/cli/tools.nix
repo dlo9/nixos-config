@@ -102,10 +102,7 @@ with lib; {
         # inline_height = 25; # https://github.com/atuinsh/atuin/issues/1289
         style = "compact";
         enter_accept = true;
-
-        # Make git commands matching better
-        # toggle with ctrl-r
-        workspaces = true;
+        filter_mode = "session";
       };
     };
 
