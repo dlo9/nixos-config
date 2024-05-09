@@ -37,6 +37,11 @@ with lib; {
         # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
         settings =
           {
+            shell = {
+              program = "${config.programs.fish.package}/bin/fish";
+              args = ["--login"];
+            };
+
             window = {
               opacity = 0.9;
               dynamic_padding = true;
@@ -45,8 +50,6 @@ with lib; {
                 y = 5;
               };
             };
-
-            decorations = "full";
 
             font = {
               normal.family = mkDefault config.font.family;
@@ -57,10 +60,6 @@ with lib; {
             cursor.style = {
               shape = "Block";
               blinking = "Always";
-              shell = {
-                program = config.programs.fish.package;
-                args = ["--login"];
-              };
             };
 
             mouse.hide_when_typing = false;
