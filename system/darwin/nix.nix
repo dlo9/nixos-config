@@ -19,7 +19,7 @@ with lib; {
         Minute = 15;
       };
 
-      options = "--delete-older-than 14d";
+      options = "--delete-older-than 7d";
       user = "dorchard";
     };
   };
