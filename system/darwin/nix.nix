@@ -19,8 +19,11 @@ with lib; {
         Minute = 15;
       };
 
+      # darwin-rebuild --list-generations
       options = "--delete-older-than 7d";
-      user = "dorchard";
+
+      # https://github.com/LnL7/nix-darwin/wiki/Deleting-old-generations#for-multi-user-installation
+      user = "root";
     };
   };
 }
