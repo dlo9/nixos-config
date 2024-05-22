@@ -1,6 +1,12 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   services.yabai = {
     enable = true;
+
+    package = pkgs.unstable.yabai;
 
     # https://github.com/koekeishiya/yabai/wiki/Configuration#configuration-file
     config = {
