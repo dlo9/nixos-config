@@ -171,6 +171,10 @@ with lib; {
       # The export plugin needs to be run to auto-export $JAVA_HOME.
       jenv sh-enable-plugin export >/dev/null
 
+      # Remove existing versions
+      rm -rf "$(jenv root)/versions/"
+      mkdir "$(jenv root)/versions/"
+
       jenv add ${pkgs.jdk8}
       jenv add ${pkgs.jdk11}
       jenv add ${pkgs.jdk17}
