@@ -90,6 +90,7 @@ with lib; {
 
         immich-cli # Bulk image uploading
         nvtop # GPU monitoring
+        noseyparker # Credential scanner
       ]);
   };
 
