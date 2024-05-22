@@ -313,82 +313,104 @@
 
     packages = let
       change-to-flake-root = ''
+        # Change to flake root
         while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
           cd ..
         done
       '';
+    in
+      inputs.flake-utils.lib.eachDefaultSystemMap (
+        system: let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in rec {
+          default = {
+            type = "app";
+            program = "${packages.${system}.build}/bin/build";
+          };
 
-      generate-hardware = ''
-        config="hosts/$(hostname)/hardware/generated.nix"
-        mkdir -p "$(dirname "$config")"
+          generate-hardware = pkgs.writeShellApplication {
+            name = "generate-hardware";
 
-        # Must use `sudo` so that all mounts are visible
-        sudo nixos-generate-config --show-hardware-config | \
-          scripts/maintenance/process-hardware-config.awk > "$config"
+            # TODO: not yet supported
+            # runtimeEnv = {
+            #   SYSTEM = system;
+            # };
 
-        nix fmt -- -q "$config"
-      '';
+            text = ''
+              SYSTEM="${system}"
 
-      generate-hardware-linux = system:
-        nixpkgs.legacyPackages.${system}.writeShellApplication {
-          name = "generate-hardware";
-          text = ''
-            ${change-to-flake-root}
-            ${generate-hardware}
-          '';
-        };
+              ${change-to-flake-root}
 
-      rebuild-linux = system:
-        nixpkgs.legacyPackages.${system}.writeShellApplication {
-          name = "rebuild";
-          text = ''
-            ${change-to-flake-root}
-            ${generate-hardware}
+              if [[ "$SYSTEM" == *-linux ]]; then
+                echo "Genrating hardware config"
 
-            # Rebuild
-            sudo nixos-rebuild switch
+                config="hosts/$(hostname)/hardware/generated.nix"
+                mkdir -p "$(dirname "$config")"
 
-            # Format
-            nix fmt -- -q .
-          '';
-        };
+                # Must use `sudo` so that all mounts are visible
+                sudo nixos-generate-config --show-hardware-config | \
+                  scripts/maintenance/process-hardware-config.awk > "$config"
 
-      rebuild-darwin = system:
-        nixpkgs.legacyPackages.${system}.writeShellApplication {
-          name = "rebuild";
-          text = ''
-            ${change-to-flake-root}
+                echo "Formatting hardware config"
+                nix fmt -- -q "$config"
+              fi
+            '';
+          };
 
-            # Copy cert file already on the machine
-            certSource="/etc/ssl/afscerts/ca-certificates.crt"
-            if [ -f "$certSource" ]; then
-              cp "$certSource" "hosts/mallow/ca-certificates.crt"
-            fi
+          build = pkgs.writeShellApplication {
+            name = "build";
 
-            # Rebuild
-            darwin-rebuild switch --flake ".#$(hostname)"
+            # TODO: not yet supported
+            # runtimeEnv = {
+            #   SYSTEM = system;
+            # };
 
-            # Format
-            nix fmt -- -q .
-          '';
-        };
-    in {
-      x86_64-linux.rebuild = rebuild-linux "x86_64-linux";
-      aarch64-linux.rebuild = rebuild-linux "aarch64-linux";
-      x86_64-linux.generate-hardware = generate-hardware-linux "x86_64-linux";
-      aarch64-linux.generate-hardware = generate-hardware-linux "aarch64-linux";
+            text = ''
+              SYSTEM="${system}"
 
-      x86_64-darwin.rebuild = rebuild-darwin "x86_64-darwin";
-      aarch64-darwin.rebuild = rebuild-darwin "aarch64-darwin";
-    };
+              # If no options were provided, then default to switch
+              if [[ "''${#@}" == 0 ]]; then
+                set -- switch
+              fi
+
+              ${change-to-flake-root}
+
+              # Format
+              echo "Formatting config"
+              nix fmt -- -q .
+
+              ${generate-hardware}/bin/generate-hardware
+
+              if [[ "$SYSTEM" == *-linux ]]; then
+                sudo nixos-rebuild "$@"
+              elif [[ "$SYSTEM" == *-darwin ]]; then
+                # Copy cert file already on the machine
+                certSource="/etc/ssl/afscerts/ca-certificates.crt"
+                if [ -f "$certSource" ]; then
+                  cp "$certSource" "hosts/mallow/ca-certificates.crt"
+                fi
+
+                # Rebuild
+                darwin-rebuild --flake ".#$(hostname)" "$@"
+              else
+                echo "Unknown system: $SYSTEM"
+                exit 1
+              fi
+            '';
+          };
+        }
+      );
 
     apps = inputs.flake-utils.lib.eachDefaultSystemMap (
       system: {
+        # nix run ".#default" build
+        # nix run ".#default" switch
         default = {
           type = "app";
-          program = "${packages.${system}.rebuild}/bin/rebuild";
+          program = "${packages.${system}.build}/bin/build";
         };
 
+        # nix run ".#generate-hardware"
         generate-hardware = {
           type = "app";
           program = "${packages.${system}.generate-hardware}/bin/generate-hardware";
