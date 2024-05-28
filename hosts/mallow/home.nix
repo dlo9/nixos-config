@@ -87,6 +87,8 @@ with lib; {
     slack
     zoom-us
     teams
+
+    grpcurl
   ];
 
   home.sessionVariables = rec {
