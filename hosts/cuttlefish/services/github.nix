@@ -10,6 +10,8 @@ with lib; {
   config = {
     services.github-runner = {
       enable = true;
+      package = pkgs.unstable.github-runner;
+
       replace = true;
       ephemeral = true;
 

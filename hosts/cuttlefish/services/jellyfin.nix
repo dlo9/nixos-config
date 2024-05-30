@@ -59,6 +59,7 @@ with lib; {
 
         services.jellyfin = {
           enable = true;
+          package = pkgs.unstable.jellyfin;
         };
 
         environment.etc."resolv.conf".text = "nameserver 1.1.1.1";
