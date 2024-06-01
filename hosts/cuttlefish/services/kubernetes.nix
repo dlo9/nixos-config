@@ -48,16 +48,17 @@ in {
   system.activationScripts = {
     giveUserKubectlAdminAccess = ''
       # Link to admin kubeconfig
-      install -D -m 600 "/etc/kubernetes/cluster-admin.kubeconfig" "/root/.kube/config"
+      install -D -m 600 "/etc/${config.services.kubernetes.pki.etcClusterAdminKubeconfig}" "/root/.kube/config"
 
       if [ ! -f "/home/${adminUser}/.kube/config" ]; then
         install -d -o "${adminUser}" -g users "/home/${adminUser}/.kube/"
-        install -o "${adminUser}" -g users -m 600 "/etc/kubernetes/cluster-admin.kubeconfig" "/home/${adminUser}/.kube/config"
+        install -o "${adminUser}" -g users -m 600 "/etc/${config.services.kubernetes.pki.etcClusterAdminKubeconfig}" "/home/${adminUser}/.kube/config"
       fi
 
       # Grant access to cluster key
-      chown root:wheel "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
-      chmod 660 "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
+      # chown root:wheel "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
+      # chmod 660 "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
+      ${pkgs.acl}/bin/setfacl -m "u:${adminUser}:r" ${config.services.kubernetes.pki.certs.clusterAdmin.key}
     '';
   };
 

@@ -8,23 +8,27 @@
 with builtins;
 with lib; {
   config = {
-    # cgroup naming doesn't work without this
-    systemd.services.netdata.path = [pkgs.kubectl];
+    systemd.services.netdata = {
+      path = [
+        # cgroup naming doesn't work without this
+        pkgs.kubectl
+        pkgs.jq
+      ];
+
+      environment = {
+        KUBE_CONFIG = "/etc/${config.services.kubernetes.pki.etcClusterAdminKubeconfig}";
+      };
+    };
+
+    # Give netdata kubectl access
+    system.activationScripts.netdata-kubectl-access = ''
+      ${pkgs.acl}/bin/setfacl -m "g:${config.services.netdata.group}:r" ${config.services.kubernetes.pki.certs.clusterAdmin.key}
+    '';
 
     services.netdata = {
       enable = true;
 
       package = pkgs.netdataCloud;
-
-      # package =
-      #   pkgs.netdataCloud.overrideAttrs
-      #   (oldAttrs: rec {
-      #     postFixup =
-      #       oldAttrs.postFixup
-      #       + ''
-      #         wrapProgram $out/libexec/netdata/plugins.d/cgroup-name.sh --prefix PATH : ${lib.makeBinPath [pkgs.kubectl]}
-      #       '';
-      #   });
 
       # View the running config at https://netdata.sigpanic.com/netdata.conf
       config = {
