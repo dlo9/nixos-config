@@ -8,7 +8,7 @@
 with builtins;
 with lib; {
   config = {
-    services.github-runner = {
+    services.github-runners."${config.networking.hostName}" = {
       enable = true;
       package = pkgs.unstable.github-runner;
 

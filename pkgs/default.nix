@@ -8,6 +8,5 @@ with pkgs; {
   lxappearance-xwayland = callPackage ./lxappearance-xwayland.nix {};
 
   nss-docker = callPackage ./nss-docker.nix {};
-  caddy = callPackage ./caddy.nix {};
   tigervnc = callPackage ./tigervnc.nix {};
 }

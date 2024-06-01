@@ -34,7 +34,7 @@ in {
 
     # Enable the ssh agent
     programs.ssh.startAgent = mkDefault true;
-    security.pam.enableSSHAgentAuth = mkDefault true;
+    security.pam.sshAgentAuth.enable = mkDefault true;
 
     services.openssh = {
       enable = mkDefault true;

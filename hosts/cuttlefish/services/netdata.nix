@@ -8,18 +8,23 @@
 with builtins;
 with lib; {
   config = {
+    # cgroup naming doesn't work without this
+    systemd.services.netdata.path = [pkgs.kubectl];
+
     services.netdata = {
       enable = true;
 
-      package = (pkgs.netdata.overrideAttrs
-        (oldAttrs: rec {
-          postFixup =
-            oldAttrs.postFixup
-            + ''
-              wrapProgram $out/libexec/netdata/plugins.d/cgroup-name.sh --prefix PATH : ${lib.makeBinPath [pkgs.kubectl]}
-            '';
-        }))
-      .override {withCloud = true;};
+      package = pkgs.netdataCloud;
+
+      # package =
+      #   pkgs.netdataCloud.overrideAttrs
+      #   (oldAttrs: rec {
+      #     postFixup =
+      #       oldAttrs.postFixup
+      #       + ''
+      #         wrapProgram $out/libexec/netdata/plugins.d/cgroup-name.sh --prefix PATH : ${lib.makeBinPath [pkgs.kubectl]}
+      #       '';
+      #   });
 
       # View the running config at https://netdata.sigpanic.com/netdata.conf
       config = {

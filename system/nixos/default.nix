@@ -22,8 +22,7 @@ with lib; {
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  boot.supportedFilesystems = ["nfs"];
-
+  boot.initrd.supportedFilesystems.nfs = true;
   services.dbus.implementation = "broker";
 
   # Timezone

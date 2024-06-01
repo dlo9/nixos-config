@@ -8,7 +8,7 @@
 in {
   config = {
     # Enable nvidia
-    sys.graphical.nvidia = true;
+    # sys.graphical.nvidia = true;
 
     # Add seatd for GPU access
     users.users.david.extraGroups = ["render"];

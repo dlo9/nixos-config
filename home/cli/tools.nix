@@ -89,7 +89,7 @@ with lib; {
         iputils # Required by gping
 
         immich-cli # Bulk image uploading
-        nvtop # GPU monitoring
+        nvtopPackages.intel # GPU monitoring
         noseyparker # Credential scanner
       ]);
   };

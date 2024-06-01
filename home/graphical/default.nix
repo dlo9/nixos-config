@@ -163,7 +163,7 @@ with lib; {
 
           # File manager
           cinnamon.nemo
-          peazip
+          #peazip # Broke with 24.05 upgrade
 
           # USB installer
           ventoy-bin
@@ -218,8 +218,6 @@ with lib; {
           qimgv
 
           # Music
-          spotify-tui
-          spotifyd
           spotify
 
           # VNC

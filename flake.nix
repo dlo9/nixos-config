@@ -3,7 +3,7 @@
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs-master.url = github:NixOS/nixpkgs/master;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
 
     # Darwin settings
     nix-darwin = {
@@ -31,7 +31,7 @@
     home-manager = {
       # TODO: change back when babelfish commit is in the stable release:
       # https://github.com/nix-community/home-manager/commit/53ccbe017079d5fba2b605cb9f9584629bebd03a
-      url = github:nix-community/home-manager/release-23.11;
+      url = github:nix-community/home-manager/release-24.05;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -56,7 +56,7 @@ with lib; {
         "slow"
       ];
 
-      initrd.supportedFilesystems = ["ext4"];
+      initrd.supportedFilesystems.ext4 = true;
 
       # Must load network module on boot for SSH access
       # lspci -v | grep -iA8 'network\|ethernet'
@@ -157,6 +157,8 @@ with lib; {
     networking.firewall.interfaces.mynet.allowedTCPPorts = [7681];
     services.ttyd = {
       enable = true;
+      writeable = true;
+
       port = 7681;
       interface = "mynet";
       clientOptions = {

@@ -103,7 +103,7 @@ with lib; {
 
     # Network name services
     services.avahi.enable = mkDefault true;
-    services.avahi.nssmdns = mkDefault true;
+    services.avahi.nssmdns4 = mkDefault true;
 
     # Network filesystem mounts
     services.gvfs.enable = mkDefault true;
