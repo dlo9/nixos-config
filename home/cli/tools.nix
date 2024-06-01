@@ -13,7 +13,6 @@ with lib; {
       du = "dust";
       df = "duf";
       cat = "bat";
-      cd = "z";
       ls = "eza";
       grep = "rg";
       top = "btm";
@@ -110,6 +109,7 @@ with lib; {
     zoxide = {
       enable = mkDefault true;
       enableFishIntegration = config.programs.fish.enable;
+      options = ["--cmd" "cd"];
     };
 
     bottom = {
