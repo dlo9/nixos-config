@@ -56,7 +56,7 @@ with lib; {
               size = mkDefault config.font.size;
             };
 
-            save_to_clipboard = true;
+            selection.save_to_clipboard = true;
             cursor.style = {
               shape = "Block";
               blinking = "Always";
