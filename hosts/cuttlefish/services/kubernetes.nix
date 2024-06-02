@@ -54,12 +54,14 @@ in {
         install -d -o "${adminUser}" -g users "/home/${adminUser}/.kube/"
         install -o "${adminUser}" -g users -m 600 "/etc/${config.services.kubernetes.pki.etcClusterAdminKubeconfig}" "/home/${adminUser}/.kube/config"
       fi
-
-      # Grant access to cluster key
-      # chown root:wheel "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
-      # chmod 660 "/var/lib/kubernetes/secrets/cluster-admin-key.pem"
-      ${pkgs.acl}/bin/setfacl -m "u:${adminUser}:r" ${config.services.kubernetes.pki.certs.clusterAdmin.key}
     '';
+  };
+
+  # Grant admins access to cluster key
+  # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/services/cluster/kubernetes/default.nix
+  services.certmgr.specs.clusterAdmin.private_key = {
+    group = "wheel";
+    mode = "0640";
   };
 
   services.kubernetes = {
