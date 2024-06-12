@@ -93,16 +93,30 @@ with lib; {
       ]);
   };
 
+  # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
+  systemd.user.services.atuin = {
+    Unit.Description = "Atuin daemon";
+    Service.ExecStart = "${config.programs.atuin.package}/bin/atuin daemon";
+    Install.WantedBy = ["default.target"];
+  };
+
   programs = {
     atuin = {
       enable = mkDefault true;
       enableFishIntegration = config.programs.fish.enable;
+
+      # Remove once stable is up to 18.3.0
+      # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
+      package = pkgs.master.atuin;
 
       settings = {
         # inline_height = 25; # https://github.com/atuinsh/atuin/issues/1289
         style = "compact";
         enter_accept = true;
         filter_mode = "session";
+
+        # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
+        daemon.enabled = true;
       };
     };
 
