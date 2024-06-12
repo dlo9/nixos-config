@@ -40,6 +40,9 @@ with lib; {
     };
   };
 
+  # Uptime stats
+  services.tuptime.enable = true;
+
   # POSIX shell implementation
   environment.binsh = "${pkgs.dash}/bin/dash";
 

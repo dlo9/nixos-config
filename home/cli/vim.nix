@@ -6,7 +6,10 @@
   ...
 }:
 with lib; {
-  home.sessionVariables.EDITOR = "vim";
+  home.sessionVariables = {
+    EDITOR = "vim";
+    FLAKE = "/etc/nixos"; # For nh
+  };
 
   programs.vim = {
     enable = true;

@@ -42,6 +42,7 @@ with lib; {
         gping
         procs
         viddy
+        # 3mux # TODO
 
         # Cheatsheet-like helpers
         navi
@@ -59,6 +60,11 @@ with lib; {
         nix-diff
         nix-tree
         nixd # Nix language server
+        nh # Nix cli helper
+
+        # CSV utils
+        miller
+        csvlens
 
         # Other utils
         curl
