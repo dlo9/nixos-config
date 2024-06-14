@@ -100,10 +100,17 @@ with lib; {
   };
 
   # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
-  systemd.user.services.atuin = {
-    Unit.Description = "Atuin daemon";
-    Service.ExecStart = "${config.programs.atuin.package}/bin/atuin daemon";
-    Install.WantedBy = ["default.target"];
+  systemd.user = {
+    sockets.atuin = {
+      Unit.Description = "Atuin daemon";
+      Socket.ListenStream = "%h/.local/share/atuin/atuin.sock"; # Default value for atuin
+      Install.WantedBy = ["sockets.target"];
+    };
+
+    services.atuin = {
+      Unit.Description = "Atuin daemon";
+      Service.ExecStart = "${config.programs.atuin.package}/bin/atuin daemon";
+    };
   };
 
   programs = {
@@ -122,7 +129,11 @@ with lib; {
         filter_mode = "session";
 
         # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
-        daemon.enabled = true;
+        daemon = {
+          enabled = true;
+          sync_frequency = 60;
+          systemd_socket = true;
+        };
       };
     };
 
