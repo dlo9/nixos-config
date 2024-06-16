@@ -215,12 +215,6 @@ with lib; {
         };
 
         style = ''
-          /*****************/
-          /***** Theme *****/
-          /*****************/
-
-          ${readFile (config.scheme inputs.base16-waybar)}
-
           * {
             font-family: ${config.font.family};
             font-size: ${builtins.toString config.font.size}px;

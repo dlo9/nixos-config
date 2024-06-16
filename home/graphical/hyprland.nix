@@ -252,10 +252,7 @@ with builtins; {
 
     services = {
       # Notifications
-      mako = {
-        enable = mkDefault isLinux;
-        extraConfig = readFile (config.scheme inputs.base16-mako);
-      };
+      mako.enable = mkDefault isLinux;
     };
   };
 }

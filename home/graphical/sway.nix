@@ -10,45 +10,6 @@ with lib;
 with types;
 with builtins; {
   config = mkIf (config.graphical.enable && isLinux) {
-    programs = {
-      swaylock.settings = with config.scheme.withHashtag; let
-        # https://github.com/Misterio77/dotfiles/blob/sway/home/.config/sway/swaylock.sh
-        insideColor = base01;
-        ringColor = base02;
-        errorColor = base08;
-        clearedColor = base0C;
-        highlightColor = base0B;
-        verifyingColor = base09;
-        textColor = base07;
-      in {
-        indicator-caps-lock = true;
-        image = "${config.wallpapers.default}";
-        scaling = "fill";
-        font = config.font.family;
-        font-size = 20;
-        indicator-radius = 115;
-
-        ring-color = ringColor;
-        inside-wrong-color = errorColor;
-        ring-wrong-color = errorColor;
-        key-hl-color = highlightColor;
-        bs-hl-color = errorColor;
-        ring-ver-color = verifyingColor;
-        inside-ver-color = verifyingColor;
-        inside-color = insideColor;
-        text-color = textColor;
-        text-clear-color = insideColor;
-        text-ver-color = insideColor;
-        text-wrong-color = insideColor;
-        text-caps-lock-color = insideColor;
-        inside-clear-color = clearedColor;
-        ring-clear-color = clearedColor;
-        inside-caps-lock-color = verifyingColor;
-        ring-caps-lock-color = ringColor;
-        separator-color = ringColor;
-      };
-    };
-
     xdg = {
       enable = mkDefault true;
 
@@ -87,60 +48,6 @@ with builtins; {
           x=-120
           y=10
         '';
-
-        "wofi/style.css".text = ''
-          *{
-            font-family: ${config.font.family};
-            font-size: ${builtins.toString config.font.size}px;
-          }
-
-          window {
-            border: 1px solid;
-          }
-
-          #input {
-            margin-bottom: 15px;
-            padding:3px;
-            border-radius: 5px;
-            border:none;
-          }
-
-          #outer-box {
-            margin: 5px;
-            padding:15px;
-          }
-
-          #text {
-            padding: 5px;
-          }
-
-          ${readFile (config.scheme inputs.base16-wofi)}
-        '';
-
-        "wofi/style.widgets.css".text = ''
-          *{
-            font-family: ${config.font.family};
-            font-size: ${builtins.toString config.font.size}px;
-          }
-
-          #window {
-            border: 1px solid white;
-            margin: 0px 5px 0px 5px;
-          }
-
-          #outer-box {
-            margin: 5px;
-            padding:10px;
-            margin-top: -22px;
-          }
-
-          #text {
-            padding: 5px;
-            color: white;
-          }
-
-          ${readFile (config.scheme inputs.base16-wofi)}
-        '';
       };
     };
 
@@ -148,7 +55,6 @@ with builtins; {
       # Notifications
       mako = {
         enable = mkDefault isLinux;
-        extraConfig = readFile (config.scheme inputs.base16-mako);
       };
 
       # Idle config for sway

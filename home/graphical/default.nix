@@ -35,36 +35,34 @@ with lib; {
         enable = true;
 
         # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
-        settings =
-          {
-            shell = {
-              program = "${config.programs.fish.package}/bin/fish";
-              args = ["--login"];
-            };
+        settings = {
+          shell = {
+            program = "${config.programs.fish.package}/bin/fish";
+            args = ["--login"];
+          };
 
-            window = {
-              opacity = 0.9;
-              dynamic_padding = true;
-              padding = {
-                x = 5;
-                y = 5;
-              };
+          window = {
+            opacity = 0.9;
+            dynamic_padding = true;
+            padding = {
+              x = 5;
+              y = 5;
             };
+          };
 
-            font = {
-              normal.family = mkDefault config.font.family;
-              size = mkDefault config.font.size;
-            };
+          font = {
+            normal.family = mkDefault config.font.family;
+            size = mkDefault config.font.size;
+          };
 
-            selection.save_to_clipboard = true;
-            cursor.style = {
-              shape = "Block";
-              blinking = "Always";
-            };
+          selection.save_to_clipboard = true;
+          cursor.style = {
+            shape = "Block";
+            blinking = "Always";
+          };
 
-            mouse.hide_when_typing = false;
-          }
-          // (importTOML (config.scheme inputs.base16-alacritty));
+          mouse.hide_when_typing = false;
+        };
       };
 
       # Other
@@ -110,45 +108,6 @@ with lib; {
 
         name = "Flat-Remix-Teal-Dark";
         package = pkgs.flat-remix-icon-theme;
-      };
-
-      theme = {
-        #package = pkgs.vimix-gtk-themes;
-
-        name = "FlatColor-base16";
-        package = let
-          gtk2-theme = config.scheme {
-            templateRepo = inputs.base16-gtk;
-            target = "gtk-2";
-          };
-
-          gtk3-theme = config.scheme {
-            templateRepo = inputs.base16-gtk;
-            target = "gtk-3";
-          };
-        in
-          pkgs.dlo9.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
-            # Build instructions: https://github.com/tinted-theming/base16-gtk-flatcolor
-            # This builds, but doesn't seem to work very well?
-            postInstall = ''
-              # Base theme info
-              base_theme=FlatColor
-              base_theme_path="$out/share/themes/$base_theme"
-
-              new_theme="$base_theme-base16"
-              new_theme_path="$out/share/themes/$new_theme"
-
-              # Clone and rename theme
-              cp -r "$base_theme_path" "$new_theme_path"
-              grep -Rl "$base_theme" "$new_theme_path" | xargs -n1 sed -i "s/$base_theme/$new_theme/"
-
-              # Rewrite colors into theme files
-              # This is specific to FlatColor, since gtk themes dont standarize base color variables
-              printf "%s\n" 'include "${gtk2-theme}"' "$(sed -E '/.*#[a-fA-F0-9]{6}.*/d' "$base_theme_path/gtk-2.0/gtkrc")" > "$new_theme_path/gtk-2.0/gtkrc"
-              printf "%s\n" '@import url("${gtk3-theme}");' "$(sed '1,10d' "$base_theme_path/gtk-3.0/gtk.css")" > "$new_theme_path/gtk-3.0/gtk.css"
-              printf "%s\n" '@import url("${gtk3-theme}");' "$(sed '1,26d' "$base_theme_path/gtk-3.20/gtk.css")" > "$new_theme_path/gtk-3.20/gtk.css"
-            '';
-          });
       };
     };
 

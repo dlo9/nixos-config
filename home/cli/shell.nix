@@ -21,15 +21,6 @@ with lib; {
       interactiveShellInit = let
         navi-fish = pkgs.runCommandLocal "navi.fish" {} "${pkgs.navi}/bin/navi widget fish > $out";
       in ''
-        # Theme
-        # Babelfish can't handle the official shell theme
-        for f in ${inputs.base16-fish-shell}/functions/__*.fish
-          source $f
-        end
-
-        source ${config.scheme inputs.base16-fish-shell}
-        base16-${config.scheme.scheme-slug}
-
         # Keep fish when using nix-shell
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
 

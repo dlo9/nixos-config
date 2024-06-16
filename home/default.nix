@@ -10,15 +10,11 @@
 }:
 with lib; {
   imports = [
-    inputs.base16.homeManagerModule
-
     ./cli
     ./graphical
     ./options.nix
+    ./theme.nix
   ];
-
-  scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";
-  #scheme = "${inputs.base16-unclaimed}/apathy.yaml";
 
   home = {
     stateVersion = "22.05";

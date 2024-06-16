@@ -45,10 +45,6 @@ with lib; {
       # Centralize backup/swap/undo files to ~/.vim
       vim-central
 
-      # Theme
-      base16-vim
-      vim-airline-themes
-
       # Autocomplete plugins
       coc-nvim # Base
       coc-git
@@ -65,14 +61,6 @@ with lib; {
     ];
 
     extraConfig = ''
-      """""""""""
-      "" Theme ""
-      """""""""""
-
-      let base16colorspace=256
-      colorscheme base16-${config.scheme.slug}
-      let g:airline_theme='base16_${builtins.replaceStrings ["-"] ["_"] config.scheme.slug}'
-
       """""""""""""
       "" Airline ""
       """""""""""""
