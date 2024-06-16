@@ -23,6 +23,7 @@ with builtins; {
           ipc = off
           preload = ${config.wallpapers.default}
           wallpaper = , ${config.wallpapers.default}
+          splash = false
         '';
       };
     };
@@ -86,6 +87,7 @@ with builtins; {
 
         misc = {
           disable_hyprland_logo = true;
+          disable_splash_rendering = true;
         };
 
         decoration = {
