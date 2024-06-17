@@ -113,6 +113,17 @@ with lib; {
     };
   };
 
+  launchd.agents.atuin = {
+    enable = true;
+    config = {
+      KeepAlive = true;
+      RunAtLoad = true;
+      ProgramArguments = ["${config.programs.atuin.package}/bin/atuin" "daemon"];
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/atuin/stderr";
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/atuin/stdout";
+    };
+  };
+
   programs = {
     atuin = {
       enable = mkDefault true;
@@ -132,7 +143,7 @@ with lib; {
         daemon = {
           enabled = true;
           sync_frequency = 60;
-          systemd_socket = true;
+          systemd_socket = mkDefault isLinux;
         };
       };
     };

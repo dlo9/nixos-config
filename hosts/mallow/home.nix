@@ -233,4 +233,17 @@ with lib; {
     // (env-dirs "stg")
     // (env-dirs "uat")
     // (env-dirs "prd");
+
+  launchd.agents = {
+    raycast = {
+      enable = true;
+      config = {
+        KeepAlive = true;
+        ProcessType = "Interactive";
+        Program = "${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast";
+        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/raycast/stderr";
+        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/raycast/stdout";
+      };
+    };
+  };
 }
