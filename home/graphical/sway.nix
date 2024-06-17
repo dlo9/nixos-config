@@ -8,10 +8,12 @@
 }:
 with lib;
 with types;
-with builtins; {
-  config = mkIf (config.graphical.enable && isLinux) {
+with builtins; let
+  isGraphicalLinux = config.graphical.enable && isLinux;
+in {
+  config = {
     xdg = {
-      enable = mkDefault true;
+      enable = mkDefault config.graphical.enable;
 
       configFile = {
         ################################
@@ -51,10 +53,12 @@ with builtins; {
       };
     };
 
+    programs.swaylock.enable = mkDefault isGraphicalLinux;
+
     services = {
       # Notifications
       mako = {
-        enable = mkDefault isLinux;
+        enable = mkDefault isGraphicalLinux;
       };
 
       # Idle config for sway
@@ -65,7 +69,7 @@ with builtins; {
         swaylock = "${pkgs.swaylock}/bin/swaylock";
         swaymsg = "${pkgs.sway}/bin/swaymsg";
       in {
-        enable = true;
+        enable = isGraphicalLinux;
 
         timeouts = [
           {
@@ -100,7 +104,7 @@ with builtins; {
     wayland.windowManager.sway = let
       modifier = "Mod1";
     in {
-      enable = mkDefault isLinux;
+      enable = mkDefault isGraphicalLinux;
 
       xwayland = true;
 
