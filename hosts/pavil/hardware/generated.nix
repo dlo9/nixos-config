@@ -73,6 +73,7 @@
   fileSystems."/home/david/documents" = {
     device = "cuttlefish:/home/david/documents";
     fsType = "nfs4";
+    options = ["noauto"];
   };
 
   fileSystems."/nix" = {

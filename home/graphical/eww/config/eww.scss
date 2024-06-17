@@ -15,13 +15,13 @@ $light-gray: #9699b7;
 
 * {
     all: unset; //Unsets everything so you can style everything from scratch
-    font-family: "JetBrainsMono"
+    // font-family: "JetBrainsMono"
 }
 
-.icon {
-    font-family: monospace;
-    font-size: 1.4rem;
-}
+// .icon {
+// font-family: monospace;
+// font-size: 1.4rem;
+// }
 
 
 button {
@@ -64,6 +64,7 @@ button {
 
 .calendar_box {
     padding: 1rem;
+
     calendar:selected {
         color: $blue;
     }
@@ -89,24 +90,32 @@ button {
 
 .sysinfo_box {
     padding: 1rem;
+
     .iconmem {
         font-size: 3rem;
         color: $yellow;
     }
+
     .iconcpu {
         font-size: 3rem;
         color: $blue;
     }
+
     .icondisk {
         font-size: 3rem;
         color: $green;
     }
-    .cpubar, .membar, .diskbar {
+
+    .cpubar,
+    .membar,
+    .diskbar {
         background-color: $crust;
     }
 }
+
 .slider_box {
     padding: 0 1rem;
+
     scale {
         background-color: $crust;
         border-radius: 100px;
@@ -141,48 +150,49 @@ button {
     }
 }
 
-.notification_box {
-}
+.notification_box {}
 
 .wifi {
-  font-size: 2rem;
-  color: $blue;
+    font-size: 2rem;
+    color: $blue;
 }
 
 .clock {
-  font-weight: bold;
-  background-color: $base;
-  color: $text;
-  border-radius: 10px;
-  padding: 0.2rem;
-  margin: 0.5rem;
+    font-weight: bold;
+    background-color: $base;
+    color: $text;
+    border-radius: 10px;
+    padding: 0.2rem;
+    margin: 0.5rem;
 }
 
 .cpubar {
-  color: $blue;
-  background-color: $surface1;
-  margin: 4px 0;
+    color: $blue;
+    background-color: $surface1;
+    margin: 4px 0;
 }
 
 .diskbar {
-  color: $green;
-  background-color: $surface1;
-  margin: 4px 0;
+    color: $green;
+    background-color: $surface1;
+    margin: 4px 0;
 }
 
 .membar {
     color: $yellow;
     background-color: $surface1;
-  margin: 4px 0;
+    margin: 4px 0;
 }
 
-.iconmem, .iconcpu, .icondisk {
+.iconmem,
+.iconcpu,
+.icondisk {
     color: $base;
     font-size: 2.5rem;
 }
 
 .date {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 .reg-btn {
@@ -242,49 +252,79 @@ button {
     padding: 0 2px;
     margin: 7px 7px 7px 0px;
     background: inherit;
+
     .dispatcher {
         border-radius: 15px;
         background: $base;
         color: $red;
         font-size: 14px;
         padding: 0 14px 0 10px;
-        &:hover { background-color: $surface0; }
-        &:active { background-color: $surface1; }
+
+        &:hover {
+            background-color: $surface0;
+        }
+
+        &:active {
+            background-color: $surface1;
+        }
     }
 }
 
 // powermenu
 .powermenu-container {
-  background: $crust;
-  color: $text;
-  padding: 10px;
-  font-size: 55px;
+    background: $crust;
+    color: $text;
+    padding: 10px;
+    font-size: 55px;
 
-  transition: all 200ms cubic-bezier(.1,-0.00,.0,1.49);
+    transition: all 200ms cubic-bezier(.1, -0.00, .0, 1.49);
 
-  .btn { margin: 1rem;}
-  // shutdown
-  .shutdown-btn-box .btn {
-    color: $red;
-    border-radius: 15px;
-    background-color: $mantle;
-    &:hover { background-color: $base; }
-    &:active { background-color: $surface1; }
-  }
-  // reboot
-  .reboot-btn-box .btn {
-    color: $mauve;
-    border-radius: 15px;
-    background-color: $mantle;
-    &:hover { background-color: $base; }
-    &:active { background-color: $surface1; }
-  }
-  // exit
-  .exit-btn-box .btn {
-    color: $yellow;
-    border-radius: 15px;
-    background-color: $mantle;
-    &:hover { background-color: $base; }
-    &:active { background-color: $surface1; }
-  }
+    .btn {
+        margin: 1rem;
+    }
+
+    // shutdown
+    .shutdown-btn-box .btn {
+        color: $red;
+        border-radius: 15px;
+        background-color: $mantle;
+
+        &:hover {
+            background-color: $base;
+        }
+
+        &:active {
+            background-color: $surface1;
+        }
+    }
+
+    // reboot
+    .reboot-btn-box .btn {
+        color: $mauve;
+        border-radius: 15px;
+        background-color: $mantle;
+
+        &:hover {
+            background-color: $base;
+        }
+
+        &:active {
+            background-color: $surface1;
+        }
+    }
+
+    // exit
+    .exit-btn-box .btn {
+        color: $yellow;
+        border-radius: 15px;
+        background-color: $mantle;
+
+        &:hover {
+            background-color: $base;
+        }
+
+        &:active {
+            background-color: $surface1;
+        }
+    }
 }

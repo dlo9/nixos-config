@@ -112,7 +112,7 @@
 
 ;; ━━━ WIFI ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (defvar wifi "{}")
-(defpoll wifi :interval "30s" "./scripts/wifi.sh")
+(defpoll wifi-poll :interval "30s" "./wifi.sh")
 
 (defwidget wifi []
   (box :vexpand false :hexpand false :orientation "v"
@@ -126,7 +126,7 @@
 
 ;; ━━━ BATTERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (defvar battery "{}")
-(defpoll battery :interval "60s" "./scripts/battery.sh")
+(defpoll battery-poll :interval "60s" "./battery.sh")
 
 (defwidget battery []
   (label :text {battery.icon}
@@ -269,7 +269,7 @@
   :wm-ignore true
   (powermenucontent))
 
-(deflisten workspaces_listen "./scripts/workspaces.sh")
+(deflisten workspaces_listen "./workspaces.sh")
 (defwidget workspaces []
   (literal :content workspaces_listen))
 

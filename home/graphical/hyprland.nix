@@ -28,11 +28,6 @@ with builtins; {
       };
     };
 
-    programs.eww = {
-      enable = true;
-      configDir = ./eww;
-    };
-
     # View logs with: `tail -f /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log`
     wayland.windowManager.hyprland = let
       mod = "ALT";
