@@ -100,5 +100,10 @@ with lib; {
         map to guest = bad user
       '';
     };
+
+    virtualisation.docker = {
+      enable = mkDefault true;
+      enableOnBoot = mkDefault true;
+    };
   };
 }

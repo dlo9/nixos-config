@@ -33,13 +33,11 @@ in {
     ];
 
     # Actual caddy definition
+    # Add modules via:
+    # https://github.com/NixOS/nixpkgs/issues/14671#issuecomment-1253111596
+    # https://github.com/caddyserver/caddy/blob/master/cmd/caddy/main.go
     services.caddy = {
       enable = true;
-
-      # Add modules via:
-      # https://github.com/NixOS/nixpkgs/issues/14671#issuecomment-1253111596
-      # https://github.com/caddyserver/caddy/blob/master/cmd/caddy/main.go
-      package = pkgs.dlo9.caddy;
 
       virtualHosts = {
         router = {
