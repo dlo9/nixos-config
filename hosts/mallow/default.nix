@@ -58,6 +58,7 @@ in {
       "sensiblesidebuttons"
       "kreya"
       "intellij-idea"
+      "github" # Github desktop for notifications
 
       # Team fun
       "steam"

@@ -169,7 +169,7 @@ with lib; {
     git = {
       enable = true;
       userName = "David Orchard";
-      userEmail = "if_coding@fastmail.com";
+      userEmail = mkDefault "if_coding@fastmail.com";
 
       lfs.enable = true;
 

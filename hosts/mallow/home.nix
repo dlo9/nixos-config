@@ -155,6 +155,8 @@ with lib; {
     '';
   };
 
+  programs.git.userEmail = "dorchard@apexfintechsolutions.com";
+
   programs.ssh = {
     enable = true;
     matchBlocks."d1lrtcapp*".extraOptions = {
