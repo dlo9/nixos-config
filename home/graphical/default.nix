@@ -178,7 +178,7 @@ with lib; {
           qimgv
 
           # Music
-          spotify
+          #spotify
 
           # VNC
           # Normal package is missing H.264 encoding
