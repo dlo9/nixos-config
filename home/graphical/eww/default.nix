@@ -7,10 +7,9 @@
   ...
 }:
 with lib; {
-  config = mkIf config.graphical.enable {
+  config = mkIf (config.graphical.enable && isLinux) {
     programs.eww = {
       enable = true;
-      package = pkgs.eww-wayland;
       configDir = ./config;
     };
 

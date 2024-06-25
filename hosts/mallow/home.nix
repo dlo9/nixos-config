@@ -40,6 +40,7 @@ with lib; {
     # Kafka
     kcat
     kafkactl
+    apacheKafka
 
     # Python
     # python38
@@ -47,6 +48,7 @@ with lib; {
     # python310Full
     # python311
     # python312
+    pyenv
 
     # Shell tools
     gnused
@@ -74,6 +76,7 @@ with lib; {
     flyway
     obsidian
     gh
+    codeowners
     #postman
 
     # SQL Server

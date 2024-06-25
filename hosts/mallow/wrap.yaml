@@ -414,7 +414,7 @@ aliases:
   # kt --create <topic name> -p 100
   # kt --delete <topic name>
   - alias: kt
-    program: kafka-topics
+    program: kafka-topics.sh
     arguments:
       - key: --replication-factor
         value: 3
@@ -447,7 +447,7 @@ aliases:
 
   # kcg --speedup <group name>
   - alias: kcg
-    program: kafka-consumer-groups
+    program: kafka-consumer-groups.sh
     keywords:
       - *kafka-topics-local
       - *kafka-topics-dev
@@ -470,7 +470,7 @@ aliases:
           [--delete, --group, $#]
 
   - alias: kl
-    program: kafka-log-dirs
+    program: kafka-log-dirs.sh
     keywords:
       - *kafka-topics-local
       - *kafka-topics-dev

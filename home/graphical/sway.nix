@@ -8,8 +8,7 @@
 }:
 with lib;
 with types;
-with builtins;
-{
+with builtins; {
   config = mkIf config.graphical.enable {
     xdg = {
       enable = true;

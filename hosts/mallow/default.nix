@@ -41,8 +41,6 @@ in {
     ];
 
     brews = [
-      "kafka"
-      "pyenv"
       "jenv"
 
       "unixodbc"
@@ -53,12 +51,10 @@ in {
     casks = [
       "docker"
       "firefox"
-      "jdk-mission-control"
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
       "kreya"
       "intellij-idea"
-      "github" # Github desktop for notifications
 
       # Team fun
       "steam"
