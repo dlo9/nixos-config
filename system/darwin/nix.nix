@@ -20,7 +20,7 @@ with lib; {
       };
 
       # darwin-rebuild --list-generations
-      options = "--delete-older-than 7d";
+      options = "--delete-old";
 
       # https://github.com/LnL7/nix-darwin/wiki/Deleting-old-generations#for-multi-user-installation
       user = "root";
