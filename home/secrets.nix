@@ -35,7 +35,7 @@ with lib; let
     attrToSecrets enabledContents;
 in {
   imports = [
-    inputs.sops-nix.nixosModules.sops
+    inputs.sops-nix.homeManagerModules.sops
   ];
 
   sops = {
@@ -45,7 +45,7 @@ in {
     age = {
       # This file must be in the filesystems mounted within the initfs.
       # I put it in the root filesystem since that's mounted first.
-      keyFile = mkDefault "/var/sops-age-keys.txt";
+      keyFile = mkDefault "${config.xdg.configHome}/sops-age-keys.txt";
       sshKeyPaths = mkDefault []; # Disable automatic SSH key import
     };
 
