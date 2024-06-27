@@ -43,6 +43,16 @@ with lib; {
       '';
     };
 
+    # Tailscale hosts
+    networking.hosts = {
+      "100.111.108.84" = ["pavil"];
+      "100.97.145.42" = ["cuttlefish"];
+      "100.78.52.90" = ["drywell"];
+      "100.115.65.29" = ["kvm-cuttlefish"];
+      "100.75.234.109" = ["kvm-drywell"];
+      "100.124.233.7" = ["opnsense"];
+    };
+
     environment.packages = with pkgs; [
     ];
   };
