@@ -7,6 +7,7 @@
 }:
 with lib;
 with types; let
+  # TODO: this is duplicated
   hostYaml = host: "${inputs.self}/hosts/${host}/secrets.yaml";
   hostYamlExists = host: pathExists (hostYaml host);
 
@@ -28,29 +29,6 @@ with types; let
     enabledContents = filterAttrs isEnabled contents;
   in
     attrToExports enabledContents;
-
-  importSecrets = sopsFile: let
-    attrToSecrets = mapAttrs' (
-      name: value: {
-        inherit name;
-
-        value =
-          (value.sopsNix or {})
-          // {
-            inherit sopsFile;
-            key = "${name}/contents";
-          };
-      }
-    );
-
-    isEnabled = name: value:
-      (value.enable or false)
-      && (value ? contents);
-
-    contents = pkgs.dlo9.lib.fromYAML sopsFile;
-    enabledContents = filterAttrs isEnabled contents;
-  in
-    attrToSecrets enabledContents;
 in {
   imports = [
     "${inputs.self}/hosts/${hostname}"
@@ -64,9 +42,6 @@ in {
   };
 
   config = {
-    # Set secrets for the current host
-    # sops.secrets = optionalAttrs (hostYamlExists hostname) (importSecrets (hostYaml hostname));
-
     # Export values for all hosts
     hosts = builtins.listToAttrs (
       map (host: {
