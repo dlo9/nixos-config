@@ -15,7 +15,13 @@ with lib; {
 
   home.packages = with pkgs; [
     which
+    openssh
   ];
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks."*".user = "david";
+  };
 
   programs.atuin.settings.daemon.enabled = false;
 
