@@ -3,6 +3,7 @@
   inputs,
   pkgs,
   lib,
+  hostname,
   ...
 }: {
   imports = [
@@ -21,4 +22,8 @@
     default = {};
     readOnly = true;
   };
+
+  networking.hostName = hostname;
+  programs.fish.enable = true;
+  environment.shells = [pkgs.fish];
 }

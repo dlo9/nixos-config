@@ -141,7 +141,7 @@ with lib; {
 
         # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
         daemon = {
-          enabled = true;
+          enabled = mkDefault true;
           sync_frequency = 60;
           systemd_socket = mkDefault isLinux;
         };

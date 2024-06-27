@@ -55,6 +55,7 @@ in {
   imports = [
     "${inputs.self}/hosts/${hostname}"
   ];
+
   options = {
     hosts = mkOption {
       description = "exported host configurations";
@@ -63,10 +64,8 @@ in {
   };
 
   config = {
-    networking.hostName = hostname;
-
     # Set secrets for the current host
-    sops.secrets = optionalAttrs (hostYamlExists hostname) (importSecrets (hostYaml hostname));
+    # sops.secrets = optionalAttrs (hostYamlExists hostname) (importSecrets (hostYaml hostname));
 
     # Export values for all hosts
     hosts = builtins.listToAttrs (

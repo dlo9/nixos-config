@@ -1,0 +1,49 @@
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  hostname,
+  ...
+}:
+with lib; {
+  config = {
+    system.stateVersion = "23.11";
+
+    # Users
+    home-manager.config = ./home.nix;
+
+    user.shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
+
+    nix = {
+      substituters = [
+        # Default priority is 50, lower number is higher priority
+        # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
+        "https://nix-community.cachix.org?priority=50"
+        "https://cuda-maintainers.cachix.org?priority=60"
+        "https://cache.flox.dev"
+        "https://nix-serve.sigpanic.com?priority=100"
+      ];
+
+      trustedPublicKeys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
+        "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+        "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
+      ];
+
+      extraOptions = ''
+        experimental-features = nix-command flakes
+        builders-use-substitutes = true
+        keep-outputs = true
+        keep-derivations = true
+
+        connect-timeout = 5
+        log-lines = 25
+      '';
+    };
+
+    environment.packages = with pkgs; [
+    ];
+  };
+}

@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  hostname,
   ...
 }:
 with lib; {
@@ -13,6 +14,7 @@ with lib; {
     ./wireless.nix
   ];
 
+  networking.hostName = hostname;
   networking.fqdn = "${networking.hostName}";
 
   # If set to the default (true), the firewall can break some tailscale and kubernetes configs

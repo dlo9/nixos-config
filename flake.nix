@@ -35,6 +35,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # Docker-compose in Nix
     arion = {
       url = github:hercules-ci/arion;
@@ -202,11 +208,36 @@
       })
     ];
 
+    androidModules = [
+      # System modules
+      ./system/home-manager.nix
+      ./system/options.nix
+      # ./system/secrets.nix
+
+      # Host modules
+      ./hosts
+
+      # Nix User repo
+      inputs.nur.nixosModules.nur
+
+      ({config, ...}: {
+        environment.motd = null;
+
+        home-manager = {
+          useUserPackages = false; # TODO
+          extraSpecialArgs = {
+            osConfig = config;
+          };
+        };
+      })
+    ];
+
     # Pass extra arguments to modules
     specialArgs = {
       inherit inputs;
       isDarwin = false;
       isLinux = true;
+      isAndroid = false;
     };
   in rec {
     # https://daiderd.com/nix-darwin/manual/index.html
@@ -216,6 +247,7 @@
           inherit inputs;
           isDarwin = true;
           isLinux = false;
+          isAndroid = false;
           hostname = "mallow";
         };
 
@@ -224,6 +256,36 @@
       };
 
       YX6MTFK902 = mallow;
+    };
+
+    nixOnDroidConfigurations = with inputs.nix-on-droid.lib; rec {
+      pixie = nixOnDroidConfiguration {
+        extraSpecialArgs = {
+          inherit inputs;
+          isDarwin = false;
+          isLinux = false;
+          isAndroid = true;
+          hostname = "pixie";
+        };
+
+        home-manager-path = inputs.home-manager.outPath;
+
+        system = "aarch64-linux";
+        modules = androidModules;
+
+        pkgs = import nixpkgs {
+          system = "aarch64-linux";
+
+          config.allowUnfree = true;
+
+          overlays = with overlays; [
+            inputs.nix-on-droid.overlays.default
+            dlo9
+            (unstable "aarch64-linux")
+            (master "aarch64-linux")
+          ];
+        };
+      };
     };
 
     nixosConfigurations = with nixpkgs.lib; rec {
@@ -322,6 +384,20 @@
       inputs.flake-utils.lib.eachDefaultSystemMap (
         system: let
           pkgs = nixpkgs.legacyPackages.${system};
+
+          setVars = ''
+            if command -v nixos-rebuild >/dev/null; then
+              OS=linux
+            elif command -v darwin-rebuild >/dev/null; then
+              OS=darwin
+            elif command -v nix-on-droid >/dev/null; then
+              OS=android
+            fi
+
+            if [ -z "$HOSTNAME" ]; then
+              HOSTNAME="$(hostname)"
+            fi
+          '';
         in rec {
           default = {
             type = "app";
@@ -337,14 +413,14 @@
             # };
 
             text = ''
-              SYSTEM="${system}"
+              ${setVars}
 
               ${change-to-flake-root}
 
-              if [[ "$SYSTEM" == *-linux ]]; then
-                echo "Genrating hardware config"
+              if [[ "$OS" == "linux" ]]; then
+                echo "Generating hardware config"
 
-                config="hosts/$(hostname)/hardware/generated.nix"
+                config="hosts/$HOSTNAME/hardware/generated.nix"
                 mkdir -p "$(dirname "$config")"
 
                 # Must use `sudo` so that all mounts are visible
@@ -366,7 +442,7 @@
             # };
 
             text = ''
-              SYSTEM="${system}"
+              ${setVars}
 
               # If no options were provided, then default to switch
               if [[ "''${#@}" == 0 ]]; then
@@ -381,9 +457,9 @@
 
               ${generate-hardware}/bin/generate-hardware
 
-              if [[ "$SYSTEM" == *-linux ]]; then
+              if [[ "$OS" == "linux" ]]; then
                 sudo nixos-rebuild "$@"
-              elif [[ "$SYSTEM" == *-darwin ]]; then
+              elif [[ "$OS" == "darwin" ]]; then
                 # Copy cert file already on the machine
                 certSource="/etc/ssl/afscerts/ca-certificates.crt"
                 if [ -f "$certSource" ]; then
@@ -391,9 +467,11 @@
                 fi
 
                 # Rebuild
-                darwin-rebuild --flake ".#$(hostname)" "$@"
+                darwin-rebuild --flake ".#$HOSTNAME" "$@"
+              elif [[ "$OS" == "android" ]]; then
+                nix-on-droid --flake ".#$HOSTNAME" --show-trace "$@"
               else
-                echo "Unknown system: $SYSTEM"
+                echo "Unknown os: $OS"
                 exit 1
               fi
             '';

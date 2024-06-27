@@ -38,6 +38,7 @@
   fileSystems."/boot/efi" = {
     device = "/dev/disk/by-uuid/D300-B14E";
     fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
   };
 
   fileSystems."/home/david" = {
@@ -68,12 +69,6 @@
   fileSystems."/home/david/code" = {
     device = "fast/home/david/code";
     fsType = "zfs";
-  };
-
-  fileSystems."/home/david/documents" = {
-    device = "cuttlefish:/home/david/documents";
-    fsType = "nfs4";
-    options = ["noauto"];
   };
 
   fileSystems."/nix" = {

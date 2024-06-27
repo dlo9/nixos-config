@@ -3,6 +3,8 @@
   pkgs,
   isLinux,
   isDarwin,
+  isAndroid,
+  hostname,
   ...
 }:
 with lib; {
@@ -14,9 +16,6 @@ with lib; {
       ./secrets.nix
     ]
     ++ (optional isDarwin ./darwin)
+    ++ (optional isAndroid ./android)
     ++ (optional isLinux ./nixos);
-
-  # Shells
-  programs.fish.enable = true;
-  environment.shells = [pkgs.fish];
 }

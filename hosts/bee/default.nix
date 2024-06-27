@@ -17,7 +17,7 @@
   # SSH config
   users.users.david.openssh.authorizedKeys.keys = [
     config.hosts.bitwarden.ssh-key.pub
-    config.hosts.pixie.ssh-key.pub
+    config.hosts.pixie.host-ssh-key.pub
     config.hosts.pavil.david-ssh-key.pub
   ];
 
