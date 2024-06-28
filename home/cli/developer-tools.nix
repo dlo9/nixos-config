@@ -18,6 +18,9 @@ with lib; {
         yq-go
         jq
         shellcheck
+
+        nixd # Nix language server
+        nix-prefetch
       ];
     };
   };

@@ -55,11 +55,9 @@ with lib; {
 
         # Nix utils
         any-nix-shell # Doesn't change the interactive shell when using nix-shell
-        nix-prefetch
         alejandra # Formatter
         nix-diff
         nix-tree
-        nixd # Nix language server
         nh # Nix cli helper
 
         # CSV utils
