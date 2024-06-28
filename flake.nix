@@ -469,7 +469,7 @@
                 # Rebuild
                 darwin-rebuild --flake ".#$HOSTNAME" "$@"
               elif [[ "$OS" == "android" ]]; then
-                nix-on-droid --flake ".#$HOSTNAME" --show-trace "$@"
+                nix-on-droid --flake ".#$HOSTNAME" --option fallback true --show-trace"$@"
               else
                 echo "Unknown os: $OS"
                 exit 1

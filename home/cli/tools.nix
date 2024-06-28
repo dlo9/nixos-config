@@ -50,7 +50,7 @@ with lib; {
         cheat
 
         # Terminal recorder
-        vhs
+        #vhs # Requires chrome
         ttyd
 
         # Nix utils
