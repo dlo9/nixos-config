@@ -22,7 +22,7 @@ with lib; {
         "https://nix-community.cachix.org?priority=50"
         "https://cuda-maintainers.cachix.org?priority=60"
         "https://cache.flox.dev"
-        "https://nix-serve.sigpanic.com?priority=100"
+        # "https://nix-serve.sigpanic.com?priority=100"
       ];
 
       trustedPublicKeys = [
