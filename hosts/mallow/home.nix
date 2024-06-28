@@ -10,6 +10,8 @@ with lib; {
     "${inputs.self}/home"
   ];
 
+  home.stateVersion = "22.05";
+
   xdg.configFile."wrap.yaml".source = ./wrap.yaml;
 
   home.packages = with pkgs; [

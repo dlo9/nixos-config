@@ -13,6 +13,8 @@ with lib; {
     "${inputs.self}/home/secrets.nix"
   ];
 
+  home.stateVersion = "23.11";
+
   home.packages = with pkgs; [
     which
     openssh

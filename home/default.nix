@@ -17,8 +17,6 @@ with lib; {
   ];
 
   home = {
-    stateVersion = "22.05";
-
     sessionPath = [
       "$HOME/.local/bin"
       "$HOME/.wrap/shims"
