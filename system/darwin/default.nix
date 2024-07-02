@@ -23,7 +23,9 @@
     readOnly = true;
   };
 
-  networking.hostName = hostname;
-  programs.fish.enable = true;
-  environment.shells = [pkgs.fish];
+  config = {
+    #networking.hostName = hostname;
+    programs.fish.enable = true;
+    environment.shells = [pkgs.fish];
+  };
 }
