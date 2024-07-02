@@ -16,6 +16,7 @@ with lib; {
 
   home.packages = with pkgs; [
     kubectl
+    tilt
 
     # gcloud components install gke-gcloud-auth-plugin
     (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
