@@ -21,6 +21,7 @@ with lib; {
 
         nixd # Nix language server
         nix-prefetch
+        pkgs.unstable.terminaltexteffects
       ];
     };
   };
