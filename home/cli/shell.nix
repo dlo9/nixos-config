@@ -125,6 +125,15 @@ with lib; {
         package.disabled = true;
       };
     };
+
+    ssh = {
+      enable = mkDefault true;
+
+      matchBlocks = {
+        kvm-cuttlefish.user = "root";
+        kvm-drywell.user = "root";
+      };
+    };
   };
 
   home.packages = with pkgs;

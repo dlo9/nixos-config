@@ -21,10 +21,7 @@ with lib; {
     pkgs.hostname
   ];
 
-  programs.ssh = {
-    enable = true;
-    matchBlocks."*".user = "david";
-  };
+  programs.ssh.matchBlocks."*".user = "david";
 
   programs.atuin.settings.daemon.enabled = false;
 
