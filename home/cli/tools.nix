@@ -91,6 +91,8 @@ with lib; {
         flashrom
         iputils # Required by gping
 
+        vulnix # Vulnerability scanner
+
         immich-cli # Bulk image uploading
         nvtopPackages.intel # GPU monitoring
         noseyparker # Credential scanner
