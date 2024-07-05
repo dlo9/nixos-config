@@ -133,9 +133,6 @@ with lib; {
 
           #kopia # Backups
 
-          # Signal
-          signal-desktop
-
           geekbench_6
 
           # Scanning
