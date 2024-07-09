@@ -20,6 +20,7 @@ with lib; {
       ping = "gping";
       ps = "procs";
       watch = "viddy";
+      z = "cd";
 
       carbonyl = "docker run --rm -it fathyb/carbonyl";
     };
