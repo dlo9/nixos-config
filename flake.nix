@@ -467,7 +467,7 @@
                 fi
 
                 # Rebuild
-                darwin-rebuild --flake ".#$HOSTNAME" "$@"
+                darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace
               elif [[ "$OS" == "android" ]]; then
                 nix-on-droid --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace
               else
