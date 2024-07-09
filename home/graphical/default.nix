@@ -72,7 +72,7 @@ with lib; {
         vim-wayland-clipboard
       ];
 
-      zathura.enable = true;
+      zathura.enable = mkDefault isLinux;
     };
 
     xdg = {
