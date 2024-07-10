@@ -122,6 +122,10 @@ in {
 
     # Home assistant
     8123
+
+    # Matter
+    5540
+    8283
   ];
 
   boot.kernel.sysctl = {
