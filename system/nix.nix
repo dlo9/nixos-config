@@ -1,11 +1,14 @@
 {
   config,
   lib,
+  inputs,
   ...
 }: let
   isSigpanicNixServe = config.services.nix-serve.enable or false;
 in {
   nix = {
+    registry.nixpkgs.flake = inputs.nixpkgs;
+
     # Binary caches
     settings = {
       trusted-users = ["@wheel"];
