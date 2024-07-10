@@ -39,11 +39,13 @@
   fileSystems."/boot/efi0" = {
     device = "/dev/disk/by-uuid/D10A-E7FF";
     fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
   };
 
   fileSystems."/boot/efi1" = {
     device = "/dev/disk/by-uuid/D007-7D72";
     fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
   };
 
   fileSystems."/home/chelsea" = {
@@ -73,6 +75,26 @@
 
   fileSystems."/root" = {
     device = "fast/home/root";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/audiobookshelf/audiobooks" = {
+    device = "slow/services/audiobookshelf/audiobooks";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/audiobookshelf/config" = {
+    device = "fast/services/audiobookshelf/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/audiobookshelf/metadata" = {
+    device = "fast/services/audiobookshelf/metadata";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/audiobookshelf/podcasts" = {
+    device = "slow/services/audiobookshelf/podcasts";
     fsType = "zfs";
   };
 
@@ -111,6 +133,16 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/fasten/cache" = {
+    device = "fast/services/fasten/cache";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/fasten/db" = {
+    device = "fast/services/fasten/db";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/feedpushr/data" = {
     device = "fast/services/feedpushr/data";
     fsType = "zfs";
@@ -123,6 +155,11 @@
 
   fileSystems."/services/fresh-rss/data" = {
     device = "fast/services/fresh-rss/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/frigate/config" = {
+    device = "fast/services/frigate/config";
     fsType = "zfs";
   };
 
@@ -188,6 +225,16 @@
 
   fileSystems."/services/linkwarden/postgres" = {
     device = "fast/services/linkwarden/postgres";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/matterbridge/data" = {
+    device = "fast/services/matterbridge/data";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/matterbridge/plugins" = {
+    device = "fast/services/matterbridge/plugins";
     fsType = "zfs";
   };
 
@@ -266,8 +313,18 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/readarr/audiobooks-config" = {
+    device = "fast/services/readarr/audiobooks-config";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/readarr/config" = {
     device = "fast/services/readarr/config";
+    fsType = "zfs";
+  };
+
+  fileSystems."/services/readarr/ebooks-config" = {
+    device = "fast/services/readarr/ebooks-config";
     fsType = "zfs";
   };
 
@@ -313,6 +370,21 @@
 
   fileSystems."/slow/media/audio" = {
     device = "slow/media/audio";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/books" = {
+    device = "slow/media/books";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/books/audiobooks" = {
+    device = "slow/media/books/audiobooks";
+    fsType = "zfs";
+  };
+
+  fileSystems."/slow/media/books/ebooks" = {
+    device = "slow/media/books/ebooks";
     fsType = "zfs";
   };
 
