@@ -70,7 +70,7 @@ with lib; {
         go-task
         pv
         sops
-        p7zip
+        ouch # zip tool, since p7zip is annoying
         zstd
         age
         glow # Markdown reader
