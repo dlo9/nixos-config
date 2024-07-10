@@ -75,9 +75,12 @@ with builtins; {
         general = {
           "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
           "col.inactive_border" = "rgba(00000000)";
-          cursor_inactive_timeout = 10;
           resize_on_border = true;
           border_size = 2;
+        };
+
+        cursor = {
+          inactive_timeout = 10;
         };
 
         misc = {
