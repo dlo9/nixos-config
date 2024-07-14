@@ -9,4 +9,6 @@ with pkgs; {
 
   nss-docker = callPackage ./nss-docker.nix {};
   tigervnc = callPackage ./tigervnc.nix {};
+  havn = callPackage ./havn.nix {};
+  tiptop = callPackage ./tiptop.nix {};
 }

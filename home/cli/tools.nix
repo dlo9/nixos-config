@@ -5,7 +5,22 @@
   isLinux,
   ...
 }:
-with lib; {
+with lib; let
+  ext = path: last (splitString "." path);
+
+  xdgSerdes = {
+    toml = (pkgs.formats.toml {}).generate;
+    yml = (pkgs.formats.yaml {}).generate;
+    yaml = (pkgs.formats.yaml {}).generate;
+  };
+
+  xdgSerde = path: xdgSerdes."${ext path}" path;
+
+  xdgFile = path: value: {
+    name = path;
+    value.source = xdgSerde path value;
+  };
+in {
   home = {
     shellAliases = {
       # Use modern alternatives to classic unix tools
@@ -30,7 +45,7 @@ with lib; {
       [
         # Modern alternatives without aliases
         fd # Modern `find` alternative
-        tldr # Simple `man` alternative
+        tealdeer # Simple `man` alternative
         mtr # Max traceroute
 
         # Modern alternatives with aliases
@@ -43,7 +58,6 @@ with lib; {
         gping
         procs
         viddy
-        # 3mux # TODO
 
         # Cheatsheet-like helpers
         navi
@@ -76,6 +90,15 @@ with lib; {
         glow # Markdown reader
         trippy # Network diagnostics
         unstable.nix-inspect
+        tailspin # Log highlighter
+        dlo9.havn # Port scanner
+
+        # To try
+        # 3mux
+
+        # Good tools, but don't need installed all the time
+        # topgrade
+        # lemmeknow
       ]
       ++
       # Linux only
@@ -212,4 +235,10 @@ with lib; {
       };
     };
   };
+
+  xdg.configFile = listToAttrs [
+    (xdgFile "tealdeer/config.toml" {
+      updates.auto_update = true;
+    })
+  ];
 }
