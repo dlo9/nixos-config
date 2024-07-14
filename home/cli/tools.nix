@@ -219,6 +219,13 @@ in {
       };
     };
 
+    helix = {
+      enable = true;
+      settings = {
+        theme = "kanagawa";
+      };
+    };
+
     yazi = {
       enable = true;
 
@@ -236,9 +243,21 @@ in {
     };
   };
 
+<<<<<<< Updated upstream
   xdg.configFile = listToAttrs [
     (xdgFile "tealdeer/config.toml" {
       updates.auto_update = true;
     })
   ];
+||||||| Stash base
+=======
+  xdg.configFile."viddy.toml".source = (pkgs.formats.toml {}).generate "viddy.toml" {
+    keymap = {
+      timemachine_go_to_past = "Shift-Down";
+      timemachine_go_to_future = "Shift-Up";
+      timemachine_go_to_now = "Ctrl-Shift-Up";
+      timemachine_go_to_oldest = "Ctrl-Shift-Down";
+    };
+  };
+>>>>>>> Stashed changes
 }
