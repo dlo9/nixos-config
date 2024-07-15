@@ -27,6 +27,10 @@ with lib; {
       ];
     };
 
+    programs = {
+      zellij.enable = true;
+    };
+
     # https://github.com/dlvhdr/gh-dash
     xdg.configFile."gh-dash/config.yml".text = builtins.toJSON {
       prSections = [

@@ -92,13 +92,17 @@ in {
         unstable.nix-inspect
         tailspin # Log highlighter
         dlo9.havn # Port scanner
+        sd # Find and replace
+        dlo9.pvw # Port viewer, pvw -aon
+        superfile
 
         # To try
-        # 3mux
+        # dblab
 
         # Good tools, but don't need installed all the time
-        # topgrade
-        # lemmeknow
+        # topgrade # Upgrade all the things
+        # lemmeknow # Identify encoded strings
+        # oha # HTTP benchmarker
       ]
       ++
       # Linux only

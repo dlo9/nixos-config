@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A fast configurable port scanner with reasonable defaults";
-    homepage = "https://github.com/mrjackwills/havn";
-    changelog = "https://github.com/mrjackwills/havn/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/mrjackwills/${pname}";
+    changelog = "https://github.com/mrjackwills/${pname}/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = pname;
   };

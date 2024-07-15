@@ -11,4 +11,5 @@ with pkgs; {
   tigervnc = callPackage ./tigervnc.nix {};
   havn = callPackage ./havn.nix {};
   tiptop = callPackage ./tiptop.nix {};
+  pvw = callPackage ./pvw.nix {};
 }
