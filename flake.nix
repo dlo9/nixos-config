@@ -130,7 +130,7 @@
     ...
   } @ inputs: let
     overlays = {
-      dlo9 = final: prev: {dlo9 = import ./pkgs {pkgs = prev;};};
+      dlo9 = import ./pkgs;
 
       unstable = system: final: prev: {
         unstable = import inputs.nixpkgs-unstable {
@@ -458,7 +458,7 @@
               ${generate-hardware}/bin/generate-hardware
 
               if [[ "$OS" == "linux" ]]; then
-                sudo nixos-rebuild "$@"
+                sudo nixos-rebuild "$@" --option fallback true --show-trace
               elif [[ "$OS" == "darwin" ]]; then
                 # Copy cert file already on the machine
                 certSource="/etc/ssl/afscerts/ca-certificates.crt"

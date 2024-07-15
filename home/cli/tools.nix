@@ -5,22 +5,8 @@
   isLinux,
   ...
 }:
-with lib; let
-  ext = path: last (splitString "." path);
-
-  xdgSerdes = {
-    toml = (pkgs.formats.toml {}).generate;
-    yml = (pkgs.formats.yaml {}).generate;
-    yaml = (pkgs.formats.yaml {}).generate;
-  };
-
-  xdgSerde = path: xdgSerdes."${ext path}" path;
-
-  xdgFile = path: value: {
-    name = path;
-    value.source = xdgSerde path value;
-  };
-in {
+with lib;
+with pkgs.dlo9.lib; {
   home = {
     shellAliases = {
       # Use modern alternatives to classic unix tools
@@ -247,21 +233,18 @@ in {
     };
   };
 
-<<<<<<< Updated upstream
   xdg.configFile = listToAttrs [
     (xdgFile "tealdeer/config.toml" {
       updates.auto_update = true;
     })
+
+    (xdgFile "viddy.toml" {
+      keymap = {
+        timemachine_go_to_past = "Shift-Down";
+        timemachine_go_to_future = "Shift-Up";
+        timemachine_go_to_now = "Ctrl-Shift-Up";
+        timemachine_go_to_oldest = "Ctrl-Shift-Down";
+      };
+    })
   ];
-||||||| Stash base
-=======
-  xdg.configFile."viddy.toml".source = (pkgs.formats.toml {}).generate "viddy.toml" {
-    keymap = {
-      timemachine_go_to_past = "Shift-Down";
-      timemachine_go_to_future = "Shift-Up";
-      timemachine_go_to_now = "Ctrl-Shift-Up";
-      timemachine_go_to_oldest = "Ctrl-Shift-Down";
-    };
-  };
->>>>>>> Stashed changes
 }

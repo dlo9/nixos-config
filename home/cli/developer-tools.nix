@@ -5,7 +5,7 @@
   ...
 }:
 with lib; {
-  config = mkIf config.developer-tools.enable {
+  config = mkIf config.developer-tools.enable (with pkgs.dlo9.lib; {
     home = {
       sessionPath = [
         "$HOME/.cargo/bin"
@@ -31,23 +31,25 @@ with lib; {
       zellij.enable = true;
     };
 
-    # https://github.com/dlvhdr/gh-dash
-    xdg.configFile."gh-dash/config.yml".text = builtins.toJSON {
-      prSections = [
-        {
-          title = "My Pull Requests";
-          filters = "is:open author:@me";
-          layout.author.hidden = true;
-        }
-        {
-          title = "Needs My Review";
-          filters = "is:open review-requested:@me -team-review-requested:apex-fintech-solutions/engineering";
-        }
-        {
-          title = "Involved";
-          filters = "is:open involves:@me - author:@me";
-        }
-      ];
-    };
-  };
+    xdg.configFile = listToAttrs [
+      # https://github.com/dlvhdr/gh-dash
+      (xdgFile "gh-dash/config.yml" {
+        prSections = [
+          {
+            title = "My Pull Requests";
+            filters = "is:open author:@me";
+            layout.author.hidden = true;
+          }
+          {
+            title = "Needs My Review";
+            filters = "is:open review-requested:@me -team-review-requested:apex-fintech-solutions/engineering";
+          }
+          {
+            title = "Involved";
+            filters = "is:open involves:@me - author:@me";
+          }
+        ];
+      })
+    ];
+  });
 }
