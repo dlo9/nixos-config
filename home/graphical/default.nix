@@ -71,7 +71,7 @@ with lib; {
             inherit key;
             mods = "Super";
             chars = ''\u001b${key}'';
-          }) (stringToCharacters "cniohljk-=[]");
+          }) (stringToCharacters "niohljk-=[]");
         };
       };
 
