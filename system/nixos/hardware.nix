@@ -47,4 +47,14 @@ with lib; {
     runtimeTime = mkDefault "1min";
     rebootTime = mkDefault "1min";
   };
+
+  # Bluetooth
+  services.blueman.enable = mkDefault config.hardware.bluetooth.enable;
+
+  # Enable A2DP Sink: https://nixos.wiki/wiki/Bluetooth
+  hardware.bluetooth.settings = {
+    General = {
+      Enable = mkDefault "Source,Sink,Media,Socket";
+    };
+  };
 }

@@ -32,6 +32,8 @@ with lib; {
     # Users
     home-manager.users.david = import ./home.nix;
 
+    # TODO: change to systemd-boot
+    # https://discourse.nixos.org/t/zfs-systemd-boot/29956/4?u=dlo9
     boot.loader.grub.mirroredBoots = [
       {
         devices = ["nodev"];
@@ -43,36 +45,14 @@ with lib; {
     boot.initrd.availableKernelModules = ["r8152"];
 
     # Bluetooth
-    services.blueman.enable = true;
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = false;
     };
 
-    # Enable A2DP Sink: https://nixos.wiki/wiki/Bluetooth
-    hardware.bluetooth.settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-      };
-    };
-
-    environment.systemPackages = with pkgs; [
-      virt-manager
-
-      # ADB fire tablet stuff
-      #gnome.zenity
-
-      # Backups
-      kopia
-
-      (appimageTools.wrapType2 {
-        name = "kopia-ui";
-        src = fetchurl {
-          url = "https://github.com/kopia/kopia/releases/download/v0.12.1/KopiaUI-0.12.1.AppImage";
-          sha256 = "sha256-Kc7ylkXuvD+E6YRe52F1gJqoaAGwQkm/3D91q43P6gU=";
-        };
-      })
-    ];
+    # environment.systemPackages = with pkgs; [
+    #   virt-manager
+    # ];
 
     # zrepl_switch to new bluetooth devices
     hardware.pulseaudio.extraConfig = "

@@ -41,11 +41,7 @@ with lib; {
     gaming.enable = false;
 
     # Bluetooth
-    services.blueman.enable = true;
-    hardware.bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
+    hardware.bluetooth.enable = true;
 
     boot = {
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
