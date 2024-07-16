@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # Admin ports can't be opened during the build
+    "--skip=scanner::tests::test_scanner_1000_empty"
     "--skip=scanner::tests::test_scanner_1000_80_443"
     "--skip=scanner::tests::test_scanner_all_80"
     "--skip=scanner::tests::test_scanner_port_80"
