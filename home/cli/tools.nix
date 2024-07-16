@@ -233,18 +233,18 @@ with pkgs.dlo9.lib; {
     };
   };
 
-  xdg.configFile = listToAttrs [
-    (xdgFile "tealdeer/config.toml" {
+  xdg.configFile = xdgFiles {
+    "tealdeer/config.toml" = {
       updates.auto_update = true;
-    })
+    };
 
-    (xdgFile "viddy.toml" {
+    "viddy.toml" = {
       keymap = {
         timemachine_go_to_past = "Shift-Down";
         timemachine_go_to_future = "Shift-Up";
         timemachine_go_to_now = "Ctrl-Shift-Up";
         timemachine_go_to_oldest = "Ctrl-Shift-Down";
       };
-    })
-  ];
+    };
+  };
 }

@@ -31,9 +31,9 @@ with lib; {
       zellij.enable = true;
     };
 
-    xdg.configFile = listToAttrs [
+    xdg.configFile = xdgFiles {
       # https://github.com/dlvhdr/gh-dash
-      (xdgFile "gh-dash/config.yml" {
+      "gh-dash/config.yml" = {
         prSections = [
           {
             title = "My Pull Requests";
@@ -49,7 +49,7 @@ with lib; {
             filters = "is:open involves:@me - author:@me";
           }
         ];
-      })
-    ];
+      };
+    };
   });
 }

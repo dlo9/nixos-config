@@ -9,18 +9,17 @@
 
   ext = path: lib.last (lib.splitString "." path);
 
-  xdgSerdes = {
+  # AttrSet of extention to convertion function
+  serdes = rec {
     toml = (formats.toml {}).generate;
-    yml = (formats.yaml {}).generate;
     yaml = (formats.yaml {}).generate;
+    yml = yaml;
   };
 
-  xdgSerde = path: xdgSerdes."${ext path}" path;
+  # Returns a convertion function for the given path
+  serdeFromFilename = path: serdes."${ext path}" path;
 
-  xdgFile = path: value: {
-    name = path;
-    value.source = xdgSerde path value;
-  };
+  xdgFiles = lib.mapAttrs (path: value: {source = serdeFromFilename path value;});
 
   maintainers.dlo9 = {
     email = "if_coding@fastmail.com";

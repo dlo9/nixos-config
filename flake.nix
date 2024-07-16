@@ -11,7 +11,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Library functions
     flake-utils.url = "github:numtide/flake-utils";
+    nix-std.url = "github:chessai/nix-std";
 
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
