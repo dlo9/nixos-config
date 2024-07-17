@@ -7,9 +7,16 @@
   ...
 }:
 with lib; let
+  # Put the file in the store, so that the derivation doesn't change every time.
+  # Otherwise, the file path changes each time anything in the repo changes,
+  # delaying build times
+  # TODO: only change if it ends in `-source`?
+  store = f: builtins.toFile "contents" (builtins.readFile f);
+
   # TODO: this is duplicated
-  hostYaml = host: "${inputs.self}/hosts/${host}/secrets.yaml";
-  hostYamlExists = host: pathExists (hostYaml host);
+  hostYamlPath = host: "${inputs.self}/hosts/${host}/secrets.yaml";
+  hostYaml = host: store (hostYamlPath host);
+  hostYamlExists = host: pathExists (hostYamlPath host);
 
   importSecrets = sopsFile: let
     attrToSecrets = mapAttrs' (
