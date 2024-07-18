@@ -13,5 +13,6 @@ with prev.pkgs; {
     havn = callPackage ./havn.nix {};
     tiptop = callPackage ./tiptop.nix {};
     pvw = callPackage ./pvw.nix {};
+    cidr = callPackage ./cidr.nix {};
   };
 }

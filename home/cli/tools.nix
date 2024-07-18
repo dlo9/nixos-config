@@ -80,6 +80,7 @@ with pkgs.dlo9.lib; {
         dlo9.havn # Port scanner
         sd # Find and replace
         dlo9.pvw # Port viewer, pvw -aon
+        dlo9.cidr
         superfile
 
         # To try
