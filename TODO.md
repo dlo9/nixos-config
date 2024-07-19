@@ -1,16 +1,10 @@
-- Show battery life in waybar (use `acpi -b`?)
 - Consolidate font settings
-- Improve "default" nixpkgs overlay in flake.nix
 
-- Review [sway addons](https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway)
-- Test [qddcswitch](https://codeberg.org/Okxa/qddcswitch)
 - Use [more modern tools](https://github.com/ibraheemdev/modern-unix)
-- Set SSH user keys (in secret)?
 - QT styling
 - Flameshot
 - `services.random-background`
 
-- [Nix flake](https://hoverbear.org/blog/a-flake-for-your-crate/) for rust projects (e.g. wrap)
 - [nix-direnv](https://github.com/nix-community/nix-direnv)
 - Partitioning:
   ```sh
