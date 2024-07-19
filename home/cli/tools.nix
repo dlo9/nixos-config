@@ -105,12 +105,18 @@ with pkgs.dlo9.lib; {
         kmon # Kernel monitor
         flashrom
         iputils # Required by gping
+        glances # Monitoring utility
 
         vulnix # Vulnerability scanner
 
         immich-cli # Bulk image uploading
         nvtopPackages.intel # GPU monitoring
         noseyparker # Credential scanner
+
+        bandwhich # Network monitor
+        diskonaut # Graphical disk space utility
+        dua # Another disk space utility
+        dive # Image layer explorer
       ]);
   };
 
