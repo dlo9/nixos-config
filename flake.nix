@@ -132,7 +132,7 @@
     ...
   } @ inputs: let
     overlays = {
-      dlo9 = import ./pkgs;
+      dlo9 = import ./pkgs inputs;
 
       unstable = system: final: prev: {
         unstable = import inputs.nixpkgs-unstable {

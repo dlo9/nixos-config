@@ -1,9 +1,9 @@
-final: prev:
+inputs: final: prev:
 with prev.pkgs; {
   dlo9 = {
     vimPlugins = recurseIntoAttrs (callPackage ./vim-plugins {});
     tmuxPlugins = recurseIntoAttrs (callPackage ./tmux-plugins {});
-    lib = recurseIntoAttrs (callPackage ./lib {});
+    lib = recurseIntoAttrs (callPackage ./lib {inherit inputs;});
 
     flatcolor-gtk-theme = callPackage ./flatcolor-gtk-theme.nix {};
     lxappearance-xwayland = callPackage ./lxappearance-xwayland.nix {};

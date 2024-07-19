@@ -6,40 +6,14 @@
   hostname,
   ...
 }:
-with lib; let
-  # TODO: this is duplicated
-  hostYaml = host: "${inputs.self}/hosts/${host}/secrets.yaml";
-  hostYamlExists = host: pathExists (hostYaml host);
-
-  importSecrets = sopsFile: let
-    attrToSecrets = mapAttrs' (
-      name: value: {
-        inherit name;
-
-        value =
-          (value.sopsNix or {})
-          // {
-            inherit sopsFile;
-            key = "${name}/contents";
-          };
-      }
-    );
-
-    isEnabled = name: value:
-      (value.enable or false)
-      && (value ? contents);
-
-    contents = pkgs.dlo9.lib.fromYAML sopsFile;
-    enabledContents = filterAttrs isEnabled contents;
-  in
-    attrToSecrets enabledContents;
-in {
+with lib;
+with pkgs.dlo9.lib; {
   imports = [
     inputs.sops-nix.nixosModules.sops
   ];
 
   sops = {
-    defaultSopsFile = mkDefault "${inputs.self}/hosts/${hostname}/secrets.yaml";
+    defaultSopsFile = mkDefault secrets.hostSops hostname;
     gnupg.sshKeyPaths = mkDefault []; # Disable automatic SSH key import
 
     age = {
@@ -50,6 +24,6 @@ in {
     };
 
     # Set secrets for the current host
-    secrets = optionalAttrs (hostYamlExists hostname) (importSecrets (hostYaml hostname));
+    secrets = secrets.hostSecrets hostname;
   };
 }
