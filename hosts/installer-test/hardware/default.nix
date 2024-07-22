@@ -17,19 +17,6 @@ in {
     ./quirks.nix
   ];
 
-  boot = {
-    zfs.requestEncryptionCredentials = [
-      "fast"
-    ];
-
-    loader = {
-      grub.enable = lib.mkForce false;
-      systemd-boot.enable = true;
-      timeout = lib.mkForce 10;
-      efi.canTouchEfiVariables = lib.mkForce false;
-    };
-  };
-
   nixpkgs.hostPlatform = "x86_64-linux";
   powerManagement.cpuFreqGovernor = "ondemand";
 }

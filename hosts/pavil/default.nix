@@ -32,16 +32,6 @@ with lib; {
     # Users
     home-manager.users.david = import ./home.nix;
 
-    # TODO: change to systemd-boot
-    # https://discourse.nixos.org/t/zfs-systemd-boot/29956/4?u=dlo9
-    boot.loader.grub.mirroredBoots = [
-      {
-        devices = ["nodev"];
-        efiSysMountPoint = "/boot/efi";
-        path = "/boot/efi/EFI";
-      }
-    ];
-
     boot.initrd.availableKernelModules = ["r8152"];
 
     # Bluetooth

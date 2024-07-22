@@ -35,6 +35,10 @@ with lib; {
     programs.nix-ld.enable = true;
 
     boot.kernelParams = ["nomodeset"];
+
+    # TODO: enable dual EFI
+    # https://discourse.nixos.org/t/zfs-systemd-boot/29956/4?u=dlo9
+    boot.loader.systemd-boot.enable = false;
     boot.loader = {
       grub.mirroredBoots = [
         {

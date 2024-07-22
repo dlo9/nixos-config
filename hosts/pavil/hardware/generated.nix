@@ -35,7 +35,7 @@
     fsType = "zfs";
   };
 
-  fileSystems."/boot/efi" = {
+  fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/D300-B14E";
     fsType = "vfat";
     options = ["fmask=0022" "dmask=0022"];

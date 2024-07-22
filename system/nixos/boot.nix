@@ -1,4 +1,8 @@
-{lib, ...}:
+{
+  lib,
+  config,
+  ...
+}:
 with lib; {
   boot = {
     initrd = {
@@ -24,13 +28,21 @@ with lib; {
       timeout = mkDefault 1;
 
       grub = {
-        enable = mkDefault true;
+        enable = mkDefault (!config.boot.loader.systemd-boot.enable);
         configurationLimit = mkDefault 8;
         splashImage = null; # I want all the text
         zfsSupport = mkDefault true;
         useOSProber = mkDefault true;
         efiSupport = mkDefault true;
         efiInstallAsRemovable = mkDefault false;
+      };
+
+      systemd-boot = {
+        # Need to run nixos-rebuild switch --install-bootloader the first time:
+        # https://github.com/NixOS/nixpkgs/issues/201677
+        enable = mkDefault true;
+        configurationLimit = mkDefault 8;
+        consoleMode = mkDefault "max";
       };
 
       efi.canTouchEfiVariables = mkDefault true;
