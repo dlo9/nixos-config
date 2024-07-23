@@ -3,6 +3,7 @@
   lib,
   pkgs,
   isLinux,
+  isDarwin,
   ...
 }:
 with lib;
@@ -138,7 +139,7 @@ with pkgs.dlo9.lib; {
     enable = true;
     config = {
       KeepAlive = true;
-      RunAtLoad = true;
+      ProcessType = "Interactive";
       ProgramArguments = ["${config.programs.atuin.package}/bin/atuin" "daemon"];
       StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/atuin/stderr";
       StandardOutPath = "${config.home.homeDirectory}/Library/Logs/atuin/stdout";
@@ -164,6 +165,7 @@ with pkgs.dlo9.lib; {
         daemon = {
           enabled = mkDefault true;
           sync_frequency = 60;
+          socket_path = mkIf isDarwin "/tmp/atuin.${config.home.username}.socket"; # Use a temporary location so that it's cleared on reboot
           systemd_socket = mkDefault isLinux;
         };
       };
