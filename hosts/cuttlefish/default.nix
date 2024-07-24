@@ -52,27 +52,12 @@ with lib; {
         "slow"
       ];
 
+      # TODO: Why do I need this if I don't have ext4?
       initrd.supportedFilesystems.ext4 = true;
 
       # Must load network module on boot for SSH access
       # lspci -v | grep -iA8 'network\|ethernet'
       initrd.availableKernelModules = ["r8169"];
-
-      # TODO: enable dual EFI
-      # https://discourse.nixos.org/t/zfs-systemd-boot/29956/4?u=dlo9
-      boot.loader.systemd-boot.enable = false;
-      loader.grub.mirroredBoots = [
-        {
-          devices = ["/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA1384E"];
-          efiSysMountPoint = "/boot/efi0";
-          path = "/boot/efi0/EFI";
-        }
-        {
-          devices = ["/dev/disk/by-id/nvme-CT1000P5SSD8_21242FA19AD2"];
-          efiSysMountPoint = "/boot/efi1";
-          path = "/boot/efi1/EFI";
-        }
-      ];
     };
 
     # GPUs

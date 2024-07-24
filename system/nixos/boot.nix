@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 with lib; {
@@ -37,12 +38,52 @@ with lib; {
         efiInstallAsRemovable = mkDefault false;
       };
 
-      systemd-boot = {
+      systemd-boot = let
+        mirror-efi = pkgs.writeShellApplication {
+          name = "mirror-efi";
+
+          runtimeInputs = with pkgs; [
+            libuuid
+            rsync
+            coreutils
+          ];
+
+          text = ''
+            mount_mountpoint="${config.boot.loader.efi.efiSysMountPoint}"
+            main_device="$(findmnt --noheadings --output source "$mount_mountpoint")"
+            mnt_target="$(mktemp -d)"
+
+            # Create a cleanup trap to ensure the temporary mount doesn't survive
+            cleanup() {
+              umount -q "$mnt_target" || true
+              rm -r "$mnt_target"
+            }
+
+            trap cleanup EXIT
+
+            # For each EFI-labeled device, mount it and clone the main device
+            for device in $(blkid --output device --match-token LABEL=EFI); do
+              # No need to copy to itself
+              if [ "$device" == "$main_device" ]; then
+                continue
+              fi
+
+              echo "Copying EFI to $device"
+
+              mount "$device" "$mnt_target"
+              rsync -a --delete "$mount_mountpoint/" "$mnt_target"
+              umount "$mnt_target"
+            done
+          '';
+        };
+      in {
         # Need to run nixos-rebuild switch --install-bootloader the first time:
         # https://github.com/NixOS/nixpkgs/issues/201677
         enable = mkDefault true;
         configurationLimit = mkDefault 8;
         consoleMode = mkDefault "max";
+
+        extraInstallCommands = "${mirror-efi}/bin/mirror-efi";
       };
 
       efi.canTouchEfiVariables = mkDefault true;

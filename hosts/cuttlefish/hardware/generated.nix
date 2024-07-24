@@ -36,16 +36,10 @@
     fsType = "zfs";
   };
 
-  fileSystems."/boot/efi0" = {
+  fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/D10A-E7FF";
     fsType = "vfat";
-    options = ["fmask=0022" "dmask=0022"];
-  };
-
-  fileSystems."/boot/efi1" = {
-    device = "/dev/disk/by-uuid/D007-7D72";
-    fsType = "vfat";
-    options = ["fmask=0022" "dmask=0022"];
+    options = ["fmask=0077" "dmask=0077"];
   };
 
   fileSystems."/home/chelsea" = {
