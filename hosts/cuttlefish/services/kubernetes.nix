@@ -132,4 +132,10 @@ in {
     # Defaults to 128 and causes 'too many open files' error for pods
     "fs.inotify.max_user_instances" = 1024;
   };
+
+  # Set the proper dependency, otherwise it fails to connect on shutdown and doesn't shutdown quickly
+  systemd.services.kube-apiserver.unitConfig = {
+    Wants = ["etcd.service"];
+    After = ["etcd.service"];
+  };
 }

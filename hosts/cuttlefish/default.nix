@@ -43,6 +43,9 @@ with lib; {
     # Bluetooth
     hardware.bluetooth.enable = true;
 
+    # Could also override systemd's DefaultTimeoutStopSec, but other services seem to behave
+    systemd.extraConfig = "DefaultTimeoutStopSec=10s";
+
     boot = {
       # Sensors from `sudo sensors-detect --auto; cat /etc/sysconfig/lm_sensors; sudo rm /etc/sysconfig/lm_sensors`
       kernelModules = ["nct6775"];

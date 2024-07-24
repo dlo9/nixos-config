@@ -207,6 +207,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/services/jellyseerr/config" = {
+    device = "fast/services/jellyseerr/config";
+    fsType = "zfs";
+  };
+
   fileSystems."/services/linkding/data" = {
     device = "fast/services/linkding/data";
     fsType = "zfs";
