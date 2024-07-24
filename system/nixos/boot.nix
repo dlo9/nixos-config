@@ -5,6 +5,14 @@
   ...
 }:
 with lib; {
+  # Mount EFI and fix security warning for EFI mount
+  # nixos-generate-config will generate this, but won't have the right options
+  fileSystems."/boot" = mkDefault {
+    device = "/dev/disk/by-label/EFI";
+    fsType = "vfat";
+    options = ["fmask=0077" "dmask=0077"];
+  };
+
   boot = {
     initrd = {
       # Enable systemd in init

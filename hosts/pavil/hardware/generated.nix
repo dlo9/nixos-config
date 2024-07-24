@@ -35,49 +35,8 @@
     fsType = "zfs";
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/D300-B14E";
-    fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
-  };
-
-  fileSystems."/home/david" = {
-    device = "fast/home/david";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david/.cache" = {
-    device = "fast/home/david/.cache";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david/.local/share/Steam" = {
-    device = "fast/games/steam";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david/.local/share/lutris" = {
-    device = "fast/games/lutris";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david/Downloads" = {
-    device = "fast/home/david/Downloads";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david/code" = {
-    device = "fast/home/david/code";
-    fsType = "zfs";
-  };
-
   fileSystems."/nix" = {
     device = "fast/nixos/nix";
-    fsType = "zfs";
-  };
-
-  fileSystems."/root" = {
-    device = "fast/home/root";
     fsType = "zfs";
   };
 }

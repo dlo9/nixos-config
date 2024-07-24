@@ -1,10 +1,9 @@
 #!/usr/bin/env -S awk -f
 
 BEGIN {
-    ignoredPaths[0] = "^/var/lib/kubernetes/pods/";
-    ignoredPaths[1] = "^/var/lib/docker/overlay2/";
-
-    ignoredFilesystemTypes[0] = "autofs";
+    # Taken from: https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/utils.nix
+    # TODO: inject this dynamically
+    split("/ /nix /nix/store /var /var/log /var/lib /var/lib/nixos /etc /usr", pathsNeededForBoot)
 }
 
 # Skip commented network interfaces
@@ -39,24 +38,14 @@ currentFilesystem != "" {
 
     # Print filesystems
     for (i in filesystemsSorted) {
-        shouldOutput = 1;
+        shouldOutput = 0;
 
-        # Ignore configured paths
+        # Only output paths needed for boot
         currentFilesystem = filesystemsSorted[i];
-        for (j in ignoredPaths) {
-            ignoredPath = ignoredPaths[j];
-            if (currentFilesystem ~ ignoredPath) {
-                shouldOutput = 0;
-                break;
-            }
-        }
-
-        # Ignore configured filesystems
-        currentFilesystemType = filesystemTypes[currentFilesystem];
-        for (j in ignoredFilesystemTypes) {
-            ignoredFilesystemType = ignoredFilesystemTypes[j];
-            if (currentFilesystemType ~ ignoredFilesystemType) {
-                shouldOutput = 0;
+        for (j in pathsNeededForBoot) {
+            bootPath = pathsNeededForBoot[j];
+            if (currentFilesystem == bootPath) {
+                shouldOutput = 1;
                 break;
             }
         }
