@@ -45,7 +45,6 @@ in {
 
       "unixodbc"
       "msodbcsql18"
-      "noseyparker"
     ];
 
     casks = [
@@ -55,6 +54,7 @@ in {
       "sensiblesidebuttons"
       "kreya"
       "intellij-idea"
+      "flameshot"
 
       # Team fun
       "steam"
