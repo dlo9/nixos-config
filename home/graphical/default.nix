@@ -238,7 +238,10 @@ with lib; {
       };
 
       # Screenshots
-      flameshot.enable = mkDefault isLinux;
+      flameshot = {
+        enable = mkDefault isLinux;
+        package = pkgs.unstable.flameshot;
+      };
     };
 
     # Restart systemd services that have changed
