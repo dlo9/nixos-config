@@ -44,6 +44,20 @@ in {
     services.caddy = {
       enable = true;
 
+      # package = pkgs.dlo9.caddy;
+      package = pkgs.dlo9.caddy.override {
+        externalPlugins = [
+          {
+            # https://caddyserver.com/docs/modules/http.handlers.replace_response
+            name = "replace-response";
+            repo = "github.com/caddyserver/replace-response";
+            version = "f92bc7d0c29d0588f91f29ecb38a0c4ddf3f85f8";
+          }
+        ];
+
+        vendorHash = "sha256-klal2H1oGkqJXFVrNVeE/F0VQjmU+eLrgxqoWQJqcao=";
+      };
+
       virtualHosts = {
         jellyfin = {
           inherit useACMEHost;
@@ -127,6 +141,18 @@ in {
                 proxy_protocol v2
               }
             }
+
+            # Fix matterbridge: https://github.com/Luligu/matterbridge/issues/84
+            replace {
+              stream
+
+              match {
+                header content-type "application/json; charset=utf-8"
+              }
+
+              "ws://192.168.1.230:8283" "wss://matterbridge.sigpanic.com:443"
+            }
+
           '';
         };
       };
@@ -138,6 +164,8 @@ in {
       globalConfig = ''
         debug
         auto_https disable_certs
+
+        order replace after encode
 
         http_port 80
         https_port 443
