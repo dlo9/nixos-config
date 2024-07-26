@@ -240,7 +240,9 @@ with lib; {
       # Screenshots
       flameshot = {
         enable = mkDefault isLinux;
-        package = pkgs.unstable.flameshot;
+        package = pkgs.unstable.flameshot.override {
+          enableWlrSupport = true;
+        };
       };
     };
 

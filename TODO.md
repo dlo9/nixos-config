@@ -2,7 +2,6 @@
 
 - Use [more modern tools](https://github.com/ibraheemdev/modern-unix)
 - QT styling
-- Flameshot
 - `services.random-background`
 
 - [nix-direnv](https://github.com/nix-community/nix-direnv)
