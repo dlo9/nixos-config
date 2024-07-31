@@ -179,6 +179,7 @@ with lib; {
           bluetuith
 
           zoom-us
+          whatsapp-for-linux
 
           # Image viewer
           qimgv
