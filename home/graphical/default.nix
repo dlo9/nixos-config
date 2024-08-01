@@ -213,7 +213,7 @@ with lib; {
           open-sans
 
           # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
-          dconf
+          #dconf
 
           # So that links open in a browser when clicked from other applications
           # (e.g. vscode)

@@ -4,6 +4,7 @@
   lib,
   inputs,
   isLinux,
+  osConfig,
   ...
 }:
 with lib;
@@ -13,6 +14,12 @@ with builtins; {
     home.packages = with pkgs; [
       hyprpicker
     ];
+
+    programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
+      if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
+        exec Hyprland
+      end
+    '';
 
     xdg = {
       enable = mkDefault true;
@@ -48,7 +55,7 @@ with builtins; {
     wayland.windowManager.hyprland = let
       mod = "ALT";
     in {
-      enable = true;
+      enable = mkDefault (!osConfig.services.desktopManager.plasma6.enable);
       plugins = [];
 
       # https://wiki.hyprland.org/Configuring/Variables/

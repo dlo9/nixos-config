@@ -103,6 +103,9 @@ with lib; {
       intel-gpu-tools
     ];
 
+    # Plasma
+    services.desktopManager.plasma6.enable = true;
+
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current CPU temp: `sensors | rg -A3 k10temp-pci-00c3 | rg -o '[0-9\.]+°C'`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`

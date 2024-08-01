@@ -45,6 +45,9 @@ with lib; {
       load-module module-switch-on-connect
     ";
 
+    # Plasma
+    services.desktopManager.plasma6.enable = false;
+
     zrepl = {
       remote = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
 

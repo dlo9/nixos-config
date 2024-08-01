@@ -7,6 +7,7 @@
 with lib; {
   imports = [
     ./polkit.nix
+    ./plasma.nix
   ];
 
   config = mkIf config.graphical.enable {
@@ -14,14 +15,7 @@ with lib; {
     security.pam.services.swaylock = {};
 
     # Auto-login since whole-disk encryption is already required
-    services.getty.autologinUser = mkIf ((builtins.length config.adminUsers) > 0) (builtins.elemAt config.adminUsers 0);
-
-    # TODO: move this to home-manager
-    environment.loginShellInit = mkDefault ''
-      if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-        exec Hyprland
-      fi
-    '';
+    services.getty.autologinUser = mkDefault config.mainAdmin;
 
     # Audio
     security.rtkit.enable = true;
@@ -38,6 +32,8 @@ with lib; {
 
     services.flatpak.enable = true;
 
+    programs.dconf.enable = true;
+
     # Desktop portal
     xdg.portal = {
       enable = mkDefault true;
@@ -46,7 +42,7 @@ with lib; {
         xdg-desktop-portal-gtk
       ];
 
-      configPackages = [config.wayland.windowManager.hyprland.package];
+      # configPackages = with pkgs; [hyprland];
       xdgOpenUsePortal = true;
 
       config = {
@@ -127,6 +123,6 @@ with lib; {
     # Keyring
     services.gnome.gnome-keyring.enable = mkDefault true;
     programs.seahorse.enable = mkDefault true;
-    programs.ssh.enableAskPassword = mkDefault true;
+    programs.ssh.enableAskPassword = mkDefault (!config.services.desktopManager.plasma6.enable);
   };
 }

@@ -14,6 +14,16 @@ with builtins; {
       default = [];
     };
 
+    mainAdmin = mkOption {
+      type = nullOr nonEmptyStr;
+
+      # Defaults to the first listed admin user
+      default =
+        if ((builtins.length config.adminUsers) == 1)
+        then (builtins.elemAt config.adminUsers 0)
+        else null;
+    };
+
     developer-tools.enable = mkEnableOption "developer tools";
     gaming.enable = mkEnableOption "gaming programs";
     graphical.enable = mkEnableOption "graphical programs";
