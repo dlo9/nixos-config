@@ -40,10 +40,6 @@ with lib; {
       powerOnBoot = false;
     };
 
-    # environment.systemPackages = with pkgs; [
-    #   virt-manager
-    # ];
-
     # zrepl_switch to new bluetooth devices
     hardware.pulseaudio.extraConfig = "
       load-module module-switch-on-connect

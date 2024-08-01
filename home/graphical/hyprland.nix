@@ -17,6 +17,22 @@ with builtins; {
     xdg = {
       enable = mkDefault true;
 
+      portal = {
+        enable = false; # Enabled on the system
+        extraPortals = with pkgs; [
+          xdg-desktop-portal-hyprland
+          xdg-desktop-portal-gtk
+        ];
+
+        configPackages = [config.wayland.windowManager.hyprland.package];
+        xdgOpenUsePortal = true;
+
+        config = {
+          common.default = ["hyprland" "gtk"];
+          preferred.default = ["hyprland" "gtk"];
+        };
+      };
+
       configFile = {
         # Set wallpaper
         "hypr/hyprpaper.conf".text = ''

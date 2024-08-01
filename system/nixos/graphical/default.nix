@@ -32,11 +32,27 @@ with lib; {
       pulse.enable = true;
     };
 
+    # Links xdg portal for home manager
+    # https://home-manager-options.extranix.com/?query=flatpak&release=release-24.05
+    environment.pathsToLink = ["/share/xdg-desktop-portal" "/share/applications"];
+
+    services.flatpak.enable = true;
+
     # Desktop portal
     xdg.portal = {
-      enable = true;
-      wlr.enable = true;
-      config.common.default = "*";
+      enable = mkDefault true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-hyprland
+        xdg-desktop-portal-gtk
+      ];
+
+      configPackages = [config.wayland.windowManager.hyprland.package];
+      xdgOpenUsePortal = true;
+
+      config = {
+        common.default = ["hyprland" "gtk"];
+        preferred.default = ["hyprland" "gtk"];
+      };
     };
 
     # Fonts

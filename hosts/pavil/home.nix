@@ -14,7 +14,8 @@ with lib; {
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
-    virt-manager # Virtualization management
+    # virt-manager # Virtualization management
+    rustdesk-flutter
   ];
 
   # SSH
