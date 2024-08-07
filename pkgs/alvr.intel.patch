@@ -1,0 +1,15 @@
+diff --git a/alvr/server/cpp/platform/linux/ffmpeg_helper.cpp b/alvr/server/cpp/platform/linux/ffmpeg_helper.cpp
+index 5ada8c6..ab933c6 100644
+--- a/alvr/server/cpp/platform/linux/ffmpeg_helper.cpp
++++ b/alvr/server/cpp/platform/linux/ffmpeg_helper.cpp
+@@ -271,10 +271,6 @@ alvr::VkFrameCtx::VkFrameCtx(VkContext& vkContext, vk::ImageCreateInfo image_cre
+     frames_ctx->width = image_create_info.extent.width;
+     frames_ctx->height = image_create_info.extent.height;
+     frames_ctx->initial_pool_size = 0;
+-    if ((err = av_hwframe_ctx_init(ctx)) < 0) {
+-        av_buffer_unref(&ctx);
+-        throw alvr::AvException("Failed to initialize vulkan frame context:", err);
+-    }
+ }
+ 
+ alvr::VkFrameCtx::~VkFrameCtx() { av_buffer_unref(&ctx); }

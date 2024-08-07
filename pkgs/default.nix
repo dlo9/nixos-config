@@ -15,5 +15,6 @@ with prev.pkgs; {
     pvw = callPackage ./pvw.nix {};
     cidr = callPackage ./cidr.nix {};
     caddy = callPackage ./caddy.nix {};
+    alvr = callPackage ./alvr.nix {};
   };
 }

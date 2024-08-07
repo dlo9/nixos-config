@@ -7,6 +7,7 @@ with lib; let
   enabled = config.services.desktopManager.plasma6.enable;
 in {
   services.xserver.enable = mkDefault enabled;
+
   services.displayManager = {
     enable = mkDefault enabled;
     autoLogin.user = mkDefault config.mainAdmin;
@@ -14,6 +15,7 @@ in {
     sddm = {
       enable = mkDefault enabled;
       wayland.enable = mkDefault enabled;
+      autoLogin.relogin = mkDefault true;
     };
   };
 }

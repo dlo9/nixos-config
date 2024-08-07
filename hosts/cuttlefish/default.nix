@@ -13,7 +13,7 @@ with lib; {
     ./services
 
     ./network.nix
-    ./remote.nix
+    #./remote.nix
     ./users.nix
     #./virtualization.nix
     ./webdav.nix
@@ -38,7 +38,7 @@ with lib; {
 
     graphical.enable = true;
     developer-tools.enable = true;
-    gaming.enable = false;
+    gaming.enable = true;
 
     # Bluetooth
     hardware.bluetooth.enable = true;
@@ -101,10 +101,20 @@ with lib; {
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
+      rustdesk-flutter
     ];
 
     # Plasma
     services.desktopManager.plasma6.enable = true;
+
+    # VR
+    programs.alvr = {
+      enable = true;
+      #package = pkgs.dlo9.alvr;
+      openFirewall = true;
+    };
+
+    hardware.steam-hardware.enable = true;
 
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current CPU temp: `sensors | rg -A3 k10temp-pci-00c3 | rg -o '[0-9\.]+°C'`
