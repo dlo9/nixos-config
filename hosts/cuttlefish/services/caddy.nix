@@ -141,18 +141,6 @@ in {
                 proxy_protocol v2
               }
             }
-
-            # Fix matterbridge: https://github.com/Luligu/matterbridge/issues/84
-            replace {
-              stream
-
-              match {
-                header content-type "application/json; charset=utf-8"
-              }
-
-              "ws://192.168.1.230:8283" "wss://matterbridge.sigpanic.com:443"
-            }
-
           '';
         };
       };
