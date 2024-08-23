@@ -4,9 +4,6 @@
   ...
 }:
 with lib; {
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.efi.canTouchEfiVariables = false;
-
   # ondemand isn't supported since the amd-pstate driver is in use
   # https://www.reddit.com/r/linux/comments/15p4bfs/amd_pstate_and_amd_pstate_epp_scaling_driver
   powerManagement.cpuFreqGovernor = "powersave";
