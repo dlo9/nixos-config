@@ -110,7 +110,7 @@ with pkgs.dlo9.lib; {
 
         vulnix # Vulnerability scanner
 
-        immich-cli # Bulk image uploading
+        unstable.immich-cli # Bulk image uploading
         nvtopPackages.intel # GPU monitoring
         noseyparker # Credential scanner
 
