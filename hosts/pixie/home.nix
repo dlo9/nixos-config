@@ -19,6 +19,8 @@ with lib; {
     which
     openssh
     pkgs.hostname
+    bind # "host" binary
+    rsync
   ];
 
   programs.ssh.matchBlocks."*".user = "david";

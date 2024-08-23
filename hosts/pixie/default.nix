@@ -10,6 +10,8 @@ with lib; {
   config = {
     system.stateVersion = "23.11";
 
+    low-power.enable = true;
+
     # Users
     home-manager.config = ./home.nix;
 
