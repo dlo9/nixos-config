@@ -3,8 +3,9 @@
   lib,
   ...
 }:
-with lib;
-let enabled = config.services.desktopManager.plasma6.enable; in {
+with lib; let
+  enabled = config.services.desktopManager.plasma6.enable;
+in {
   services.xserver.enable = mkDefault enabled;
   services.displayManager = {
     enable = mkDefault enabled;
