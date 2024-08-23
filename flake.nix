@@ -425,6 +425,10 @@
                 config="hosts/$HOSTNAME/hardware/generated.nix"
                 mkdir -p "$(dirname "$config")"
 
+                # Ask for sudo now, so that the file isn't truncated
+                # if sudo fails
+                sudo -v
+
                 # Must use `sudo` so that all mounts are visible
                 sudo nixos-generate-config --show-hardware-config | \
                   scripts/maintenance/process-hardware-config.awk > "$config"
