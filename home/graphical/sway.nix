@@ -541,8 +541,6 @@ with builtins; {
 
           # Search for desktop entries
           {command = "${pkgs.dex}/bin/dex -a -s /etc/xdg/autostart/:~/.config/autostart/";}
-
-          {command = "novnc-server";}
         ];
       };
 

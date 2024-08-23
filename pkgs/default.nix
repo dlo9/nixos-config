@@ -9,7 +9,6 @@ with prev.pkgs; {
     lxappearance-xwayland = callPackage ./lxappearance-xwayland.nix {};
 
     nss-docker = callPackage ./nss-docker.nix {};
-    tigervnc = callPackage ./tigervnc.nix {};
     havn = callPackage ./havn.nix {};
     tiptop = callPackage ./tiptop.nix {};
     pvw = callPackage ./pvw.nix {};

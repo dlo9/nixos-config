@@ -184,13 +184,6 @@ with lib; {
           # Image viewer
           qimgv
 
-          # Music
-          #spotify
-
-          # VNC
-          # Normal package is missing H.264 encoding
-          pkgs.dlo9.tigervnc
-
           # Password manager
           bitwarden
 
