@@ -55,6 +55,7 @@ in {
       "kreya"
       "intellij-idea"
       "flameshot"
+      "logseq"
 
       # Team fun
       "steam"

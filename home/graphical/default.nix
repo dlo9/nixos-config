@@ -195,6 +195,8 @@ with lib; {
           bitwarden
 
           libreoffice
+
+          logseq
         ])
 
         [
@@ -218,9 +220,6 @@ with lib; {
           # So that links open in a browser when clicked from other applications
           # (e.g. vscode)
           xdg-utils
-
-          # Notes app
-          #obsidian
 
           # Networking utils (telnet)
           inetutils
