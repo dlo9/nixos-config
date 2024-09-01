@@ -7,7 +7,11 @@
   isSigpanicNixServe = config.services.nix-serve.enable or false;
 in {
   nix = {
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+      nixpkgs-master.flake = inputs.nixpkgs-master;
+    };
 
     # Binary caches
     settings = {
