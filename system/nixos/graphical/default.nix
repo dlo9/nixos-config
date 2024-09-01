@@ -6,6 +6,7 @@
 }:
 with lib; {
   imports = [
+    ./ios.nix
     ./polkit.nix
     ./plasma.nix
   ];
