@@ -21,6 +21,7 @@ with lib; {
     pkgs.hostname
     bind # "host" binary
     rsync
+    mosh
   ];
 
   programs.ssh.matchBlocks."*".user = "david";
