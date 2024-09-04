@@ -6,30 +6,8 @@
   ...
 }:
 with builtins;
-with lib; let
-  # nix-shell -p terraform-providers.htpasswd --run "htpasswd -nB david"
-  # nix-shell -p apacheHttpd --run "htpasswd -nB david"
-  htpasswd = pkgs.writeText "htpasswd" ''
-    david:$2y$05$pe8DCM.Q8ojQZtYUnM.HP..Lw3IOfpywuVD6QLD5yZ3QNVm0ZyOPi
-    chelsea:$2y$05$XngjpZNS3WVzR.1i.F695.Qh9NdJCbRPz9lpRBcESMi5kQFF5zvxi
-  '';
-
-  webdav-root = pkgs.linkFarm "webdav-root" {
-    "documents" = "/home/david/documents";
-    "media" = "/slow/media";
-    "games" = "/slow/games";
-
-    "chelsea-cuttlefish" = "/home/chelsea/documents";
-    "backup/chelsea" = "/slow/backup/chelsea";
-  };
-in {
+with lib; {
   config = {
-    # PAM auth
-    #security.pam.services.webdav = {
-    #  unixAuth = true;
-    #  setEnvironment = false;
-    #};
-
     # WebDAV
     services.webdav-server-rs = {
       enable = true;
@@ -40,18 +18,6 @@ in {
           listen = ["0.0.0.0:12345" "[::]:12345"];
         };
 
-        # PAM auth (doesn't seem to work)
-        #accounts = {
-        #  auth-type = "pam";
-        #  acct-type = "unix";
-        #};
-
-        #pam = {
-        #  service = "webdav";
-        #  cache-timeout = 120;
-        #  threads = 8;
-        #};
-
         # htpasswd auth
         accounts = {
           acct-type = "unix";
@@ -60,7 +26,11 @@ in {
         };
 
         htpasswd.default = {
-          inherit htpasswd;
+          # mkpasswd -m sha-512
+          htpasswd = pkgs.writeText "htpasswd" ''
+            david:$6$lfXZQaVisXg6Gjqz$1dTcCAbHKnMjk.PJs0EUpSsG773FXma54tqaLGdMbDBmb7v848m/tA.46oI0ProdPd6b7u49U0d6h8Jq7wQK4/
+            chelsea:$6$xCwfzfv87NxMTzqM$ZttnXW7GtkV8aeoWMqsuOjhi7RLiIVQtGt13p.0IUXemdN7CpsFrQj3yBGDp9WXYu9u/OXcpVw/FSzbHYZvbE/
+          '';
         };
 
         unix = {
@@ -71,8 +41,15 @@ in {
         location = [
           {
             route = ["/(*path)"];
-            directory = webdav-root;
             methods = ["webdav-rw"];
+            directory = pkgs.linkFarm "webdav-root" {
+              "documents" = "/home/david/documents";
+              "media" = "/slow/media";
+              "games" = "/slow/games";
+
+              "chelsea-cuttlefish" = "/home/chelsea/documents";
+              "backup/chelsea" = "/slow/backup/chelsea";
+            };
 
             # TODO: make defaults
             handler = "filesystem";
