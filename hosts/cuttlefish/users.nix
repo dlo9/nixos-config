@@ -19,6 +19,7 @@ in {
           uid = 1001;
           group = "users";
           isSystemUser = true;
+          hashedPassword = "$6$CiWKN4ueep82fXQG$Vhk6usx2xJ.OkcrTaXVnHXOlPhGPosDYBFvR3LECpRMFI5PS6/d6nMkz2mc2Tc3aIK68TnoLnT98BJcHVS.o71";
           createHome = false;
         };
 
