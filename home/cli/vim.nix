@@ -56,7 +56,7 @@ with lib; {
       coc-java
       coc-go
       coc-highlight
-      coc-rome # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
+      coc-biome # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
       coc-sh
       coc-docker
     ];

@@ -14,6 +14,18 @@ with vimUtils; {
     };
   };
 
+  # Requires python support in vim
+  vimania-uri-rs = buildVimPlugin rec {
+    name = "vimania-uri-rs";
+    pname = name;
+    src = fetchFromGitHub {
+      owner = "sysid";
+      repo = "vimania-uri-rs";
+      rev = "v1.1.1";
+      sha256 = "sha256-V0bJnAUHo8nnEo+x1M7nEbNXafRbdwlm+A6MMQyqf30=";
+    };
+  };
+
   vim-yadi = buildVimPlugin rec {
     name = "vim-yadi";
     pname = name;
@@ -25,14 +37,14 @@ with vimUtils; {
     };
   };
 
-  coc-rome = buildVimPlugin rec {
-    name = "coc-rome";
+  coc-biome = buildVimPlugin rec {
+    name = "coc-biome";
     pname = name;
     src = fetchFromGitHub {
       owner = "fannheyward";
-      repo = "coc-rome";
-      rev = "b14e08e942997ca202037efb7ed72506f761fca5";
-      sha256 = "0l7aff25hhsdkpybcvqnn46z9izzrbldyw6ljri8smbfvipaaz5y";
+      repo = "coc-biome";
+      rev = "11d04a8e535780a1132307d701eb005bc08792e5";
+      sha256 = "sha256-yC9Y2WbaXZAVuQjtoG6sETDEjovDoFIEHMk+rBGm0G0=";
     };
   };
 
