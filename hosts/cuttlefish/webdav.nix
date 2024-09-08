@@ -43,12 +43,14 @@ with lib; {
             route = ["/(*path)"];
             methods = ["webdav-rw"];
             directory = pkgs.linkFarm "webdav-root" {
-              "documents" = "/home/david/documents";
-              "media" = "/slow/media";
-              "games" = "/slow/games";
+              "chelsea/documents" = "/home/chelsea/documents";
+              "chelsea/backup" = "/slow/backup/chelsea";
 
-              "chelsea-cuttlefish" = "/home/chelsea/documents";
-              "backup/chelsea" = "/slow/backup/chelsea";
+              "david/backup" = "/slow/backup/david";
+              "david/documents" = "/home/david/documents";
+
+              "system/media" = "/slow/media";
+              "system/games" = "/slow/games";
             };
 
             # TODO: make defaults
