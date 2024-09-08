@@ -15,5 +15,8 @@ with prev.pkgs; {
     cidr = callPackage ./cidr.nix {};
     caddy = callPackage ./caddy.nix {};
     alvr = callPackage ./alvr.nix {};
+    posting = callPackage ./posting.nix {};
+    otree = callPackage ./otree.nix {};
+    # rainfrog = callPackage ./rainfrog.nix {}; # Requires rust 1.80, currently in unstable
   };
 }

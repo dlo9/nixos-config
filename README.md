@@ -122,6 +122,13 @@ This section contains information I frequently have to look up, and want an easi
 - `/nix/var/nix/profiles/system` - the default boot profile
 - `/nix/var/nix/profiles/per-user/` - user profiles
 
+## Building packages
+Package expressions can be automatically created with `nix-init`:
+
+```sh
+nix run nixpkgs#nix-init -- -u https://github.com/fioncat/otree
+```
+
 ## Cheatsheet
 ### Configuration switching
 ```sh

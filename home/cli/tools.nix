@@ -82,7 +82,15 @@ with pkgs.dlo9.lib; {
         sd # Find and replace
         dlo9.pvw # Port viewer, pvw -aon
         dlo9.cidr
-        superfile
+        superfile # File explorer
+        peco # Interactive filtering
+        jnv # JSON interactive filtering
+        clipboard-jh # `cb` a clipboard manager
+        jc # CLI output to json
+        dlo9.posting # Postman-like clint
+        # dlo9.otree # JSON tree viewer
+        eva # calculator
+        # dlo9.rainfrog # Postgres TUI
 
         # To try
         # dblab
