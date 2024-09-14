@@ -35,58 +35,8 @@
     fsType = "zfs";
   };
 
-  fileSystems."/boot/efi0" = {
-    device = "/dev/disk/by-uuid/A408-8BD3";
-    fsType = "vfat";
-  };
-
-  fileSystems."/fast" = {
-    device = "fast";
-    fsType = "zfs";
-  };
-
-  fileSystems."/home/david" = {
-    device = "fast/home/david";
-    fsType = "zfs";
-  };
-
   fileSystems."/nix" = {
     device = "fast/nixos/nix";
-    fsType = "zfs";
-  };
-
-  fileSystems."/root" = {
-    device = "fast/home/root";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow" = {
-    device = "slow";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/backups/michael" = {
-    device = "slow/backups/michael";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/backups/sue" = {
-    device = "slow/backups/sue";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/documents/michael" = {
-    device = "slow/documents/michael";
-    fsType = "zfs";
-  };
-
-  fileSystems."/slow/documents/sue" = {
-    device = "slow/documents/sue";
-    fsType = "zfs";
-  };
-
-  fileSystems."/zfs" = {
-    device = "fast/zfs";
     fsType = "zfs";
   };
 }

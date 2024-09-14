@@ -36,24 +36,18 @@ with lib; {
 
     boot.kernelParams = ["nomodeset"];
 
-    # TODO: enable dual EFI
-    # https://discourse.nixos.org/t/zfs-systemd-boot/29956/4?u=dlo9
-    boot.loader.systemd-boot.enable = false;
-    boot.loader = {
-      grub.mirroredBoots = [
-        {
-          devices = ["/dev/disk/by-id/nvme-Force_MP500_17037932000122530025"];
-          efiSysMountPoint = "/boot/efi0";
-          path = "/boot/efi0/EFI";
-        }
-        #{ devices = [ "/dev/disk/by-id/usb-Leef_Supra_0171000000030148-0:0" ]; efiSysMountPoint = "/boot/efi1"; path = "/boot/efi1/EFI"; }
-      ];
-    };
-
     # Ethernet modules for remote boot login
     boot.initrd.kernelModules = [
       "r8169"
     ];
+
+    fileSystems."/zfs" = {
+      device = "fast/zfs";
+      fsType = "zfs";
+      neededForBoot = true;
+    };
+
+    boot.zfs.extraPools = ["slow"];
 
     boot.zfs.requestEncryptionCredentials = [
       "fast"
