@@ -115,6 +115,15 @@ in {
           '';
         };
 
+        ttyd = {
+          inherit useACMEHost;
+          serverAliases = [ "ttyd.sigpanic.com" "term.sigpanic.com" ];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://localhost:7681
+          '';
+        };
+
         wedding = {
           inherit useACMEHost;
           serverAliases = ["wedding.sigpanic.com"];
