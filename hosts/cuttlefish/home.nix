@@ -9,6 +9,7 @@
 with lib; {
   imports = [
     "${inputs.self}/home"
+    ./home/mail.nix
   ];
 
   home.stateVersion = "22.05";
