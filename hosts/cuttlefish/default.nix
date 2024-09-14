@@ -15,7 +15,6 @@ with lib; {
     ./network.nix
     ./users.nix
     #./virtualization.nix
-    ./webdav.nix
   ];
 
   config = {

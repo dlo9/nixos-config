@@ -9,6 +9,7 @@
     ./kubernetes.nix
     ./netdata.nix
     ./nfs.nix
+    ./webdav.nix
     ./zrepl.nix
   ];
 
