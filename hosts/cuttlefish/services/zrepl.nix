@@ -41,7 +41,7 @@ with lib; {
     ];
 
     zrepl = {
-      remote = "drywell.dlo9.github.beta.tailscale.net:1111";
+      remote = "drywell.fairy-koi.ts.net:1111";
 
       filesystems = {
         "<".local = "year";

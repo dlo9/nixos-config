@@ -40,7 +40,7 @@ with lib; {
     ];
 
     zrepl = {
-      remote = "cuttlefish.dlo9.github.beta.tailscale.net:1111";
+      remote = "cuttlefish.fairy-koi.ts.net:1111";
 
       filesystems = {
         "<" = {
