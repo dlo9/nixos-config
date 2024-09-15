@@ -57,7 +57,7 @@ with lib; let
         address = cfg.remote;
       };
 
-      replication.concurrency.steps = mkDefault 8;
+      replication.concurrency.steps = mkDefault 16;
 
       send = {
         encrypted = true;
