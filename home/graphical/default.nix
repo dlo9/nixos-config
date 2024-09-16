@@ -188,8 +188,6 @@ with lib; {
           bitwarden
 
           libreoffice
-
-          logseq
         ])
 
         [
