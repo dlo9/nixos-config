@@ -16,6 +16,7 @@ with lib; {
   home.packages = with pkgs; [
     # virt-manager # Virtualization management
     rustdesk-flutter
+    sidequest
   ];
 
   # SSH
