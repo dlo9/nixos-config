@@ -11,6 +11,7 @@
     ./nfs.nix
     ./ttyd.nix
     ./webdav.nix
+    ./wivrn.nix
     ./zrepl.nix
   ];
 
