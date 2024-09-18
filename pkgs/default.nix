@@ -14,7 +14,8 @@ with prev.pkgs; {
     pvw = callPackage ./pvw.nix {};
     cidr = callPackage ./cidr.nix {};
     caddy = callPackage ./caddy.nix {};
-    alvr = callPackage ./alvr.nix {};
+    alvr = callPackage ./alvr/package.nix {}; # https://github.com/NixOS/nixpkgs/pull/308097
+    wivrn = callPackage ./wivrn.nix {}; # https://github.com/NixOS/nixpkgs/pull/316975
     posting = callPackage ./posting.nix {};
     otree = callPackage ./otree.nix {};
     # rainfrog = callPackage ./rainfrog.nix {}; # Requires rust 1.80, currently in unstable

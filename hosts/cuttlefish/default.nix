@@ -108,7 +108,7 @@ with lib; {
     # VR
     programs.alvr = {
       enable = true;
-      #package = pkgs.dlo9.alvr;
+      package = pkgs.dlo9.alvr;
       openFirewall = true;
     };
 

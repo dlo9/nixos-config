@@ -1,18 +1,40 @@
-{ config, lib, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib; {
-  services.avahi = {
-    enable = true;
-    allowInterfaces = [ "enp39s0" "cuttlefish@enp39s0" ];
+  imports = [
+    ./wivrn/module.nix
+  ];
 
-    publish = {
+  services = {
+    avahi = {
       enable = true;
-      userServices = true;
+      allowInterfaces = ["enp39s0" "cuttlefish@enp39s0"];
+
+      publish = {
+        enable = true;
+        userServices = true;
+      };
+    };
+
+    monado = {
+      enable = true;
+      # defaultRuntime = true;
+    };
+
+    wivrn = {
+      enable = true;
+      package = pkgs.dlo9.wivrn;
+      openFirewall = true;
+      defaultRuntime = true;
     };
   };
 
-  networking.firewall = {
-    allowedTCPPorts = [9757];
-    allowedUDPPorts = [9757];
-  };
+  # networking.firewall = {
+  #   allowedTCPPorts = [9757];
+  #   allowedUDPPorts = [9757];
+  # };
 }
