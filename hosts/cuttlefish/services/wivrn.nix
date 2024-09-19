@@ -11,18 +11,7 @@ with lib; {
 
   services = {
     avahi = {
-      enable = true;
       allowInterfaces = ["enp39s0" "cuttlefish@enp39s0"];
-
-      publish = {
-        enable = true;
-        userServices = true;
-      };
-    };
-
-    monado = {
-      enable = true;
-      # defaultRuntime = true;
     };
 
     wivrn = {
@@ -30,6 +19,7 @@ with lib; {
       package = pkgs.dlo9.wivrn;
       openFirewall = true;
       defaultRuntime = true;
+      autoStart = true;
     };
   };
 

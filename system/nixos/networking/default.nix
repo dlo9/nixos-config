@@ -15,7 +15,7 @@ with lib; {
   ];
 
   networking.hostName = hostname;
-  networking.fqdn = "${networking.hostName}";
+  # networking.fqdn = "${networking.hostName}";
 
   # If set to the default (true), the firewall can break some tailscale and kubernetes configs
   networking.firewall.checkReversePath = mkDefault "loose";
