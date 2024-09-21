@@ -1,5 +1,4 @@
-{ config, ... }:
-{
+{config, ...}: {
   # Web shell
   services.ttyd = {
     enable = true;
