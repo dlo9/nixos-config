@@ -14,7 +14,7 @@ in {
     defaultSession = "plasmax11"; # Wayland gives a black screen
     sddm = {
       enable = mkDefault enabled;
-      wayland.enable = mkDefault enabled;
+      wayland.enable = mkDefault enabled; # Use waycheck to check wayland features
       autoLogin.relogin = mkDefault true;
     };
   };
