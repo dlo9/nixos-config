@@ -43,13 +43,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JFiDjx2iQfBDD1yRWHPx0UiIAqEk8+nzf967o/HXYqs=";
+    hash = "sha256-DYV+JUWjjhLZLq+4Hv7jxOyxDqQut/mU1X0ZFMoNkDI=";
   };
 
   monado = applyPatches {
@@ -57,14 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "dfc602288ab05131584a3f2be18031a13fccd061";
-      hash = "sha256-4HZs3cgqOWWpXQb5kfG513f7+znO0hJvAbj2rxrqmeI=";
+      rev = "bcbe19ddd795f182df42051e5495e9727db36c1c";
+      hash = "sha256-sh5slHROcuC3Dgenu1+hm8U5lUOW48JUbiluYvc3NiQ=";
     };
 
     patches = [
       "${finalAttrs.src}/patches/monado/0001-c-multi-disable-dropping-of-old-frames.patch"
       "${finalAttrs.src}/patches/monado/0002-ipc-server-Always-listen-to-stdin.patch"
       "${finalAttrs.src}/patches/monado/0003-c-multi-Don-t-log-frame-time-diff.patch"
+      "${finalAttrs.src}/patches/monado/0005-distortion-images.patch"
+      "${finalAttrs.src}/patches/monado/0008-Use-mipmaps-for-distortion-shader.patch"
+      "${finalAttrs.src}/patches/monado/0009-convert-to-YCbCr-in-monado.patch"
     ];
   };
 

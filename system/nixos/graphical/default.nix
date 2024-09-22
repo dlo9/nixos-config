@@ -115,8 +115,11 @@ with lib; {
     };
 
     # Network name services
-    services.avahi.enable = mkDefault true;
-    services.avahi.nssmdns4 = mkDefault true;
+    services.avahi = {
+      enable = mkDefault true;
+      nssmdns4 = mkDefault true;
+      ipv6 = mkDefault true;
+    };
 
     # Network filesystem mounts
     services.gvfs.enable = mkDefault true;

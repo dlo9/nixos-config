@@ -58,7 +58,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   patches = [
-    ./intel-gpu.patch
     (substituteAll {
       src = ./fix-finding-libs.patch;
       ffmpeg = lib.getDev ffmpeg;
