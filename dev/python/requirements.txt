@@ -1,0 +1,3 @@
+# Run "bpython"
+bpython
+wat-inspector

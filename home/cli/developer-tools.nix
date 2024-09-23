@@ -24,6 +24,7 @@ with lib; {
         pkgs.unstable.terminaltexteffects
 
         gh-dash
+        devenv
       ];
     };
 
