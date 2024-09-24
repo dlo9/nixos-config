@@ -81,6 +81,7 @@ with lib; {
     gh
     codeowners
     #postman
+    jira-cli-go
 
     # SQL Server
     # unixODBC
