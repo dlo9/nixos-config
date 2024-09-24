@@ -17,6 +17,8 @@ with lib; {
     # virt-manager # Virtualization management
     rustdesk-flutter
     sidequest
+    nvtopPackages.amd # GPU monitoring
+    amdgpu_top
   ];
 
   # SSH

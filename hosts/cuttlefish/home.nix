@@ -19,6 +19,10 @@ with lib; {
     ".ssh/id_ed25519.pub".text = osConfig.hosts.${osConfig.networking.hostName}.david-ssh-key.pub;
   };
 
+  home.packages = [
+    nvtopPackages.intel # GPU monitoring
+  ];
+
   # wivrn
   # https://github.com/WiVRn/WiVRn/issues/45#issue-2165564488
   # xdg.configFile."openxr/1/active_runtime.json".text = ''
