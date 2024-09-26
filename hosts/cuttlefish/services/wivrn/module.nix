@@ -3,9 +3,9 @@
   pkgs,
   lib,
   ...
-}:
-let
-  inherit (lib)
+}: let
+  inherit
+    (lib)
     mkIf
     mkEnableOption
     mkPackageOption
@@ -20,47 +20,43 @@ let
     maintainers
     ;
   cfg = config.services.wivrn;
-  configFormat = pkgs.formats.json { };
+  configFormat = pkgs.formats.json {};
 
   # For the application option to work with systemd PATH, we find the store binary path of
   # the package, concat all of the following strings, and then update the application attribute.
   # Application can either be a package or a list that has a package as the first element.
   applicationExists = builtins.hasAttr "application" cfg.config.json;
   applicationListNotEmpty = (
-    if builtins.isList cfg.config.json.application then
-      (builtins.length cfg.config.json.application) != 0
-    else
-      true
+    if builtins.isList cfg.config.json.application
+    then (builtins.length cfg.config.json.application) != 0
+    else true
   );
   applicationCheck = applicationExists && applicationListNotEmpty;
 
   applicationBinary = (
-    if builtins.isList cfg.config.json.application then
-      builtins.head cfg.config.json.application
-    else
-      cfg.config.json.application
+    if builtins.isList cfg.config.json.application
+    then builtins.head cfg.config.json.application
+    else cfg.config.json.application
   );
   applicationStrings = builtins.tail cfg.config.json.application;
 
   applicationPath = mkIf applicationCheck applicationBinary;
 
   applicationConcat = (
-    if builtins.isList cfg.config.json.application then
-      builtins.concatStringsSep " " ([ (getExe applicationBinary) ] ++ applicationStrings)
-    else
-      (getExe applicationBinary)
+    if builtins.isList cfg.config.json.application
+    then builtins.concatStringsSep " " ([(getExe applicationBinary)] ++ applicationStrings)
+    else (getExe applicationBinary)
   );
   applicationUpdate = recursiveUpdate cfg.config.json (
-    optionalAttrs applicationCheck { application = applicationConcat; }
+    optionalAttrs applicationCheck {application = applicationConcat;}
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
-in
-{
+in {
   options = {
     services.wivrn = {
       enable = mkEnableOption "WiVRn, an OpenXR streaming application";
 
-      package = mkPackageOption pkgs "wivrn" { };
+      package = mkPackageOption pkgs "wivrn" {};
 
       openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
 
@@ -87,7 +83,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         description = "Packages to add to the wivrn-application service $PATH.";
-        default = [ ];
+        default = [];
         example = literalExpression "[ pkgs.bash pkgs.procps ]";
       };
 
@@ -103,7 +99,7 @@ in
 
             See https://github.com/Meumeu/WiVRn/blob/master/docs/configuration.md
           '';
-          default = { };
+          default = {};
           example = literalExpression ''
             {
               scale = 0.8;
@@ -140,20 +136,22 @@ in
         # The WiVRn server runs in a hardened service and starts the applications in a different service
         wivrn = {
           description = "WiVRn XR runtime service";
-          environment = {
-            # Default options
-            # https://gitlab.freedesktop.org/monado/monado/-/blob/598080453545c6bf313829e5780ffb7dde9b79dc/src/xrt/targets/service/monado.in.service#L12
-            XRT_COMPOSITOR_LOG = "debug";
-            XRT_PRINT_OPTIONS = "on";
-            IPC_EXIT_ON_DISCONNECT = "off";
-          } // cfg.monadoEnvironment;
+          environment =
+            {
+              # Default options
+              # https://gitlab.freedesktop.org/monado/monado/-/blob/598080453545c6bf313829e5780ffb7dde9b79dc/src/xrt/targets/service/monado.in.service#L12
+              XRT_COMPOSITOR_LOG = "debug";
+              XRT_PRINT_OPTIONS = "on";
+              IPC_EXIT_ON_DISCONNECT = "off";
+            }
+            // cfg.monadoEnvironment;
           serviceConfig = {
             ExecStart = (
               (getExe cfg.package) + " --systemd" + optionalString cfg.config.enable " -f ${configFile}"
             );
             # Hardening options
-            CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
-            AmbientCapabilities = [ "CAP_SYS_NICE" ];
+            CapabilityBoundingSet = ["CAP_SYS_NICE"];
+            AmbientCapabilities = ["CAP_SYS_NICE"];
             LockPersonality = true;
             NoNewPrivileges = true;
             PrivateTmp = true;
@@ -168,7 +166,7 @@ in
             RestrictNamespaces = true;
             RestrictSUIDSGID = true;
           };
-          wantedBy = mkIf cfg.autoStart [ "default.target" ];
+          wantedBy = mkIf cfg.autoStart ["default.target"];
           restartTriggers = [
             cfg.package
             configFile
@@ -176,7 +174,7 @@ in
         };
         wivrn-application = mkIf applicationCheck {
           description = "WiVRn application service";
-          requires = [ "wivrn.service" ];
+          requires = ["wivrn.service"];
           serviceConfig = {
             ExecStart = (
               (getExe cfg.package) + " --application" + optionalString cfg.config.enable " -f ${configFile}"
@@ -186,7 +184,7 @@ in
             PrivateTmp = true;
           };
           # We need to add the application to PATH so WiVRn can find it
-          path = [ applicationPath ] ++ cfg.extraPackages;
+          path = [applicationPath] ++ cfg.extraPackages;
         };
       };
     };
@@ -207,8 +205,8 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9757 ];
-      allowedUDPPorts = [ 9757 ];
+      allowedTCPPorts = [9757];
+      allowedUDPPorts = [9757];
     };
 
     environment = {
@@ -216,11 +214,11 @@ in
         cfg.package
         applicationPath
       ];
-      pathsToLink = [ "/share/openxr" ];
+      pathsToLink = ["/share/openxr"];
       etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
         source = "${cfg.package}/share/openxr/1/openxr_wivrn.json";
       };
     };
   };
-  meta.maintainers = with maintainers; [ passivelemon ];
+  meta.maintainers = with maintainers; [passivelemon];
 }

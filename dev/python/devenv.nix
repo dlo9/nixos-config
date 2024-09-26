@@ -1,6 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
-
 {
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
   languages.python = {
     enable = true;
     venv.enable = true;
