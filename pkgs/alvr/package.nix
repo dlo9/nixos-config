@@ -37,6 +37,7 @@
   x264,
   xvidcore,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
   version = "20.11.0";
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   patches = [
+    ./intel-gpu.patch
     (substituteAll {
       src = ./fix-finding-libs.patch;
       ffmpeg = lib.getDev ffmpeg;
@@ -65,15 +67,19 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-lbrotlicommon"
+      "-lbrotlidec"
+      "-lcrypto"
+      "-lpng"
+      "-lssl"
+    ];
+  };
+
   RUSTFLAGS = map (a: "-C link-arg=${a}") [
     "-Wl,--push-state,--no-as-needed"
     "-lEGL"
-    "-lbrotlicommon"
-    "-lbrotlidec"
-    "-lcrypto"
-    "-lpng"
-    "-lssl"
-    "-lvulkan"
     "-lwayland-client"
     "-lxkbcommon"
     "-Wl,--pop-state"
@@ -135,7 +141,7 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/lib $out/lib64
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
@@ -143,7 +149,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [passivelemon];
+    maintainers = with maintainers; [ passivelemon ];
     platforms = platforms.linux;
   };
 }

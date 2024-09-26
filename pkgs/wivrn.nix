@@ -10,7 +10,7 @@
   boost,
   cli11,
   cmake,
-  cudaPackages ? {},
+  cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   eigen,
   ffmpeg,
@@ -85,46 +85,42 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      glslang
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals cudaSupport [autoAddDriverRunpath];
+  nativeBuildInputs = [
+    cmake
+    git
+    glslang
+    pkg-config
+    python3
+  ] ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
-  buildInputs =
-    [
-      avahi
-      boost
-      cli11
-      eigen
-      ffmpeg
-      freetype
-      glm
-      harfbuzz
-      libdrm
-      libGL
-      libva
-      libX11
-      libXrandr
-      libpulseaudio
-      nlohmann_json
-      onnxruntime
-      openxr-loader
-      pipewire
-      shaderc
-      spdlog
-      systemd
-      udev
-      vulkan-headers
-      vulkan-loader
-      vulkan-tools
-      x264
-    ]
-    ++ lib.optionals cudaSupport [cudaPackages.cudatoolkit];
+  buildInputs = [
+    avahi
+    boost
+    cli11
+    eigen
+    ffmpeg
+    freetype
+    glm
+    harfbuzz
+    libdrm
+    libGL
+    libva
+    libX11
+    libXrandr
+    libpulseaudio
+    nlohmann_json
+    onnxruntime
+    openxr-loader
+    pipewire
+    shaderc
+    spdlog
+    systemd
+    udev
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    x264
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cudatoolkit ];
 
   cmakeFlags = [
     (lib.cmakeBool "WIVRN_USE_VAAPI" true)
@@ -139,14 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
   ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/Meumeu/WiVRn/";
     changelog = "https://github.com/Meumeu/WiVRn/releases/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [passivelemon];
+    maintainers = with maintainers; [ passivelemon ];
     platforms = platforms.linux;
     mainProgram = "wivrn-server";
   };
