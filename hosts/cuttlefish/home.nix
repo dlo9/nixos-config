@@ -19,7 +19,7 @@ with lib; {
     ".ssh/id_ed25519.pub".text = osConfig.hosts.${osConfig.networking.hostName}.david-ssh-key.pub;
   };
 
-  home.packages = [
+  home.packages = with pkgs; [
     nvtopPackages.intel # GPU monitoring
   ];
 
