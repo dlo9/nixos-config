@@ -10,7 +10,7 @@ with lib; {
       # IDE
       vscode = {
         enable = true;
-        package = pkgs.vscode;
+        package = pkgs.vscode-fhs;
 
         # Don't enable these settings, or all settings must be managed by nix
         # enableUpdateCheck = false;
