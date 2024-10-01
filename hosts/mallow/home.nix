@@ -240,6 +240,7 @@ with lib; {
       g = "pushd ~/g";
 
       rcn = (env-dirs "rcn").rcn-afs;
+      sbx = (env-dirs "sbx").sbx-afs;
     }
     // (env-dirs "dev")
     // (env-dirs "stg")
