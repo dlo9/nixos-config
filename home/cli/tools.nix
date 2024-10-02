@@ -91,6 +91,7 @@ with pkgs.dlo9.lib; {
         # dlo9.otree # JSON tree viewer
         eva # calculator
         # dlo9.rainfrog # Postgres TUI
+        dlo9.carl
 
         # To try
         # dblab

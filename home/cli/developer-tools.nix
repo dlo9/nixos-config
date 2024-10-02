@@ -25,6 +25,8 @@ with lib; {
 
         gh-dash
         devenv
+        gitu # Git TUI
+        # dlo9.pocker # Docker TUI - too many python deps
       ];
     };
 

@@ -40,6 +40,7 @@ with lib; {
 
     environment.systemPackages = with pkgs; [
       zfs
+      httm # Time machine file viewer
     ];
 
     # Unlock ZFS with SSH at boot

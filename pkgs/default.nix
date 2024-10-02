@@ -19,5 +19,9 @@ with prev.pkgs; {
     posting = callPackage ./posting.nix {};
     otree = callPackage ./otree.nix {};
     # rainfrog = callPackage ./rainfrog.nix {}; # Requires rust 1.80, currently in unstable
+    carl = callPackage ./carl.nix {};
+    pocker = callPackage ./pocker.nix {};
+    pywinpty = callPackage ./pywinpty.nix {};
+    textual-plotext = callPackage ./textual-plotext.nix {};
   };
 }
