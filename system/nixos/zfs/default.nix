@@ -21,10 +21,7 @@ with lib; {
     networking.hostId = mkDefault (substring 0 8 (builtins.hashString "sha256" config.networking.hostName));
 
     boot = {
-      kernelPackages = mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
-
       zfs.devNodes = mkDefault "/dev/disk/by-id";
-      zfs.package = mkDefault pkgs.unstable.zfs; # 2.2.4
 
       # Hibernation on ZFS can cause corruption
       # Plus, this doesn't work with randomly encrypted swap
