@@ -33,4 +33,20 @@
     intel-media-driver
     intel-vaapi-driver
   ];
+
+  # Conflicts with TLP, not sure where it's enabled
+  services.power-profiles-daemon.enable = false;
+  services.tlp = {
+    enable = true;
+
+    # https://linrunner.de/tlp/settings/index.html
+    settings = {
+      WIFI_PWR_ON_AC = "on";
+      RADEON_DPM_STATE_ON_AC = "battery"; # Probably doesn't matter
+      PLATFORM_PROFILE_ON_AC = "low-power";
+      DEVICES_TO_DISABLE_ON_STARTUP = "wifi";
+      DEVICES_TO_ENABLE_ON_STARTUP = "bluetooth";
+      RUNTIME_PM_ON_AC = "auto";
+    };
+  };
 }
