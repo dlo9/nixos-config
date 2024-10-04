@@ -16,4 +16,6 @@
     # ./quirks.nix
     ./generated.nix
   ];
+
+  services.tlp.enable = true;
 }
