@@ -31,7 +31,7 @@
     intel-compute-runtime
     onevpl-intel-gpu # Replaced by vpl-gpu-rt soon
     intel-media-driver
-    intel-vaapi-driver
+    #intel-vaapi-driver
   ];
 
   # Conflicts with TLP, not sure where it's enabled
