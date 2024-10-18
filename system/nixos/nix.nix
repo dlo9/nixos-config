@@ -3,7 +3,9 @@
   lib,
   ...
 }:
-with lib; {
+with lib; let
+  enableSigpanicSubstituter = !(config.services.nix-serve.enable or false);
+in {
   # Autoupgrade
   # Can be run manually with: `systemctl start nixos-upgrade.service`
   system.autoUpgrade = {
@@ -38,6 +40,8 @@ with lib; {
         mandatoryFeatures = [];
       }
     ];
+
+    settings.substituters = lib.optional enableSigpanicSubstituter "https://nix-serve.sigpanic.com?priority=100";
 
     distributedBuilds = mkDefault config.low-power.enable;
   };

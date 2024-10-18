@@ -2,11 +2,10 @@
   config,
   lib,
   inputs,
+  isLinux,
   ...
 }:
-with lib; let
-  isSigpanicNixServe = config.services.nix-serve.enable or false;
-in {
+with lib; {
   nix = {
     registry = {
       nixpkgs-unstable.flake = mkDefault inputs.nixpkgs-unstable;
@@ -17,15 +16,13 @@ in {
     settings = {
       trusted-users = ["@wheel"];
 
-      substituters =
-        [
-          # Default priority is 50, lower number is higher priority
-          # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
-          "https://nix-community.cachix.org?priority=50"
-          "https://cuda-maintainers.cachix.org?priority=60"
-          "https://cache.flox.dev"
-        ]
-        ++ lib.optional (!isSigpanicNixServe) "https://nix-serve.sigpanic.com?priority=100";
+      substituters = [
+        # Default priority is 50, lower number is higher priority
+        # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
+        "https://nix-community.cachix.org?priority=50"
+        "https://cuda-maintainers.cachix.org?priority=60"
+        "https://cache.flox.dev"
+      ];
 
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
