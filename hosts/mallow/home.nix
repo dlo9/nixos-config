@@ -173,6 +173,9 @@ with lib; {
     };
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/330735
+  programs.vscode.package = mkForce pkgs.vscode;
+
   home.activation = {
     setWallpaper = ''
       osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.wallpapers.default}"'
