@@ -16,7 +16,7 @@ with lib; {
 
   home.packages = with pkgs; [
     kubectl
-    tilt
+    #tilt
 
     # gcloud components install gke-gcloud-auth-plugin
     (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
@@ -91,8 +91,8 @@ with lib; {
     skhd
 
     # Business apps
-    slack
-    zoom-us
+    #slack
+    #zoom-us
     teams
 
     grpcurl

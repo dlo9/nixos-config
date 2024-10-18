@@ -49,11 +49,11 @@ in {
 
     casks = [
       "docker"
-      "firefox"
+      #"firefox"
       "nosqlbooster-for-mongodb"
       "sensiblesidebuttons"
       "kreya"
-      "intellij-idea"
+      #"intellij-idea"
       "flameshot"
       "logseq"
 
