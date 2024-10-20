@@ -132,6 +132,8 @@ with lib; {
       matchBlocks = {
         kvm-cuttlefish.user = "root";
         kvm-drywell.user = "root";
+        cuttlefish.user = "david";
+        opnsense.user = "root";
       };
     };
   };
