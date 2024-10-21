@@ -84,7 +84,7 @@ in {
         }
         prometheus :10055
         # forward . /etc/resolv.conf
-        forward . 1.1.1.1
+        forward . 192.168.1.1
         cache 30
         loop
         reload
