@@ -125,7 +125,7 @@ in {
 
     # Matter
     5540
-    8283
+    8482
   ];
 
   boot.kernel.sysctl = {
