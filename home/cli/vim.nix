@@ -53,7 +53,6 @@ with lib; {
       coc-spell-checker
       coc-vimlsp
       coc-yaml
-      coc-java
       coc-go
       coc-highlight
       coc-biome # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
