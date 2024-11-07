@@ -92,6 +92,7 @@ with pkgs.dlo9.lib; {
         eva # calculator
         # dlo9.rainfrog # Postgres TUI
         dlo9.carl
+        dlo9.cy
 
         # To try
         # dblab

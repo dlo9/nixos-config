@@ -23,5 +23,6 @@ with prev.pkgs; {
     pocker = callPackage ./pocker.nix {};
     pywinpty = callPackage ./pywinpty.nix {};
     textual-plotext = callPackage ./textual-plotext.nix {};
+    cy = callPackage ./cy.nix {};
   };
 }
