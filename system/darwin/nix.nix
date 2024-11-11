@@ -12,7 +12,13 @@ with lib; {
   nix = {
     package = mkDefault pkgs.nix;
 
-    settings.auto-optimise-store = true;
+    optimise = {
+      automatic = true;
+      interval = {
+        Hour = 12;
+        Minute = 0;
+      };
+    };
 
     gc = {
       automatic = mkDefault true;

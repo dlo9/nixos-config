@@ -34,7 +34,7 @@ with lib; {
     groovy
     google-java-format
     maven
-    jd-gui # Decompiler
+    #jd-gui # Decompiler
 
     # Golang
     go

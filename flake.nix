@@ -4,11 +4,12 @@
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs-master.url = github:NixOS/nixpkgs/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
+    nixpkgs-darwin.url = github:NixOS/nixpkgs/nixpkgs-24.05-darwin;
 
     # Darwin settings
     nix-darwin = {
       url = github:LnL7/nix-darwin;
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     # Library functions
@@ -31,8 +32,6 @@
 
     # Home manager
     home-manager = {
-      # TODO: change back when babelfish commit is in the stable release:
-      # https://github.com/nix-community/home-manager/commit/53ccbe017079d5fba2b605cb9f9584629bebd03a
       url = github:nix-community/home-manager/release-24.05;
       inputs.nixpkgs.follows = "nixpkgs";
     };

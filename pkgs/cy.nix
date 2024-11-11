@@ -1,8 +1,8 @@
-{ lib
-, buildGo123Module
-, fetchFromGitHub
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
 }:
-
 buildGo123Module rec {
   pname = "cy";
   version = "1.1.0";
@@ -17,13 +17,13 @@ buildGo123Module rec {
   vendorHash = null;
   doCheck = false;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   meta = with lib; {
     description = "Time travel in the terminal";
     homepage = "https://github.com/cfoust/cy";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     mainProgram = "cy";
   };
 }
