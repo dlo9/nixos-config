@@ -462,8 +462,13 @@
 
               ${generate-hardware}/bin/generate-hardware
 
+              # Install nom for better build output
+              echo "Installing nom..."
+              nix build nixpkgs#nix-output-monitor
+              PATH="$PATH:$(nix path-info nixpkgs#nix-output-monitor)/bin"
+
               if [[ "$OS" == "linux" ]]; then
-                sudo nixos-rebuild "$@" --option fallback true --show-trace
+                sudo nixos-rebuild "$@" --option fallback true --show-trace |& nom
               elif [[ "$OS" == "darwin" ]]; then
                 # Copy cert file already on the machine
                 certSource="/etc/ssl/afscerts/ca-certificates.crt"
@@ -472,9 +477,9 @@
                 fi
 
                 # Rebuild
-                darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace
+                darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace |& nom
               elif [[ "$OS" == "android" ]]; then
-                nix-on-droid --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace
+                nix-on-droid --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace |& nom
               else
                 echo "Unknown os: $OS"
                 exit 1

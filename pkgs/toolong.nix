@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "toolong";
   version = "1.4.0";
@@ -28,13 +28,13 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "toolong" ];
+  pythonImportsCheck = ["toolong"];
 
   meta = with lib; {
     description = "A terminal application to view, tail, merge, and search log files (plus JSONL";
     homepage = "https://github.com/Textualize/toolong";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     mainProgram = "toolong";
   };
 }
