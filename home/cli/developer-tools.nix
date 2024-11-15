@@ -29,6 +29,7 @@ with lib; {
         # dlo9.pocker # Docker TUI - too many python deps
         dlo9.toolong
         tcping-go
+        distrobox
       ];
     };
 
