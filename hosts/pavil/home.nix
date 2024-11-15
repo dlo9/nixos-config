@@ -19,6 +19,7 @@ with lib; {
     sidequest
     nvtopPackages.amd # GPU monitoring
     amdgpu_top
+    orca-slicer
   ];
 
   # SSH
