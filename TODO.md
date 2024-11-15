@@ -4,7 +4,6 @@
 - QT styling
 - `services.random-background`
 
-- [nix-direnv](https://github.com/nix-community/nix-direnv)
 - Partitioning:
   ```sh
   # SSD

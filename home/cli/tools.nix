@@ -180,6 +180,11 @@ with pkgs.dlo9.lib; {
       };
     };
 
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
     zoxide = {
       enable = mkDefault true;
       enableFishIntegration = config.programs.fish.enable;
