@@ -24,5 +24,6 @@ with prev.pkgs; {
     pywinpty = callPackage ./pywinpty.nix {};
     textual-plotext = callPackage ./textual-plotext.nix {};
     cy = callPackage ./cy.nix {};
+    toolong = callPackage ./toolong.nix {};
   };
 }

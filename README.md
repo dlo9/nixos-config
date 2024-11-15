@@ -126,7 +126,7 @@ This section contains information I frequently have to look up, and want an easi
 Package expressions can be automatically created with `nix-init`:
 
 ```sh
-nix run nixpkgs#nix-init -- -u https://github.com/fioncat/otree
+nix run nixpkgs#nix-init -- -u https://github.com/fioncat/otree otree.nix
 ```
 
 ## Cheatsheet
