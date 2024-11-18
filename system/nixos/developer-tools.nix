@@ -11,7 +11,7 @@ with lib; {
 
     # Docker
     virtualisation.docker = {
-      enable = mkDefault true;
+      enable = mkDefault (!config.virtualisation.podman.enable);
       enableOnBoot = mkDefault true;
     };
 

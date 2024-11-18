@@ -40,6 +40,18 @@ in {
       enable = true;
 
       virtualHosts = {
+        immich = {
+          inherit useACMEHost;
+
+          serverAliases = [
+            "immich.${useACMEHost}"
+            "photos.${useACMEHost}"
+          ];
+
+          extraConfig = ''
+            reverse_proxy http://localhost:3001
+          '';
+        };
         router = {
           inherit useACMEHost;
           serverAliases = ["router.${useACMEHost}"];
