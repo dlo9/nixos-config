@@ -59,6 +59,33 @@ in {
       };
 
       virtualHosts = {
+        ender = {
+          inherit useACMEHost;
+          serverAliases = ["ender.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://192.168.0.2
+          '';
+        };
+
+        fluidd = {
+          inherit useACMEHost;
+          serverAliases = ["fluidd.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://192.168.0.2:4408
+          '';
+        };
+
+        mainsail = {
+          inherit useACMEHost;
+          serverAliases = ["mainsail.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://192.168.0.2:4409
+          '';
+        };
+
         jellyfin = {
           inherit useACMEHost;
           serverAliases = ["jellyfin.sigpanic.com"];
