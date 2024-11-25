@@ -1,7 +1,8 @@
 {
-  config, pkgs, ...
-}:
-{
+  config,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     dive
     podman-tui
@@ -21,5 +22,5 @@
   };
 
   # Allow DNS for all docker-compose networks
-  networking.firewall.interfaces."podman+".allowedUDPPorts = [ 53 ];
+  networking.firewall.interfaces."podman+".allowedUDPPorts = [53];
 }

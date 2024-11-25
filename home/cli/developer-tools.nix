@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 with lib; {
@@ -11,26 +12,32 @@ with lib; {
         "$HOME/.cargo/bin"
       ];
 
-      packages = with pkgs; [
-        # Rust
-        rustup
+      packages = with pkgs;
+      # All systems
+        [
+          # Rust
+          rustup
 
-        yq-go
-        jq
-        shellcheck
+          yq-go
+          jq
+          shellcheck
 
-        nixd # Nix language server
-        nix-prefetch
-        pkgs.unstable.terminaltexteffects
+          nixd # Nix language server
+          nix-prefetch
+          pkgs.unstable.terminaltexteffects
 
-        gh-dash
-        devenv
-        gitu # Git TUI
-        # dlo9.pocker # Docker TUI - too many python deps
-        dlo9.toolong
-        tcping-go
-        distrobox
-      ];
+          gh-dash
+          devenv
+          gitu # Git TUI
+          # dlo9.pocker # Docker TUI - too many python deps
+          dlo9.toolong
+          tcping-go
+        ]
+        ++
+        # Linux only
+        (optionals isLinux [
+          distrobox
+        ]);
     };
 
     programs = {

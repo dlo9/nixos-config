@@ -107,8 +107,7 @@ with lib; {
     JAVA_HOME_8 = pkgs.jdk8;
     JAVA_HOME_11 = pkgs.jdk11;
     JAVA_HOME_17 = pkgs.jdk17;
-    JAVA_HOME_19 = pkgs.jdk19;
-    JAVA_HOME_22 = pkgs.jdk22;
+    JAVA_HOME_23 = pkgs.jdk23;
 
     # HOMEBREW_CURLRC = "1";
     RUST_BACKTRACE = "1";
@@ -194,9 +193,8 @@ with lib; {
       jenv add ${pkgs.jdk8}
       jenv add ${pkgs.jdk11}
       jenv add ${pkgs.jdk17}
-      jenv add ${pkgs.jdk19}
-      jenv add ${pkgs.jdk22}
-      jenv global 22
+      jenv add ${pkgs.jdk23}
+      jenv global 23
 
       jenv rehash
     '';
