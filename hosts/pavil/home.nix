@@ -20,6 +20,7 @@ with lib; {
     nvtopPackages.amd # GPU monitoring
     amdgpu_top
     orca-slicer
+    freecad
   ];
 
   # SSH
