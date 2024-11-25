@@ -13,9 +13,6 @@ in {
   };
 
   config = mkIf cfg.nvidia {
-    # Required to remedy weird crash when using nvidia in docker
-    # systemd.enableUnifiedCgroupHierarchy = false;
-
     boot.blacklistedKernelModules = ["nouveau"];
 
     # https://nixos.wiki/wiki/Chromium#Enabling_native_Wayland_support
@@ -35,7 +32,7 @@ in {
         };
       };
 
-      opengl.extraPackages = with pkgs; [
+      graphics.extraPackages = with pkgs; [
         #vaapiVdpau
         #libvdpau-va-gl
 

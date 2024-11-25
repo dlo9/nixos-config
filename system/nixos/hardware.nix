@@ -12,10 +12,9 @@ with lib; {
 
     enableAllFirmware = mkDefault true;
 
-    opengl = {
+    graphics = {
       enable = mkDefault true;
-      driSupport = mkDefault true;
-      driSupport32Bit = pkgs.stdenv.isx86_64;
+      enable32Bit = pkgs.stdenv.isx86_64;
     };
   };
 

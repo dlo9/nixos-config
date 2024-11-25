@@ -3,8 +3,8 @@
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs-master.url = github:NixOS/nixpkgs/master;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
-    nixpkgs-darwin.url = github:NixOS/nixpkgs/nixpkgs-24.05-darwin;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.11;
+    nixpkgs-darwin.url = github:NixOS/nixpkgs/nixpkgs-24.11-darwin;
 
     # Darwin settings
     nix-darwin = {
@@ -32,7 +32,7 @@
 
     # Home manager
     home-manager = {
-      url = github:nix-community/home-manager/release-24.05;
+      url = github:nix-community/home-manager/release-24.11;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

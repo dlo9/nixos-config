@@ -37,7 +37,7 @@ with lib; {
 
         # https://alacritty.org/config-alacritty.html
         settings = {
-          shell = {
+          terminal.shell = {
             program = "${config.programs.fish.package}/bin/fish";
             args = ["--login"];
           };
@@ -131,7 +131,7 @@ with lib; {
           pkgs.dlo9.lxappearance-xwayland
 
           # File manager
-          cinnamon.nemo
+          nemo
           #peazip # Broke with 24.05 upgrade
 
           # USB installer
@@ -145,7 +145,7 @@ with lib; {
           geekbench_6
 
           # Scanning
-          gnome.simple-scan
+          simple-scan
 
           # Networking utils
           wpa_supplicant_gui

@@ -15,7 +15,7 @@ with lib; {
 
   home.packages = with pkgs; [
     # virt-manager # Virtualization management
-    rustdesk-flutter
+    rustdesk
     sidequest
     nvtopPackages.amd # GPU monitoring
     amdgpu_top

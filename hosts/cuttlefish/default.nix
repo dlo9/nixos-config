@@ -83,7 +83,7 @@ with lib; {
     #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     # };
 
-    # hardware.opengl = {
+    # hardware.graphics = {
     #   enable = true;
     #   extraPackages = with pkgs; [
     #     intel-media-driver
@@ -99,7 +99,7 @@ with lib; {
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
-      rustdesk-flutter
+      rustdesk
     ];
 
     # Plasma
@@ -108,7 +108,6 @@ with lib; {
     # VR
     programs.alvr = {
       enable = true;
-      package = pkgs.dlo9.alvr;
       openFirewall = true;
     };
 

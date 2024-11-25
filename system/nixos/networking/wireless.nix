@@ -12,22 +12,22 @@ with lib; {
 
     # Enable wpa_gui
     userControlled.enable = mkDefault true;
-    environmentFile = config.sops.secrets.wireless-env.path;
+    secretsFile = config.sops.secrets.wireless-env.path;
     networks = {
       "?" = {
-        psk = "@INTERNET@";
+        pskRaw = "ext:INTERNET";
         priority = 10;
       };
-      iot.psk = "@IOT@";
-      BossAdams.psk = "@BOSS_ADAMS@";
-      "pretty fly for a wifi".psk = "@PRETTY_FLY_FOR_A_WIFI@";
-      "pretty fly for a wifi-5G".psk = "@PRETTY_FLY_FOR_A_WIFI@";
-      qwertyuiop.psk = "@QWERTYUIOP@";
-      LGFAK.psk = "@LGFAK@";
-      "gh 42".psk = "@GH_42@";
-      "Menehune House & Cottage".psk = "@MENEHUNE@";
-      BlueWaveHeights.psk = "@BLUE_WAVE_HEIGHTS@";
-      "Mountain House".psk = "@MOUNTAIN_HOUSE@";
+      iot.pskRaw = "ext:IOT";
+      BossAdams.pskRaw = "ext:BOSS_ADAMS";
+      "pretty fly for a wifi".pskRaw = "ext:PRETTY_FLY_FOR_A_WIFI";
+      "pretty fly for a wifi-5G".pskRaw = "ext:PRETTY_FLY_FOR_A_WIFI";
+      qwertyuiop.pskRaw = "ext:QWERTYUIOP";
+      LGFAK.pskRaw = "ext:LGFAK";
+      "gh 42".pskRaw = "ext:GH_42";
+      "Menehune House & Cottage".pskRaw = "ext:MENEHUNE";
+      BlueWaveHeights.pskRaw = "ext:BLUE_WAVE_HEIGHTS";
+      "Mountain House".pskRaw = "ext:MOUNTAIN_HOUSE";
     };
   };
 }
