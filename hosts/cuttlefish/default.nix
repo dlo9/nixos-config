@@ -104,9 +104,9 @@ with lib; {
     ];
 
     # Plasma
-    services.desktopManager.plasma6.enable = true;
+    #services.desktopManager.plasma6.enable = true;
     # https://github.com/sddm/sddm/issues/1768
-    users.users.david.shell = pkgs.bash;
+    #users.users.david.shell = pkgs.bash;
 
     # VR
     programs.alvr = {

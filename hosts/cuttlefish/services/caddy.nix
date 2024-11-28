@@ -116,7 +116,8 @@ in {
           extraConfig = ''
             ${authentikForwardAuth}
 
-            reverse_proxy https://winvm.lan:47990 {
+            #reverse_proxy https://winvm.lan:47990 {
+            reverse_proxy https://localhost:47990 {
               header_up Authorization "Basic {$SUNSHINE_BASIC_AUTH}"
               transport http {
                 tls_insecure_skip_verify

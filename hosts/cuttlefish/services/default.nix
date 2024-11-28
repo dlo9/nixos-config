@@ -9,6 +9,7 @@
     ./kubernetes.nix
     ./netdata.nix
     ./nfs.nix
+    ./sunshine.nix
     ./ttyd.nix
     ./webdav.nix
     ./wivrn.nix
