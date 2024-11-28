@@ -84,6 +84,8 @@ with lib; {
 
       # Keyring
       libsecret
+
+      waypipe
     ];
 
     # Printing

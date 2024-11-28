@@ -100,10 +100,13 @@ with lib; {
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
       rustdesk
+      kdePackages.krdp
     ];
 
     # Plasma
     services.desktopManager.plasma6.enable = true;
+    # https://github.com/sddm/sddm/issues/1768
+    users.users.david.shell = pkgs.bash;
 
     # VR
     programs.alvr = {
@@ -142,12 +145,18 @@ with lib; {
       secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
     };
 
+    networking.firewall.allowedUDPPorts = [
+      3389 # RDP
+    ];
+
     networking.firewall.allowedTCPPorts = [
       # TODO: is this for prometheus?
       9000
 
       # Misc testing
       8080
+
+      3389 # RDP
     ];
 
     # Home assistant's voice assistant uses random UDP ports, which we need to allow

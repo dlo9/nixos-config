@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   # Users
   users.mutableUsers = false;
   users.users = {
@@ -9,7 +9,7 @@
       isNormalUser = true;
       hashedPassword = "$6$8xGwl/pOyfkTn2pB$s2A1K5yORHrtLa.xKkuHIhgzVK.ERZT6IwMLJhDS9kEJYGhWbulm0JUTEckC1ySPoZ9ebTT9Vg/ZC6tBE2RZg.";
       createHome = true;
-      shell = pkgs.fish;
+      shell = lib.mkDefault pkgs.fish;
       extraGroups = [
         "wheel"
         "docker"
