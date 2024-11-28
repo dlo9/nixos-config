@@ -129,6 +129,8 @@ with builtins; {
 
         # Monitors
         monitor = [
+          "desc:The Linux Foundation PiKVM CAFEBABE, 1920x1080@24, auto, 1" # PiKVM
+          "desc:AOC 28E850, 2560x1440@24Hz, auto, 1" # Display Stub Adapter
           ", preferred, auto, 1" # Default
           # "DP-1, highres, 0x0, 1"
         ];
