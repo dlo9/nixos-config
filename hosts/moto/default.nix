@@ -37,9 +37,10 @@
       })
     ];
 
+    nix.distributedBuilds = true;
+
     sys = {
       kernel = false;
-      low-power = true;
       gaming.enable = false;
       graphical.enable = false;
       zfs.enable = false;

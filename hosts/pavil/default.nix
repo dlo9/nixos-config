@@ -40,6 +40,8 @@ with lib; {
       powerOnBoot = false;
     };
 
+    nix.distributedBuilds = true;
+
     # zrepl_switch to new bluetooth devices
     hardware.pulseaudio.extraConfig = "
       load-module module-switch-on-connect

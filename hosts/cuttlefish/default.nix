@@ -138,6 +138,7 @@ with lib; {
     };
 
     # Nix cache
+    boot.binfmt.emulatedSystems = ["aarch64-linux"];
     services.nix-serve = {
       enable = true;
       port = 5000;

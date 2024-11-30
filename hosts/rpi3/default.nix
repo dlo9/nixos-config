@@ -41,11 +41,11 @@
       development.enable = false;
       gaming.enable = false;
       graphical.enable = false;
-      low-power = true;
       zfs.enable = false;
     };
 
     virtualisation.docker.enable = false;
+    nix.distributedBuilds = true;
 
     # Allow IP forwarding for tailscale subnets
     boot.kernel.sysctl = {

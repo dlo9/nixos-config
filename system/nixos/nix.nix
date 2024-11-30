@@ -29,20 +29,17 @@ in {
     };
 
     # Use cuttlefish as a remote builder
-    buildMachines = mkIf config.low-power.enable [
-      {
-        hostname = "cuttlefish";
-        systems = ["x86_64-linux" "aarch64-linux"];
+    #buildMachines = optional config.nix.distributedBuilds {
+    buildMachines = [{
+      hostName = "cuttlefish";
+      protocol = "ssh-ng";
+      systems = ["x86_64-linux" "aarch64-linux"];
 
-        maxJobs = 4;
-        speedFactor = 1;
-        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-        mandatoryFeatures = [];
-      }
-    ];
+      maxJobs = 4;
+      speedFactor = 1;
+      supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+    }];
 
     settings.substituters = lib.optional enableSigpanicSubstituter "https://nix-serve.sigpanic.com?priority=100";
-
-    distributedBuilds = mkDefault config.low-power.enable;
   };
 }

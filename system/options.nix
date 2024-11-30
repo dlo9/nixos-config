@@ -27,7 +27,6 @@ with builtins; {
     developer-tools.enable = mkEnableOption "developer tools";
     gaming.enable = mkEnableOption "gaming programs";
     graphical.enable = mkEnableOption "graphical programs";
-    low-power.enable = mkEnableOption "low power mode";
 
     font.family = mkOption {
       type = nonEmptyStr;

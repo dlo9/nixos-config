@@ -6,9 +6,6 @@
 }:
 with lib; {
   config = mkIf config.developer-tools.enable {
-    # TODO: probably not necessary, should remove
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
-
     # Docker
     virtualisation.docker = {
       enable = mkDefault (!config.virtualisation.podman.enable);

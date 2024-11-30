@@ -12,10 +12,10 @@
 
   sys = {
     gaming.enable = false;
-    low-power = true;
   };
 
   zramSwap.enable = true;
+  nix.distributedBuilds = true;
 
   services.smartd.enable = lib.mkForce false;
   virtualisation.docker.enable = lib.mkForce false;

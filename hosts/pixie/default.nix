@@ -10,14 +10,14 @@ with lib; {
   config = {
     system.stateVersion = "23.11";
 
-    low-power.enable = true;
-
     # Users
     home-manager.config = ./home.nix;
 
     user.shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
 
     nix = {
+      distributedBuilds = true;
+
       substituters = [
         # Default priority is 50, lower number is higher priority
         # See priority of each cache: curl https://cache.nixos.org/nix-cache-info

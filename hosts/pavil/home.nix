@@ -19,7 +19,11 @@ with lib; {
     sidequest
     nvtopPackages.amd # GPU monitoring
     amdgpu_top
-    orca-slicer
+    #(orca-slicer.overrideAttrs (finalAttrs: previousAttrs: {
+    #  # TODO: Remove once merged:
+    #  # https://github.com/NixOS/nixpkgs/pull/360219/files
+    #  cmakeFlags = lib.remove "-DFLATPAK=1" previousAttrs.cmakeFlags or [ ];
+    #}))
     freecad
   ];
 
