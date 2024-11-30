@@ -83,20 +83,25 @@ with lib; {
       };
 
       # Users must be added with `sudo smbpasswd -a <user>`
-      extraConfig = let
+      settings = let
         tailscaleCidr = "100.64.0.0/10";
-      in ''
-        workgroup = WORKGROUP
-        server string = drywell
-        netbios name = drywell
-        security = user
-        #use sendfile = yes
-        #max protocol = smb2
-        hosts allow = ${tailscaleCidr} 192.168. 127.0.0.1 localhost
-        hosts deny = 0.0.0.0/0
-        guest account = nobody
-        map to guest = bad user
-      '';
+      in {
+        global = {
+          security = "user";
+          workgroup = "WORKGROUP";
+          "server string" = "drywell";
+          "netbios name" = "drywell";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
+          "hosts deny" = "0.0.0.0/0";
+          "hosts allow" = [
+            "${tailscaleCidr}"
+            "192.168."
+            "127.0.0.1"
+            "localhost"
+          ];
+        };
+      };
     };
   };
 }
