@@ -9,26 +9,28 @@ with lib; let
 
   # https://github.com/sddm/sddm/issues/1768
   sddm = pkgs.kdePackages.sddm.override {
-    runCommand = (name: env: buildCommand:
-      pkgs.runCommand name env (buildCommand + ''
-        # Replace the link with a real copy
-        mv "$out/share" "$out/share.link"
-        cp -Lr "$out/share.link" "$out/share"
-        rm "$out/share.link"
+    runCommand = (
+      name: env: buildCommand:
+        pkgs.runCommand name env (buildCommand
+          + ''
+            # Replace the link with a real copy
+            mv "$out/share" "$out/share.link"
+            cp -Lr "$out/share.link" "$out/share"
+            rm "$out/share.link"
 
-        for f in $out/bin/*; do
-          wrapProgram "$f" --set SHELL ${pkgs.bash}
-        done
+            for f in $out/bin/*; do
+              wrapProgram "$f" --set SHELL ${pkgs.bash}
+            done
 
-        chmod u+w \
-          $out/share \
-          $out/share/sddm \
-          $out/share/sddm/scripts
+            chmod u+w \
+              $out/share \
+              $out/share/sddm \
+              $out/share/sddm/scripts
 
-        for f in $out/share/sddm/scripts/*; do
-          wrapProgram "$f" --set SHELL ${pkgs.bash}
-        done
-      '')
+            for f in $out/share/sddm/scripts/*; do
+              wrapProgram "$f" --set SHELL ${pkgs.bash}
+            done
+          '')
     );
   };
 in {
