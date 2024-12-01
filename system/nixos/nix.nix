@@ -34,7 +34,7 @@ in {
       {
         hostName = "cuttlefish";
         sshUser = "nix-remote";
-        sshKey = "/etc/ssh/ssh_host_ed25519_key";
+        sshKey = config.sops.secrets.host-ssh-key.path;
         publicHostKey = builtins.readFile (pkgs.runCommandLocal "base64-key" {} ''
           printf "%s" '${config.hosts.cuttlefish.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
         '');
