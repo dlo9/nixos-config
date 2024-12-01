@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; let
@@ -29,16 +30,22 @@ in {
     };
 
     # Use cuttlefish as a remote builder
-    #buildMachines = optional config.nix.distributedBuilds {
-    buildMachines = [{
-      hostName = "cuttlefish";
-      protocol = "ssh-ng";
-      systems = ["x86_64-linux" "aarch64-linux"];
+    buildMachines = [
+      {
+        hostName = "cuttlefish";
+        sshUser = "nix-remote";
+        sshKey = "/etc/ssh/ssh_host_ed25519_key";
+        publicHostKey = builtins.readFile (pkgs.runCommandLocal "base64-key" {} ''
+          printf "%s" '${config.hosts.cuttlefish.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
+        '');
+        protocol = "ssh-ng";
+        systems = ["x86_64-linux" "aarch64-linux"];
 
-      maxJobs = 4;
-      speedFactor = 1;
-      supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-    }];
+        maxJobs = 4;
+        speedFactor = 2;
+        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      }
+    ];
 
     settings.substituters = lib.optional enableSigpanicSubstituter "https://nix-serve.sigpanic.com?priority=100";
   };
