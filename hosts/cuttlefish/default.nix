@@ -137,27 +137,12 @@ with lib; {
       '';
     };
 
-    # Nix cache
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
-    services.nix-serve = {
-      enable = true;
-      port = 5000;
-      openFirewall = true;
-      secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
-    };
-
-    networking.firewall.allowedUDPPorts = [
-      3389 # RDP
-    ];
-
     networking.firewall.allowedTCPPorts = [
-      # TODO: is this for prometheus?
+      # Authentik: Is this necessary?
       9000
 
       # Misc testing
       8080
-
-      3389 # RDP
     ];
 
     # Home assistant's voice assistant uses random UDP ports, which we need to allow
