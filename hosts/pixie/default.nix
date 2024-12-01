@@ -16,8 +16,12 @@ with lib; {
     user.shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
 
     # TODO: Remove when distributedBuilds option is introduced
-    environment.etc."nix/machines".text = ''
-        ssh-ng://nix-remote@cuttlefish x86_64-linux,aarch64-linux /etc/ssh/ssh_host_ed25519_key 4 2 nixos-test,benchmark,big-parallel,kvm - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUtENkFxN3hNM3pleFBYY2s1Zk9mODF4VnpIUHZSdVQrZzJwRytQVUg0b3cgcm9vdEBjdXR0bGVmaXNo
+    environment.etc."nix/machines".text = let
+      publicHostKey = builtins.readFile (pkgs.runCommandLocal "base64-key" {} ''
+        printf "%s" '${config.hosts.cuttlefish.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
+      '');
+    in ''
+      ssh-ng://nix-remote@cuttlefish x86_64-linux,aarch64-linux ${config.hosts.pixie.host-ssh-key.path} 4 2 nixos-test,benchmark,big-parallel,kvm - ${publicHostKey}
     '';
 
     # Link the repo for familiarity
