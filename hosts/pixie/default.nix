@@ -15,16 +15,19 @@ with lib; {
 
     user.shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
 
-    nix = {
-      distributedBuilds = true;
+    # TODO: Remove when distributedBuilds option is introduced
+    environment.etc."nix/machines" = ''
+      ssh-ng://nix-remote@cuttlefish x86_64-linux,aarch64-linux /etc/ssh/ssh_host_ed25519_key 4 2 nixos-test,benchmark,big-parallel,kvm - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUtENkFxN3hNM3pleFBYY2s1Zk9mODF4VnpIUHZSdVQrZzJwRytQVUg0b3cgcm9vdEBjdXR0bGVmaXNo
+    '';
 
+    nix = {
       substituters = [
         # Default priority is 50, lower number is higher priority
         # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
         "https://nix-community.cachix.org?priority=50"
         "https://cuda-maintainers.cachix.org?priority=60"
         "https://cache.flox.dev"
-        # "https://nix-serve.sigpanic.com?priority=100"
+        "https://nix-serve.sigpanic.com?priority=100"
       ];
 
       trustedPublicKeys = [
