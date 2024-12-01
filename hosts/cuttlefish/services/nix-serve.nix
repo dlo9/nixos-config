@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   services.nix-serve = {
@@ -13,6 +17,7 @@
 
     isSystemUser = true;
     hashedPassword = "!";
+    shell = pkgs.dash;
 
     openssh.authorizedKeys.keys = [
       config.hosts.pixie.host-ssh-key.pub
