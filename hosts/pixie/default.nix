@@ -21,7 +21,7 @@ with lib; {
         printf "%s" '${config.hosts.cuttlefish.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
       '');
     in ''
-      ssh-ng://nix-remote@cuttlefish x86_64-linux,aarch64-linux /data/data/com.termux.nix/files/home/.ssh/id_ed25519 4 2 nixos-test,benchmark,big-parallel,kvm - ${publicHostKey}
+      ssh-ng://nix-remote@nix-serve.sigpanic.com x86_64-linux,aarch64-linux /data/data/com.termux.nix/files/home/.ssh/id_ed25519 4 2 nixos-test,benchmark,big-parallel,kvm - ${publicHostKey}
     '';
 
     # Link the repo for familiarity

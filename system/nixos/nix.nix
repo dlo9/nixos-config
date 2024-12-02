@@ -32,7 +32,7 @@ in {
     # Use cuttlefish as a remote builder
     buildMachines = [
       {
-        hostName = "cuttlefish";
+        hostName = "nix-serve.sigpanic.com";
         sshUser = "nix-remote";
         sshKey = config.sops.secrets.host-ssh-key.path;
         publicHostKey = builtins.readFile (pkgs.runCommandLocal "base64-key" {} ''
