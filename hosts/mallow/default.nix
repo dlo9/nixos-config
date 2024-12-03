@@ -42,22 +42,20 @@ in {
 
     brews = [
       "jenv"
-
-      "unixodbc"
       "msodbcsql18"
+      "unixodbc"
     ];
 
     casks = [
       "docker"
-      #"firefox"
-      "nosqlbooster-for-mongodb"
-      "sensiblesidebuttons"
-      "kreya"
-      #"intellij-idea"
+      "firefox"
       "flameshot"
+      "intellij-idea"
+      "kreya"
       "logseq"
-
-      # Team fun
+      "nosqlbooster-for-mongodb"
+      "onedrive"
+      "sensiblesidebuttons"
       "steam"
     ];
   };
