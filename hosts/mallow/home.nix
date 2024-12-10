@@ -96,6 +96,7 @@ with lib; {
     teams
 
     grpcurl
+    ghz
   ];
 
   home.sessionVariables = rec {
