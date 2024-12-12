@@ -140,6 +140,12 @@ with lib; {
     "/sbin"
   ];
 
+  # https://github.com/nix-community/home-manager/issues/5952
+  programs.tmux.extraConfig = ''
+    set -gu default-command
+    set -g default-shell "$SHELL"
+  '';
+
   programs.fish.interactiveShellInit = ''
     # Jenv rehash is really slow -- exclude it from the init process
     # so that new tmux windows don't take 1s+ to create
