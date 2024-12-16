@@ -186,9 +186,6 @@
       # Host modules
       ./hosts
 
-      # Nix User repo
-      inputs.nur.modules.nixos.default
-
       # Nixpkgs overlays
       ({
         config,
@@ -204,6 +201,9 @@
             dlo9
             (unstable "aarch64-darwin")
             (master "aarch64-darwin")
+
+            # Nix User repo
+            inputs.nur.overlays.default
           ];
         };
       })
