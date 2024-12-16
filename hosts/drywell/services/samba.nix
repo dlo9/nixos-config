@@ -25,7 +25,26 @@ with lib; {
     enable = true;
     openFirewall = true;
 
-    shares = {
+    # Users must be added with `sudo smbpasswd -a <user>`
+    settings = let
+      tailscaleCidr = "100.64.0.0/10";
+    in {
+      global = {
+        security = "user";
+        workgroup = "WORKGROUP";
+        "server string" = "drywell";
+        "netbios name" = "drywell";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "hosts deny" = "0.0.0.0/0";
+        "hosts allow" = [
+          "${tailscaleCidr}"
+          "192.168."
+          "127.0.0.1"
+          "localhost"
+        ];
+      };
+
       michael = {
         path = "/slow/documents/michael";
         browseable = "yes";
@@ -46,27 +65,6 @@ with lib; {
         "force user" = "sue";
         "force group" = "users";
         "valid users" = "+samba";
-      };
-    };
-
-    # Users must be added with `sudo smbpasswd -a <user>`
-    settings = let
-      tailscaleCidr = "100.64.0.0/10";
-    in {
-      global = {
-        security = "user";
-        workgroup = "WORKGROUP";
-        "server string" = "drywell";
-        "netbios name" = "drywell";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
-        "hosts deny" = "0.0.0.0/0";
-        "hosts allow" = [
-          "${tailscaleCidr}"
-          "192.168."
-          "127.0.0.1"
-          "localhost"
-        ];
       };
     };
   };
