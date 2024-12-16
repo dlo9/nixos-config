@@ -108,14 +108,6 @@ with lib; {
     # https://github.com/sddm/sddm/issues/1768
     #users.users.david.shell = pkgs.bash;
 
-    # VR
-    programs.alvr = {
-      enable = true;
-      openFirewall = true;
-    };
-
-    hardware.steam-hardware.enable = true;
-
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current CPU temp: `sensors | rg -A3 k10temp-pci-00c3 | rg -o '[0-9\.]+°C'`
     # View current fan speeds: `sensors | rg fan | rg -v ' 0 RPM'`

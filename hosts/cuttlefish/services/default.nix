@@ -12,8 +12,8 @@
     ./nix-serve.nix
     ./sunshine.nix
     ./ttyd.nix
+    ./vr.nix
     ./webdav.nix
-    ./wivrn.nix
     ./zrepl.nix
   ];
 
