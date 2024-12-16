@@ -36,6 +36,10 @@ with lib; {
   # '';
 
   # VR
+  xdg.configFile."wlxoverlay/conf.d/pw_fallback.yaml".text = ''
+    capture_method: pw_fallback
+  '';
+
   xdg.configFile."openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
 
   xdg.configFile."openvr/openvrpaths.vrpath".text = builtins.toJSON {

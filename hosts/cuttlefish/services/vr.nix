@@ -5,10 +5,11 @@
   ...
 }:
 with lib; {
-  #programs.alvr = {
-  #  enable = true;
-  #  openFirewall = true;
-  #};
+  programs.alvr = {
+    # https://github.com/alvr-org/ALVR/issues/2014#issuecomment-2509734136
+    enable = false;
+    openFirewall = true;
+  };
 
   hardware.steam-hardware.enable = true;
 
@@ -21,20 +22,25 @@ with lib; {
       defaultRuntime = true;
       autoStart = true;
 
+      extraPackages = with pkgs; [
+        pulseaudio # For changing volume with wlx-overlay-s
+      ];
+
       config = {
         enable = true;
 
         json = {
-          bitrate = 100000000;
-          #encoders = [
-          #  {
-          #    encoder = "vaapi";
-          #    #codec = "av1";
-          #    #device = "/dev/dri/renderD128";
-          #  }
-          #];
+          bitrate = 10000000; # 10 MiB
+          encoders = [
+            {
+              encoder = "vaapi";
+              #codec = "av1";
+              codec = "h265";
+              device = "/dev/dri/renderD128";
+            }
+          ];
 
-          #application = [pkgs.wlx-overlay-s];
+          application = [pkgs.wlx-overlay-s];
         };
       };
     };
