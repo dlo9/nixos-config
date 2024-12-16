@@ -9,7 +9,7 @@ with lib; {
     programs.steam.enable = mkDefault true;
 
     environment.systemPackages = with pkgs; [
-      heroic
+      #heroic
       moonlight-qt
     ];
   };
