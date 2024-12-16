@@ -156,7 +156,7 @@
       ./hosts
 
       # Nix User repo
-      inputs.nur.nixosModules.nur
+      inputs.nur.modules.nixos.default
 
       # Docker-compose in Nix
       inputs.arion.nixosModules.arion
@@ -187,7 +187,7 @@
       ./hosts
 
       # Nix User repo
-      inputs.nur.nixosModules.nur
+      inputs.nur.modules.nixos.default
 
       # Nixpkgs overlays
       ({
@@ -219,7 +219,7 @@
       ./hosts
 
       # Nix User repo
-      inputs.nur.nixosModules.nur
+      inputs.nur.modules.nixos.default
 
       ({config, ...}: {
         environment.motd = null;

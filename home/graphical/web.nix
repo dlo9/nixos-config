@@ -38,7 +38,7 @@ with lib; {
             path = "default";
 
             # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
-            extensions = with config.nur.repos.rycee.firefox-addons; [
+            extensions = with pkgs.nur.repos.rycee.firefox-addons; [
               #amazon-band-detector
               auto-tab-discard
               bitwarden
