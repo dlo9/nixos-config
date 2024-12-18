@@ -64,15 +64,6 @@ in {
           serverAliases = ["ender.sigpanic.com"];
           extraConfig = ''
             ${authentikForwardAuth}
-            reverse_proxy http://192.168.0.2
-          '';
-        };
-
-        fluidd = {
-          inherit useACMEHost;
-          serverAliases = ["fluidd.sigpanic.com"];
-          extraConfig = ''
-            ${authentikForwardAuth}
             reverse_proxy http://192.168.0.2:4408
           '';
         };
