@@ -68,15 +68,6 @@ in {
           '';
         };
 
-        mainsail = {
-          inherit useACMEHost;
-          serverAliases = ["mainsail.sigpanic.com"];
-          extraConfig = ''
-            ${authentikForwardAuth}
-            reverse_proxy http://192.168.0.2:4409
-          '';
-        };
-
         jellyfin = {
           inherit useACMEHost;
           serverAliases = ["jellyfin.sigpanic.com"];
