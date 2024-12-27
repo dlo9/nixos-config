@@ -90,11 +90,6 @@ with lib; {
     # Window manager/hotkeys
     skhd
 
-    # Business apps
-    #slack
-    #zoom-us
-    teams
-
     grpcurl
     ghz
   ];

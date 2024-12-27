@@ -57,6 +57,7 @@ in {
       "onedrive"
       "sensiblesidebuttons"
       "steam"
+      "microsoft-teams"
     ];
   };
 
