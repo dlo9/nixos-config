@@ -15,6 +15,10 @@ in {
       };
 
       users = {
+        david.extraGroups = [
+          "media"
+        ];
+
         chelsea = {
           uid = 1001;
           group = "users";
