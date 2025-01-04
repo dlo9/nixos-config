@@ -134,6 +134,10 @@ with lib; {
         kvm-drywell.user = "root";
         cuttlefish.user = "david";
         opnsense.user = "root";
+        trident = {
+          user = "pi";
+          hostname = "192.168.0.3";
+        };
       };
     };
   };
