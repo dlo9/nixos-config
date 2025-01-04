@@ -39,7 +39,11 @@ in {
           printf "%s" '${config.hosts.cuttlefish.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
         '');
         protocol = "ssh-ng";
-        systems = ["x86_64-linux" "aarch64-linux"];
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "armv7l-linux"
+        ];
 
         maxJobs = 4;
         speedFactor = 2;
