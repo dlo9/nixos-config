@@ -3,16 +3,13 @@
 set -e
 
 usage() {
-  echo "create-host-config <hostname> <admin username> <zfs password> <description>"
+  echo "create-host-config <hostname> <admin username>"
 }
 
 hostname="$1"
 admin="$2"
-zfsKey="$3"
-description="$4"
-installerHost="$(hostname)"
 
-if [ -z "$hostname" ] || [ -z "$admin" ] || [ -z "$zfsKey" ] || [ -z "$description" ]; then
+if [ -z "$hostname" ] || [ -z "$admin" ]; then
   usage
   exit 1
 fi
@@ -54,30 +51,8 @@ ageKeyPrivate="$(echo "$ageKey" | awk 'NR == 3 {print $1}')"
 rm -rf "$tempDir"
 
 ###############
-### Exports ###
-###############
-
-cat << EOF > "$hostDir/exports.nix"
-{
-  ssh-keys = {
-    host = {
-      ed25519 = "$sshHostPublic";
-      rsa = "$sshHostRsaPublic";
-    };
-
-    $admin = {
-      ed25519 = "$sshAdminPublic";
-    };
-  };
-}
-EOF
-
-###############
 ### Secrets ###
 ###############
-
-# Add private age key to sops
-sops --set "[\"$hostname\"] {\"meta\": { \"description\": \"$description\", \"created\": \"$ageKeyCreated\", \"public key\": \"$ageKeyPublic\"}, \"private\": \"$ageKeyPrivate\"}" "$repoDir/sys/secrets/age-keys.yaml"
 
 # Add public age key to sops
 creationRules="$(cat "$repoDir/.sops.yaml")"
@@ -87,54 +62,51 @@ printf "%s" "$creationRules" | awk "/Host root keys/ { inHostKeys=1 } inHostKeys
 cat << EOF >> "$repoDir/.sops.yaml"
 
   - path_regex: ^hosts/$hostname/secrets.yaml\$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)\$
+    unencrypted_regex: ^(exports|enable|sopsNix)\$
     key_groups:
     - age:
       - *bitwarden
       - *$hostname
 EOF
 
-# Update shared keys file
-printf 'y\n' | sops updatekeys "$repoDir/sys/secrets/shared.yaml" > /dev/null 2>&1
+# Update shared keys
+find "$repoDir" -name secrets.yaml -not -path "$repoDir/hosts/*" -exec sops updatekeys -y '{}' ';'
 
 # Create host secrets
 cat << EOF >> "$hostDir/secrets.yaml"
-ssh-keys:
-  host:
-    ed25519: |
-      $(echo "$sshHostPrivate" | sed '1b; s/^/      /')
-    rsa: |
-      $(echo "$sshHostRsaPrivate" | sed '1b; s/^/      /')
-  $admin:
-    ed25519: |
+age-key:
+  enable: false
+  exports:
+    created: "$ageKeyCreated"
+    public: $ageKeyPublic
+  contents: $ageKeyPrivate
+host-ssh-key:
+  enable: true
+  sopsNix:
+    path: /etc/ssh/ssh_host_ed25519_key
+  exports:
+    pub: $sshHostPublic
+  contents: |
+    $(echo "$sshHostPrivate" | sed '1b; s/^/      /')
+$admin-ssh-key:
+  enable: true
+  sopsNix:
+    path: /home/$admin/.ssh/id_ed25519
+    owner: $admin
+    group: users
+  exports:
+    pub: $sshAdminPublic
+  contents: |
       $(echo "$sshAdminPrivate" | sed '1b; s/^/      /')
 EOF
 
+# Encrypt host secrets
 sops -e -i "$hostDir/secrets.yaml"
-
-# Add installer secrets file to sops
-cat << EOF >> "$repoDir/.sops.yaml"
-
-  - path_regex: ^hosts/$hostname/install.secrets.yaml\$
-    unencrypted_regex: ^(meta|.*_unencrypted|.*\.pub)\$
-    key_groups:
-    - age:
-      - *bitwarden
-      - *$hostname
-      - *$installerHost
-EOF
-
-# Create installer secrets
-cat << EOF >> "$hostDir/install.secrets.yaml"
-zfs-key: $zfsKey
-sops-key: $ageKeyPrivate
-EOF
 
 ###########################
 ### Hardware Generation ###
 ###########################
 
-#"$repoDir/hosts/generate-hardware-config.sh" / "$hostname"
-git add -u
-git add "hosts/$hostname"
-git commit -m "Add host: $hostname"
+#git add -u
+#git add "hosts/$hostname"
+#git commit -m "Add host: $hostname"
