@@ -316,6 +316,13 @@
         modules = linuxModules;
       };
 
+      trident = nixosSystem {
+        specialArgs = specialArgs // {hostname = "trident";};
+        # system = "armv7l-linux";
+        system = "aarch64-linux";
+        modules = linuxModules;
+      };
+
       # https://mobile.nixos.org/devices/motorola-potter.html
       # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
       # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto

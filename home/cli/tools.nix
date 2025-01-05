@@ -78,21 +78,13 @@ with pkgs.dlo9.lib; {
         trippy # Network diagnostics
         unstable.nix-inspect
         tailspin # Log highlighter
-        dlo9.havn # Port scanner
         sd # Find and replace
-        dlo9.pvw # Port viewer, pvw -aon
-        dlo9.cidr
         superfile # File explorer
         peco # Interactive filtering
         jnv # JSON interactive filtering
         clipboard-jh # `cb` a clipboard manager
         jc # CLI output to json
-        dlo9.posting # Postman-like clint
-        # dlo9.otree # JSON tree viewer
         eva # calculator
-        # dlo9.rainfrog # Postgres TUI
-        dlo9.carl
-        dlo9.cy
 
         # To try
         # dblab
@@ -120,8 +112,8 @@ with pkgs.dlo9.lib; {
 
         vulnix # Vulnerability scanner
 
-        unstable.immich-cli # Bulk image uploading
-        noseyparker # Credential scanner
+        immich-cli # Bulk image uploading
+        # noseyparker # Credential scanner
 
         bandwhich # Network monitor
         diskonaut # Graphical disk space utility

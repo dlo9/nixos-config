@@ -32,6 +32,15 @@ with lib; {
           # dlo9.pocker # Docker TUI - too many python deps
           dlo9.toolong
           tcping-go
+
+          dlo9.havn # Port scanner
+          dlo9.cidr
+          dlo9.pvw # Port viewer, pvw -aon
+          dlo9.carl
+          dlo9.cy
+          dlo9.posting # Postman-like clint
+          # dlo9.otree # JSON tree viewer
+          # dlo9.rainfrog # Postgres TUI
         ]
         ++
         # Linux only
