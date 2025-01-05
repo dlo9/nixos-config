@@ -7,6 +7,7 @@
     enableConfig = true;
     devices = {
       disk.fast = {
+        #imageSize = "20G";
         type = "disk";
         device = "/dev/mmcblk0";
 
