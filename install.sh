@@ -3,7 +3,8 @@
 set -e
 
 host="trident"
-remote_user="pi"
+remote_host="192.168.1.53"
+remote_user="root"
 remote_port="22"
 
 # Create a temporary directory
@@ -32,5 +33,5 @@ nix run github:nix-community/nixos-anywhere -- \
   --generate-hardware-config nixos-generate-config "hosts/$host/hardware/generated.nix" \
   --kexec "$(nix build --print-out-paths "github:nix-community/nixos-images#packages.aarch64-linux.kexec-installer-nixos-unstable-noninteractive")/nixos-kexec-installer-noninteractive-aarch64-linux.tar.gz" \
   -p "$remote_port" \
-  --target-host "$remote_user@$host"
+  --target-host "$remote_user@$remote_host"
 #  --extra-files "$tmp" \

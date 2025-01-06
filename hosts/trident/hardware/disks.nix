@@ -9,7 +9,7 @@
       disk.fast = {
         #imageSize = "20G";
         type = "disk";
-        device = "/dev/mmcblk0";
+        device = "/dev/disk/by-id/mmc-LX128_0x41e90373";
 
         content = {
           type = "gpt";
