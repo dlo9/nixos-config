@@ -21,8 +21,14 @@ with lib; {
     services.davfs2.enable = false;
 
     # Disable some thing that fwupd enables to save space
-    #security.polkit.enable = mkForce false;
-    #services.udisks2.enable = mkForce false;
+    services.fwupd.daemonSettings.DisabledPlugins = [
+      # No UEFI, so disable it:
+      # https://github.com/fwupd/fwupd/wiki/PluginFlag:capsules-unsupported
+      "test"
+      "test_ble"
+      "invalid"
+      "bios"
+    ];
 
     fix-efi.enable = false;
 
