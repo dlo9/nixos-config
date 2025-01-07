@@ -21,8 +21,8 @@ with lib; {
     services.davfs2.enable = false;
 
     # Disable some thing that fwupd enables to save space
-    security.polkit.enable = mkForce false;
-    services.udisks2.enable = mkForce false;
+    #security.polkit.enable = mkForce false;
+    #services.udisks2.enable = mkForce false;
 
     fix-efi.enable = false;
 

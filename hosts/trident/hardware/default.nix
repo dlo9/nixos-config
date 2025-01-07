@@ -33,4 +33,6 @@ with lib; {
     zfs = mkForce false;
     cifs = mkForce false;
   };
+
+  services.smartd.enable = false;
 }

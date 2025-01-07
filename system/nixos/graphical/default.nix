@@ -18,18 +18,6 @@ with lib; {
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = mkDefault config.mainAdmin;
 
-    # Location services
-    services.geoclue2 = {
-      enable = mkDefault config.graphical.enable;
-
-      appConfig = {
-        "gammastep" = {
-          isAllowed = true;
-          isSystem = false;
-        };
-      };
-    };
-
     # Audio
     security.rtkit.enable = true;
     services.pipewire = {

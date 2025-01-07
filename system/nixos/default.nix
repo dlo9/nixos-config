@@ -25,8 +25,20 @@ with lib; {
   boot.initrd.supportedFilesystems.nfs = true;
   services.dbus.implementation = "broker";
 
-  # Timezone
+  # Timezone sync (uses geoclue below)
   services.localtimed.enable = true;
+
+  # Location services
+  services.geoclue2 = {
+    enable = mkDefault true;
+
+    appConfig = {
+      "gammastep" = {
+        isAllowed = true;
+        isSystem = false;
+      };
+    };
+  };
 
   # Uptime stats
   services.tuptime.enable = true;
