@@ -29,6 +29,10 @@ with lib; {
       };
     };
 
+    boot.binfmt.emulatedSystems = [
+      "aarch64-linux"
+    ];
+
     # Users
     home-manager.users.david = import ./home.nix;
 

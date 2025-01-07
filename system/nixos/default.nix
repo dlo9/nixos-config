@@ -28,18 +28,6 @@ with lib; {
   # Timezone
   services.localtimed.enable = true;
 
-  # Location services
-  services.geoclue2 = {
-    enable = true;
-
-    appConfig = {
-      "gammastep" = {
-        isAllowed = true;
-        isSystem = false;
-      };
-    };
-  };
-
   # Uptime stats
   services.tuptime.enable = true;
 
@@ -47,6 +35,10 @@ with lib; {
   environment.binsh = "${pkgs.dash}/bin/dash";
 
   programs.fish.enable = true;
+  # Fish enables this by default, which results in slow builds:
+  # https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365
+  documentation.man.generateCaches = false;
+
   environment.shells = [pkgs.fish];
 
   # This value determines the NixOS release from which the default

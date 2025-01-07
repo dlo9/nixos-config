@@ -24,5 +24,5 @@ with lib; {
     pingLimit = "--limit 1/second --limit-burst 10";
   };
 
-  services.davfs2.enable = true;
+  services.davfs2.enable = mkDefault true;
 }

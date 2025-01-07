@@ -62,20 +62,13 @@ with pkgs.dlo9.lib; {
         nix-tree
         nh # Nix cli helper
 
-        # CSV utils
-        miller
-        csvlens
-
         # Other utils
         curl
         go-task
         pv
         sops
         ouch # zip tool, since p7zip is annoying
-        zstd
         age
-        glow # Markdown reader
-        trippy # Network diagnostics
         unstable.nix-inspect
         tailspin # Log highlighter
         sd # Find and replace
@@ -104,16 +97,8 @@ with pkgs.dlo9.lib; {
         lsof
         pciutils # lspci
         gptfdisk # Disk partitioning (sgdisk)
-        inxi # Hardware info
         kmon # Kernel monitor
-        flashrom
         iputils # Required by gping
-        glances # Monitoring utility
-
-        vulnix # Vulnerability scanner
-
-        immich-cli # Bulk image uploading
-        # noseyparker # Credential scanner
 
         bandwhich # Network monitor
         diskonaut # Graphical disk space utility
@@ -151,10 +136,6 @@ with pkgs.dlo9.lib; {
     atuin = {
       enable = mkDefault true;
       enableFishIntegration = config.programs.fish.enable;
-
-      # Remove once stable is up to 18.3.0
-      # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
-      package = pkgs.master.atuin;
 
       settings = {
         # inline_height = 25; # https://github.com/atuinsh/atuin/issues/1289
@@ -221,29 +202,6 @@ with pkgs.dlo9.lib; {
         credential.helper = mkIf isLinux "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
         push.autoSetupRemote = true;
         merge.conflictStyle = "zdiff3";
-      };
-    };
-
-    helix = {
-      enable = true;
-      settings = {
-        theme = "kanagawa";
-      };
-    };
-
-    yazi = {
-      enable = true;
-
-      settings = {
-        manager = {
-          sort_by = "natural";
-          sort_sensitive = false;
-          sort_reverse = false;
-          sort_dir_first = true;
-          linemode = "size";
-          show_hidden = true;
-          show_symlink = true;
-        };
       };
     };
   };

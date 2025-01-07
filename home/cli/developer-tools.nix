@@ -41,6 +41,19 @@ with lib; {
           dlo9.posting # Postman-like clint
           # dlo9.otree # JSON tree viewer
           # dlo9.rainfrog # Postgres TUI
+
+          flashrom
+          noseyparker # Credential scanner
+          glances # Monitoring utility
+
+          vulnix # Vulnerability scanner
+          glow # Markdown reader
+          trippy # Network diagnostics
+          inxi # Hardware info
+
+          # CSV utils
+          miller
+          csvlens
         ]
         ++
         # Linux only
@@ -51,6 +64,27 @@ with lib; {
 
     programs = {
       zellij.enable = true;
+
+      helix = {
+        enable = true;
+        settings = {
+          theme = "kanagawa";
+        };
+      };
+
+      yazi = {
+        settings = {
+          manager = {
+            sort_by = "natural";
+            sort_sensitive = false;
+            sort_reverse = false;
+            sort_dir_first = true;
+            linemode = "size";
+            show_hidden = true;
+            show_symlink = true;
+          };
+        };
+      };
     };
 
     xdg.configFile = xdgFiles {

@@ -18,7 +18,7 @@ with lib; {
 
     # Derive `hostId`, which must be set for `zpool import`, from hostname
     # If instead it should be static for a host, then generate with `tr -dc 0-9a-f < /dev/urandom | head -c 8`
-    networking.hostId = mkDefault (substring 0 8 (builtins.hashString "sha256" config.networking.hostName));
+    networking.hostId = substring 0 8 (builtins.hashString "sha256" config.networking.hostName);
 
     boot = {
       zfs.devNodes = mkDefault "/dev/disk/by-id";

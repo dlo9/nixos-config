@@ -318,9 +318,23 @@
 
       trident = nixosSystem {
         specialArgs = specialArgs // {hostname = "trident";};
-        # system = "armv7l-linux";
+
         system = "aarch64-linux";
-        modules = linuxModules;
+        modules =
+          linuxModules
+          ++ [
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+
+            # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
+            {
+              nixpkgs.overlays = [
+                (final: super: {
+                  makeModulesClosure = x:
+                    super.makeModulesClosure (x // {allowMissing = true;});
+                })
+              ];
+            }
+          ];
       };
 
       # https://mobile.nixos.org/devices/motorola-potter.html

@@ -11,11 +11,6 @@ with lib; {
     cpu.amd.updateMicrocode = mkDefault pkgs.stdenv.isx86_64;
 
     enableAllFirmware = mkDefault true;
-
-    graphics = {
-      enable = mkDefault true;
-      enable32Bit = pkgs.stdenv.isx86_64;
-    };
   };
 
   # Firmware update service

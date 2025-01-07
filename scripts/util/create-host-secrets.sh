@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-  echo "create-host-config <hostname> <admin username>"
+  echo "create-host-secrets <hostname> <admin username>"
 }
 
 hostname="$1"
@@ -87,7 +87,7 @@ host-ssh-key:
   exports:
     pub: $sshHostPublic
   contents: |
-    $(echo "$sshHostPrivate" | sed '1b; s/^/      /')
+    $(echo "$sshHostPrivate" | sed '1b; s/^/    /')
 $admin-ssh-key:
   enable: true
   sopsNix:
@@ -97,7 +97,7 @@ $admin-ssh-key:
   exports:
     pub: $sshAdminPublic
   contents: |
-      $(echo "$sshAdminPrivate" | sed '1b; s/^/      /')
+    $(echo "$sshAdminPrivate" | sed '1b; s/^/    /')
 EOF
 
 # Encrypt host secrets

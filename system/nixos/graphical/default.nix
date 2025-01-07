@@ -18,6 +18,18 @@ with lib; {
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = mkDefault config.mainAdmin;
 
+    # Location services
+    services.geoclue2 = {
+      enable = mkDefault config.graphical.enable;
+
+      appConfig = {
+        "gammastep" = {
+          isAllowed = true;
+          isSystem = false;
+        };
+      };
+    };
+
     # Audio
     security.rtkit.enable = true;
     services.pipewire = {
@@ -30,6 +42,11 @@ with lib; {
     # Links xdg portal for home manager
     # https://home-manager-options.extranix.com/?query=flatpak&release=release-24.05
     environment.pathsToLink = ["/share/xdg-desktop-portal" "/share/applications"];
+
+    hardware.graphics = {
+      enable = mkDefault true;
+      enable32Bit = pkgs.stdenv.isx86_64;
+    };
 
     services.flatpak.enable = true;
 

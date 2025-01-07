@@ -13,7 +13,7 @@ with lib; {
 
   programs.vim = {
     enable = true;
-    packageConfigurable = pkgs.vim_configurable;
+    packageConfigurable = pkgs.vim;
 
     settings = {
       background = "dark";

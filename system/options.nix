@@ -27,6 +27,7 @@ with builtins; {
     developer-tools.enable = mkEnableOption "developer tools";
     gaming.enable = mkEnableOption "gaming programs";
     graphical.enable = mkEnableOption "graphical programs";
+    fix-efi.enable = mkEnableOption "fix EFI permissions" // {default = true;};
 
     font.family = mkOption {
       type = nonEmptyStr;
