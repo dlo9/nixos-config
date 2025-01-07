@@ -26,11 +26,14 @@ with lib; {
   services.dbus.implementation = "broker";
 
   # Timezone sync (uses geoclue below)
-  services.localtimed.enable = true;
+  services.tzupdate.enable = true;
 
   # Location services
+  location.provider = "geoclue2";
   services.geoclue2 = {
     enable = mkDefault true;
+    submissionUrl = "https://api.beacondb.net/v1/geolocate";
+    geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
 
     appConfig = {
       "gammastep" = {
