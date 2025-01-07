@@ -19,17 +19,7 @@ with lib; {
 
     nix.distributedBuilds = true;
     services.davfs2.enable = false;
-
-    # Disable some thing that fwupd enables to save space
-    services.fwupd.daemonSettings.DisabledPlugins = [
-      # No UEFI, so disable it:
-      # https://github.com/fwupd/fwupd/wiki/PluginFlag:capsules-unsupported
-      "test"
-      "test_ble"
-      "invalid"
-      "bios"
-    ];
-
+    services.fwupd.enable = false;
     fix-efi.enable = false;
 
     sdImage = {
