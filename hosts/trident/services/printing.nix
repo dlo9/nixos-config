@@ -16,7 +16,10 @@ with lib; {
     # Allows restart, shutdown, etc.
     # allowSystemControl = true;
   };
+
   services.fluidd.enable = true;
+
+  networking.firewall.allowedTCPPorts = [ 80 ];
 
   # TODO: klipperscreen
 }
