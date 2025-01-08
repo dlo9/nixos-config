@@ -43,7 +43,7 @@ with lib; {
           # dlo9.rainfrog # Postgres TUI
 
           flashrom
-          noseyparker # Credential scanner
+          #noseyparker # Credential scanner
           glances # Monitoring utility
 
           vulnix # Vulnerability scanner
