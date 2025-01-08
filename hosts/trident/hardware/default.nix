@@ -16,17 +16,29 @@ with lib; {
     ./generated.nix
   ];
 
-  services.tlp.enable = true;
-
+  # From wiki: https://wiki.nixos.org/wiki/NixOS_on_ARM/Raspberry_Pi_4
   environment.systemPackages = with pkgs; [
     libraspberrypi
+    raspberrypi-eeprom
   ];
 
-  # Try out zen kernel
-  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+  console.enable = false;
+  hardware = {
+    raspberry-pi."4" = {
+      apply-overlays-dtmerge.enable = true;
+      fkms-3d.enable = true;
+    };
+
+    deviceTree = {
+      enable = true;
+      #filter = "*rpi-4-*.dtb";
+    };
+  };
+
   boot.loader.systemd-boot.enable = false;
   boot.loader.grub.enable = false;
   boot.initrd.systemd.tpm2.enable = false;
+  services.tlp.enable = true;
 
   # Some filesystems aren't needed, and keep the image small
   boot.supportedFilesystems = {
