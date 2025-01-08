@@ -45,7 +45,7 @@ with lib; {
               #base16
               facebook-container
               #highlight-all
-              honey
+              #honey
               #surfshark
               tab-session-manager
               tree-style-tab
