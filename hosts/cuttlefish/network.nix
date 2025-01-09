@@ -54,6 +54,7 @@ in {
           name = "cuttlefish";
           DHCP = "yes";
           dhcpV4Config.Hostname = "cuttlefish";
+          domains = config.services.resolved.domains;
         };
       };
 
