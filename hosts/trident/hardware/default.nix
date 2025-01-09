@@ -22,16 +22,44 @@ with lib; {
     raspberrypi-eeprom
   ];
 
-  console.enable = false;
+  #console.enable = false;
+  boot.kernelParams = [
+    "console=ttyS1,115200n8"
+  ];
+
+  #boot.kernelPackages = pkgs.linuxPackages_rpi4;
+  nix.settings.max-jobs = 2;
+
   hardware = {
     raspberry-pi."4" = {
       apply-overlays-dtmerge.enable = true;
-      fkms-3d.enable = true;
+      #fkms-3d.enable = true;
     };
 
     deviceTree = {
       enable = true;
-      #filter = "*rpi-4-*.dtb";
+      #filter = mkForce "*-rpi-*.dtb";
+
+      overlays = let
+        btt-display = pkgs.fetchFromGitHub {
+          owner = "bigtreetech";
+          repo = "TFT43-DIP";
+          rev = "a4409952502d7e09521454c530ff728bd5856542";
+          hash = "sha256-mlkuc5cWJ0qjYV9KgHRTF3JxzOeOe7e++4D54I7p+uY=";
+        };
+      in [
+        #{
+        #  name = "rpi-tft43-overlay";
+        #  dtboFile = "${btt-display}/gt911_btt_tft43_dip.dtbo";
+        #  dtsFile = "${btt-display}/gt911_btt_tft43_dip.dts";
+        #}
+        #{
+        #  name = "vc4-kms-dpi-generic";
+        #  dtsFile = pkgs.fetchurl {
+        #    url = "https://raw.githubusercontent.com/raspberrypi/linux/refs/heads/rpi-6.6.y/arch/arm/boot/dts/overlays/vc4-kms-dpi-generic-overlay.dts";
+        #  };
+        #}
+      ];
     };
   };
 
