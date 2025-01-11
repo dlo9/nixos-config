@@ -61,14 +61,47 @@ with lib; {
     8555 # webrtc
   ];
 
-  environment.systemPackages = with pkgs; [
-    klipperscreen
-  ];
+  services.getty.autologinUser = "pi";
 
-  #services.xserver = {
-  #  enable = true;
-  #displayManager.lightdm.enable = true;
-  #};
+  services.cage = {
+    enable = true;
+    program = "${pkgs.klipperscreen}/bin/KlipperScreen";
+    user = "pi";
+
+    environment = {
+      WLR_LIBINPUT_NO_DEVICES = "1";
+      XDG_RUNTIME_DIR = "/run/user/1000";
+    };
+  };
+
+  # Rotate the screen after cage starts
+  systemd.services."cage-tty1" = rec {
+
+    requires = [ "user.slice" "user@1000.service" ];
+    after = [ "user.slice" "user@1000.service" "systemd-user-sessions.service" ];
+    serviceConfig = {
+      TimeoutStartSec = "30s";
+      ExecStartPost = "-${pkgs.writeShellApplication {
+        name = "rotate-display";
+
+        runtimeInputs = with pkgs; [
+          wlr-randr
+          jq
+        ];
+
+        text = ''
+          # Wait until the session exists
+          until [[ -e "$XDG_RUNTIME_DIR/wayland-0" ]]; do
+            sleep 1
+          done
+
+          display="$(wlr-randr --json | jq -r '.[].name')"
+          echo "Rotating display $display"
+          wlr-randr --output "$display" --transform 180
+        '';
+      }}/bin/rotate-display";
+    };
+  };
 
   services.go2rtc = {
     enable = true;

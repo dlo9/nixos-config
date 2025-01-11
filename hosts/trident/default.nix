@@ -22,19 +22,6 @@ with lib; {
     services.fwupd.enable = false;
     fix-efi.enable = false;
 
-    sdImage = {
-      populateRootCommands = ''
-        mkdir files/etc
-        cp -r ${inputs.self} files/etc/nixos
-
-        mkdir files/var
-        chmod 755 files/var
-
-        cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
-        chmod 600 "files/var/sops-age-keys.txt"
-      '';
-    };
-
     system.stateVersion = "24.11";
   };
 }

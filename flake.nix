@@ -42,6 +42,11 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Docker-compose in Nix
     arion = {
       url = github:hercules-ci/arion;
@@ -290,12 +295,12 @@
     };
 
     nixosConfigurations = with nixpkgs.lib; rec {
-      bee = nixosSystem {
-        specialArgs = specialArgs // {hostname = "bee";};
+      #bee = nixosSystem {
+      #  specialArgs = specialArgs // {hostname = "bee";};
 
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
+      #  system = "x86_64-linux";
+      #  modules = linuxModules;
+      #};
 
       cuttlefish = nixosSystem {
         specialArgs = specialArgs // {hostname = "cuttlefish";};
@@ -304,11 +309,11 @@
         modules = linuxModules;
       };
 
-      nib = nixosSystem {
-        specialArgs = specialArgs // {hostname = "nib";};
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
+      #nib = nixosSystem {
+      #  specialArgs = specialArgs // {hostname = "nib";};
+      #  system = "x86_64-linux";
+      #  modules = linuxModules;
+      #};
 
       pavil = nixosSystem {
         specialArgs = specialArgs // {hostname = "pavil";};
@@ -323,8 +328,6 @@
         modules =
           linuxModules
           ++ [
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-
             # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
             {
               nixpkgs.overlays = [
@@ -337,38 +340,72 @@
           ];
       };
 
+      trident-sd-card = nixosSystem {
+        specialArgs = specialArgs // {hostname = "trident";};
+
+        system = "aarch64-linux";
+        modules = linuxModules ++ [
+          {
+             imports = [ "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix" ];
+
+             sdImage = {
+               populateRootCommands = ''
+                 mkdir files/etc
+                 cp -r ${inputs.self} files/etc/nixos
+
+                 mkdir files/var
+                 chmod 755 files/var
+
+                 cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
+                 chmod 600 "files/var/sops-age-keys.txt"
+               '';
+             };
+          }
+
+          # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
+          {
+            nixpkgs.overlays = [
+              (final: super: {
+                makeModulesClosure = x:
+                  super.makeModulesClosure (x // {allowMissing = true;});
+              })
+            ];
+          }
+        ];
+      };
+
       # https://mobile.nixos.org/devices/motorola-potter.html
       # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
       # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
-      moto = nixosSystem {
-        specialArgs = specialArgs // {hostname = "moto";};
+      #moto = nixosSystem {
+      #  specialArgs = specialArgs // {hostname = "moto";};
 
-        system = "aarch64-linux";
-        modules =
-          linuxModules
-          ++ [
-            (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
-          ];
-      };
+      #  system = "aarch64-linux";
+      #  modules =
+      #    linuxModules
+      #    ++ [
+      #      (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
+      #    ];
+      #};
 
-      # Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
-      # Impure needed to access host paths without putting in the nix store
-      moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
+      ## Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
+      ## Impure needed to access host paths without putting in the nix store
+      #moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
 
-      rpi3 = nixosSystem {
-        specialArgs = specialArgs // {hostname = "rpi3";};
+      #rpi3 = nixosSystem {
+      #  specialArgs = specialArgs // {hostname = "rpi3";};
 
-        system = "aarch64-linux";
-        modules =
-          linuxModules
-          ++ [
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          ];
-      };
+      #  system = "aarch64-linux";
+      #  modules =
+      #    linuxModules
+      #    ++ [
+      #      "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+      #    ];
+      #};
 
-      # Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
-      # Impure needed to access host paths without putting in the nix store
-      rpi3-image = rpi3.config.system.build.sdImage;
+      ## Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
+      ## Impure needed to access host paths without putting in the nix store
+      #rpi3-image = rpi3.config.system.build.sdImage;
 
       drywell = nixosSystem {
         specialArgs = specialArgs // {hostname = "drywell";};
@@ -377,12 +414,12 @@
         modules = linuxModules;
       };
 
-      installer-test = nixosSystem {
-        specialArgs = specialArgs // {hostname = "installer-test";};
+      #installer-test = nixosSystem {
+      #  specialArgs = specialArgs // {hostname = "installer-test";};
 
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
+      #  system = "x86_64-linux";
+      #  modules = linuxModules;
+      #};
     };
 
     # packages.x86_64-linux = {
@@ -393,7 +430,7 @@
     #   };
     # };
 
-    inherit overlays;
+    #inherit overlays;
 
     packages = let
       change-to-flake-root = ''
@@ -421,11 +458,6 @@
             fi
           '';
         in rec {
-          default = {
-            type = "app";
-            program = "${packages.${system}.build}/bin/build";
-          };
-
           generate-hardware = pkgs.writeShellApplication {
             name = "generate-hardware";
 
@@ -528,5 +560,48 @@
     );
 
     formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    #colmena = {
+    #  meta = {
+    #    nixpkgs = import nixpkgs {
+    #      system = "x86_64-linux";
+    #    };
+
+    #    allowApplyAll = false;
+    #  };
+
+    #  trident = {
+    #    deployment = {
+    #      targetHost = "trident";
+    #      targetUser = "pi";
+    #    };
+    #  } // nixosConfigurations.trident;
+    #};
+
+    # add colmena compatibility
+    #colmena = let
+    #  conf = self.nixosConfigurations;
+    #in {
+    #  meta = {
+    #    # This can be overriden by node nixpkgs
+    #    nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+    #    nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
+    #    nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
+    #  };
+    #} // builtins.mapAttrs (name: value: { imports = value._module.args.modules; }) conf;
+
+    # nix run github:serokell/deploy-rs .#trident
+    deploy.nodes.trident = {
+      hostname = "trident";
+      sshUser = "pi";
+      user = "root";
+      interactiveSudo = true;
+      fastConnection = true;
+
+      profiles.system.path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.trident;
+    };
+
+    # This is highly advised, and will prevent many possible mistakes
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
   };
 }
