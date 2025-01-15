@@ -61,8 +61,6 @@ with lib; {
     8555 # webrtc
   ];
 
-  services.getty.autologinUser = "pi";
-
   services.cage = {
     enable = true;
     program = "${pkgs.klipperscreen}/bin/KlipperScreen";
@@ -75,10 +73,14 @@ with lib; {
   };
 
   # Rotate the screen after cage starts
-  systemd.services."cage-tty1" = rec {
+  systemd.services."cage-tty1" = let
+    # Cage has a race condition and fails to start a user session without this
+    requirements = [ "user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" ];
+  in rec {
 
-    requires = [ "user.slice" "user@1000.service" ];
-    after = [ "user.slice" "user@1000.service" "systemd-user-sessions.service" ];
+    requires = requirements;
+    after = requirements;
+
     serviceConfig = {
       TimeoutStartSec = "30s";
       ExecStartPost = "-${pkgs.writeShellApplication {
