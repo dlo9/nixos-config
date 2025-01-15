@@ -51,14 +51,6 @@ with lib; {
   networking.firewall.allowedTCPPorts = [
     # Fluidd's nginx
     80
-
-    # go2rtc
-    1984 # API/webpage
-    8555 # webrtc
-  ];
-
-  networking.firewall.allowedUDPPorts = [
-    8555 # webrtc
   ];
 
   services.cage = {
@@ -102,14 +94,6 @@ with lib; {
           wlr-randr --output "$display" --transform 180
         '';
       }}/bin/rotate-display";
-    };
-  };
-
-  services.go2rtc = {
-    enable = true;
-    settings = {
-      streams.c200 = "ffmpeg:device?video=/dev/video0&input_format=h264&video_size=2560x1440";
-      api.origin = "*"; # CORS anywhere
     };
   };
 }

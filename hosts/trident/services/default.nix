@@ -1,6 +1,8 @@
 {...}: {
   imports = [
-    ./printing.nix
+    ./camera.nix
+    ./klipper.nix
     ./ssh.nix
+    ./touchscreen.nix
   ];
 }
