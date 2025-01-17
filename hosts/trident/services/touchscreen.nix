@@ -26,6 +26,7 @@ with lib; {
 
     serviceConfig = {
       TimeoutStartSec = "30s";
+      Restart = "always";
       ExecStartPost = "-${pkgs.writeShellApplication {
         name = "rotate-display";
 
