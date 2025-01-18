@@ -24,6 +24,6 @@ with pkgs.dlo9.lib; {
     };
 
     # Set secrets for the current host
-    secrets = secrets.hostSecrets hostname;
+    secrets = secrets.sopsSecrets ./secrets.yaml // secrets.hostSecrets hostname;
   };
 }

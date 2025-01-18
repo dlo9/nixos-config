@@ -81,7 +81,7 @@
 
       # Return true if the secret is enabled and is non-empty
       isEnabled = name: value:
-        (value.enable or false)
+        (value.enable or true)
         && (value ? contents);
 
       enabledContents = lib.filterAttrs isEnabled (parseSops sopsFile);

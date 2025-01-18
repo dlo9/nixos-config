@@ -19,7 +19,8 @@ creation_rules:
   ##### Shared keys #####
   #######################
 
-  - path_regex: ^system/nixos/networking/secrets.yaml$
+  - path_regex: ^system/(.*/)?secrets.yaml$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
     key_groups:
       - age: *everyone
 
