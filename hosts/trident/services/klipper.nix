@@ -67,9 +67,8 @@ with lib; {
   # Rotate the screen after cage starts
   systemd.services."cage-tty1" = let
     # Cage has a race condition and fails to start a user session without this
-    requirements = [ "user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" ];
+    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket"];
   in rec {
-
     requires = requirements;
     after = requirements;
 

@@ -42,7 +42,7 @@ in {
 
     services = {
       immich = {
-        image = "ghcr.io/immich-app/immich-server:v1.122.3";
+        image = "ghcr.io/immich-app/immich-server:v1.124.2";
 
         environment = {
           TZ = "America/Los_Angeles";

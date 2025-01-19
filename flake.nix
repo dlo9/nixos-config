@@ -344,34 +344,36 @@
         specialArgs = specialArgs // {hostname = "trident";};
 
         system = "aarch64-linux";
-        modules = linuxModules ++ [
-          {
-             imports = [ "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix" ];
+        modules =
+          linuxModules
+          ++ [
+            {
+              imports = ["${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"];
 
-             sdImage = {
-               populateRootCommands = ''
-                 mkdir files/etc
-                 cp -r ${inputs.self} files/etc/nixos
+              sdImage = {
+                populateRootCommands = ''
+                  mkdir files/etc
+                  cp -r ${inputs.self} files/etc/nixos
 
-                 mkdir files/var
-                 chmod 755 files/var
+                  mkdir files/var
+                  chmod 755 files/var
 
-                 cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
-                 chmod 600 "files/var/sops-age-keys.txt"
-               '';
-             };
-          }
+                  cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
+                  chmod 600 "files/var/sops-age-keys.txt"
+                '';
+              };
+            }
 
-          # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
-          {
-            nixpkgs.overlays = [
-              (final: super: {
-                makeModulesClosure = x:
-                  super.makeModulesClosure (x // {allowMissing = true;});
-              })
-            ];
-          }
-        ];
+            # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
+            {
+              nixpkgs.overlays = [
+                (final: super: {
+                  makeModulesClosure = x:
+                    super.makeModulesClosure (x // {allowMissing = true;});
+                })
+              ];
+            }
+          ];
       };
 
       # https://mobile.nixos.org/devices/motorola-potter.html
