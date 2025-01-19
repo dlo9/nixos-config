@@ -142,7 +142,7 @@ with lib; {
 
           #kopia # Backups
 
-          geekbench_6
+          #geekbench_6
 
           # Scanning
           simple-scan
@@ -154,8 +154,8 @@ with lib; {
           smartmontools
 
           # Notes app
-          anytype
-          master.appflowy
+          #anytype
+          #master.appflowy
 
           # Video player
           mpv
@@ -178,7 +178,7 @@ with lib; {
           # GUI-ish bluetooth control
           bluetuith
 
-          zoom-us
+          #zoom-us
           whatsapp-for-linux
 
           # Image viewer
