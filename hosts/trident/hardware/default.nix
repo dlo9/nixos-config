@@ -70,7 +70,11 @@ with lib; {
   };
 
   boot.loader = {
-    generic-extlinux-compatible.enable = true;
+    generic-extlinux-compatible = {
+      enable = true;
+      configurationLimit = 8;
+    };
+
     systemd-boot.enable = false;
     grub.enable = false;
   };
