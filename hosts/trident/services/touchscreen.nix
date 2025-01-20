@@ -5,6 +5,10 @@
   ...
 }:
 with lib; {
+  # Disable getty (tty console) to avoid race condition
+  # between getty and cage for claiming the VT
+  console.enable = false;
+
   services.cage = {
     enable = true;
     program = "${pkgs.klipperscreen}/bin/KlipperScreen";
@@ -25,7 +29,7 @@ with lib; {
     after = requirements;
 
     serviceConfig = {
-      TimeoutStartSec = "30s";
+      TimeoutStartSec = "10s";
       Restart = "always";
       ExecStartPost = "-${pkgs.writeShellApplication {
         name = "rotate-display";
