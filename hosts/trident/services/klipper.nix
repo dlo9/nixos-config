@@ -46,7 +46,12 @@ with lib; {
     };
   };
 
-  services.fluidd.enable = true;
+  services.fluidd = {
+    enable = true;
+    nginx.extraConfig = ''
+      client_max_body_size 100M;
+    '';
+  };
 
   networking.firewall.allowedTCPPorts = [
     # Fluidd's nginx
