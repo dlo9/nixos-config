@@ -99,7 +99,6 @@ with lib; {
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
-      rustdesk
       kdePackages.krdp
     ];
 
