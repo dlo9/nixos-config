@@ -29,8 +29,7 @@ in {
   #
   # After first boot, run this to connect:
   # sudo podman exec -it obico /opt/venv/bin/python -m moonraker_obico.link -c /opt/printer_data/config/moonraker-obico.cfg
-  systemd.services.${config.virtualisation.oci-containers.containers.obico.serviceName}.serviceConfig.ExecStartPre = let
-  in "-${pkgs.writeShellApplication {
+  systemd.services.${config.virtualisation.oci-containers.containers.obico.serviceName}.serviceConfig.ExecStartPre = "-${pkgs.writeShellApplication {
     name = "create-obico-config";
 
     text = ''

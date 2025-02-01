@@ -4,11 +4,31 @@
   lib,
   ...
 }:
-with lib; {
+with lib; let
+  moonrakerConfig = "${config.services.moonraker.stateDir}/config/moonraker.cfg";
+in {
   services.klipper = {
     enable = true;
     user = "moonraker";
     group = "moonraker";
+
+    package = pkgs.klipper.overrideAttrs (oldAttrs: let
+      z-calibration = pkgs.fetchFromGitHub {
+        owner = "protoloft";
+        repo = "klipper_z_calibration";
+        rev = "v1.1.2";
+        sha256 = "sha256-YNy3FmDa4kksweWrhnwa6WKQR3sDoBxtnGh9BoXEIGs=";
+      };
+    in {
+      postInstall = ''
+        # Call the original postInstall step
+        ${oldAttrs.postInstall or ""}
+
+        # Add plugins
+        chmod +w $out/lib/klippy/extras
+        cp ${z-calibration}/z_calibration.py $out/lib/klippy/extras/z_calibration.py
+      '';
+    });
 
     # Use a mutable config, under moonraker's config path,
     # so that it can be edited in the UI
@@ -43,8 +63,22 @@ with lib; {
           "http://trident"
         ];
       };
+
+      "include ${moonrakerConfig}" = {};
     };
   };
+
+  # Ensure the moonraker config exists, or else moonraker won't start
+  systemd.services.moonraker.serviceConfig.ExecStartPre = "-${pkgs.writeShellApplication {
+    name = "create-moonraker-config";
+
+    text = ''
+      if [ ! -e "${moonrakerConfig}" ]; then
+        touch "${moonrakerConfig}"
+        chown ${config.services.moonraker.user}:${config.services.moonraker.group} "${moonrakerConfig}"
+      fi
+    '';
+  }}/bin/create-moonraker-config";
 
   services.fluidd = {
     enable = true;
