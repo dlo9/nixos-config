@@ -25,8 +25,9 @@ in {
         ${oldAttrs.postInstall or ""}
 
         # Add plugins
-        chmod +w $out/lib/klippy/extras
-        cp ${z-calibration}/z_calibration.py $out/lib/klippy/extras/z_calibration.py
+        chmod +w $out/lib/klipper/extras
+
+        cp ${z-calibration}/z_calibration.py $out/lib/klipper/extras/z_calibration.py
       '';
     });
 

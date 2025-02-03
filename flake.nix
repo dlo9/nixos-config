@@ -591,7 +591,7 @@
     #  };
     #} // builtins.mapAttrs (name: value: { imports = value._module.args.modules; }) conf;
 
-    # nix run github:serokell/deploy-rs .#trident
+    # nix run github:serokell/deploy-rs -- --skip-checks --auto-rollback false -k .#trident
     deploy.nodes.trident = {
       hostname = "trident";
       sshUser = "pi";
