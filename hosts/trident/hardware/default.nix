@@ -87,5 +87,6 @@ with lib; {
     cifs = mkForce false;
   };
 
+  # No hard drives
   services.smartd.enable = false;
 }

@@ -52,4 +52,9 @@ with lib; {
       }}/bin/rotate-display";
     };
   };
+
+  # Enable wireless control
+  # wpa_supplicant sometimes fails to connect on boot, use network-manager instead.
+  # This also enables adhoc networking via the touchscreen
+  networking.networkmanager.enable = true;
 }
