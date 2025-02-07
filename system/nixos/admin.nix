@@ -7,6 +7,7 @@ with lib; let
   adminConfig = user: {
     users.users.${user}.extraGroups =
       (optional config.hardware.i2c.enable config.hardware.i2c.group)
+      ++ (optional config.networking.networkmanager.enable "networkmanager")
       ++ (optional (config.users.groups ? "wireshark") "wireshark")
       ++ ["dialout"];
 

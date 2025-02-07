@@ -11,7 +11,7 @@ with lib; {
 
   services.cage = {
     enable = true;
-    program = "${pkgs.klipperscreen}/bin/KlipperScreen";
+    program = "${pkgs.dlo9.klipperscreen}/bin/KlipperScreen";
     user = "pi";
 
     environment = {

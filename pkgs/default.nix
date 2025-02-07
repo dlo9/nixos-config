@@ -1,6 +1,6 @@
 inputs: final: prev:
 with prev.pkgs; {
-  dlo9 = {
+  dlo9 = rec {
     vimPlugins = recurseIntoAttrs (callPackage ./vim-plugins {});
     tmuxPlugins = recurseIntoAttrs (callPackage ./tmux-plugins {});
     lib = recurseIntoAttrs (callPackage ./lib {inherit inputs;});
@@ -23,5 +23,8 @@ with prev.pkgs; {
     textual-plotext = callPackage ./textual-plotext.nix {};
     cy = callPackage ./cy.nix {};
     toolong = callPackage ./toolong.nix {};
+    python-sdbus = callPackage ./python-sdbus.nix { };
+    python-sdbus-networkmanager = callPackage ./python-sdbus-networkmanager.nix { inherit python-sdbus; };
+    klipperscreen = callPackage ./klipperscreen.nix { inherit python-sdbus-networkmanager; };
   };
 }
