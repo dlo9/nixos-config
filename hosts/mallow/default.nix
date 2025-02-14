@@ -44,6 +44,7 @@ in {
       "jenv"
       "msodbcsql18"
       "unixodbc"
+      "ollama"
     ];
 
     casks = [
