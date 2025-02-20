@@ -6,7 +6,6 @@
   systemd,
   #python-sdbus-networkmanager,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "sdbus";
   version = "0.13.0";
@@ -41,8 +40,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Modern Python D-Bus library. Based on sd-bus from libsystemd";
     homepage = "https://pypi.org/project/sdbus/";
-    license = with lib.licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with lib.maintainers; [ ];
+    license = with lib.licenses; [gpl2Only lgpl21Only];
+    maintainers = with lib.maintainers; [];
     mainProgram = "sdbus";
   };
 }

@@ -4,23 +4,21 @@
   lib,
   inputs,
   ...
-}:
+}: let
+  configFile = "/etc/obico.cfg";
 
-let
-    configFile = "/etc/obico.cfg";
+  defaultConfigContents = builtins.toFile "obico.cfg" ''
+    [server]
+    url = https://obico.sigpanic.com
 
-    defaultConfigContents = builtins.toFile "obico.cfg" ''
-      [server]
-      url = https://obico.sigpanic.com
-
-      [moonraker]
-      host = localhost
-    '';
+    [moonraker]
+    host = localhost
+  '';
 in {
   virtualisation.oci-containers.containers.obico = {
     image = "ghcr.io/thespaghettidetective/moonraker-obico:latest";
-    volumes = [ "${configFile}:/opt/printer_data/config/moonraker-obico.cfg" ];
-    extraOptions = [ "--privileged" ];
+    volumes = ["${configFile}:/opt/printer_data/config/moonraker-obico.cfg"];
+    extraOptions = ["--privileged"];
     user = "root:root";
   };
 
