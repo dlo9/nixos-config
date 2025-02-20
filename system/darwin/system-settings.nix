@@ -5,9 +5,7 @@
       # Disable natural scrolling
       "com.apple.swipescrolldirection" = false;
 
-      # Hide menu bar, since spacebar is used instead
-      _HIHideMenuBar = true;
-
+      # Show hidden files
       AppleShowAllFiles = true;
     };
 

@@ -9,9 +9,9 @@
   imports = [
     ./nix.nix
     ./skhd.nix
-    ./spacebar.nix
+    ./status-bar.nix
     ./system-settings.nix
-    ./yabai.nix
+    ./window-manager.nix
     inputs.home-manager.darwinModules.home-manager
   ];
 

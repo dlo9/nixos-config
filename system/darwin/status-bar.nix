@@ -1,9 +1,22 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
-  launchd.user.agents.spacebar.serviceConfig = {
+  # Hide menu bar, since spacebar is used instead
+  system.defaults.NSGlobalDomain._HIHideMenuBar = true;
+
+  services.sketchybar = {
+    enable = true;
+  };
+
+  fonts.packages = with pkgs; [
+    # For application icons
+    sketchybar-app-font
+  ];
+
+  launchd.user.agents.spacebar.serviceConfig = lib.mkIf config.services.spacebar.enable {
     StandardErrorPath = "/tmp/spacebar.err.log";
     StandardOutPath = "/tmp/spacebar.out.log";
   };
@@ -17,7 +30,7 @@
       '';
     }}/bin/is-fullscreen";
   in {
-    enable = true;
+    enable = false;
     package = pkgs.spacebar;
 
     config = let
