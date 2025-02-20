@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     ln -s $out/dist/screen.py $out/bin/KlipperScreen
   '';
 
-  passthru.updateScript = gitUpdater { url = meta.homepage; };
+  passthru.updateScript = gitUpdater {url = meta.homepage;};
 
   meta = with lib; {
     description = "Touchscreen GUI for the Klipper 3D printer firmware";

@@ -4,7 +4,6 @@
   fetchPypi,
   python-sdbus,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "sdbus-networkmanager";
   version = "2.0.0";
@@ -32,8 +31,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "NetworkManager binds for sdbus";
     homepage = "https://pypi.org/project/sdbus-networkmanager/";
-    license = with lib.licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with lib.maintainers; [ ];
+    license = with lib.licenses; [gpl2Only lgpl21Only];
+    maintainers = with lib.maintainers; [];
     mainProgram = "sdbus-networkmanager";
   };
 }
