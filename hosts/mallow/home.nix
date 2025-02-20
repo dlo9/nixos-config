@@ -88,7 +88,7 @@ with lib; {
     # unixODBCDrivers.msodbcsql17
 
     # Window manager/hotkeys
-    skhd
+    #skhd
 
     grpcurl
     ghz

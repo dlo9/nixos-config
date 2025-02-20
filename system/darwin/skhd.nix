@@ -1,5 +1,5 @@
-{pkgs, ...}: {
-  launchd.user.agents.skhd = {
+{pkgs, lib, config, ...}: {
+  launchd.user.agents.skhd = lib.mkIf config.services.skhd.enable {
     environment.SHELL = "/bin/sh"; # Speed up commands by not using fish
     serviceConfig = {
       StandardErrorPath = "/tmp/skhd.err.log";
@@ -11,7 +11,7 @@
     modifier = "alt";
   in {
     # Don't forget to disable "Secure Keyboard Entry" by opening the terminal application
-    enable = true;
+    enable = false;
 
     skhdConfig = ''
       # To debug "secure keyboard entry" error:
