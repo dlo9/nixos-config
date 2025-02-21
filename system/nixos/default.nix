@@ -56,6 +56,22 @@ with lib; {
 
   environment.shells = [pkgs.fish];
 
+  services.kmscon = {
+    enable = false;
+    hwRender = true;
+    autologinUser = mkDefault config.mainAdmin;
+    fonts = [
+      {
+        name = config.font.family;
+        package = (pkgs.nerdfonts.override {
+          fonts = [
+            "Noto"
+          ];
+        });
+      }
+    ];
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
