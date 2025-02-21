@@ -34,10 +34,8 @@
   # Color border of active window
   services.jankyborders = {
     enable = true;
-    active_color = "gradient(bottom_left=0xee33ccff,top_right=0xee00ff99)";
+    active_color = "gradient(top_right=0xee33ccff,bottom_left=0xee00ff99)";
     inactive_color = "0x00000000";
-    blur_radius = 5.0;
-    hidpi = true;
   };
 
   services.aerospace = {
@@ -84,7 +82,7 @@
           alt-r = "mode resize";
           alt-shift-r = ["layout tiles" "flatten-workspace-tree"]; # Reset layout
           alt-space = "layout floating tiling"; # toggle between floating and tiling
-          alt-f = "fullscreen --no-outer-gaps";
+          alt-f = "fullscreen";
           alt-tab = "focus-back-and-forth";
           alt-shift-tab = "workspace-back-and-forth";
           alt-shift-q = "close";
