@@ -44,6 +44,8 @@ with lib; {
         {
           # This rotates the display and is a modification of:
           # https://github.com/NixOS/nixos-hardware/blob/8870dcaff63dfc6647fb10648b827e9d40b0a337/raspberry-pi/4/touch-ft5406.nix#L48-L49
+          # Might also be able to rotate this way:
+          # https://www.raspberrypi.com/documentation/accessories/touch-display-2.html#rotate-screen-without-a-desktop
           name = "rpi-ft5406-overlay-rotate";
           dtsText = ''
             /dts-v1/;
