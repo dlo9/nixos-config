@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./beszel.nix
     ./caddy.nix
     ./certs.nix
     ./ddns.nix
