@@ -68,6 +68,15 @@ in {
           '';
         };
 
+        beszel = {
+          inherit useACMEHost;
+          serverAliases = ["beszel.sigpanic.com"];
+          extraConfig = ''
+            ${authentikForwardAuth}
+            reverse_proxy http://localhost:8090
+          '';
+        };
+
         jellyfin = {
           inherit useACMEHost;
           serverAliases = ["jellyfin.sigpanic.com"];
