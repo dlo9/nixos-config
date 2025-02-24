@@ -46,6 +46,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    isd = {
+      url = "github:isd-project/isd/v0.5.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Docker-compose in Nix
     arion = {
       url = github:hercules-ci/arion;
@@ -150,6 +155,10 @@
           config.allowUnfree = prev.config.allowUnfree;
         };
       };
+
+      isd = system: final: prev: {
+        isd = inputs.isd.packages.${system}.isd;
+      };
     };
 
     linuxModules = [
@@ -176,8 +185,9 @@
 
           overlays = with overlays; [
             dlo9
-            (unstable "x86_64-linux")
-            (master "x86_64-linux")
+            (master config.nixpkgs.hostPlatform.system)
+            (unstable config.nixpkgs.hostPlatform.system)
+            (isd config.nixpkgs.hostPlatform.system)
           ];
         };
       })
