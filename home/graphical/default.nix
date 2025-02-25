@@ -28,9 +28,6 @@ with lib; {
       else null;
 
     programs = {
-      # Image viewer
-      feh.enable = mkDefault isLinux;
-
       # Terminal
       alacritty = {
         enable = true;
@@ -182,10 +179,7 @@ with lib; {
           whatsapp-for-linux
 
           # Image viewer
-          qimgv
-
-          # Password manager
-          bitwarden
+          loupe
 
           libreoffice
         ])
