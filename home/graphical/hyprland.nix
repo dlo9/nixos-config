@@ -99,6 +99,7 @@ with builtins; {
           "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
           "col.inactive_border" = "rgba(00000000)";
           resize_on_border = true;
+          extend_border_grab_area = 50;
           border_size = 2;
         };
 
@@ -179,6 +180,16 @@ with builtins; {
           "${mod}, right, movefocus, r"
           "${mod}, up, movefocus, u"
           "${mod}, down, movefocus, d"
+
+          "${mod} + SHIFT, left, movewindow, l"
+          "${mod} + SHIFT, right, movewindow, r"
+          "${mod} + SHIFT, up, movewindow, u"
+          "${mod} + SHIFT, down, movewindow, d"
+
+          "${mod} + CTRL, left, swapwindow, l"
+          "${mod} + CTRL, right, swapwindow, r"
+          "${mod} + CTRL, up, swapwindow, u"
+          "${mod} + CTRL, down, swapwindow, d"
 
           # Move focus to workspaces
           "${mod}, 1, workspace, 1"
