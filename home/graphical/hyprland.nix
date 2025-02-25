@@ -136,7 +136,23 @@ with builtins; {
         ];
 
         # Keybindings
-        bind = [
+        bind = let
+          toggle-setting = "${pkgs.writeShellApplication {
+            name = "toggle-setting";
+
+            text = ''
+              #!/bin/sh
+              set -e
+
+              if [[ $# -ne 1 ]]; then
+                echo "Usage: toggle-setting <option>"
+                exit 1
+              fi
+
+              hyprctl keyword "$1" "$(hyprctl getoption "$1" | awk 'NR==1 {print xor(1,$2)}')"
+            '';
+          }}/bin/toggle-setting";
+        in [
           # Open terminal
           "${mod}, RETURN, exec, alacritty"
 
@@ -154,6 +170,9 @@ with builtins; {
 
           # Lock
           "${mod} + SHIFT, L, exec, ${pkgs.swaylock}/bin/swaylock"
+
+          # Toggle dimming
+          "${mod} + SHIFT, D, exec, ${toggle-setting} decoration:dim_inactive"
 
           # Move focus
           "${mod}, left, movefocus, l"
