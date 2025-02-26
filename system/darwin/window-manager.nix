@@ -49,7 +49,7 @@
     settings = {
       automatically-unhide-macos-hidden-apps = true;
       after-startup-command = ["layout tiles"];
-      on-focus-changed = ["move-mouse window-lazy-center"];
+      #on-focus-changed = ["move-mouse window-lazy-center"];
       exec-on-workspace-change = [
         "/bin/sh"
         "-c"

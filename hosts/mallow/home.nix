@@ -262,4 +262,18 @@ with lib; {
       };
     };
   };
+
+  # Autofocus
+  launchd.agents = {
+    autoraise = {
+      enable = true;
+      config = {
+        KeepAlive = true;
+        ProcessType = "Interactive";
+        ProgramArguments = [ "${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" ];
+        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stderr";
+        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stdout";
+      };
+    };
+  };
 }
