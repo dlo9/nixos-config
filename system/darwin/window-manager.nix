@@ -40,6 +40,7 @@
 
   services.aerospace = {
     enable = true;
+    package = pkgs.unstable.aerospace;
 
     # TODO:
     # Fullscreen
@@ -50,10 +51,15 @@
       after-startup-command = ["layout tiles"];
       on-focus-changed = ["move-mouse window-lazy-center"];
       exec-on-workspace-change = [
-        "/bin/bash"
+        "/bin/sh"
         "-c"
-        "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
+        "${config.services.sketchybar.package}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
       ];
+
+      workspace-to-monitor-force-assignment = {
+        "1" = "built-in";
+        "10" = "secondary";
+      };
 
       on-window-detected =
         map (app: {
@@ -70,11 +76,36 @@
         inner.vertical = 10;
         outer.left = 10;
         outer.right = 10;
-        outer.top = 10;
+        outer.top = [
+          # Bar is already accounted for
+          {monitor.built-in = 10;}
+
+          # Need to account for the menu bar
+          47
+        ];
         outer.bottom = 10;
       };
 
-      mode = {
+      mode = let
+        change-workspace = "${pkgs.writeShellApplication {
+          name = "change-workspace";
+
+          runtimeInputs = [
+            config.services.aerospace.package
+          ];
+
+          text = ''
+            workspace=$1
+            window_count="$(aerospace list-windows --workspace "$workspace" --count)"
+
+             if [[ "$window_count" -eq 0 ]]; then
+               aerospace summon-workspace "$workspace"
+             else
+               aerospace workspace "$workspace"
+             fi
+          '';
+        }}/bin/change-workspace";
+      in {
         # Commands: https://nikitabobko.github.io/AeroSpace/commands
         main.binding = {
           alt-h = "layout tiles horizontal";
@@ -99,16 +130,32 @@
           alt-shift-up = "move up";
           alt-shift-down = "move down";
 
-          alt-1 = "workspace 1";
-          alt-2 = "workspace 2";
-          alt-3 = "workspace 3";
-          alt-4 = "workspace 4";
-          alt-5 = "workspace 5";
-          alt-6 = "workspace 6";
-          alt-7 = "workspace 7";
-          alt-8 = "workspace 8";
-          alt-9 = "workspace 9";
-          alt-0 = "workspace 10";
+          alt-ctrl-left = "move-node-to-monitor left";
+          alt-ctrl-right = "move-node-to-monitor right";
+          alt-ctrl-up = "move-node-to-monitor up";
+          alt-ctrl-down = "move-node-to-monitor down";
+
+          # alt-1 = "workspace 1";
+          # alt-2 = "workspace 2";
+          # alt-3 = "workspace 3";
+          # alt-4 = "workspace 4";
+          # alt-5 = "workspace 5";
+          # alt-6 = "workspace 6";
+          # alt-7 = "workspace 7";
+          # alt-8 = "workspace 8";
+          # alt-9 = "workspace 9";
+          # alt-0 = "workspace 10";
+
+          alt-1 = "exec-and-forget ${change-workspace} 1";
+          alt-2 = "exec-and-forget ${change-workspace} 2";
+          alt-3 = "exec-and-forget ${change-workspace} 3";
+          alt-4 = "exec-and-forget ${change-workspace} 4";
+          alt-5 = "exec-and-forget ${change-workspace} 5";
+          alt-6 = "exec-and-forget ${change-workspace} 6";
+          alt-7 = "exec-and-forget ${change-workspace} 7";
+          alt-8 = "exec-and-forget ${change-workspace} 8";
+          alt-9 = "exec-and-forget ${change-workspace} 9";
+          alt-0 = "exec-and-forget ${change-workspace} 10";
 
           alt-shift-1 = "move-node-to-workspace 1";
           alt-shift-2 = "move-node-to-workspace 2";
