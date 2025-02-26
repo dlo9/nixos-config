@@ -71,19 +71,21 @@
           "com.cisco.anyconnect.gui"
         ];
 
-      gaps = {
+      gaps = let
+        outer-gap = (builtins.ceil config.services.jankyborders.width);
+      in {
         inner.horizontal = 10;
         inner.vertical = 10;
-        outer.left = 10;
-        outer.right = 10;
+        outer.left = outer-gap;
+        outer.right = outer-gap;
+        outer.bottom = outer-gap;
         outer.top = [
           # Bar is already accounted for
-          {monitor.built-in = 10;}
+          {monitor.built-in = outer-gap;}
 
           # Need to account for the menu bar
-          47
+          (37 + outer-gap)
         ];
-        outer.bottom = 10;
       };
 
       mode = let
