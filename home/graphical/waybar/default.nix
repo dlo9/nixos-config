@@ -120,7 +120,7 @@ with lib; {
               tooltip-format = "Used: {used} ({percentage_used}%)\nFree: {free} ({percentage_free}%)\nTotal: {total}";
             };
 
-            layer = "top";
+            layer = "bottom";
             memory = {
               format = " {}%";
               interval = 5;
