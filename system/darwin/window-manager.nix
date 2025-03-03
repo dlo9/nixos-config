@@ -58,7 +58,8 @@
 
       workspace-to-monitor-force-assignment = {
         "1" = "built-in";
-        "10" = "secondary";
+        "9" = ["hdmi" "dp" "built-in"];
+        "10" = ["dp" "hdmi" "built-in"];
       };
 
       on-window-detected =
