@@ -270,7 +270,7 @@ with lib; {
       config = {
         KeepAlive = true;
         ProcessType = "Interactive";
-        ProgramArguments = [ "${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" ];
+        ProgramArguments = [ "${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" "-mouseDelta=1" "pollMillis=50" "-delay=10" ];
         StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stderr";
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stdout";
       };
