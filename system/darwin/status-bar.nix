@@ -8,7 +8,7 @@
   system.defaults.NSGlobalDomain._HIHideMenuBar = true;
 
   services.sketchybar = {
-    enable = true;
+    enable = config.services.aerospace.enable;
   };
 
   fonts.packages = with pkgs; [
@@ -30,7 +30,7 @@
       '';
     }}/bin/is-fullscreen";
   in {
-    enable = false;
+    enable = config.services.yabai.enable;
     package = pkgs.spacebar;
 
     config = let

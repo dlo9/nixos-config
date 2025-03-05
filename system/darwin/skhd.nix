@@ -11,7 +11,7 @@
     modifier = "alt";
   in {
     # Don't forget to disable "Secure Keyboard Entry" by opening the terminal application
-    enable = false;
+    enable = config.services.yabai.enable;
 
     skhdConfig = ''
       # To debug "secure keyboard entry" error:

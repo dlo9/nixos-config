@@ -6,7 +6,7 @@
   system.defaults = {
     # Recommended for stability:
     # https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
-    spaces.spans-displays = true;
+    spaces.spans-displays = config.services.aerospace.enable;
 
     NSGlobalDomain = {
       # Drag windows more easily
@@ -39,7 +39,7 @@
   };
 
   services.aerospace = {
-    enable = true;
+    enable = false;
     package = pkgs.unstable.aerospace;
 
     # TODO:
@@ -58,8 +58,8 @@
 
       workspace-to-monitor-force-assignment = {
         "1" = "built-in";
-        "9" = ["hdmi" "dp" "built-in"];
-        "10" = ["dp" "hdmi" "built-in"];
+        "9" = ["hdmi" "dp" "DELL P2721Q (1)" "DELL P2721Q (2)" "built-in"];
+        "10" = ["dp" "hdmi" "DELL P2721Q (2)" "DELL P2721Q (1)" "built-in"];
       };
 
       on-window-detected =
@@ -120,6 +120,7 @@
           alt-tab = "focus-back-and-forth";
           alt-shift-tab = "workspace-back-and-forth";
           alt-shift-q = "close";
+          alt-k = "exec-and-forget pkill -f aerospace";
 
           alt-enter = "exec-and-forget ${pkgs.alacritty}/bin/alacritty";
 
@@ -188,7 +189,7 @@
   };
 
   services.yabai = {
-    enable = false;
+    enable = !config.services.aerospace.enable;
 
     package = pkgs.unstable.yabai;
 
