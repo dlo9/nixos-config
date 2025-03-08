@@ -76,7 +76,7 @@ with lib; {
 
         # Container cache
         "fast/docker<".local = "week";
-        "fast/containerd<".local = "week";
+        "fast/containerd<".local = "day";
 
         # Unmanaged
         "slow/trash<" = {};
