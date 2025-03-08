@@ -63,6 +63,9 @@ with builtins; {
 
           # Keep up to 1 week
           week = "1x1h(keep=all) | 23x1h | 6x1d";
+
+          # Keep up to 1 day
+          day = "1x1h(keep=all) | 23x1h";
         };
       };
 
