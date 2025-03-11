@@ -20,6 +20,7 @@ with lib; {
     amdgpu_top
     orca-slicer
     freecad
+    openscad
   ];
 
   # SSH
