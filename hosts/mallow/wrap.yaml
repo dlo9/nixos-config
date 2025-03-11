@@ -611,4 +611,4 @@ aliases:
       - keys: [--down]
         values:
           - -c
-          - curl -s 'http://pfix1.apexclearing.local:3000/v1/sessions/statuses.json' | jq -r 'to_entries | .[] | select(.value.is_session_time and (.value.logged_on | not)) | .key' | sed 's/FIX.4.2://'
+          - curl -s 'http://pfix1.apexclearing.local:3000/v1/sessions/statuses.json' | jq -r 'to_entries | .[] | select(.value.is_session_time and (.value.logged_on | not)) | .key'
