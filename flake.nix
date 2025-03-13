@@ -5,9 +5,6 @@
     nixpkgs-master.url = github:NixOS/nixpkgs/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-24.11;
 
-    # Determinate nix for faster builds
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
-
     # Darwin settings
     nix-darwin = {
       url = github:LnL7/nix-darwin/nix-darwin-24.11;
@@ -177,8 +174,6 @@
       # Docker-compose in Nix
       inputs.arion.nixosModules.arion
 
-      inputs.determinate.nixosModules.default
-
       # Nixpkgs overlays
       ({
         config,
@@ -204,8 +199,6 @@
 
       # Host modules
       ./hosts
-
-      inputs.determinate.darwinModules.default
 
       # Nixpkgs overlays
       ({
