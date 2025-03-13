@@ -24,6 +24,14 @@ with lib; {
         "https://cache.flox.dev"
       ];
 
+      trusted-substituters = [
+        "https://nix-community.cachix.org"
+        "https://cuda-maintainers.cachix.org"
+        "https://cache.flox.dev"
+        "https://devenv.cachix.org"
+        "https://nix-serve.sigpanic.com"
+      ];
+
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
@@ -37,6 +45,7 @@ with lib; {
 
     extraOptions = ''
       experimental-features = nix-command flakes
+      accept-flake-config = true
       builders-use-substitutes = true
       keep-outputs = true
       keep-derivations = true
