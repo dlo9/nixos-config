@@ -24,6 +24,7 @@
     openssh.authorizedKeys.keys = [
       config.hosts.pixie.host-ssh-key.pub
       config.hosts.pavil.host-ssh-key.pub
+      config.hosts.pavil.david-ssh-key.pub
     ];
   };
 
