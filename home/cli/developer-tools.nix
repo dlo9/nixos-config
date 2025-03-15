@@ -27,7 +27,7 @@ with lib; {
           pkgs.unstable.terminaltexteffects
 
           gh-dash
-          devenv
+          unstable.devenv
           gitu # Git TUI
           # dlo9.pocker # Docker TUI - too many python deps
           dlo9.toolong
