@@ -49,6 +49,7 @@ with lib; {
       builders-use-substitutes = true
       keep-outputs = true
       keep-derivations = true
+      download-buffer-size = 268435456
 
       connect-timeout = 5
       log-lines = 25
