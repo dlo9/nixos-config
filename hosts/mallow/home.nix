@@ -261,18 +261,32 @@ with lib; {
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/raycast/stdout";
       };
     };
-  };
 
-  # Autofocus
-  launchd.agents = {
     autoraise = {
       enable = true;
       config = {
         KeepAlive = true;
         ProcessType = "Interactive";
-        ProgramArguments = [ "${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" "-mouseDelta=1" "pollMillis=50" "-delay=10" ];
+        ProgramArguments = ["${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" "-mouseDelta=1" "pollMillis=50" "-delay=10"];
         StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stderr";
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stdout";
+      };
+    };
+
+    pgpass = {
+      enable = true;
+      config = {
+        ProcessType = "Background";
+        StartInterval = 15 * 60;
+        EnvironmentVariables = {
+          HOME = config.home.homeDirectory;
+          PATH = concatStringsSep ":" config.home.sessionPath;
+        };
+        Program = "${pkgs.writeShellScript "pgpass" ''
+          echo "*:*:*:dorchard@apexfintechsolutions.com:$(gcloud auth print-access-token)" > $HOME/.pgpass
+        ''}";
+        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/pgpass/stderr";
+        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/pgpass/stdout";
       };
     };
   };
