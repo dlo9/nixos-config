@@ -13,5 +13,12 @@
 
     environment.systemPackages = [pkgs.dlo9.nss-docker];
     system.nssDatabases.hosts = ["docker"];
+
+    virtualisation.containerd.settings = {
+      plugins."io.containerd.grpc.v1.cri".registry.config_path = "/etc/containerd/certs.d";
+    };
+
+    # Doesn't work because of auth?
+    virtualisation.docker.daemon.settings.registry-mirrors = ["https://docker.sigpanic.com"];
   };
 }
