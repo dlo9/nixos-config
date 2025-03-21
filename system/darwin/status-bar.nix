@@ -82,9 +82,9 @@
     # Put some extra config options at the end. center_shell MUST go after title,
     # but the modules's automatic conversion sorts alphabetically, which breaks it
     # Further, there must be a newline because this option doesn't append correctly
-    extraConfig = ''
+    # extraConfig = ''
 
-      spacebar -m config center_shell on
-    '';
+    #   spacebar -m config center_shell on
+    # '';
   };
 }
