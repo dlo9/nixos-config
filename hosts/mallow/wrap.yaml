@@ -23,10 +23,17 @@ anchors:
 
   - &kafka-topics-dev
     keys: *dev-keys
-    values: [--bootstrap-server, $KAFKA_DEV, --command-config, $KAFKA_PROPERTIES_DEV]
+    values:
+      [--bootstrap-server, $KAFKA_DEV, --command-config, $KAFKA_PROPERTIES_DEV]
   - &kafka-topics-dev-ascend
     keys: *dev-ascend-keys
-    values: [--bootstrap-server, $KAFKA_DEV_ASCEND, --command-config, $KAFKA_PROPERTIES_DEV]
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_DEV_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_DEV,
+      ]
   - &kafka-topics-dev-old
     keys: *dev-old-keys
     values: [--bootstrap-server, $KAFKA_DEV_OLD]
@@ -41,10 +48,17 @@ anchors:
 
   - &kafka-topics-stg
     keys: *stg-keys
-    values: [--bootstrap-server, $KAFKA_STG, --command-config, $KAFKA_PROPERTIES_STG]
+    values:
+      [--bootstrap-server, $KAFKA_STG, --command-config, $KAFKA_PROPERTIES_STG]
   - &kafka-topics-stg-ascend
     keys: *stg-ascend-keys
-    values: [--bootstrap-server, $KAFKA_STG_ASCEND, --command-config, $KAFKA_PROPERTIES_STG]
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_STG_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_STG,
+      ]
   - &kafka-topics-stg-old
     keys: *stg-old-keys
     values: [--bootstrap-server, $KAFKA_STG_OLD]
@@ -59,10 +73,17 @@ anchors:
 
   - &kafka-topics-uat
     keys: *uat-keys
-    values: [--bootstrap-server, $KAFKA_UAT, --command-config, $KAFKA_PROPERTIES_UAT]
+    values:
+      [--bootstrap-server, $KAFKA_UAT, --command-config, $KAFKA_PROPERTIES_UAT]
   - &kafka-topics-uat-ascend
     keys: *uat-ascend-keys
-    values: [--bootstrap-server, $KAFKA_UAT_ASCEND, --command-config, $KAFKA_PROPERTIES_UAT]
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_UAT_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_UAT,
+      ]
   - &kafka-topics-uat-old
     keys: *uat-old-keys
     values: [--bootstrap-server, $KAFKA_UAT_OLD]
@@ -77,10 +98,17 @@ anchors:
 
   - &kafka-topics-prd
     keys: *prd-keys
-    values: [--bootstrap-server, $KAFKA_PRD, --command-config, $KAFKA_PROPERTIES_PRD]
+    values:
+      [--bootstrap-server, $KAFKA_PRD, --command-config, $KAFKA_PROPERTIES_PRD]
   - &kafka-topics-prd-ascend
     keys: *prd-ascend-keys
-    values: [--bootstrap-server, $KAFKA_PRD_ASCEND, --command-config, $KAFKA_PROPERTIES_PRD]
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_PRD_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_PRD,
+      ]
   - &kafka-topics-prd-old
     keys: *prd-old-keys
     values: [--bootstrap-server, $KAFKA_PRD_OLD]
@@ -89,13 +117,15 @@ anchors:
   - &rcn-keys [--rcn]
   - &kafka-topics-rcn
     keys: *rcn-keys
-    values: [--bootstrap-server, $KAFKA_RCN, --command-config, $KAFKA_PROPERTIES_RCN]
+    values:
+      [--bootstrap-server, $KAFKA_RCN, --command-config, $KAFKA_PROPERTIES_RCN]
 
   # Sandbox
   - &sbx-keys [--sbx]
   - &kafka-topics-sbx
     keys: *sbx-keys
-    values: [--bootstrap-server, $KAFKA_SBX, --command-config, $KAFKA_PROPERTIES_SBX]
+    values:
+      [--bootstrap-server, $KAFKA_SBX, --command-config, $KAFKA_PROPERTIES_SBX]
 
 variables:
   ###########################
@@ -278,7 +308,17 @@ aliases:
 
         # Run an alpine container
       - keys: [--alpine, --debug]
-        values: [run, --image=alpine, -it, --restart=Never, --rm, dorchard-debug, --, sh]
+        values:
+          [
+            run,
+            --image=alpine,
+            -it,
+            --restart=Never,
+            --rm,
+            dorchard-debug,
+            --,
+            sh,
+          ]
 
   - alias: h
     program: helm
@@ -374,27 +414,107 @@ aliases:
 
       # Main
       - keys: *dev-keys
-        values: [-b, $KAFKA_DEV, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_DEV]
+        values:
+          [
+            -b,
+            $KAFKA_DEV,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
       - keys: *stg-keys
-        values: [-b, $KAFKA_STG, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_STG]
+        values:
+          [
+            -b,
+            $KAFKA_STG,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
       - keys: *uat-keys
-        values: [-b, $KAFKA_UAT, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_UAT]
+        values:
+          [
+            -b,
+            $KAFKA_UAT,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
       - keys: *prd-keys
-        values: [-b, $KAFKA_PRD, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_PRD]
+        values:
+          [
+            -b,
+            $KAFKA_PRD,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
 
       # Ascend
       - keys: *dev-ascend-keys
-        values: [-b, $KAFKA_DEV_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_DEV]
+        values:
+          [
+            -b,
+            $KAFKA_DEV_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
       - keys: *stg-ascend-keys
-        values: [-b, $KAFKA_STG_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_STG]
+        values:
+          [
+            -b,
+            $KAFKA_STG_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
       - keys: *uat-ascend-keys
-        values: [-b, $KAFKA_UAT_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_UAT]
+        values:
+          [
+            -b,
+            $KAFKA_UAT_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
       - keys: *prd-ascend-keys
-        values: [-b, $KAFKA_PRD_ASCEND, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_PRD]
+        values:
+          [
+            -b,
+            $KAFKA_PRD_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
       - keys: *rcn-keys
-        values: [-b, $KAFKA_RCN, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_RCN]
+        values:
+          [
+            -b,
+            $KAFKA_RCN,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_RCN,
+          ]
       - keys: *sbx-keys
-        values: [-b, $KAFKA_SBX, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_SBX]
+        values:
+          [
+            -b,
+            $KAFKA_SBX,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_SBX,
+          ]
 
       # Old
       - keys: *dev-old-keys
@@ -418,13 +538,45 @@ aliases:
     keywords:
       # Main
       - keys: *dev-keys
-        values: [-b, $KAFKA_DEV, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_DEV]
+        values:
+          [
+            -b,
+            $KAFKA_DEV,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
       - keys: *stg-keys
-        values: [-b, $KAFKA_STG, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_STG]
+        values:
+          [
+            -b,
+            $KAFKA_STG,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
       - keys: *uat-keys
-        values: [-b, $KAFKA_UAT, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_UAT]
+        values:
+          [
+            -b,
+            $KAFKA_UAT,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
       - keys: *prd-keys
-        values: [-b, $KAFKA_PRD, -X, security.protocol=ssl, -X, ssl.ca.location=$KAFKA_CA_PRD]
+        values:
+          [
+            -b,
+            $KAFKA_PRD,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
 
   # TODO: fix this so that I don't need `--topic` but can still use keyword overrides with positional parameter
   # kt --create <topic name>
@@ -453,6 +605,8 @@ aliases:
       - *kafka-topics-prd
       - *kafka-topics-prd-ascend
       - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
       - keys: [--create]
         values: [--create, --topic, $#]
       - keys: [--delete]
@@ -479,12 +633,13 @@ aliases:
       - *kafka-topics-prd
       - *kafka-topics-prd-ascend
       - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
       - keys: [--speedup]
         values:
           [--reset-offsets, --all-topics, --execute, --to-latest, --group, $#]
       - keys: [--delete]
-        values:
-          [--delete, --group, $#]
+        values: [--delete, --group, $#]
 
   - alias: kl
     program: kafka-log-dirs.sh
@@ -502,15 +657,27 @@ aliases:
       - *kafka-topics-prd
       - *kafka-topics-prd-ascend
       - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
       - keys: [--tales]
-        values:
-          [--describe, --topic-list, "trade-processing.tales.status"]
+        values: [--describe, --topic-list, "trade-processing.tales.status"]
 
   - alias: kafka-scripts
     program: docker
     keywords:
       - keys: [--stg, --staging]
-        values: [run, -v, ~/.config/kafkacat/stg:/work, -e, BOOTSTRAP_SERVER=$KAFKA_STG_OLD, --entrypoint, bash, -it, confluentinc/cp-kafka:5.4.3]
+        values:
+          [
+            run,
+            -v,
+            ~/.config/kafkacat/stg:/work,
+            -e,
+            BOOTSTRAP_SERVER=$KAFKA_STG_OLD,
+            --entrypoint,
+            bash,
+            -it,
+            confluentinc/cp-kafka:5.4.3,
+          ]
 
   #############
   ### Other ###
