@@ -15,22 +15,9 @@ in {
   environment.systemPackages = with pkgs; [
     # Basic kubernetes CLIs
     kubectl
-    kustomize
-
-    # Helm
-    kubernetes-helm
 
     # SOPS
     sops
-
-    # SOPS kustomize plugin
-    # https://github.com/NixOS/nixpkgs/issues/175515
-    (pkgs.kustomize-sops.overrideAttrs (oldAttrs: {
-      installPhase = ''
-        mkdir -p $out/lib/viaduct.ai/v1/ksops/
-        mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
-      '';
-    }))
 
     # Gitops CLI
     argocd
@@ -40,7 +27,6 @@ in {
   ];
 
   environment.sessionVariables = {
-    KUSTOMIZE_PLUGIN_HOME = "/run/current-system/sw/lib";
     CONTAINER_RUNTIME_ENDPOINT = "unix:///run/containerd/containerd.sock";
   };
 
@@ -101,13 +87,6 @@ in {
 
     # Allow privileged containers
     apiserver.extraOpts = "--allow-privileged";
-  };
-
-  # ISCSI services required for OpenEBS (PVC storage):
-  # https://openebs.io/docs/user-guides/prerequisites#linux-platforms
-  services.openiscsi = {
-    enable = true;
-    name = config.networking.hostName;
   };
 
   # TODO: get in-cluster API access working without this
