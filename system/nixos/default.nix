@@ -46,6 +46,13 @@ with lib; {
   # Uptime stats
   services.tuptime.enable = true;
 
+  # Autotune
+  # services.bpftune doesn't let me override arguments
+  systemd.services.bpftune = {
+    script = "${pkgs.bpftune}/bin/bpftune -ds";
+    wantedBy = [ "multi-user.target" ];
+  };
+
   # POSIX shell implementation
   environment.binsh = "${pkgs.dash}/bin/dash";
 
