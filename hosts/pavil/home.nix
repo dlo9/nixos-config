@@ -15,12 +15,11 @@ with lib; {
 
   home.packages = with pkgs; [
     # virt-manager # Virtualization management
-    sidequest
     nvtopPackages.amd # GPU monitoring
     amdgpu_top
     orca-slicer
     freecad
-    openscad
+    nextcloud-client
   ];
 
   # SSH
