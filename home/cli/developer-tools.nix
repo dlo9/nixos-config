@@ -60,7 +60,6 @@ with lib; {
         ++
         # Linux only
         (optionals isLinux [
-          distrobox
           isd
         ]);
     };

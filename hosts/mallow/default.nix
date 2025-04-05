@@ -59,6 +59,9 @@ in {
       "sensiblesidebuttons"
       "steam"
       "microsoft-teams"
+
+      # Gui for launchctl
+      "launchcontrol"
     ];
   };
 
@@ -70,5 +73,15 @@ in {
     uid = 503;
     gid = 20;
     shell = pkgs.fish;
+  };
+
+  # Check current DNS settings with: scutil --dns
+  # This also adds domains as a resolver in /etc/resolver (See https://github.com/suth/mac-traefik-config)
+  services.dnsmasq = {
+    enable = true;
+
+    addresses = {
+      "laptop" = "127.0.0.1";
+    };
   };
 }

@@ -250,7 +250,19 @@ with lib; {
     // (env-dirs "uat")
     // (env-dirs "prd");
 
-  launchd.agents = {
+  launchd.agents = let
+    docker-compose = name: {
+      enable = true;
+      config = {
+        KeepAlive = true;
+        ProcessType = "Interactive";
+        WorkingDirectory = "${config.home.homeDirectory}/Documents/documents/docker-compose/${name}";
+        ProgramArguments = ["/usr/local/bin/docker" "compose" "up"];
+        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/docker-compose/${name}/stderr";
+        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/docker-compose/${name}/stdout";
+      };
+    };
+  in {
     raycast = {
       enable = true;
       config = {
@@ -289,5 +301,8 @@ with lib; {
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/pgpass/stdout";
       };
     };
+
+    traefik = docker-compose "traefik";
+    linkding = docker-compose "linkding";
   };
 }
