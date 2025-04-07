@@ -60,20 +60,39 @@ in {
 
     # Use `hostname.cluster` instead of `cluster.local` since Android can't resolve .local through a VPN
     addons.dns.clusterDomain = "${masterHostname}.cluster";
+
+    # Documentation: https://coredns.io/plugins/
     addons.dns.corefile = ''
       .:10053 {
+        # Log errors
         errors
+
+        # Support a /health endpoint
         health :10054
-        kubernetes ${config.services.kubernetes.addons.dns.clusterDomain} in-addr.arpa ip6.arpa {
-          pods insecure
-          fallthrough in-addr.arpa ip6.arpa
-        }
+
+        # Support a /metrics endpoint
         prometheus :10055
-        # forward . /etc/resolv.conf
-        forward . 192.168.1.1
+
+        # Resolve k8s pods
+        kubernetes ${config.services.kubernetes.addons.dns.clusterDomain} {
+          pods insecure
+        }
+
+        forward . 9.9.9.9 {
+          # Don't forward tailscale or cluster addresses
+          except ts.net ${config.services.kubernetes.addons.dns.clusterDomain}
+        }
+
+        # Cache
         cache 30
+
+        # Break loops
         loop
+
+        # Reload when the config changes
         reload
+
+        # Round-robin
         loadbalance
       }
     '';
@@ -83,7 +102,8 @@ in {
     ];
 
     # Allow swap on host machine
-    kubelet.extraOpts = "--fail-swap-on=false";
+    # Don't inherit DNS from host
+    kubelet.extraOpts = "--fail-swap-on=false --resolv-conf=";
 
     # Allow privileged containers
     apiserver.extraOpts = "--allow-privileged";
