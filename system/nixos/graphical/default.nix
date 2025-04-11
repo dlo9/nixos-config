@@ -125,6 +125,7 @@ with lib; {
     services.avahi = {
       enable = mkDefault true;
       nssmdns4 = mkDefault true;
+      nssmdns6 = mkDefault true;
       ipv6 = mkDefault true;
     };
 
