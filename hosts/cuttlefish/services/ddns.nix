@@ -58,7 +58,7 @@ with lib; let
           "${pkgs.replace-secret}/bin/replace-secret" "API Token" "${config.sops.secrets.cloudflare-ddns.path}" "/run/${RuntimeDirectory}/godns.json"
         ''}";
 
-        ExecStart = "${pkgs.godns}/bin/godns -c /run/${RuntimeDirectory}/godns.json";
+        ExecStart = "${pkgs.unstable.godns}/bin/godns -c /run/${RuntimeDirectory}/godns.json";
       };
     };
 in {
