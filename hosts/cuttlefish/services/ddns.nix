@@ -36,7 +36,7 @@ with lib; let
     godns-IPv6 = godns-IPv4 // {
       ip_urls = [];
       ip_type = "IPv6";
-      ip_interface = "cuttlefish";
+      ip_interface = "enp39s0";
     };
   };
 

@@ -24,54 +24,54 @@ in {
       "net.ipv4.conf.all.rp_filter" = 1;
     };
 
-    systemd.network = {
-      links = {
-        # Randomize MAC of physical links
-        "10-host" = {
-          matchConfig.Type = "ether";
-          linkConfig = {
-            MACAddressPolicy = "random";
-            NamePolicy = "path";
-          };
-        };
-      };
+    #systemd.network = {
+    #  links = {
+    #    # Randomize MAC of physical links
+    #    "10-host" = {
+    #      matchConfig.Type = "ether";
+    #      linkConfig = {
+    #        MACAddressPolicy = "random";
+    #        NamePolicy = "path";
+    #      };
+    #    };
+    #  };
 
-      networks = {
-        # Disable DHCP on physical links and add the host's vlan
-        "35-wired" = {
-          DHCP = "no";
+    #  networks = {
+    #    # Disable DHCP on physical links and add the host's vlan
+    #    "35-wired" = {
+    #      DHCP = "no";
 
-          macvlan = [
-            "cuttlefish"
-          ];
-        };
+    #      macvlan = [
+    #        "cuttlefish"
+    #      ];
+    #    };
 
-        # Disable wireless
-        "35-wireless".DHCP = "no";
+    #    # Disable wireless
+    #    "35-wireless".DHCP = "no";
 
-        # Enable DHCP for cuttlefish's vlan
-        "40-cuttlefish" = {
-          name = "cuttlefish";
-          DHCP = "yes";
-          dhcpV4Config.Hostname = "cuttlefish";
-          domains = config.services.resolved.domains;
-        };
-      };
+    #    # Enable DHCP for cuttlefish's vlan
+    #    "40-cuttlefish" = {
+    #      name = "cuttlefish";
+    #      DHCP = "yes";
+    #      dhcpV4Config.Hostname = "cuttlefish";
+    #      domains = config.services.resolved.domains;
+    #    };
+    #  };
 
-      netdevs = {
-        # Virtual network card for cuttlefish
-        "15-cuttlefish" = {
-          netdevConfig = {
-            Kind = "macvlan";
-            Name = "cuttlefish";
-            MACAddress = MACs.cuttlefish;
-          };
+    #  netdevs = {
+    #    # Virtual network card for cuttlefish
+    #    "15-cuttlefish" = {
+    #      netdevConfig = {
+    #        Kind = "macvlan";
+    #        Name = "cuttlefish";
+    #        MACAddress = MACs.cuttlefish;
+    #      };
 
-          macvlanConfig = {
-            Mode = "bridge";
-          };
-        };
-      };
-    };
+    #      macvlanConfig = {
+    #        Mode = "bridge";
+    #      };
+    #    };
+    #  };
+    #};
   };
 }
