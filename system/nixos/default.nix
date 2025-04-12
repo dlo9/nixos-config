@@ -49,7 +49,8 @@ with lib; {
   # Autotune
   # services.bpftune doesn't let me override arguments
   systemd.services.bpftune = {
-    script = "${pkgs.bpftune}/bin/bpftune -ds";
+    # Use unstable due to file descriptor leak: https://github.com/oracle/bpftune/issues/102
+    script = "${pkgs.unstable.bpftune}/bin/bpftune -ds";
     wantedBy = [ "multi-user.target" ];
   };
 
