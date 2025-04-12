@@ -36,7 +36,7 @@
     };
 
     nix-on-droid = {
-      url = "github:nix-community/nix-on-droid/release-23.11";
+      url = "github:nix-community/nix-on-droid/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
@@ -57,7 +57,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur.url = github:nix-community/NUR;
+    nur = {
+      url = github:nix-community/NUR;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -233,7 +236,7 @@
       ./hosts
 
       # Nix User repo
-      inputs.nur.modules.nixos.default
+      #inputs.nur.modules.nixos.default
 
       ({config, ...}: {
         environment.motd = null;
@@ -274,6 +277,7 @@
     };
 
     nixOnDroidConfigurations = with inputs.nix-on-droid.lib; rec {
+      # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
       pixie = nixOnDroidConfiguration {
         extraSpecialArgs = {
           inherit inputs;
@@ -285,7 +289,6 @@
 
         home-manager-path = inputs.home-manager.outPath;
 
-        system = "aarch64-linux";
         modules = androidModules;
 
         pkgs = import nixpkgs {
