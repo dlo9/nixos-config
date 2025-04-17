@@ -1,0 +1,31 @@
+services:
+  traefik:
+    networks:
+      - shared
+
+    container_name: traefik
+
+    image: traefik:v3.3
+
+    command: --api.insecure=true --providers.docker
+
+    ports:
+      - "80:80"
+
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    restart: unless-stopped
+
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=shared
+      - traefik.http.routers.dashboard.rule=Host(`traefik.laptop`)
+      - traefik.http.routers.dashboard.service=api@internal
+
+      # Middleware for authenticating as the "david" user
+      - traefik.http.middlewares.auth-david.headers.customrequestheaders.Remote-User=david
+
+networks:
+  shared:
