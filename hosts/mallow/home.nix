@@ -302,7 +302,20 @@ with lib; {
       };
     };
 
-    traefik = docker-compose "traefik";
-    linkding = docker-compose "linkding";
+    docker-compose = {
+      enable = true;
+      config = rec {
+        #KeepAlive = true;
+        ProcessType = "Interactive";
+        EnvironmentVariables = {
+          HOME = config.home.homeDirectory;
+          PATH = concatStringsSep ":" config.home.sessionPath;
+        };
+        WorkingDirectory = "${config.home.homeDirectory}/code/nixos-config/hosts/mallow/docker-compose";
+        ProgramArguments = ["${WorkingDirectory}/all-docker-compose.sh" "up"];
+        StandardErrorPath = "${WorkingDirectory}/logs/all.stderr.log";
+        StandardOutPath = "${WorkingDirectory}/logs/all.stdout.log";
+      };
+    };
   };
 }

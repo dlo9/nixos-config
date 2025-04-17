@@ -315,6 +315,7 @@ aliases:
             -it,
             --restart=Never,
             --rm,
+            --annotations="sidecar.istio.io/inject=false",
             dorchard-debug,
             --,
             sh,
