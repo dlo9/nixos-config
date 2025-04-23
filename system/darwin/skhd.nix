@@ -1,4 +1,9 @@
-{pkgs, lib, config, ...}: {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   launchd.user.agents.skhd = lib.mkIf config.services.skhd.enable {
     environment.SHELL = "/bin/sh"; # Speed up commands by not using fish
     serviceConfig = {
