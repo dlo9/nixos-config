@@ -73,7 +73,7 @@
         ];
 
       gaps = let
-        outer-gap = (builtins.ceil config.services.jankyborders.width);
+        outer-gap = builtins.ceil config.services.jankyborders.width;
       in {
         inner.horizontal = 10;
         inner.vertical = 10;

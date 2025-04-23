@@ -51,7 +51,7 @@ with lib; {
   systemd.services.bpftune = {
     # Use unstable due to file descriptor leak: https://github.com/oracle/bpftune/issues/102
     script = "${pkgs.unstable.bpftune}/bin/bpftune -ds";
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = ["multi-user.target"];
   };
 
   # POSIX shell implementation
@@ -71,11 +71,11 @@ with lib; {
     fonts = [
       {
         name = config.font.family;
-        package = (pkgs.nerdfonts.override {
+        package = pkgs.nerdfonts.override {
           fonts = [
             "Noto"
           ];
-        });
+        };
       }
     ];
   };
