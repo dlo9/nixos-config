@@ -39,6 +39,7 @@ with lib; {
     # Golang
     go
     protobuf
+    sqlc
 
     # Kafka
     kcat
