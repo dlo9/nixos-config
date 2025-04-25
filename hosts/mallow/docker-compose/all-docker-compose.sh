@@ -17,6 +17,12 @@ find . -type d -depth 1 | while read -r d; do
   # Change to the directory
   cd "$d" || continue
 
+  if [ -f ".ignore" ]; then
+    printf "%s\n" "Skipping $dirname $@... "
+    cd ..
+    continue
+  fi
+
   if [ -f "docker-compose.yaml" ] || [ -f "docker-compose.yml" ]; then
     printf "%s\n" "Running $dirname $@... "
 
