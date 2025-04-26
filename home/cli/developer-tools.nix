@@ -3,10 +3,11 @@
   lib,
   pkgs,
   isLinux,
+  mylib,
   ...
 }:
 with lib; {
-  config = mkIf config.developer-tools.enable (with pkgs.dlo9.lib; {
+  config = mkIf config.developer-tools.enable {
     home = {
       sessionPath = [
         "$HOME/.cargo/bin"
@@ -89,7 +90,7 @@ with lib; {
       };
     };
 
-    xdg.configFile = xdgFiles {
+    xdg.configFile = mylib.xdgFiles {
       # https://github.com/dlvhdr/gh-dash
       "gh-dash/config.yml" = {
         prSections = [
@@ -109,5 +110,5 @@ with lib; {
         ];
       };
     };
-  });
+  };
 }

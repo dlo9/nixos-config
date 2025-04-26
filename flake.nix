@@ -5,6 +5,10 @@
     nixpkgs-master.url = github:NixOS/nixpkgs/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-24.11;
 
+    # Structure
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+
     # Darwin settings
     nix-darwin = {
       url = github:LnL7/nix-darwin/nix-darwin-24.11;
@@ -137,326 +141,346 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    ...
-  } @ inputs: let
-    overlays = {
-      dlo9 = import ./pkgs inputs;
+  outputs = inputs @ {flake-parts, ...}:
+  # https://flake.parts/module-arguments.html
+    flake-parts.lib.mkFlake {inherit inputs;} (top @ {
+      self,
+      config,
+      withSystem,
+      moduleWithSystem,
+      ...
+    }: {
+      imports = [
+        # flake-parts plugins
+        inputs.pkgs-by-name-for-flake-parts.flakeModule
+      ];
 
-      unstable = system: final: prev: {
-        unstable = import inputs.nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = prev.config.allowUnfree;
-        };
-      };
+      flake = let
+        systemOverlay = system: final: prev: {
+          # dlo9 = (import ./pkgs inputs).dlo9;
 
-      master = system: final: prev: {
-        master = import inputs.nixpkgs-master {
-          inherit system;
-          config.allowUnfree = prev.config.allowUnfree;
-        };
-      };
-
-      isd = system: final: prev: {
-        isd = inputs.isd.packages.${system}.isd;
-      };
-    };
-
-    linuxModules = [
-      # System modules
-      ./system
-
-      # Host modules
-      ./hosts
-
-      # Nix User repo
-      inputs.nur.modules.nixos.default
-
-      # Docker-compose in Nix
-      inputs.arion.nixosModules.arion
-
-      # Nixpkgs overlays
-      ({
-        config,
-        inputs,
-        ...
-      }: {
-        nixpkgs = {
-          config.allowUnfree = true;
-
-          overlays = with overlays; [
-            dlo9
-            (master config.nixpkgs.hostPlatform.system)
-            (unstable config.nixpkgs.hostPlatform.system)
-            (isd config.nixpkgs.hostPlatform.system)
-          ];
-        };
-      })
-    ];
-
-    darwinModules = [
-      # System modules
-      ./system
-
-      # Host modules
-      ./hosts
-
-      # Nixpkgs overlays
-      ({
-        config,
-        inputs,
-        ...
-      }: {
-        nixpkgs = {
-          hostPlatform = "aarch64-darwin";
-          config.allowUnfree = true;
-
-          overlays = with overlays; [
-            inputs.nix-darwin.overlays.default
-            dlo9
-            (unstable "aarch64-darwin")
-            (master "aarch64-darwin")
-
-            # Nix User repo
-            inputs.nur.overlays.default
-          ];
-        };
-      })
-    ];
-
-    androidModules = [
-      # System modules
-      ./system/home-manager.nix
-      ./system/options.nix
-      # ./system/secrets.nix
-
-      # Host modules
-      ./hosts
-
-      # Nix User repo
-      #inputs.nur.modules.nixos.default
-
-      ({config, ...}: {
-        environment.motd = null;
-
-        home-manager = {
-          useUserPackages = false; # TODO
-          extraSpecialArgs = {
-            osConfig = config;
+          dlo9 = inputs.nixpkgs.lib.filesystem.packagesFromDirectoryRecursive {
+            callPackage = inputs.nixpkgs.legacyPackages.${system}.callPackage;
+            directory = ./pkgs;
           };
-        };
-      })
-    ];
 
-    # Pass extra arguments to modules
-    specialArgs = {
-      inherit inputs;
-      isDarwin = false;
-      isLinux = true;
-      isAndroid = false;
-    };
-  in rec {
-    # https://daiderd.com/nix-darwin/manual/index.html
-    darwinConfigurations = with inputs.nix-darwin.lib; rec {
-      mallow = darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          isDarwin = true;
-          isLinux = false;
-          isAndroid = false;
-          hostname = "mallow";
+          unstable = import inputs.nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = prev.config.allowUnfree;
+          };
+
+          master = import inputs.nixpkgs-master {
+            inherit system;
+            config.allowUnfree = prev.config.allowUnfree;
+          };
+
+          isd = inputs.isd.packages.${system}.isd;
         };
 
-        system = "aarch64-darwin";
-        modules = darwinModules;
-      };
+        # overlays = {
+        #   dlo9 = import ./pkgs inputs;
 
-      YX6MTFK902 = mallow;
-    };
+        #   unstable = system: final: prev: {
+        #     unstable = import inputs.nixpkgs-unstable {
+        #       inherit system;
+        #       config.allowUnfree = prev.config.allowUnfree;
+        #     };
+        #   };
 
-    nixOnDroidConfigurations = with inputs.nix-on-droid.lib; rec {
-      # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
-      pixie = nixOnDroidConfiguration {
-        extraSpecialArgs = {
-          inherit inputs;
-          isDarwin = false;
-          isLinux = false;
-          isAndroid = true;
-          hostname = "pixie";
-        };
+        #   master = system: final: prev: {
+        #     master = import inputs.nixpkgs-master {
+        #       inherit system;
+        #       config.allowUnfree = prev.config.allowUnfree;
+        #     };
+        #   };
 
-        home-manager-path = inputs.home-manager.outPath;
+        #   isd = system: final: prev: {
+        #     isd = inputs.isd.packages.${system}.isd;
+        #   };
+        # };
 
-        modules = androidModules;
+        androidModules = [
+          # System modules
+          ./system/home-manager.nix
+          ./system/options.nix
+          # ./system/secrets.nix
 
-        pkgs = import nixpkgs {
-          system = "aarch64-linux";
+          # Host modules
+          ./hosts
 
-          config.allowUnfree = true;
+          # Nix User repo
+          #inputs.nur.modules.nixos.default
 
-          overlays = with overlays; [
-            inputs.nix-on-droid.overlays.default
-            dlo9
-            (unstable "aarch64-linux")
-            (master "aarch64-linux")
-          ];
-        };
-      };
-    };
+          ({config, ...}: {
+            environment.motd = null;
 
-    nixosConfigurations = with nixpkgs.lib; rec {
-      #bee = nixosSystem {
-      #  specialArgs = specialArgs // {hostname = "bee";};
+            home-manager = {
+              useUserPackages = false; # TODO
+              extraSpecialArgs = {
+                osConfig = config;
+              };
+            };
+          })
+        ];
 
-      #  system = "x86_64-linux";
-      #  modules = linuxModules;
-      #};
+        linuxModules = [
+          # System modules
+          ./system
 
-      cuttlefish = nixosSystem {
-        specialArgs = specialArgs // {hostname = "cuttlefish";};
+          # Host modules
+          ./hosts
 
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
+          # Nix User repo
+          inputs.nur.modules.nixos.default
 
-      #nib = nixosSystem {
-      #  specialArgs = specialArgs // {hostname = "nib";};
-      #  system = "x86_64-linux";
-      #  modules = linuxModules;
-      #};
+          # Docker-compose in Nix
+          inputs.arion.nixosModules.arion
 
-      pavil = nixosSystem {
-        specialArgs = specialArgs // {hostname = "pavil";};
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
+          # Nixpkgs overlays
+          ({
+            config,
+            inputs,
+            ...
+          }: {
+            nixpkgs = {
+              config.allowUnfree = true;
 
-      trident = nixosSystem {
-        specialArgs = specialArgs // {hostname = "trident";};
-
-        system = "aarch64-linux";
-        modules =
-          linuxModules
-          ++ [
-            # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
-            {
-              nixpkgs.overlays = [
-                (final: super: {
-                  makeModulesClosure = x:
-                    super.makeModulesClosure (x // {allowMissing = true;});
-                })
+              overlays = [
+                (systemOverlay config.nixpkgs.hostPlatform.system)
               ];
-            }
-          ];
-      };
+            };
+          })
+        ];
 
-      trident-sd-card = nixosSystem {
-        specialArgs = specialArgs // {hostname = "trident";};
+        darwinModules = [
+          # System modules
+          ./system
 
-        system = "aarch64-linux";
-        modules =
-          linuxModules
-          ++ [
-            {
-              imports = ["${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"];
+          # Host modules
+          ./hosts
 
-              sdImage = {
-                populateRootCommands = ''
-                  mkdir files/etc
-                  cp -r ${inputs.self} files/etc/nixos
+          # Nixpkgs overlays
+          ({
+            config,
+            inputs,
+            ...
+          }: {
+            nixpkgs = {
+              hostPlatform = "aarch64-darwin";
+              config.allowUnfree = true;
 
-                  mkdir files/var
-                  chmod 755 files/var
+              overlays = [
+                inputs.nix-darwin.overlays.default
+                (systemOverlay config.nixpkgs.hostPlatform.system)
 
-                  cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
-                  chmod 600 "files/var/sops-age-keys.txt"
-                '';
+                # Nix User repo
+                inputs.nur.overlays.default
+              ];
+            };
+          })
+        ];
+
+        #isOs = system: os: builtins.elem os (builtins.split system "-");
+
+        specialArgs = ctx: os: hostname: {
+          inherit inputs hostname;
+          isDarwin = os == "darwin";
+          isLinux = os == "linux";
+          isAndroid = os == "android";
+          mylib = ctx.pkgs.callPackage ./lib {inherit inputs;};
+        };
+      in {
+        # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
+        nixOnDroidConfigurations.pixie = withSystem "x86_64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+              extraSpecialArgs = specialArgs ctx "android" "pixie";
+              home-manager-path = inputs.home-manager.outPath;
+              modules = androidModules;
+
+              pkgs = import inputs.nixpkgs {
+                inherit system;
+
+                config.allowUnfree = true;
+
+                overlays = [
+                  inputs.nix-on-droid.overlays.default
+                  (systemOverlay system)
+                ];
               };
             }
+        );
 
-            # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
-            {
-              nixpkgs.overlays = [
-                (final: super: {
-                  makeModulesClosure = x:
-                    super.makeModulesClosure (x // {allowMissing = true;});
-                })
-              ];
+        darwinConfigurations.YX6MTFK902 = withSystem "aarch64-darwin" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nix-darwin.lib.darwinSystem {
+              specialArgs = specialArgs ctx "darwin" "mallow";
+              inherit system;
+              modules = darwinModules;
             }
-          ];
+        );
+
+        nixosConfigurations.cuttlefish = withSystem "x86_64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "cuttlefish";
+              inherit system;
+              modules = linuxModules;
+            }
+        );
+
+        nixosConfigurations.drywell = withSystem "x86_64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "drywell";
+              inherit system;
+              modules = linuxModules;
+            }
+        );
+
+        nixosConfigurations.pavil = withSystem "x86_64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "pavil";
+              inherit system;
+              modules = linuxModules;
+            }
+        );
+
+        nixosConfigurations.trident = withSystem "aarch64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "trident";
+              inherit system;
+              modules =
+                linuxModules
+                ++ [
+                  # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
+                  {
+                    nixpkgs.overlays = [
+                      (final: super: {
+                        makeModulesClosure = x:
+                          super.makeModulesClosure (x // {allowMissing = true;});
+                      })
+                    ];
+                  }
+                ];
+            }
+        );
+
+        nixosConfigurations.trident-sd-card = withSystem "aarch64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "trident";
+              inherit system;
+              modules =
+                linuxModules
+                ++ [
+                  {
+                    imports = ["${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"];
+
+                    sdImage = {
+                      populateRootCommands = ''
+                        mkdir files/etc
+                        cp -r ${inputs.self} files/etc/nixos
+
+                        mkdir files/var
+                        chmod 755 files/var
+
+                        cp "/impure/sops-age-keys.txt" "files/var/sops-age-keys.txt"
+                        chmod 600 "files/var/sops-age-keys.txt"
+                      '';
+                    };
+                  }
+
+                  # https://github.com/NixOS/nixpkgs/issues/154163#issuecomment-1350599022
+                  {
+                    nixpkgs.overlays = [
+                      (final: super: {
+                        makeModulesClosure = x:
+                          super.makeModulesClosure (x // {allowMissing = true;});
+                      })
+                    ];
+                  }
+                ];
+            }
+        );
+
+        # nix run github:serokell/deploy-rs -- --skip-checks --auto-rollback false -k .#trident
+        deploy.nodes.trident = {
+          hostname = "trident";
+          sshUser = "pi";
+          user = "root";
+          interactiveSudo = true;
+          fastConnection = true;
+
+          profiles.system.path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.trident;
+        };
+
+        # This is highly advised, and will prevent many possible mistakes
+        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
       };
 
-      # https://mobile.nixos.org/devices/motorola-potter.html
-      # - Test with: nix eval "/etc/nixos#nixosConfigurations.moto.config.system.build.toplevel.drvPath"
-      # - Build with: nixos-rebuild build --flake path:///etc/nixos#moto
-      #moto = nixosSystem {
-      #  specialArgs = specialArgs // {hostname = "moto";};
+      systems = [
+        # systems for which you want to build the `perSystem` attributes
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
 
-      #  system = "aarch64-linux";
-      #  modules =
-      #    linuxModules
-      #    ++ [
-      #      (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "motorola-potter";})
-      #    ];
-      #};
+      perSystem = {
+        config,
+        pkgs,
+        self',
+        ...
+      }: {
+        # https://github.com/drupol/pkgs-by-name-for-flake-parts
+        # pkgsDirectory = ./pkgs;
 
-      ## Build with: `nix build 'path:.#nixosConfigurations.moto-image'`
-      ## Impure needed to access host paths without putting in the nix store
-      #moto-image = moto.config.mobile.outputs.android.android-fastboot-images;
+        formatter = pkgs.alejandra;
 
-      #rpi3 = nixosSystem {
-      #  specialArgs = specialArgs // {hostname = "rpi3";};
-
-      #  system = "aarch64-linux";
-      #  modules =
-      #    linuxModules
-      #    ++ [
-      #      "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-      #    ];
-      #};
-
-      ## Build with: `nix build --impure 'path:.#nixosConfigurations.rpi3-image'`
-      ## Impure needed to access host paths without putting in the nix store
-      #rpi3-image = rpi3.config.system.build.sdImage;
-
-      drywell = nixosSystem {
-        specialArgs = specialArgs // {hostname = "drywell";};
-
-        system = "x86_64-linux";
-        modules = linuxModules;
-      };
-
-      #installer-test = nixosSystem {
-      #  specialArgs = specialArgs // {hostname = "installer-test";};
-
-      #  system = "x86_64-linux";
-      #  modules = linuxModules;
-      #};
-    };
-
-    # packages.x86_64-linux = {
-    #   vmware = inputs.nixos-generators.nixosGenerate {
-    #     system = "x86_64-linux";
-    #     modules = [ ];
-    #     format = "iso";
-    #   };
-    # };
-
-    #inherit overlays;
-
-    packages = let
-      change-to-flake-root = ''
-        # Change to flake root
-        while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
-          cd ..
-        done
-      '';
-    in
-      inputs.flake-utils.lib.eachDefaultSystemMap (
-        system: let
-          pkgs = nixpkgs.legacyPackages.${system};
+        packages = let
+          change-to-flake-root = ''
+            # Change to flake root
+            while [ ! -f "flake.nix" ] && [ "$PWD" != "/" ]; do
+              cd ..
+            done
+          '';
 
           setVars = ''
             if command -v nixos-rebuild >/dev/null; then
@@ -471,7 +495,7 @@
               HOSTNAME="$(hostname)"
             fi
           '';
-        in rec {
+        in {
           generate-hardware = pkgs.writeShellApplication {
             name = "generate-hardware";
 
@@ -527,7 +551,7 @@
               echo "Formatting config"
               nix fmt -- -q .
 
-              ${generate-hardware}/bin/generate-hardware
+              ${self'.packages.generate-hardware}/bin/generate-hardware
 
               # Install nom for better build output
               echo "Installing nom..."
@@ -553,69 +577,22 @@
               fi
             '';
           };
-        }
-      );
-
-    apps = inputs.flake-utils.lib.eachDefaultSystemMap (
-      system: {
-        # nix run ".#default" build
-        # nix run ".#default" switch
-        default = {
-          type = "app";
-          program = "${packages.${system}.build}/bin/build";
         };
 
-        # nix run ".#generate-hardware"
-        generate-hardware = {
-          type = "app";
-          program = "${packages.${system}.generate-hardware}/bin/generate-hardware";
+        apps = {
+          # nix run ".#default" build
+          # nix run ".#default" switch
+          default = {
+            type = "app";
+            program = "${self'.packages.build}/bin/build";
+          };
+
+          # nix run ".#generate-hardware"
+          generate-hardware = {
+            type = "app";
+            program = "${self'.packages.generate-hardware}/bin/generate-hardware";
+          };
         };
-      }
-    );
-
-    formatter = inputs.flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    #colmena = {
-    #  meta = {
-    #    nixpkgs = import nixpkgs {
-    #      system = "x86_64-linux";
-    #    };
-
-    #    allowApplyAll = false;
-    #  };
-
-    #  trident = {
-    #    deployment = {
-    #      targetHost = "trident";
-    #      targetUser = "pi";
-    #    };
-    #  } // nixosConfigurations.trident;
-    #};
-
-    # add colmena compatibility
-    #colmena = let
-    #  conf = self.nixosConfigurations;
-    #in {
-    #  meta = {
-    #    # This can be overriden by node nixpkgs
-    #    nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
-    #    nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
-    #    nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
-    #  };
-    #} // builtins.mapAttrs (name: value: { imports = value._module.args.modules; }) conf;
-
-    # nix run github:serokell/deploy-rs -- --skip-checks --auto-rollback false -k .#trident
-    deploy.nodes.trident = {
-      hostname = "trident";
-      sshUser = "pi";
-      user = "root";
-      interactiveSudo = true;
-      fastConnection = true;
-
-      profiles.system.path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.trident;
-    };
-
-    # This is highly advised, and will prevent many possible mistakes
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
-  };
+      };
+    });
 }

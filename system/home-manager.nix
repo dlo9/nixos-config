@@ -7,6 +7,7 @@
   isDarwin,
   isAndroid,
   hostname,
+  mylib,
   ...
 }:
 with lib; {
@@ -29,7 +30,7 @@ with lib; {
 
     # Pass extra arguments to home.nix
     extraSpecialArgs = {
-      inherit inputs isLinux isDarwin isAndroid hostname;
+      inherit inputs isLinux isDarwin isAndroid hostname mylib;
     };
   };
 }

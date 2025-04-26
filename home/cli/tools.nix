@@ -4,10 +4,10 @@
   pkgs,
   isLinux,
   isDarwin,
+  mylib,
   ...
 }:
-with lib;
-with pkgs.dlo9.lib; {
+with lib; {
   home = {
     shellAliases = {
       # Use modern alternatives to classic unix tools
@@ -206,7 +206,7 @@ with pkgs.dlo9.lib; {
     };
   };
 
-  xdg.configFile = xdgFiles {
+  xdg.configFile = mylib.xdgFiles {
     "tealdeer/config.toml" = {
       updates.auto_update = true;
     };

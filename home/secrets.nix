@@ -4,16 +4,16 @@
   pkgs,
   inputs,
   hostname,
+  mylib,
   ...
 }:
-with lib;
-with pkgs.dlo9.lib; {
+with lib; {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
   ];
 
   sops = {
-    defaultSopsFile = mkDefault secrets.hostSops hostname;
+    defaultSopsFile = mkDefault mylib.secrets.hostSops hostname;
     gnupg.sshKeyPaths = mkDefault []; # Disable automatic SSH key import
 
     age = {
@@ -24,6 +24,6 @@ with pkgs.dlo9.lib; {
     };
 
     # Set secrets for the current host
-    secrets = secrets.hostSecrets hostname;
+    secrets = mylib.secrets.hostSecrets hostname;
   };
 }

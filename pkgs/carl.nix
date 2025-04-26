@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     description = "Carl is a calendar for the commandline. It tries to mimic the various cal(1) implementations out there, but also adds enhanced features like colors and ical support";
     homepage = "https://github.com/b1rger/carl";
     changelog = "https://github.com/b1rger/carl/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.unfree; # FIXME: nix-init did not found a license
+    license = licenses.mit;
     maintainers = with maintainers; [];
     mainProgram = "carl";
   };
