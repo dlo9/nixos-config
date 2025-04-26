@@ -3,11 +3,11 @@
   pkgs,
   hostname,
   inputs,
+  mylib,
   ...
 }:
 with lib;
-with types;
-with pkgs.dlo9.lib; {
+with types; {
   imports = [
     "${inputs.self}/hosts/${hostname}"
   ];
@@ -21,6 +21,6 @@ with pkgs.dlo9.lib; {
 
   config = {
     # Export values for all hosts
-    hosts = secrets.hostExports;
+    hosts = mylib.secrets.hostExports;
   };
 }
