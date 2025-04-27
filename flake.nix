@@ -1,9 +1,9 @@
 {
   inputs = {
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
-    nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    nixpkgs-master.url = github:NixOS/nixpkgs/master;
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.11;
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     # Structure
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -11,7 +11,7 @@
 
     # Darwin settings
     nix-darwin = {
-      url = github:LnL7/nix-darwin/nix-darwin-24.11;
+      url = "github:LnL7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -29,13 +29,13 @@
 
     # Secrets management
     sops-nix = {
-      url = github:Mic92/sops-nix;
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Home manager
     home-manager = {
-      url = github:nix-community/home-manager/release-24.11;
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,12 +57,12 @@
 
     # Docker-compose in Nix
     arion = {
-      url = github:hercules-ci/arion;
+      url = "github:hercules-ci/arion";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nur = {
-      url = github:nix-community/NUR;
+      url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -78,65 +78,65 @@
     };
 
     mobile-nixos = {
-      url = github:NixOS/mobile-nixos;
+      url = "github:NixOS/mobile-nixos";
       flake = false;
     };
 
     # Theming
     # A decent alternative (can generate color from picture): https://git.sr.ht/~misterio/nix-colors
-    base16.url = github:SenchoPens/base16.nix/v1.1.1;
+    base16.url = "github:SenchoPens/base16.nix/v1.1.1";
 
     # Main theme
     # https://github.com/chriskempson/base16#scheme-repositories
     base16-atelier = {
-      url = github:atelierbram/base16-atelier-schemes;
+      url = "github:atelierbram/base16-atelier-schemes";
       flake = false;
     };
 
     base16-unclaimed = {
-      url = github:chriskempson/base16-unclaimed-schemes;
+      url = "github:chriskempson/base16-unclaimed-schemes";
       flake = false;
     };
 
     # Theme templates
     # https://github.com/chriskempson/base16#template-repositories
     base16-shell = {
-      url = github:chriskempson/base16-shell;
+      url = "github:chriskempson/base16-shell";
       flake = false;
     };
 
     base16-fish-shell = {
-      url = github:FabioAntunes/base16-fish-shell;
+      url = "github:FabioAntunes/base16-fish-shell";
       flake = false;
     };
 
     base16-alacritty = {
-      url = github:aarowill/base16-alacritty;
+      url = "github:aarowill/base16-alacritty";
       flake = false;
     };
 
     base16-mako = {
-      url = github:Eluminae/base16-mako;
+      url = "github:Eluminae/base16-mako";
       flake = false;
     };
 
     base16-wofi = {
-      url = https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz;
+      url = "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz";
       flake = false;
     };
 
     base16-waybar = {
-      url = github:mnussbaum/base16-waybar;
+      url = "github:mnussbaum/base16-waybar";
       flake = false;
     };
 
     base16-sway = {
-      url = github:rkubosz/base16-sway;
+      url = "github:rkubosz/base16-sway";
       flake = false;
     };
 
     base16-gtk = {
-      url = github:tinted-theming/base16-gtk-flatcolor;
+      url = "github:tinted-theming/base16-gtk-flatcolor";
       flake = false;
     };
   };
@@ -157,8 +157,6 @@
 
       flake = let
         systemOverlay = system: final: prev: {
-          # dlo9 = (import ./pkgs inputs).dlo9;
-
           dlo9 = inputs.nixpkgs.lib.filesystem.packagesFromDirectoryRecursive {
             callPackage = inputs.nixpkgs.legacyPackages.${system}.callPackage;
             directory = ./pkgs;
@@ -176,28 +174,6 @@
 
           isd = inputs.isd.packages.${system}.isd;
         };
-
-        # overlays = {
-        #   dlo9 = import ./pkgs inputs;
-
-        #   unstable = system: final: prev: {
-        #     unstable = import inputs.nixpkgs-unstable {
-        #       inherit system;
-        #       config.allowUnfree = prev.config.allowUnfree;
-        #     };
-        #   };
-
-        #   master = system: final: prev: {
-        #     master = import inputs.nixpkgs-master {
-        #       inherit system;
-        #       config.allowUnfree = prev.config.allowUnfree;
-        #     };
-        #   };
-
-        #   isd = system: final: prev: {
-        #     isd = inputs.isd.packages.${system}.isd;
-        #   };
-        # };
 
         androidModules = [
           # System modules
@@ -279,8 +255,6 @@
             };
           })
         ];
-
-        #isOs = system: os: builtins.elem os (builtins.split system "-");
 
         specialArgs = ctx: os: hostname: {
           inherit inputs hostname;

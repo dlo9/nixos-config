@@ -1,8 +1,43 @@
 {
-    "[nix]": {
-      "editor.defaultFormatter": "kamadorueda.alejandra",
-      "editor.formatOnPaste": true,
-      "editor.formatOnSave": true,
-      "editor.formatOnType": false
-    },
-  }
+  "[nix]": {
+    "editor.defaultFormatter": "kamadorueda.alejandra",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": false
+  },
+  "cSpell.words": [
+    "aarowill",
+    "afscerts",
+    "alacritty",
+    "Antunes",
+    "arion",
+    "atelierbram",
+    "Benedikt",
+    "chessai",
+    "disko",
+    "drupol",
+    "elif",
+    "Eluminae",
+    "Fabio",
+    "libva",
+    "libvdpau",
+    "mnussbaum",
+    "MTFK",
+    "mylib",
+    "nixos",
+    "nixpkgs",
+    "numtide",
+    "Nvenc",
+    "Nvfbc",
+    "pavil",
+    "pkgs",
+    "rkubosz",
+    "Seidl",
+    "serokell",
+    "vaapi",
+    "vainfo",
+    "Vdpau",
+    "vgpu",
+    "wofi"
+  ],
+}
