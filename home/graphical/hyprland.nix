@@ -270,6 +270,9 @@ with builtins; {
           "bordercolor rgb(ff0000), title:(Tree Style Tab)"
 
           "opacity 0.8 override, class:Alacritty"
+
+          # Tooltip for SweetHome3D
+          "nofocus, title:win1"
         ];
       };
 
