@@ -12,6 +12,7 @@
     ./nexus.nix
     ./nfs.nix
     ./nix-serve.nix
+    ./samba.nix
     ./sunshine.nix
     ./ttyd.nix
     ./vr.nix

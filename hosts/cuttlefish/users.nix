@@ -12,11 +12,13 @@ in {
     users = {
       groups = {
         media.gid = media-id;
+        samba = {};
       };
 
       users = {
         david.extraGroups = [
           "media"
+          "samba"
         ];
 
         chelsea = {
@@ -25,6 +27,7 @@ in {
           isSystemUser = true;
           hashedPassword = "$6$CiWKN4ueep82fXQG$Vhk6usx2xJ.OkcrTaXVnHXOlPhGPosDYBFvR3LECpRMFI5PS6/d6nMkz2mc2Tc3aIK68TnoLnT98BJcHVS.o71";
           createHome = false;
+          extraGroups = ["samba"];
         };
 
         media = {
