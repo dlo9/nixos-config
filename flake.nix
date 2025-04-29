@@ -8,6 +8,7 @@
     # Structure
     flake-parts.url = "github:hercules-ci/flake-parts";
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    terranix.url = "github:terranix/terranix";
 
     # Darwin settings
     nix-darwin = {
@@ -153,6 +154,7 @@
       imports = [
         # flake-parts plugins
         inputs.pkgs-by-name-for-flake-parts.flakeModule
+        inputs.terranix.flakeModule
       ];
 
       flake = let
