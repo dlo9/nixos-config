@@ -348,6 +348,17 @@
             }
         );
 
+        # nix run nixpkgs#deploy-rs -- --skip-checks -k .#wyse
+        deploy.nodes.wyse = {
+          hostname = "wyse";
+          sshUser = "david";
+          user = "root";
+          interactiveSudo = true;
+          fastConnection = true;
+
+          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.wyse;
+        };
+
         nixosConfigurations.pavil = withSystem "x86_64-linux" (
           ctx @ {
             config,
