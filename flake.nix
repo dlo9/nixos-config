@@ -334,6 +334,20 @@
             }
         );
 
+        nixosConfigurations.wyse = withSystem "x86_64-linux" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nixpkgs.lib.nixosSystem {
+              specialArgs = specialArgs ctx "linux" "wyse";
+              inherit system;
+              modules = linuxModules;
+            }
+        );
+
         nixosConfigurations.pavil = withSystem "x86_64-linux" (
           ctx @ {
             config,

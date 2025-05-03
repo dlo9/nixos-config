@@ -13,6 +13,7 @@ age-keys: &everyone # Master key
   - &mallow age1h8cp3pwklm5tfcr5udxj7q8yfkfww368f0c4uymzfkzr5r5qpv4q82fkxy
   - &pixie age1zx9kfxfre3zyuazgr4wkrh0gqdudqj3e6gcuts3mr9ly8jkfmctsl9pqnk
   - &trident age1jgc4n5klps48l83gmw7mqmh0x45ss3uvmpe8muys8ag90sf84arqqymclg
+  - &wyse age12e02a0j3k2wy4h6sllynytej0zlvmu5w0ky78gtzlk005gf2pu5sv08l35
 
 creation_rules:
   #######################
@@ -104,3 +105,10 @@ creation_rules:
     - age:
       - *bitwarden
       - *trident
+
+  - path_regex: ^hosts/wyse/secrets.yaml$
+    unencrypted_regex: ^(exports|enable|sopsNix)$
+    key_groups:
+    - age:
+      - *bitwarden
+      - *wyse
