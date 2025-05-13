@@ -5,7 +5,8 @@
   wrapGAppsHook3,
   gobject-introspection,
   gitUpdater,
-  python-sdbus-networkmanager,
+  #python-sdbus-networkmanager,
+  dlo9,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
@@ -34,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     mpv
     six
     dbus-python
-    python-sdbus-networkmanager
+    dlo9.python-sdbus-networkmanager
   ];
 
   dontWrapGApps = true;

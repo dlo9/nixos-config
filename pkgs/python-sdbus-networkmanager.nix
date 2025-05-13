@@ -2,7 +2,8 @@
   lib,
   python3,
   fetchPypi,
-  python-sdbus,
+  #python-sdbus,
+  dlo9,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "sdbus-networkmanager";
@@ -20,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
-    python-sdbus
+    dlo9.python-sdbus
   ];
 
   pythonImportsCheck = [
