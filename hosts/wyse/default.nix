@@ -10,6 +10,7 @@ with lib; {
   imports = [
     ./hardware
     ./network.nix
+    ./initrd-wifi.nix
   ];
 
   config = {

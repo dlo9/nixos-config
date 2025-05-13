@@ -6,3 +6,6 @@ result
 
 # Temporary files
 *.swp
+
+# deploy-rs profiles
+.deploy-gc
