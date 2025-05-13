@@ -40,7 +40,7 @@ with lib; {
             }
           ];
 
-          application = [pkgs.wlx-overlay-s];
+          application = [pkgs.unstable.wlx-overlay-s];
         };
       };
     };
