@@ -334,6 +334,17 @@
             }
         );
 
+        # nix run nixpkgs#deploy-rs -- --skip-checks -k .#drywell
+        deploy.nodes.drywell = {
+          hostname = "drywell";
+          sshUser = "david";
+          user = "root";
+          interactiveSudo = true;
+          fastConnection = true;
+
+          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.drywell;
+        };
+
         nixosConfigurations.wyse = withSystem "x86_64-linux" (
           ctx @ {
             config,
