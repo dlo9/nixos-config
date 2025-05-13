@@ -265,6 +265,21 @@
           isAndroid = os == "android";
           mylib = ctx.pkgs.callPackage ./lib {inherit inputs;};
         };
+
+        # Use nixpkgs cache for deploy-rs: https://github.com/serokell/deploy-rs?tab=readme-ov-file#api
+        deployPkgs = system: import inputs.nixpkgs {
+          inherit system;
+
+          overlays = [
+            inputs.deploy-rs.overlay # or deploy-rs.overlays.default
+
+            (self: super: {
+              deploy-rs = {
+                inherit (import inputs.nixpkgs { inherit system; }) deploy-rs; lib = super.deploy-rs.lib;
+              };
+            })
+          ];
+        };
       in {
         # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
         nixOnDroidConfigurations.pixie = withSystem "x86_64-linux" (
@@ -342,7 +357,7 @@
           interactiveSudo = true;
           fastConnection = true;
 
-          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.drywell;
+          profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.drywell;
         };
 
         nixosConfigurations.wyse = withSystem "x86_64-linux" (
@@ -367,7 +382,7 @@
           interactiveSudo = true;
           fastConnection = true;
 
-          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.wyse;
+          profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.wyse;
         };
 
         nixosConfigurations.pavil = withSystem "x86_64-linux" (
@@ -461,7 +476,7 @@
           interactiveSudo = true;
           fastConnection = true;
 
-          profiles.system.path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.trident;
+          profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
         };
 
         # This is highly advised, and will prevent many possible mistakes
