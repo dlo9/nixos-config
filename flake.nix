@@ -160,7 +160,7 @@
       flake = let
         systemOverlay = system: final: prev: {
           dlo9 = inputs.nixpkgs.lib.filesystem.packagesFromDirectoryRecursive {
-            callPackage = inputs.nixpkgs.legacyPackages.${system}.callPackage;
+            inherit (final) callPackage;
             directory = ./pkgs;
           };
 
