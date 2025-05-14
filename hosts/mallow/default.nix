@@ -76,7 +76,9 @@ in {
   };
 
   # Check current DNS settings with: scutil --dns
-  # This also adds domains as a resolver in /etc/resolver (See https://github.com/suth/mac-traefik-config)
+  # This also adds domains as a resolver in /etc/resolver. See:
+  # - https://github.com/suth/mac-traefik-config
+  # - https://vninja.net/2020/02/06/macos-custom-dns-resolvers
   services.dnsmasq = {
     enable = true;
 
