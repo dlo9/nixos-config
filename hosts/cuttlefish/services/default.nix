@@ -32,7 +32,7 @@
     networking.nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "cuttlefish";
+      externalInterface = "enp39s0";
     };
   };
 }
