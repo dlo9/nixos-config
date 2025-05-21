@@ -20,5 +20,5 @@
   services.tlp.enable = true;
 
   # Try out zen kernel
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
 }
