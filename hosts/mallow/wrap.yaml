@@ -199,18 +199,18 @@ variables:
   KAFKA_LOCAL: localhost:31090
 
   # Main
-  KAFKA_DEV: kafka-v1-1.dev.gcp.apexclearing.com:9093,kafka-v1-2.dev.gcp.apexclearing.com:9093,kafka-v1-3.dev.gcp.apexclearing.com:9093
-  KAFKA_STG: kafka-v1-1.stg.gcp.apexclearing.com:9093,kafka-v1-2.stg.gcp.apexclearing.com:9093,kafka-v1-3.stg.gcp.apexclearing.com:9093
-  KAFKA_UAT: kafka-v1-1.uat.gcp.apexclearing.com:9093,kafka-v1-2.uat.gcp.apexclearing.com:9093,kafka-v1-3.uat.gcp.apexclearing.com:9093
-  KAFKA_PRD: kafka-v1-1.prd.gcp.apexclearing.com:9093,kafka-v1-2.prd.gcp.apexclearing.com:9093,kafka-v1-3.prd.gcp.apexclearing.com:9093
+  KAFKA_DEV: kafka-v1.kafka.dev.gcp.apexclearing.com:9093
+  KAFKA_STG: kafka-v1.kafka.stg.gcp.apexclearing.com:9093
+  KAFKA_UAT: kafka-v1.kafka.uat.gcp.apexclearing.com:9093
+  KAFKA_PRD: kafka-v1.kafka.prd.gcp.apexclearing.com:9093
 
   # Ascend
-  KAFKA_DEV_ASCEND: kb-ecru-boom-1.dev.gcp.apexclearing.com:9093,kb-ecru-boom-2.dev.gcp.apexclearing.com:9093,kb-ecru-boom-3.dev.gcp.apexclearing.com:9093
-  KAFKA_STG_ASCEND: kb-ecru-boom-1.stg.gcp.apexclearing.com:9093,kb-ecru-boom-2.stg.gcp.apexclearing.com:9093,kb-ecru-boom-3.stg.gcp.apexclearing.com:9093
-  KAFKA_UAT_ASCEND: kb-ecru-boom-1.uat.gcp.apexclearing.com:9093,kb-ecru-boom-2.uat.gcp.apexclearing.com:9093,kb-ecru-boom-3.uat.gcp.apexclearing.com:9093
-  KAFKA_PRD_ASCEND: kb-ecru-boom-1.prd.gcp.apexclearing.com:9093,kb-ecru-boom-2.prd.gcp.apexclearing.com:9093,kb-ecru-boom-3.prd.gcp.apexclearing.com:9093
-  KAFKA_RCN: kb-ecru-boom-1.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-2.rcn.gcp.apexclearing.com:9093,kb-ecru-boom-3.rcn.gcp.apexclearing.com:9093
-  KAFKA_SBX: kb-ecru-boom-1.sbx.gcp.apexclearing.com:9093,kb-ecru-boom-2.sbx.gcp.apexclearing.com:9093,kb-ecru-boom-3.sbx.gcp.apexclearing.com:9093
+  KAFKA_DEV_ASCEND: ecru-boom.kafka.dev.gcp.apexclearing.com:9093
+  KAFKA_STG_ASCEND: ecru-boom.kafka.stg.gcp.apexclearing.com:9093
+  KAFKA_UAT_ASCEND: ecru-boom.kafka.uat.gcp.apexclearing.com:9093
+  KAFKA_PRD_ASCEND: ecru-boom.kafka.prd.gcp.apexclearing.com:9093
+  KAFKA_RCN: ecru-boom.kafka.rcn.gcp.apexclearing.com:9093
+  KAFKA_SBX: ecru-boom.kafka.sbx.gcp.apexclearing.com:9093
 
   # Old
   KAFKA_DEV_OLD: kafka-1.dev.gcp.apexclearing.com:31090
