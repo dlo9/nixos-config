@@ -44,18 +44,13 @@ in {
     services.caddy = {
       enable = true;
 
-      # package = pkgs.dlo9.caddy;
-      package = pkgs.dlo9.caddy.override {
-        externalPlugins = [
-          {
-            # https://caddyserver.com/docs/modules/http.handlers.replace_response
-            name = "replace-response";
-            repo = "github.com/caddyserver/replace-response";
-            version = "f92bc7d0c29d0588f91f29ecb38a0c4ddf3f85f8";
-          }
+      package = pkgs.caddy.withPlugins {
+        plugins = [
+          # https://caddyserver.com/docs/modules/http.handlers.replace_response
+          "github.com/caddyserver/replace-response@v0.0.0-20240710174758-f92bc7d0c29d"
         ];
 
-        vendorHash = "sha256-klal2H1oGkqJXFVrNVeE/F0VQjmU+eLrgxqoWQJqcao=";
+        hash = "sha256-SXFQCkGHt2bVuQNoQPqHLh+sEZL8gkfZj+AuBffjk0M=";
       };
 
       virtualHosts = {

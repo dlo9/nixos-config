@@ -11,10 +11,12 @@
   ext = path: lib.last (lib.splitString "." path);
 
   # AttrSet of extention to convertion function
+  # https://github.com/NixOS/nixpkgs/blob/f78a20aa5cdb449134d5a0fa03fe82b804353fbb/pkgs/pkgs-lib/formats.nix
   serdes = rec {
     toml = (formats.toml {}).generate;
     yaml = (formats.yaml {}).generate;
     yml = yaml;
+    ini = (formats.ini {}).generate;
   };
 
   # Returns a convertion function for the given path

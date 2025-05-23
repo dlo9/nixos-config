@@ -32,8 +32,6 @@ with lib; {
   location.provider = "geoclue2";
   services.geoclue2 = {
     enable = mkDefault true;
-    submissionUrl = "https://api.beacondb.net/v1/geolocate";
-    geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
 
     appConfig = {
       "gammastep" = {
@@ -71,11 +69,7 @@ with lib; {
     fonts = [
       {
         name = config.font.family;
-        package = pkgs.nerdfonts.override {
-          fonts = [
-            "Noto"
-          ];
-        };
+        package = pkgs.nerd-fonts.noto;
       }
     ];
   };

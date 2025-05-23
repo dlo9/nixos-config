@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BCg572435CdQMOldm3Ao4D+sDxbXUlDxMWmxa+aqTY0=";
   };
 
-  cargoHash = "sha256-JaAlWiaOUoXSV6O4wmU7zCR5h5olO2zkB5WEGk2/ZdE=";
+  cargoHash = "sha256-ryK1NeDZa6635rcilN2+KvdlkzUsVNV9fufIXByoTX0=";
 
   checkFlags = [
     # Admin ports can't be opened during the build

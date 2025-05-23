@@ -47,7 +47,7 @@ with lib; {
     nix.distributedBuilds = true;
 
     # zrepl_switch to new bluetooth devices
-    hardware.pulseaudio.extraConfig = "
+    services.pulseaudio.extraConfig = "
       load-module module-switch-on-connect
     ";
 

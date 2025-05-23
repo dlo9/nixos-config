@@ -101,7 +101,6 @@ with lib; {
         iputils # Required by gping
 
         bandwhich # Network monitor
-        diskonaut # Graphical disk space utility
         dua # Another disk space utility
         dive # Image layer explorer
       ]);
@@ -147,7 +146,7 @@ with lib; {
         daemon = {
           enabled = mkDefault true;
           sync_frequency = 60;
-          socket_path = mkIf isDarwin "/tmp/atuin.${config.home.username}.socket"; # Use a temporary location so that it's cleared on reboot
+          socket_path = if isDarwin then "/tmp/atuin.${config.home.username}.socket" else "${config.home.homeDirectory}/.local/share/atuin/atuin.sock"; # Use a temporary location so that it's cleared on reboot
           systemd_socket = mkDefault isLinux;
         };
       };
