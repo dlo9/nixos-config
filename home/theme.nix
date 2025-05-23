@@ -95,7 +95,8 @@ with lib; {
   };
 
   services = {
-    mako.extraConfig = readFile (config.scheme inputs.base16-mako);
+    # TODO: removed, have to use mako.settings
+    #mako.extraConfig = readFile (config.scheme inputs.base16-mako);
   };
 
   gtk.theme = {

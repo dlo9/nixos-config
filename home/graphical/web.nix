@@ -38,7 +38,7 @@ with lib; {
             path = "default";
 
             # https://gitlab.com/rycee/nur-expressions/-/blob/master/pkgs/firefox-addons/generated-firefox-addons.nix
-            extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+            extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
               #amazon-band-detector
               auto-tab-discard
               bitwarden
@@ -55,10 +55,10 @@ with lib; {
 
             search = {
               force = true;
-              default = "DuckDuckGo";
+              default = "ddg";
               order = [
-                "DuckDuckGo"
-                "Google"
+                "ddg"
+                "google"
               ];
 
               engines = {
@@ -85,7 +85,7 @@ with lib; {
 
                 "NixOS Wiki" = {
                   urls = [{template = "https://nixos.wiki/index.php?search={searchTerms}";}];
-                  iconUpdateURL = "https://nixos.wiki/favicon.png";
+                  icon = "https://nixos.wiki/favicon.png";
                   updateInterval = 24 * 60 * 60 * 1000; # every day
                   definedAliases = ["@nw"];
                 };

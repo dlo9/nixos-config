@@ -25,7 +25,8 @@ with builtins; {
       enable = mkDefault true;
 
       portal = {
-        enable = false; # Enabled on the system
+        enable = true;
+
         extraPortals = with pkgs; [
           xdg-desktop-portal-hyprland
           xdg-desktop-portal-gtk

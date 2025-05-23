@@ -158,7 +158,7 @@ with lib; {
           mpv
 
           # PDF viewers
-          okular
+          kdePackages.okular
 
           # Key tester
           wev
@@ -186,14 +186,7 @@ with lib; {
 
         [
           # Fonts
-          # Nerdfonts is huge, so only install specific fonts
-          # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/data/fonts/nerdfonts/shas.nix
-          (nerdfonts.override {
-            fonts = [
-              "Noto"
-            ];
-          })
-
+          nerd-fonts.noto
           noto-fonts-emoji
 
           b612

@@ -19,7 +19,7 @@ with lib; {
         # Allow extension installations/updates
         mutableExtensionsDir = true;
 
-        extensions = with pkgs.vscode-extensions; [
+        profiles.default.extensions = with pkgs.vscode-extensions; [
           jnoortheen.nix-ide
 
           # Enables SSH into a Nix remote host:

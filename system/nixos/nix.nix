@@ -17,6 +17,8 @@ in {
     dates = "Sat, 02:00";
   };
 
+  system.rebuild.enableNg = true;
+
   nix = {
     gc = {
       automatic = true;

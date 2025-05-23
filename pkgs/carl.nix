@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+l11eP+1qKrWbZhyUJgQ8FgQ+2rncx778F5RPzCfvV4=";
   };
 
-  cargoHash = "sha256-nBl34szwEQX26MibfT10E55czYXN3/9W3y2z936KqTc=";
+  cargoHash = "sha256-kzHMjrLCiiMLMTSozKq5jMWq3rGb+xsXhZoOuod7qGE=";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
