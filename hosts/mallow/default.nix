@@ -66,6 +66,7 @@ in {
   };
 
   # Users
+  system.primaryUser = "dorchard";
   home-manager.users.${user} = import ./home.nix;
 
   users.users.${user} = {
