@@ -17,15 +17,13 @@ with lib; {
   ];
 
   config = mkIf config.graphical.enable {
-    home.pointerCursor =
-      if isLinux
-      then {
-        name = "Numix-Cursor-Light";
-        package = pkgs.numix-cursor-theme;
-        gtk.enable = true;
-        x11.enable = true;
-      }
-      else null;
+    home.pointerCursor = {
+      enable = isLinux;
+      name = "Numix-Cursor-Light";
+      package = pkgs.numix-cursor-theme;
+      gtk.enable = true;
+      x11.enable = true;
+    };
 
     programs = {
       # Terminal
