@@ -20,7 +20,7 @@ aliases:
 
     keywords:
       - keys: [--local]
-        values: [192.168.1.230]
+        values: [192.168.0.230]
       - keys: [--remote]
         values: [-p, $CUTTLEFISH_SSH_PORT, $CUTTLEFISH_SSH_URL]
 
