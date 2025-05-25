@@ -37,6 +37,9 @@ in {
     # Secrets
     systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets."caddy-env".path;
 
+    # Kubernetes depends on nexus for container images
+    systemd.services.caddy.before = [ "kubernetes.slice" ];
+
     # Actual caddy definition
     # Add modules via:
     # https://github.com/NixOS/nixpkgs/issues/14671#issuecomment-1253111596
