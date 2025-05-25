@@ -18,7 +18,7 @@
   ];
 
   # Need older kernel because openvino is broken on 6.8
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
+  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
 
   # Need older ZFS because of older kernel
   boot.zfs.package = pkgs.zfs;
