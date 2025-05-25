@@ -13,7 +13,7 @@ with lib; let
   # TODO: Make the available outside this file, so that configs can be adjacent to their services
   authentikForwardAuth = ''
     # forward authentication to outpost
-    forward_auth http://192.168.1.230:1080 {
+    forward_auth http://192.168.0.230:1080 {
         header_up Host "authentik.sigpanic.com"
         uri /outpost.goauthentik.io/auth/caddy
 
@@ -179,7 +179,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["*.sigpanic.com"];
           extraConfig = ''
-            reverse_proxy http://192.168.1.230:1080 {
+            reverse_proxy http://192.168.0.230:1080 {
               transport http {
                 proxy_protocol v2
               }
