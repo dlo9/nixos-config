@@ -68,6 +68,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    wrap = {
+      url = "github:dlo9/wrap/0.4.4";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -231,6 +236,7 @@
 
               overlays = [
                 (systemOverlay config.nixpkgs.hostPlatform.system)
+                inputs.wrap.overlays.default
               ];
             };
           })
@@ -259,6 +265,7 @@
 
                 # Nix User repo
                 inputs.nur.overlays.default
+                inputs.wrap.overlays.default
               ];
             };
           })
@@ -308,6 +315,7 @@
                 overlays = [
                   inputs.nix-on-droid.overlays.default
                   (systemOverlay system)
+                  inputs.wrap.overlays.default
                 ];
               };
             }
