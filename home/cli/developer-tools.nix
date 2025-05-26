@@ -16,16 +16,15 @@ with lib; {
       packages = with pkgs;
       # All systems
         [
-          # Rust
-          rustup
-
           yq-go
           jq
           shellcheck
 
           nixd # Nix language server
           nix-prefetch
-          pkgs.unstable.terminaltexteffects
+          unstable.terminaltexteffects
+
+          wrap
 
           gh-dash
           unstable.devenv
