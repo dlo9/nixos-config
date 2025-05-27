@@ -69,7 +69,7 @@
     };
 
     wrap = {
-      url = "github:dlo9/wrap/0.4.4";
+      url = "github:dlo9/wrap/0.4.5";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -280,19 +280,21 @@
         };
 
         # Use nixpkgs cache for deploy-rs: https://github.com/serokell/deploy-rs?tab=readme-ov-file#api
-        deployPkgs = system: import inputs.nixpkgs {
-          inherit system;
+        deployPkgs = system:
+          import inputs.nixpkgs {
+            inherit system;
 
-          overlays = [
-            inputs.deploy-rs.overlay # or deploy-rs.overlays.default
+            overlays = [
+              inputs.deploy-rs.overlay # or deploy-rs.overlays.default
 
-            (self: super: {
-              deploy-rs = {
-                inherit (import inputs.nixpkgs { inherit system; }) deploy-rs; lib = super.deploy-rs.lib;
-              };
-            })
-          ];
-        };
+              (self: super: {
+                deploy-rs = {
+                  inherit (import inputs.nixpkgs {inherit system;}) deploy-rs;
+                  lib = super.deploy-rs.lib;
+                };
+              })
+            ];
+          };
       in {
         # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
         nixOnDroidConfigurations.pixie = withSystem "x86_64-linux" (
@@ -609,7 +611,7 @@
                 fi
 
                 # Rebuild
-                darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --option http2 false --show-trace |& nom
+                sudo darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --option http2 false --show-trace |& nom
               elif [[ "$OS" == "android" ]]; then
                 nix-on-droid --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace |& nom
               else
