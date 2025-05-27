@@ -27,16 +27,16 @@
       # Wheel doesn't exist in initrd
       newWirelessConfig = builtins.toFile "wpa_supplicant.conf" (builtins.replaceStrings ["ctrl_interface_group=wheel"] [""] (builtins.readFile oldWirelessConfig));
     in {
-       initrdBin = with pkgs; [
-         # Uncomment to debug
-         #iproute2
-       ];
+      initrdBin = with pkgs; [
+        # Uncomment to debug
+        #iproute2
+      ];
 
       # Dependencies aren't tracked properly:
       # https://github.com/NixOS/nixpkgs/issues/309316
-      storePaths = config.boot.initrd.systemd.services.wpa_supplicant.path
-      ++ (lib.splitString "\n" (lib.readFile (pkgs.writeStringReferencesToFile config.boot.initrd.systemd.services.wpa_supplicant.script)));
-
+      storePaths =
+        config.boot.initrd.systemd.services.wpa_supplicant.path
+        ++ (lib.splitString "\n" (lib.readFile (pkgs.writeStringReferencesToFile config.boot.initrd.systemd.services.wpa_supplicant.script)));
 
       services.wpa_supplicant = {
         wantedBy = ["initrd.target"];
