@@ -40,9 +40,11 @@ in {
   systemd.services = composeService {
     name = "immich";
 
-    services = {
+    services = let
+      version = "v1.133.1";
+    in {
       immich = {
-        image = "ghcr.io/immich-app/immich-server:v1.129.0";
+        image = "ghcr.io/immich-app/immich-server:${version}";
 
         environment = {
           TZ = "America/Los_Angeles";
@@ -69,7 +71,7 @@ in {
       };
 
       machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v1.112.0-openvino";
+        image = "ghcr.io/immich-app/immich-machine-learning:${version}-openvino";
 
         environment = {
           TZ = "America/Los_Angeles";
@@ -96,7 +98,7 @@ in {
       };
 
       postgres = {
-        image = "tensorchord/pgvecto-rs:pg16-v0.2.0";
+        image = "ghcr.io/immich-app/postgres:16-vectorchord0.3.0-pgvectors0.2.0";
         environment.TZ = "America/Los_Angeles";
         env_file = [config.sops.secrets.immich-postgres.path];
         ports = ["5432"];
