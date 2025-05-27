@@ -38,7 +38,7 @@ in {
     systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets."caddy-env".path;
 
     # Kubernetes depends on nexus for container images
-    systemd.services.caddy.before = [ "kubernetes.slice" ];
+    systemd.services.caddy.before = ["kubernetes.slice"];
 
     # Actual caddy definition
     # Add modules via:

@@ -52,7 +52,7 @@ in {
 
   # Downgrade to fix mount failures: https://github.com/kubernetes/kubernetes/issues/130999
   # TODO: undo once pkgs.util-linux is > v2.41
-  systemd.services.kubelet.path = lib.mkBefore [ pkgs.previous.util-linux ];
+  systemd.services.kubelet.path = lib.mkBefore [pkgs.previous.util-linux];
 
   services.kubernetes = {
     roles = ["master" "node"];

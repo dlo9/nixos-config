@@ -146,7 +146,10 @@ with lib; {
         daemon = {
           enabled = mkDefault true;
           sync_frequency = 60;
-          socket_path = if isDarwin then "/tmp/atuin.${config.home.username}.socket" else "${config.home.homeDirectory}/.local/share/atuin/atuin.sock"; # Use a temporary location so that it's cleared on reboot
+          socket_path =
+            if isDarwin
+            then "/tmp/atuin.${config.home.username}.socket"
+            else "${config.home.homeDirectory}/.local/share/atuin/atuin.sock"; # Use a temporary location so that it's cleared on reboot
           systemd_socket = mkDefault isLinux;
         };
       };
