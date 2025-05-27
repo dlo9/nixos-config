@@ -611,6 +611,7 @@
                 fi
 
                 # Rebuild
+                sudo -v # Nom has an issue with hiding the sudo message
                 sudo darwin-rebuild --flake ".#$HOSTNAME" "$@" --option fallback true --option http2 false --show-trace |& nom
               elif [[ "$OS" == "android" ]]; then
                 nix-on-droid --flake ".#$HOSTNAME" "$@" --option fallback true --show-trace |& nom
