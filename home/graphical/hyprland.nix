@@ -15,6 +15,8 @@ with builtins; {
       hyprpicker
     ];
 
+    programs.swaylock.enable = true;
+
     programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
         exec Hyprland
@@ -48,6 +50,41 @@ with builtins; {
           preload = ${config.wallpapers.default}
           wallpaper = , ${config.wallpapers.default}
           splash = false
+        '';
+
+        ################################
+        ##### Wofi (notifications) #####
+        ################################
+
+        "wofi/config".text = ''
+          hide_scroll=true
+          show=drun
+          width=25%
+          lines=10
+          line_wrap=word
+          term=alacritty
+          allow_markup=true
+          always_parse_args=true
+          show_all=true
+          print_command=true
+          layer=overlay
+          allow_images=true
+          insensitive=true
+          prompt=
+          image_size=15
+          display_generic=true
+          location=center
+        '';
+
+        "wofi/config.power".text = ''
+          hide_search=true
+          hide_scroll=true
+          show=dmenu
+          width=100
+          lines=4
+          location=top_right
+          x=-120
+          y=10
         '';
       };
     };
@@ -315,6 +352,41 @@ with builtins; {
     services = {
       # Notifications
       mako.enable = mkDefault isLinux;
+
+      hypridle = {
+        enable = true;
+
+        settings = {
+          general = {
+            lock_cmd = "${pkgs.swaylock}/bin/swaylock -f";
+            before_sleep_cmd = "${pkgs.swaylock}/bin/swaylock -f";
+            after_sleep_cmd = "hyprctl dispatch dpms on";
+          };
+
+          listener = let
+            minToSec = n: n * 60;
+          in [
+            {
+              # Lock the screen after 5 minutes
+              timeout = minToSec 5;
+              on-timeout = "${pkgs.swaylock}/bin/swaylock -f";
+            }
+
+            {
+              # Screen off after 10 minutes
+              timeout = minToSec 10;
+              on-timeout = "hyprctl dispatch dpms off";
+              on-resume = "hyprctl dispatch dpms on && brightnessctl -r ";
+            }
+
+            {
+              # Suspend after 15 minutes
+              timeout = minToSec 15;
+              on-timeout = "systemctl suspend";
+            }
+          ];
+        };
+      };
     };
   };
 }
