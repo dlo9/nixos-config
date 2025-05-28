@@ -25,6 +25,9 @@ with lib; {
           unstable.terminaltexteffects
 
           wrap
+          fselect # Find, but with SQL
+          wiper # Disk usage TUI
+          serpl # CLI find & replace: scooter is another option
 
           gh-dash
           unstable.devenv
