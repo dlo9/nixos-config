@@ -11,7 +11,6 @@ with lib; {
     ./developer-tools.nix
     ./eww
     ./hyprland.nix
-    ./sway.nix
     ./waybar
     ./web.nix
   ];
