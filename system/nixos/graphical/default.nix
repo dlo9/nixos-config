@@ -12,8 +12,8 @@ with lib; {
   ];
 
   config = mkIf config.graphical.enable {
-    # Allow swaylock
-    security.pam.services.swaylock = {};
+    # Allow hyprlock
+    security.pam.services.hyprlock = {};
 
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = mkDefault config.mainAdmin;

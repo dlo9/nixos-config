@@ -15,7 +15,77 @@ with builtins; {
       hyprpicker
     ];
 
-    programs.swaylock.enable = true;
+    programs.hyprlock = {
+      enable = true;
+      settings = {
+        "$font" = "NotoSansM Nerd Font Mono";
+
+        animations = {
+          enabled = true;
+          bezier = "linear, 1, 1, 0, 0";
+          animation = [
+            "fadeIn, 1, 5, linear"
+            "fadeOut, 1, 5, linear"
+            "inputFieldDots, 1, 2, linear"
+          ];
+        };
+
+        background = {
+          path = "screenshot";
+          blur_passess = 1;
+        };
+
+        input-field = {
+          size = "20%, 5%";
+          outline_thickness = 3;
+          inner_color = "rgba(0, 0, 0, 0.0)"; # no fill
+
+          outer_color = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+          check_color = "rgba(00ff99ee) rgba(ff6633ee) 120deg";
+          fail_color = "rgba(ff6633ee) rgba(ff0066ee) 40deg";
+
+          font_color = "rgb(143, 143, 143)";
+          fade_on_empty = false;
+          rounding = 15;
+
+          font_family = "$font";
+          placeholder_text = "Input password...";
+          fail_text = "$PAMFAIL";
+
+          dots_spacing = 0.3;
+
+          # uncomment to use an input indicator that does not show the password length (similar to swaylock's input indicator)
+          # hide_input = true;
+
+          position = "0, -20";
+          halign = "center";
+          valign = "center";
+        };
+
+        label = [
+          {
+            # Time
+            text = "$TIME";
+            font_size = 90;
+            font_family = "$font";
+
+            position = "-30, 0";
+            halign = "right";
+            valign = "top";
+          }
+          {
+            # Date
+            text = "cmd[update:60000] date +\"%A, %d %B %Y\"";
+            font_size = 25;
+            font_family = "$font";
+
+            position = "-30, -150";
+            halign = "right";
+            valign = "top";
+          }
+        ];
+      };
+    };
 
     programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
@@ -211,7 +281,7 @@ with builtins; {
           "${mod} + SHIFT, R, forcerendererreload"
 
           # Lock
-          "${mod} + SHIFT, L, exec, ${pkgs.swaylock}/bin/swaylock"
+          "${mod} + SHIFT, L, exec, ${config.programs.hyprlock.package}/bin/hyprlock"
 
           # Toggle dimming
           "${mod} + SHIFT, D, exec, ${toggle-setting} decoration:dim_inactive"
@@ -295,7 +365,7 @@ with builtins; {
 
           # Find names with:
           # hyprctl devices -j
-          ", switch:Lid Switch, exec, ${pkgs.swaylock}/bin/swaylock"
+          ", switch:Lid Switch, exec, ${config.programs.hyprlock.package}/bin/hyprlock"
         ];
 
         # Window rules
@@ -358,8 +428,8 @@ with builtins; {
 
         settings = {
           general = {
-            lock_cmd = "${pkgs.swaylock}/bin/swaylock -f";
-            before_sleep_cmd = "${pkgs.swaylock}/bin/swaylock -f";
+            lock_cmd = "${config.programs.hyprlock.package}/bin/hyprlock";
+            before_sleep_cmd = "${config.programs.hyprlock.package}/bin/hyprlock";
             after_sleep_cmd = "hyprctl dispatch dpms on";
           };
 
@@ -369,7 +439,7 @@ with builtins; {
             {
               # Lock the screen after 5 minutes
               timeout = minToSec 5;
-              on-timeout = "${pkgs.swaylock}/bin/swaylock -f";
+              on-timeout = "${config.programs.hyprlock.package}/bin/hyprlock";
             }
 
             {
