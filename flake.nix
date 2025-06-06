@@ -137,11 +137,6 @@
       flake = false;
     };
 
-    base16-sway = {
-      url = "github:rkubosz/base16-sway";
-      flake = false;
-    };
-
     base16-gtk = {
       url = "github:tinted-theming/base16-gtk-flatcolor";
       flake = false;

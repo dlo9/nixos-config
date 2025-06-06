@@ -137,22 +137,6 @@
         "type": "github"
       }
     },
-    "base16-sway": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1708008500,
-        "narHash": "sha256-PAS3bnLKNEEgSJVBHOa4b/fCzyJ3WOInCQ+Qkrw7/zY=",
-        "owner": "rkubosz",
-        "repo": "base16-sway",
-        "rev": "41a9936ad6a3fa23f56d682fc386de9d948ecce6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rkubosz",
-        "repo": "base16-sway",
-        "type": "github"
-      }
-    },
     "base16-unclaimed": {
       "flake": false,
       "locked": {
@@ -1021,7 +1005,6 @@
         "base16-gtk": "base16-gtk",
         "base16-mako": "base16-mako",
         "base16-shell": "base16-shell",
-        "base16-sway": "base16-sway",
         "base16-unclaimed": "base16-unclaimed",
         "base16-waybar": "base16-waybar",
         "base16-wofi": "base16-wofi",
