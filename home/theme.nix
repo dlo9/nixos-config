@@ -55,43 +55,6 @@ with lib; {
 
       ${readFile (config.scheme inputs.base16-waybar)}
     '';
-
-    swaylock.settings = with config.scheme.withHashtag; let
-      # https://github.com/Misterio77/dotfiles/blob/sway/home/.config/sway/swaylock.sh
-      insideColor = base01;
-      ringColor = base02;
-      errorColor = base08;
-      clearedColor = base0C;
-      highlightColor = base0B;
-      verifyingColor = base09;
-      textColor = base07;
-    in {
-      indicator-caps-lock = true;
-      image = "${config.wallpapers.default}";
-      scaling = "fill";
-      font = config.font.family;
-      font-size = 20;
-      indicator-radius = 115;
-
-      ring-color = ringColor;
-      inside-wrong-color = errorColor;
-      ring-wrong-color = errorColor;
-      key-hl-color = highlightColor;
-      bs-hl-color = errorColor;
-      ring-ver-color = verifyingColor;
-      inside-ver-color = verifyingColor;
-      inside-color = insideColor;
-      text-color = textColor;
-      text-clear-color = insideColor;
-      text-ver-color = insideColor;
-      text-wrong-color = insideColor;
-      text-caps-lock-color = insideColor;
-      inside-clear-color = clearedColor;
-      ring-clear-color = clearedColor;
-      inside-caps-lock-color = verifyingColor;
-      ring-caps-lock-color = ringColor;
-      separator-color = ringColor;
-    };
   };
 
   services = {
