@@ -49,4 +49,12 @@
       RUNTIME_PM_ON_AC = "auto";
     };
   };
+
+  # Disable suspend
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
 }
