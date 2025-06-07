@@ -32,7 +32,7 @@ with builtins; {
 
         background = {
           path = "screenshot";
-          blur_passess = 1;
+          blur_passes = 1;
         };
 
         input-field = {
