@@ -69,9 +69,9 @@ with builtins; {
             font_size = 90;
             font_family = "$font";
 
-            position = "-30, 0";
-            halign = "right";
-            valign = "top";
+            position = "0, 100";
+            halign = "center";
+            valign = "center";
           }
           {
             # Date
@@ -79,9 +79,9 @@ with builtins; {
             font_size = 25;
             font_family = "$font";
 
-            position = "-30, -150";
-            halign = "right";
-            valign = "top";
+            position = "0, 180";
+            halign = "center";
+            valign = "center";
           }
         ];
       };
