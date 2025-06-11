@@ -15,6 +15,23 @@ with builtins; {
       hyprpicker
     ];
 
+    # Doesn't seem to work well, blocks changes by wdisplays
+    # systemd.user.services.wl-distore = {
+    #   Unit = {
+    #     Description = "Wayland Display Store";
+    #     PartOf = "graphical-session.target";
+    #   };
+
+    #   Service = {
+    #     Environment = [
+    #       "RUST_LOG=info"
+    #     ];
+    #     ExecStart = "${pkgs.dlo9.wl-distore}/bin/wl-distore";
+    #   };
+
+    #   Install.WantedBy = ["graphical-session.target"];
+    # };
+
     programs.hyprlock = {
       enable = true;
       settings = {
