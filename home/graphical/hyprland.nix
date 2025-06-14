@@ -255,14 +255,62 @@ with builtins; {
 
         # Monitors
         monitor = [
-          "desc:The Linux Foundation PiKVM CAFEBABE, 1920x1080@24, auto, 1" # PiKVM
-          "desc:AOC 28E850, 2560x1440@24Hz, auto, 1" # Display Stub Adapter
-          "desc:Digital Projection Limited DP 0000000000000, preferred, 0x0, 1"
+          # PiKVM
+          "desc:The Linux Foundation PiKVM CAFEBABE, 1920x1080@24, auto, 1"
+
+          # Display Stub Adapter
+          "desc:AOC 28E850, 2560x1440@24Hz, auto, 1"
+
+          # Top Left (Anker display adapter)
+          "desc:Digital Projection Limited, preferred, 0x0, 1"
+
+          # Top Right
           "desc:HYC CO. LTD. HDMI, preferred, 2560x0, 1"
+
+          # Laptop
           "desc:LG Display 0x062F, preferred, 1600x1440, 1"
-          ", preferred, auto, 1" # Default
-          # "DP-1, highres, 0x0, 1"
+
+          # Default
+          ", preferred, auto, 1"
         ];
+
+        # monitorv2 = [
+        #   {
+        #     # PiKVM
+        #     output = "desc:The Linux Foundation PiKVM CAFEBABE";
+        #     mode = "1920x1080@24";
+        #     position = "auto";
+        #   }
+        #   {
+        #     # Display Stub Adapter
+        #     output = "desc:AOC 28E850";
+        #     mode = "2560x1440@24Hz";
+        #     position = "auto";
+        #   }
+        #   {
+        #     # Top Left (Anker display adapter)
+        #     output = "desc:Digital Projection Limited";
+        #     mode = "preferred";
+        #     position = "0x0";
+        #   }
+        #   {
+        #     # Top Right
+        #     output = "desc:HYC CO. LTD. HDMI";
+        #     mode = "preferred";
+        #     position = "2560x0";
+        #   }
+        #   {
+        #     # Laptop
+        #     output = "desc:LG Display 0x062F";
+        #     mode = "preferred";
+        #     position = "1600x1440";
+        #   }
+        #   {
+        #     # Default
+        #     mode = "preferred";
+        #     position = "auto";
+        #   }
+        # ];
 
         # Keybindings
         bind = let
