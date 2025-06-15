@@ -13,7 +13,11 @@ with lib; {
     # Users
     home-manager.config = ./home.nix;
 
-    user.shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
+    user = {
+      uid = 10570;
+      gid = 10570;
+      shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
+    };
 
     # TODO: Remove when distributedBuilds option is introduced
     environment.etc."nix/machines".text = let

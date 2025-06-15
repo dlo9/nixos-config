@@ -26,6 +26,9 @@ with lib; {
         "https://nix-community.cachix.org?priority=50"
         "https://cuda-maintainers.cachix.org?priority=60"
         "https://cache.flox.dev"
+
+        # https://github.com/nix-community/nix-on-droid/wiki/Remote-deploy-with-deploy%E2%80%90rs
+        "https://nix-on-droid.cachix.org"
       ];
 
       trusted-substituters = [
@@ -41,6 +44,7 @@ with lib; {
         "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
         "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
         "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
+        "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
       ];
 
       # To avoid github rate limiting

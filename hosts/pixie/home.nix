@@ -22,6 +22,9 @@ with lib; {
     bind # "host" binary
     rsync
     mosh
+
+    # Needed for home-manager script
+    coreutils
   ];
 
   programs.ssh.matchBlocks."*".user = "david";
@@ -32,9 +35,16 @@ with lib; {
     XDG_RUNTIME_DIR = "/tmp/run";
   };
 
-  # Launch services on shell start
-  programs.fish.interactiveShellInit = ''
+  programs.fish.shellInit = lib.mkBefore ''
+    # nix-on-droid writes the PATH here
+    #source /etc/profile
+
+    ${pkgs.coreutils}/bin/cat /etc/profile | ${pkgs.babelfish}/bin/babelfish | source
+
+    # Launch services on shell start
     ${config.systemd.user.services.sops-nix.Service.ExecStart}
+
+    # TODO: start SSH
   '';
 
   # SSH
