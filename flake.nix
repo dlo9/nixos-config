@@ -280,7 +280,7 @@
             inherit system;
 
             overlays = [
-              inputs.deploy-rs.overlay # or deploy-rs.overlays.default
+              inputs.deploy-rs.overlays.default
 
               (self: super: {
                 deploy-rs = {
@@ -290,9 +290,14 @@
               })
             ];
           };
+
+        activateNixOnDroid = configuration:
+          (deployPkgs "aarch64-linux").deploy-rs.lib.activate.custom
+            configuration.activationPackage
+            "${configuration.activationPackage}/activate";
       in {
         # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
-        nixOnDroidConfigurations.pixie = withSystem "x86_64-linux" (
+        nixOnDroidConfigurations.pixie = withSystem "aarch64-linux" (
           ctx @ {
             config,
             inputs',
@@ -317,6 +322,23 @@
               };
             }
         );
+
+        # nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false -k .#pixie -- --impure
+        # https://github.com/nix-community/nix-on-droid/wiki/Remote-deploy-with-deploy%E2%80%90rs
+        deploy.nodes.pixie = {
+          hostname = "pixie";
+          sshUser = "nix-on-droid";
+          user = "nix-on-droid";
+          #interactiveSudo = true;
+          fastConnection = true;
+          sshOpts = [ "-p" "8022" ];
+
+          #profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
+          #profiles.nix-on-droid.path = (deployPkgs "aarch64-linux").deploy-rs.lib.aarch64-linux.activate.custom self.nixOnDroidConfigurations.pixie.activationPackage "${self.nixOnDroidConfigurations.pixie.activationPackage}/activate";
+          #profiles.nix-on-droid.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.custom self.nixOnDroidConfigurations.pixie.activationPackage "${self.nixOnDroidConfigurations.pixie.activationPackage}/activate";
+          profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
+          #profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
+        };
 
         darwinConfigurations.YX6MTFK902 = withSystem "aarch64-darwin" (
           ctx @ {
@@ -479,7 +501,7 @@
             }
         );
 
-        # nix run github:serokell/deploy-rs -- --skip-checks --auto-rollback false -k .#trident
+        # nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false -k .#trident
         deploy.nodes.trident = {
           hostname = "trident";
           sshUser = "pi";
