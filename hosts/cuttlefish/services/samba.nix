@@ -43,6 +43,11 @@ with lib; {
           "127.0.0.1"
           "localhost"
         ];
+
+        # https://www.reddit.com/r/OpenMediaVault/comments/11gwi1g/significant_samba_speedperformance_improvement_by/
+        "write cache size" = 2097152;
+        "min receivefile size" = 16384;
+        "getwd cache" = true;
       };
 
       chelsea = {
