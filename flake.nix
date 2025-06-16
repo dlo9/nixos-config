@@ -432,6 +432,17 @@
             }
         );
 
+        # nix run nixpkgs#deploy-rs -- --skip-checks -k .#pavil
+        deploy.nodes.pavil = {
+          hostname = "pavil";
+          sshUser = "david";
+          user = "root";
+          interactiveSudo = true;
+          fastConnection = true;
+
+          profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.pavil;
+        };
+
         nixosConfigurations.trident = withSystem "aarch64-linux" (
           ctx @ {
             config,
