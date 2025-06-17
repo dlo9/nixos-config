@@ -19,7 +19,6 @@ with lib; {
     amdgpu_top
     orca-slicer
     freecad
-    nextcloud-client
   ];
 
   # SSH
