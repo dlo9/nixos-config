@@ -6,7 +6,6 @@
   stdenv,
   wayland,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "wl-distore";
   version = "unstable-2024-11-16";
@@ -37,8 +36,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "A Wayland output configuration watcher for wlroots";
     homepage = "https://github.com/andriyDev/wl-distore";
-    license = with lib.licenses; [ asl20 mit ];
-    maintainers = with lib.maintainers; [ ];
+    license = with lib.licenses; [asl20 mit];
+    maintainers = with lib.maintainers; [];
     mainProgram = "wl-distore";
   };
 }

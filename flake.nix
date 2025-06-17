@@ -293,8 +293,8 @@
 
         activateNixOnDroid = configuration:
           (deployPkgs "aarch64-linux").deploy-rs.lib.activate.custom
-            configuration.activationPackage
-            "${configuration.activationPackage}/activate";
+          configuration.activationPackage
+          "${configuration.activationPackage}/activate";
       in {
         # Test with: nix eval 'path:.#nixOnDroidConfigurations.pixie.config'
         nixOnDroidConfigurations.pixie = withSystem "aarch64-linux" (
@@ -331,7 +331,7 @@
           user = "nix-on-droid";
           #interactiveSudo = true;
           fastConnection = true;
-          sshOpts = [ "-p" "8022" ];
+          sshOpts = ["-p" "8022"];
 
           #profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
           #profiles.nix-on-droid.path = (deployPkgs "aarch64-linux").deploy-rs.lib.aarch64-linux.activate.custom self.nixOnDroidConfigurations.pixie.activationPackage "${self.nixOnDroidConfigurations.pixie.activationPackage}/activate";
