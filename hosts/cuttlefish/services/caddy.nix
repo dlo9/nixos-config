@@ -9,6 +9,7 @@ with builtins;
 with lib; let
   useACMEHost = "sigpanic.com";
   listenAddresses = ["0.0.0.0"];
+  tailscaleDomain = "fairy-koi.ts.net";
 
   # TODO: Make the available outside this file, so that configs can be adjacent to their services
   authentikForwardAuth = ''
@@ -57,12 +58,18 @@ in {
       };
 
       virtualHosts = {
-        ender = {
+        trident = {
           inherit useACMEHost;
-          serverAliases = ["ender.sigpanic.com"];
+          serverAliases = ["trident.sigpanic.com"];
           extraConfig = ''
             ${authentikForwardAuth}
-            reverse_proxy http://192.168.0.2:4408
+            reverse_proxy http://trident {
+              # Don't pass JWT to fluidd, since it's an authentik token and not moonraker token
+              # Rely on moonraker's trusted_proxies instead
+              header_up -Authorization
+              header_up -X-Forwarded-For
+              header_up -X-Real-IP
+            }
           '';
         };
 
