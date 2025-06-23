@@ -16,8 +16,8 @@ in {
       z-calibration = pkgs.fetchFromGitHub {
         owner = "protoloft";
         repo = "klipper_z_calibration";
-        rev = "v1.1.2";
-        sha256 = "sha256-YNy3FmDa4kksweWrhnwa6WKQR3sDoBxtnGh9BoXEIGs=";
+        rev = "v1.1.3";
+        sha256 = "sha256-WWP0LqhJ3ET4nxR8hVpq1uMOSK+CX7f3LXjOAZbRY8c=";
       };
     in {
       postInstall = ''
@@ -56,12 +56,13 @@ in {
       authorization = {
         trusted_clients = [
           "localhost"
-          "192.168.1.0/24"
+          "192.168.0.0/16"
         ];
 
         cors_domains = [
           "http://localhost"
           "http://trident"
+          "*://trident.sigpanic.com"
         ];
       };
 
