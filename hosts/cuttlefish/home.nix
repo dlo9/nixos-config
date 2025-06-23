@@ -21,6 +21,7 @@ with lib; {
 
   home.packages = with pkgs; [
     nvtopPackages.intel # GPU monitoring
+    kdash # kubernetes dashboard
   ];
 
   # wivrn
