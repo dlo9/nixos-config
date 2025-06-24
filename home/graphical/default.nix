@@ -179,6 +179,7 @@ with lib; {
           loupe
 
           libreoffice
+          cameractrls-gtk4
         ])
 
         [
