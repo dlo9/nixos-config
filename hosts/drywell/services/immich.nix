@@ -41,7 +41,7 @@ in {
     name = "immich";
 
     services = let
-      version = "v1.133.1";
+      version = "v1.135.3";
     in {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${version}";
@@ -98,7 +98,7 @@ in {
       };
 
       postgres = {
-        image = "ghcr.io/immich-app/postgres:16-vectorchord0.3.0-pgvectors0.2.0";
+        image = "ghcr.io/immich-app/postgres:16-vectorchord0.4.3-pgvectors0.2.0";
         environment.TZ = "America/Los_Angeles";
         env_file = [config.sops.secrets.immich-postgres.path];
         ports = ["5432"];
