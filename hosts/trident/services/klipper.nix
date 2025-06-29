@@ -34,7 +34,7 @@ in {
     # Use a mutable config, under moonraker's config path,
     # so that it can be edited in the UI
     mutableConfig = true;
-    mutableConfigFolder = "${config.services.moonraker.stateDir}/config";
+    configDir = "${config.services.moonraker.stateDir}/config";
 
     # If missing, download LDO's trident template
     configFile = pkgs.fetchurl {
