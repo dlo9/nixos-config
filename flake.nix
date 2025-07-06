@@ -326,18 +326,14 @@
         # nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false -k .#pixie -- --impure
         # https://github.com/nix-community/nix-on-droid/wiki/Remote-deploy-with-deploy%E2%80%90rs
         deploy.nodes.pixie = {
-          hostname = "pixie";
+          hostname = "google-pixel-6";
           sshUser = "nix-on-droid";
           user = "nix-on-droid";
           #interactiveSudo = true;
           fastConnection = true;
           sshOpts = ["-p" "8022"];
 
-          #profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
-          #profiles.nix-on-droid.path = (deployPkgs "aarch64-linux").deploy-rs.lib.aarch64-linux.activate.custom self.nixOnDroidConfigurations.pixie.activationPackage "${self.nixOnDroidConfigurations.pixie.activationPackage}/activate";
-          #profiles.nix-on-droid.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.custom self.nixOnDroidConfigurations.pixie.activationPackage "${self.nixOnDroidConfigurations.pixie.activationPackage}/activate";
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
-          #profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
         };
 
         darwinConfigurations.YX6MTFK902 = withSystem "aarch64-darwin" (
@@ -538,6 +534,7 @@
         config,
         pkgs,
         self',
+        lib,
         ...
       }: {
         # https://github.com/drupol/pkgs-by-name-for-flake-parts
@@ -663,6 +660,38 @@
           generate-hardware = {
             type = "app";
             program = "${self'.packages.generate-hardware}/bin/generate-hardware";
+          };
+
+          # Starts ssh for nix-on-droid, useful for bootstrapping the install for deploy-rs. Run with:
+          # nix run github:dlo9/nixos-config#nix-on-droid-ssh
+          nix-on-droid-ssh = let
+            mylib = pkgs.callPackage ./lib {inherit inputs;};
+            hosts = mylib.secrets.hostExports;
+          in {
+            type = "app";
+            program = pkgs.writeShellScriptBin "start-ssh" ''
+                dir="/tmp/ssh"
+                mkdir -p "$dir"
+
+                if [ ! -e "$dir/ssh_host_ed25519_key" ]; then
+                  ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f $dir/ssh_host_ed25519_key -N ""
+                fi
+
+                cat <<- EOF > "$dir/authorized_keys"
+                ${hosts.cuttlefish.david-ssh-key.pub}
+                ${hosts.pavil.david-ssh-key.pub}
+                ${hosts.bitwarden.ssh-key.pub}
+                EOF
+
+                cat <<- EOF > "$dir/sshd_config"
+                AuthorizedKeysFile $dir/authorized_keys
+                HostKey $dir/ssh_host_ed25519_key
+                Port 8022
+                EOF
+
+                echo "Starting ssh in the foreground"
+                ${pkgs.openssh}/bin/sshd -f "$dir/sshd_config" -D
+              '';
           };
         };
       };
