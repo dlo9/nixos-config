@@ -10,7 +10,6 @@ with lib; {
 
     settings = let
       camera = format: size: "ffmpeg:device?video=/dev/video0&input_format=${format}&video_size=${size}";
-
       # Rotate with ffmpeg, requires transcoding (50% CPU)
       #camera = format: size: "ffmpeg:device?video=/dev/video0&input_format=${format}&video_size=${size}#video=${format}#rotate=180";
     in {
@@ -41,5 +40,23 @@ with lib; {
     allowedUDPPorts = [
       8555 # webrtc
     ];
+  };
+
+  services.nginx.virtualHosts."${config.services.fluidd.hostName}" = {
+    locations = {
+      "~ ^/camera/(.*)$" = {
+        proxyWebsockets = true;
+        proxyPass = "http://127.0.0.1:1984/$1";
+        extraConfig = ''
+          # Modify URLs in response content
+          #sub_filter 'ws://trident/' 'ws://trident/camera/';
+          #sub_filter 'wss://trident/' 'wss://trident/camera/';
+          sub_filter 'ws://trident/camera' 'ws://trident';
+          sub_filter 'wss://trident/camera' 'wss://trident';
+          sub_filter_once off;
+          sub_filter_types text/html text/css text/javascript application/javascript application/json;
+        '';
+      };
+    };
   };
 }

@@ -63,12 +63,23 @@ in {
           serverAliases = ["trident.sigpanic.com"];
           extraConfig = ''
             ${authentikForwardAuth}
-            reverse_proxy http://trident {
-              # Don't pass JWT to fluidd, since it's an authentik token and not moonraker token
-              # Rely on moonraker's trusted_proxies instead
-              header_up -Authorization
-              header_up -X-Forwarded-For
-              header_up -X-Real-IP
+
+            handle_path /stream.html* {
+                reverse_proxy http://trident:1984 {
+                  header_up -Authorization
+                  header_up -X-Forwarded-For
+                  header_up -X-Real-IP
+                }
+            }
+
+            handle {
+              reverse_proxy http://trident {
+                # Don't pass JWT to fluidd, since it's an authentik token and not moonraker token
+                # Rely on moonraker's trusted_proxies instead
+                header_up -Authorization
+                header_up -X-Forwarded-For
+                header_up -X-Real-IP
+              }
             }
           '';
         };
