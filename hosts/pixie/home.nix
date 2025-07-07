@@ -26,7 +26,8 @@ with lib; {
     # SSH start script
     (
       pkgs.writeShellScriptBin "start-sshd" ''
-        ${pkgs.openssh}/bin/sshd -f "${config.home.homeDirectory}/.ssh/sshd_config" -D
+        echo "Starting ssh in the foreground"
+        ${pkgs.openssh}/bin/sshd -f ~/.ssh/sshd_config -D
       ''
     )
   ];
@@ -38,6 +39,10 @@ with lib; {
   home.sessionVariables = {
     XDG_RUNTIME_DIR = "/tmp/run";
   };
+
+  # Disable this since `id` isn't in home-manager's path, which
+  # causes issues when setting up TMUX_TMPDIR
+  programs.tmux.secureSocket = false;
 
   programs.fish.shellInit = lib.mkBefore ''
     # nix-on-droid writes the PATH here
@@ -58,8 +63,12 @@ with lib; {
     '';
 
     ".ssh/sshd_config".text = ''
-      HostKey ${config.home.homeDirectory}/.ssh/id_ed25519
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      AuthorizedKeysFile ~/.ssh/authorized_keys
+      HostKey ~/.ssh/id_ed25519
       Port 8022
+      Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
     '';
   };
 }

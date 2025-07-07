@@ -332,8 +332,6 @@
           fastConnection = true;
           sshOpts = [
             "-p" "8022"
-            # Uncomment when deploying for the first time to ignore the randomly generated host key
-            #"-o" "StrictHostKeyChecking=no" "-o" "UserKnownHostsFile=/dev/null"
           ];
 
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
@@ -672,7 +670,7 @@
             hosts = mylib.secrets.hostExports;
           in {
             type = "app";
-            program = pkgs.writeShellScriptBin "start-ssh" ''
+            program = pkgs.writeShellScriptBin "nix-on-droid-ssh" ''
                 dir="/tmp/ssh"
                 mkdir -p "$dir"
 
@@ -690,6 +688,7 @@
                   AuthorizedKeysFile $dir/authorized_keys
                   HostKey $dir/ssh_host_ed25519_key
                   Port 8022
+                  Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
                 EOF
 
                 if [ ! -e "$HOME/.bashrc" ]; then

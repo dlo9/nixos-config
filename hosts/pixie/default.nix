@@ -14,8 +14,8 @@ with lib; {
     home-manager.config = ./home.nix;
 
     user = {
-      uid = 10570;
-      gid = 10570;
+      uid = 10576;
+      gid = 10576;
       shell = "${config.home-manager.config.programs.fish.package}/bin/fish";
     };
 
@@ -69,8 +69,5 @@ with lib; {
       "100.75.234.109" = ["kvm-drywell"];
       "100.124.233.7" = ["opnsense"];
     };
-
-    environment.packages = with pkgs; [
-    ];
   };
 }
