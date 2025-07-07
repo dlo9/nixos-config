@@ -8,6 +8,7 @@
 with lib; {
   nixpkgs.config.permittedInsecurePackages = [
     "ventoy-1.1.05"
+    "nexus-3.70.1-02"
   ];
 
   nix = {
