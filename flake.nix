@@ -329,9 +329,12 @@
           hostname = "google-pixel-6";
           sshUser = "nix-on-droid";
           user = "nix-on-droid";
-          #interactiveSudo = true;
           fastConnection = true;
-          sshOpts = ["-p" "8022"];
+          sshOpts = [
+            "-p" "8022"
+            # Uncomment when deploying for the first time to ignore the randomly generated host key
+            #"-o" "StrictHostKeyChecking=no" "-o" "UserKnownHostsFile=/dev/null"
+          ];
 
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
         };
@@ -678,16 +681,23 @@
                 fi
 
                 cat <<- EOF > "$dir/authorized_keys"
-                ${hosts.cuttlefish.david-ssh-key.pub}
-                ${hosts.pavil.david-ssh-key.pub}
-                ${hosts.bitwarden.ssh-key.pub}
+                  ${hosts.cuttlefish.david-ssh-key.pub}
+                  ${hosts.pavil.david-ssh-key.pub}
+                  ${hosts.bitwarden.ssh-key.pub}
                 EOF
 
                 cat <<- EOF > "$dir/sshd_config"
-                AuthorizedKeysFile $dir/authorized_keys
-                HostKey $dir/ssh_host_ed25519_key
-                Port 8022
+                  AuthorizedKeysFile $dir/authorized_keys
+                  HostKey $dir/ssh_host_ed25519_key
+                  Port 8022
                 EOF
+
+                if [ ! -e "$HOME/.bashrc" ]; then
+                  # Make sure PATH includes nix utils
+                  cat <<- EOF > "$HOME/.bashrc"
+                  source /etc/profile
+                EOF
+                fi
 
                 echo "Starting ssh in the foreground"
                 ${pkgs.openssh}/bin/sshd -f "$dir/sshd_config" -D
