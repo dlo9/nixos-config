@@ -331,7 +331,8 @@
           user = "nix-on-droid";
           fastConnection = true;
           sshOpts = [
-            "-p" "8022"
+            "-p"
+            "8022"
           ];
 
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
@@ -671,36 +672,36 @@
           in {
             type = "app";
             program = pkgs.writeShellScriptBin "nix-on-droid-ssh" ''
-                dir="/tmp/ssh"
-                mkdir -p "$dir"
+              dir="/tmp/ssh"
+              mkdir -p "$dir"
 
-                if [ ! -e "$dir/ssh_host_ed25519_key" ]; then
-                  ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f $dir/ssh_host_ed25519_key -N ""
-                fi
+              if [ ! -e "$dir/ssh_host_ed25519_key" ]; then
+                ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f $dir/ssh_host_ed25519_key -N ""
+              fi
 
-                cat <<- EOF > "$dir/authorized_keys"
-                  ${hosts.cuttlefish.david-ssh-key.pub}
-                  ${hosts.pavil.david-ssh-key.pub}
-                  ${hosts.bitwarden.ssh-key.pub}
-                EOF
+              cat <<- EOF > "$dir/authorized_keys"
+                ${hosts.cuttlefish.david-ssh-key.pub}
+                ${hosts.pavil.david-ssh-key.pub}
+                ${hosts.bitwarden.ssh-key.pub}
+              EOF
 
-                cat <<- EOF > "$dir/sshd_config"
-                  AuthorizedKeysFile $dir/authorized_keys
-                  HostKey $dir/ssh_host_ed25519_key
-                  Port 8022
-                  Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
-                EOF
+              cat <<- EOF > "$dir/sshd_config"
+                AuthorizedKeysFile $dir/authorized_keys
+                HostKey $dir/ssh_host_ed25519_key
+                Port 8022
+                Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+              EOF
 
-                if [ ! -e "$HOME/.bashrc" ]; then
-                  # Make sure PATH includes nix utils
-                  cat <<- EOF > "$HOME/.bashrc"
-                  source /etc/profile
-                EOF
-                fi
+              if [ ! -e "$HOME/.bashrc" ]; then
+                # Make sure PATH includes nix utils
+                cat <<- EOF > "$HOME/.bashrc"
+                source /etc/profile
+              EOF
+              fi
 
-                echo "Starting ssh in the foreground"
-                ${pkgs.openssh}/bin/sshd -f "$dir/sshd_config" -D
-              '';
+              echo "Starting ssh in the foreground"
+              ${pkgs.openssh}/bin/sshd -f "$dir/sshd_config" -D
+            '';
           };
         };
       };
