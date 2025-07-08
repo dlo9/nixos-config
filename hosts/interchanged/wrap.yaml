@@ -1,0 +1,782 @@
+anchors:
+  ###############################
+  ### Common environment keys ###
+  ###############################
+
+  # Local
+  - &local-keys [--local]
+
+  - &kafka-topics-local
+    keys: *local-keys
+    values: [--bootstrap-server, $KAFKA_LOCAL]
+
+  # Codefresh
+  - &codefresh-keys [--cf, --codefresh]
+
+  # Development
+  - &dev-keys [--dev]
+  - &dev-green-keys [--dev-green]
+  - &dev-blue-keys [--dev-blue]
+  - &dev-ascend-keys [--dev-ascend, --dev-afs]
+  - &dev-old-keys [--dev-old, --dev-legacy]
+  - &dev-infra-keys [--dev-infra]
+
+  - &kafka-topics-dev
+    keys: *dev-keys
+    values:
+      [--bootstrap-server, $KAFKA_DEV, --command-config, $KAFKA_PROPERTIES_DEV]
+  - &kafka-topics-dev-ascend
+    keys: *dev-ascend-keys
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_DEV_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_DEV,
+      ]
+  - &kafka-topics-dev-old
+    keys: *dev-old-keys
+    values: [--bootstrap-server, $KAFKA_DEV_OLD]
+
+  # Staging
+  - &stg-keys [--stg, --staging]
+  - &stg-green-keys [--stg-green]
+  - &stg-blue-keys [--stg-blue]
+  - &stg-ascend-keys [--stg-ascend, --stg-afs]
+  - &stg-old-keys [--stg-old, --stg-legacy]
+  - &stg-infra-keys [--stg-infra]
+
+  - &kafka-topics-stg
+    keys: *stg-keys
+    values:
+      [--bootstrap-server, $KAFKA_STG, --command-config, $KAFKA_PROPERTIES_STG]
+  - &kafka-topics-stg-ascend
+    keys: *stg-ascend-keys
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_STG_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_STG,
+      ]
+  - &kafka-topics-stg-old
+    keys: *stg-old-keys
+    values: [--bootstrap-server, $KAFKA_STG_OLD]
+
+  # UAT
+  - &uat-keys [--uat]
+  - &uat-green-keys [--uat-green]
+  - &uat-blue-keys [--uat-blue]
+  - &uat-ascend-keys [--uat-ascend, --uat-afs]
+  - &uat-old-keys [--uat-old, --uat-legacy]
+  - &uat-infra-keys [--uat-infra]
+
+  - &kafka-topics-uat
+    keys: *uat-keys
+    values:
+      [--bootstrap-server, $KAFKA_UAT, --command-config, $KAFKA_PROPERTIES_UAT]
+  - &kafka-topics-uat-ascend
+    keys: *uat-ascend-keys
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_UAT_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_UAT,
+      ]
+  - &kafka-topics-uat-old
+    keys: *uat-old-keys
+    values: [--bootstrap-server, $KAFKA_UAT_OLD]
+
+  # Production
+  - &prd-keys [--prd]
+  - &prd-green-keys [--prd-green]
+  - &prd-blue-keys [--prd-blue]
+  - &prd-ascend-keys [--prd-ascend, --prd-afs]
+  - &prd-old-keys [--prd-old, --prd-legacy]
+  - &prd-infra-keys [--prd-infra]
+
+  - &kafka-topics-prd
+    keys: *prd-keys
+    values:
+      [--bootstrap-server, $KAFKA_PRD, --command-config, $KAFKA_PROPERTIES_PRD]
+  - &kafka-topics-prd-ascend
+    keys: *prd-ascend-keys
+    values:
+      [
+        --bootstrap-server,
+        $KAFKA_PRD_ASCEND,
+        --command-config,
+        $KAFKA_PROPERTIES_PRD,
+      ]
+  - &kafka-topics-prd-old
+    keys: *prd-old-keys
+    values: [--bootstrap-server, $KAFKA_PRD_OLD]
+
+  # Recon
+  - &rcn-keys [--rcn]
+  - &kafka-topics-rcn
+    keys: *rcn-keys
+    values:
+      [--bootstrap-server, $KAFKA_RCN, --command-config, $KAFKA_PROPERTIES_RCN]
+
+  # Sandbox
+  - &sbx-keys [--sbx]
+  - &kafka-topics-sbx
+    keys: *sbx-keys
+    values:
+      [--bootstrap-server, $KAFKA_SBX, --command-config, $KAFKA_PROPERTIES_SBX]
+
+variables:
+  ###########################
+  ### Kubernetes contexts ###
+  ###########################
+
+  # Local
+  KUBE_CONTEXT_LOCAL: docker-desktop
+
+  # Codefresh
+  KUBE_CONTEXT_CODEFRESH: gke_apex-bluesails_us-central1-b_codefresh-test
+
+  # Development
+  KUBE_CONTEXT_DEV_GREEN: gke_apex-vdev-edev-shared-e168dac0_us-central1_app-us-central1-a1cf793e
+  KUBE_CONTEXT_DEV_BLUE: gke_apex-vdev-edev-shared-e168dac0_us-central1_app-us-ce1-363a9dbd
+  KUBE_CONTEXT_DEV_OLD: gke_apexclearing-dev-be5c7a91_us-central1_gke-us-central1
+  KUBE_CONTEXT_DEV_INFRA: gke_apex-vdev-edev-shared-e168dac0_us-central1_infra-us-central1-1a37463d
+  KUBE_CONTEXT_DEV_ASCEND: gke_apex-vdev-edev-shared-e168dac0_us-central1_afsapi-us-ce1-63ed6fc8
+  KUBE_CONTEXT_DEV: $KUBE_CONTEXT_DEV_BLUE
+
+  # Staging
+  KUBE_CONTEXT_STG_GREEN: gke_apex-vdev-estg-shared-b2893f4e_us-central1_app-us-central1-a5cf47c2
+  KUBE_CONTEXT_STG_BLUE: gke_apex-vdev-estg-shared-b2893f4e_us-central1_app-us-ce1-6a93c9a6
+  KUBE_CONTEXT_STG_INFRA: gke_apex-vdev-estg-shared-b2893f4e_us-central1_infra-us-central1-e3d6ef1f
+  KUBE_CONTEXT_STG_ASCEND: gke_apex-vdev-estg-shared-b2893f4e_us-central1_afsapi-us-ce1-b6574119
+  KUBE_CONTEXT_STG: $KUBE_CONTEXT_STG_BLUE
+
+  # UAT
+  KUBE_CONTEXT_UAT_GREEN: gke_apex-vuat-euat-shared-9851d55b_us-central1_app-us-central1-0d66a2e8
+  KUBE_CONTEXT_UAT_BLUE: gke_apex-vuat-euat-shared-9851d55b_us-central1_app-us-ce1-24af6785
+  KUBE_CONTEXT_UAT_OLD: gke_apexclearing-uat-13e9d7dc_us-central1_gke-us-central1
+  KUBE_CONTEXT_UAT_INFRA: gke_apex-vuat-euat-shared-9851d55b_us-central1_infra-us-central1-016f702d
+  KUBE_CONTEXT_UAT_ASCEND: gke_apex-vuat-euat-shared-9851d55b_us-central1_afsapi-us-ce1-d939ac97
+  KUBE_CONTEXT_UAT: $KUBE_CONTEXT_UAT_BLUE
+
+  # Production
+  KUBE_CONTEXT_PRD_GREEN: gke_apex-vprd-eprd-shared-712561df_us-central1_app-us-central1-659f3a00
+  KUBE_CONTEXT_PRD_BLUE: gke_apex-vprd-eprd-shared-712561df_us-central1_app-us-ce1-9fb88f77
+  KUBE_CONTEXT_PRD_OLD: gke_apexclearing-prod-64145754_us-central1_gke-us-central1
+  KUBE_CONTEXT_PRD_INFRA: gke_apex-vprd-eprd-shared-712561df_us-central1_infra-us-central1-6254ffa1
+  KUBE_CONTEXT_PRD_ASCEND: gke_apex-vprd-eprd-shared-712561df_us-central1_afsapi-us-ce1-65849e3e
+  KUBE_CONTEXT_PRD: $KUBE_CONTEXT_PRD_BLUE
+
+  # Recon
+  KUBE_CONTEXT_RCN: gke_apex-shared-rcn-00_us-central1_afsapi-us-ce1-c6a0bbc0
+
+  # Sandbox
+  KUBE_CONTEXT_SBX: gke_apex-shared-sbx-00_us-central1_afsapi-us-ce1-a201209a
+
+  ######################
+  ### Kafka clusters ###
+  ######################
+
+  # Properties
+  KAFKA_PROPERTIES_DEV: ~/.config/kafkacat/vm-dev.properties
+  KAFKA_PROPERTIES_STG: ~/.config/kafkacat/vm-stg.properties
+  KAFKA_PROPERTIES_UAT: ~/.config/kafkacat/vm-uat.properties
+  KAFKA_PROPERTIES_PRD: ~/.config/kafkacat/vm-prd.properties
+  KAFKA_PROPERTIES_RCN: ~/.config/kafkacat/vm-rcn.properties
+  KAFKA_PROPERTIES_SBX: ~/.config/kafkacat/vm-sbx.properties
+
+  # Certificates
+  KAFKA_CA_DEV: ~/.config/kafkacat/vm-dev-ca.pem
+  KAFKA_CA_STG: ~/.config/kafkacat/vm-stg-ca.pem
+  KAFKA_CA_UAT: ~/.config/kafkacat/vm-uat-ca.pem
+  KAFKA_CA_PRD: ~/.config/kafkacat/vm-prd-ca.pem
+  KAFKA_CA_RCN: ~/.config/kafkacat/vm-rcn-ca.pem
+  KAFKA_CA_SBX: ~/.config/kafkacat/vm-sbx-ca.pem
+
+  # Local
+  KAFKA_LOCAL: localhost:31090
+
+  # Main
+  KAFKA_DEV: kafka-v1.kafka.dev.gcp.apexclearing.com:9093
+  KAFKA_STG: kafka-v1.kafka.stg.gcp.apexclearing.com:9093
+  KAFKA_UAT: kafka-v1.kafka.uat.gcp.apexclearing.com:9093
+  KAFKA_PRD: kafka-v1.kafka.prd.gcp.apexclearing.com:9093
+
+  # Ascend
+  KAFKA_DEV_ASCEND: ecru-boom.kafka.dev.gcp.apexclearing.com:9093
+  KAFKA_STG_ASCEND: ecru-boom.kafka.stg.gcp.apexclearing.com:9093
+  KAFKA_UAT_ASCEND: ecru-boom.kafka.uat.gcp.apexclearing.com:9093
+  KAFKA_PRD_ASCEND: ecru-boom.kafka.prd.gcp.apexclearing.com:9093
+  KAFKA_RCN: ecru-boom.kafka.rcn.gcp.apexclearing.com:9093
+  KAFKA_SBX: ecru-boom.kafka.sbx.gcp.apexclearing.com:9093
+
+  # Old
+  KAFKA_DEV_OLD: kafka-1.dev.gcp.apexclearing.com:31090
+  KAFKA_STG_OLD: kafka-two-0-text.stg.gcp.apexclearing.com:29092,kafka-two-1-text.stg.gcp.apexclearing.com:29092,kafka-two-2-text.stg.gcp.apexclearing.com:29092,kafka-two-3-text.stg.gcp.apexclearing.com:29092
+  KAFKA_UAT_OLD: kafka-1.uat.gcp.apexclearing.com:31090
+  KAFKA_PRD_OLD: kafka-1.prd.gcp.apexclearing.com:31090
+
+  #############
+  ### Other ###
+  #############
+
+  DOCKER_HOME: /host$HOME
+
+aliases:
+  ##################
+  ### Kubernetes ###
+  ##################
+
+  - alias: k
+    program: kubectl
+    arguments:
+      - key: -n
+        value: trade-processing
+        cleared-by: [-n, -A]
+      - key: --context
+        value: docker-desktop
+        cleared-by: [--context]
+    keywords:
+      - keys: *local-keys
+        values: [--context, $KUBE_CONTEXT_LOCAL]
+      - keys: *codefresh-keys
+        values: [--context, $KUBE_CONTEXT_CODEFRESH]
+
+      - keys: *dev-keys
+        values: [--context, $KUBE_CONTEXT_DEV]
+      - keys: *stg-keys
+        values: [--context, $KUBE_CONTEXT_STG]
+      - keys: *uat-keys
+        values: [--context, $KUBE_CONTEXT_UAT]
+      - keys: *prd-keys
+        values: [--context, $KUBE_CONTEXT_PRD]
+
+      - keys: *dev-ascend-keys
+        values: [--context, $KUBE_CONTEXT_DEV_ASCEND]
+      - keys: *stg-ascend-keys
+        values: [--context, $KUBE_CONTEXT_STG_ASCEND]
+      - keys: *uat-ascend-keys
+        values: [--context, $KUBE_CONTEXT_UAT_ASCEND]
+      - keys: *prd-ascend-keys
+        values: [--context, $KUBE_CONTEXT_PRD_ASCEND]
+
+      - keys: *dev-old-keys
+        values: [--context, $KUBE_CONTEXT_DEV_OLD]
+      - keys: *uat-old-keys
+        values: [--context, $KUBE_CONTEXT_UAT_OLD]
+      - keys: *prd-old-keys
+        values: [--context, $KUBE_CONTEXT_PRD_OLD]
+
+      - keys: *dev-infra-keys
+        values: [--context, $KUBE_CONTEXT_DEV_INFRA]
+      - keys: *stg-infra-keys
+        values: [--context, $KUBE_CONTEXT_STG_INFRA]
+      - keys: *uat-infra-keys
+        values: [--context, $KUBE_CONTEXT_UAT_INFRA]
+      - keys: *prd-infra-keys
+        values: [--context, $KUBE_CONTEXT_PRD_INFRA]
+
+      - keys: *dev-green-keys
+        values: [--context, $KUBE_CONTEXT_DEV_GREEN]
+      - keys: *stg-green-keys
+        values: [--context, $KUBE_CONTEXT_STG_GREEN]
+      - keys: *uat-green-keys
+        values: [--context, $KUBE_CONTEXT_UAT_GREEN]
+      - keys: *prd-green-keys
+        values: [--context, $KUBE_CONTEXT_PRD_GREEN]
+
+      - keys: *dev-blue-keys
+        values: [--context, $KUBE_CONTEXT_DEV_BLUE]
+      - keys: *stg-blue-keys
+        values: [--context, $KUBE_CONTEXT_STG_BLUE]
+      - keys: *uat-blue-keys
+        values: [--context, $KUBE_CONTEXT_UAT_BLUE]
+      - keys: *prd-blue-keys
+        values: [--context, $KUBE_CONTEXT_PRD_BLUE]
+
+      - keys: *rcn-keys
+        values: [--context, $KUBE_CONTEXT_RCN]
+
+      - keys: *sbx-keys
+        values: [--context, $KUBE_CONTEXT_SBX]
+
+        # RKE
+      - keys: [--rke-dev]
+        values: [--context, onpremise-rke-dev, --kubeconfig, ~/.kube/rke]
+
+        # Run an alpine container
+      - keys: [--alpine, --debug]
+        values:
+          [
+            run,
+            --image=alpine,
+            -it,
+            --restart=Never,
+            --rm,
+            --annotations=sidecar.istio.io/inject=false,
+            dorchard-debug,
+            --,
+            sh,
+          ]
+
+  - alias: h
+    program: helm
+    arguments:
+      - key: -n
+        value: trade-processing
+        cleared-by: [-n, -A]
+      - key: --kube-context
+        value: docker-desktop
+        cleared-by: [--kube-context]
+    keywords:
+      - keys: *local-keys
+        values: [--kube-context, $KUBE_CONTEXT_LOCAL]
+      - keys: *codefresh-keys
+        values: [--kube-context, $KUBE_CONTEXT_CODEFRESH]
+
+      - keys: *dev-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV]
+      - keys: *stg-keys
+        values: [--kube-context, $KUBE_CONTEXT_STG]
+      - keys: *uat-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT]
+      - keys: *prd-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD]
+
+      - keys: *dev-ascend-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV_ASCEND]
+      - keys: *stg-ascend-keys
+        values: [--kube-context, $KUBE_CONTEXT_STG_ASCEND]
+      - keys: *uat-ascend-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT_ASCEND]
+      - keys: *prd-ascend-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD_ASCEND]
+
+      - keys: *dev-old-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV_OLD]
+      - keys: *uat-old-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT_OLD]
+      - keys: *prd-old-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD_OLD]
+
+      - keys: *dev-infra-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV_INFRA]
+      - keys: *stg-infra-keys
+        values: [--kube-context, $KUBE_CONTEXT_STG_INFRA]
+      - keys: *uat-infra-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT_INFRA]
+      - keys: *prd-infra-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD_INFRA]
+
+      - keys: *dev-green-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV_GREEN]
+      - keys: *stg-green-keys
+        values: [--kube-context, $KUBE_CONTEXT_STG_GREEN]
+      - keys: *uat-green-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT_GREEN]
+      - keys: *prd-green-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD_GREEN]
+
+      - keys: *dev-blue-keys
+        values: [--kube-context, $KUBE_CONTEXT_DEV_BLUE]
+      - keys: *stg-blue-keys
+        values: [--kube-context, $KUBE_CONTEXT_STG_BLUE]
+      - keys: *uat-blue-keys
+        values: [--kube-context, $KUBE_CONTEXT_UAT_BLUE]
+      - keys: *prd-blue-keys
+        values: [--kube-context, $KUBE_CONTEXT_PRD_BLUE]
+
+  ##############
+  ### Google ###
+  ##############
+
+  - alias: gc
+    program: gcloud
+    keywords:
+      - keys: *dev-old-keys
+        values: [--project, apexclearing-dev-be5c7a91]
+      - keys: *uat-old-keys
+        values: [--project, apexclearing-uat-13e9d7dc]
+      - keys: *prd-old-keys
+        values: [--project, apexclearing-prod-64145754]
+
+  #############
+  ### Kafka ###
+  #############
+
+  - alias: kc
+    program: kcat
+    keywords:
+      # Local
+      - keys: *local-keys
+        values: [-b, $KAFKA_LOCAL]
+
+      # Main
+      - keys: *dev-keys
+        values:
+          [
+            -b,
+            $KAFKA_DEV,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
+      - keys: *stg-keys
+        values:
+          [
+            -b,
+            $KAFKA_STG,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
+      - keys: *uat-keys
+        values:
+          [
+            -b,
+            $KAFKA_UAT,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
+      - keys: *prd-keys
+        values:
+          [
+            -b,
+            $KAFKA_PRD,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
+
+      # Ascend
+      - keys: *dev-ascend-keys
+        values:
+          [
+            -b,
+            $KAFKA_DEV_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
+      - keys: *stg-ascend-keys
+        values:
+          [
+            -b,
+            $KAFKA_STG_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
+      - keys: *uat-ascend-keys
+        values:
+          [
+            -b,
+            $KAFKA_UAT_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
+      - keys: *prd-ascend-keys
+        values:
+          [
+            -b,
+            $KAFKA_PRD_ASCEND,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
+      - keys: *rcn-keys
+        values:
+          [
+            -b,
+            $KAFKA_RCN,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_RCN,
+          ]
+      - keys: *sbx-keys
+        values:
+          [
+            -b,
+            $KAFKA_SBX,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_SBX,
+          ]
+
+      # Old
+      - keys: *dev-old-keys
+        values: [-b, $KAFKA_DEV_OLD]
+      - keys: *stg-old-keys
+        values: [-b, $KAFKA_STG_OLD]
+      - keys: *uat-old-keys
+        values: [-b, $KAFKA_UAT_OLD]
+      - keys: *prd-old-keys
+        values: [-b, $KAFKA_PRD_OLD]
+
+  - alias: kc-docker
+    program: docker
+    arguments:
+      - key: kcat-base64
+      - key: -w=/host${PWD}
+      - key: -v=/Users/dorchard:/Users/dorchard
+      - key: --network=host
+      - key: -it
+      - key: run
+    keywords:
+      # Main
+      - keys: *dev-keys
+        values:
+          [
+            -b,
+            $KAFKA_DEV,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_DEV,
+          ]
+      - keys: *stg-keys
+        values:
+          [
+            -b,
+            $KAFKA_STG,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_STG,
+          ]
+      - keys: *uat-keys
+        values:
+          [
+            -b,
+            $KAFKA_UAT,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_UAT,
+          ]
+      - keys: *prd-keys
+        values:
+          [
+            -b,
+            $KAFKA_PRD,
+            -X,
+            security.protocol=ssl,
+            -X,
+            ssl.ca.location=$KAFKA_CA_PRD,
+          ]
+
+  # TODO: fix this so that I don't need `--topic` but can still use keyword overrides with positional parameter
+  # kt --create <topic name>
+  # kt --create <topic name> -p 100
+  # kt --delete <topic name>
+  - alias: kt
+    program: kafka-topics.sh
+    arguments:
+      - key: --replication-factor
+        value: 3
+        cleared-by: [--replication-factor, --delete]
+      - key: --partitions
+        value: 1
+        cleared-by: [--partitions, -p, --delete]
+    keywords:
+      - *kafka-topics-local
+      - *kafka-topics-dev
+      - *kafka-topics-dev-ascend
+      - *kafka-topics-dev-old
+      - *kafka-topics-stg
+      - *kafka-topics-stg-ascend
+      - *kafka-topics-stg-old
+      - *kafka-topics-uat
+      - *kafka-topics-uat-ascend
+      - *kafka-topics-uat-old
+      - *kafka-topics-prd
+      - *kafka-topics-prd-ascend
+      - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
+      - keys: [--create]
+        values: [--create, --topic, $#]
+      - keys: [--delete]
+        values: [--delete, --topic, $#]
+      - keys: [-r]
+        values: [--replication-factor, $#]
+      - keys: [-p]
+        values: [--partitions, $#]
+
+  # kcg --speedup <group name>
+  - alias: kcg
+    program: kafka-consumer-groups.sh
+    keywords:
+      - *kafka-topics-local
+      - *kafka-topics-dev
+      - *kafka-topics-dev-ascend
+      - *kafka-topics-dev-old
+      - *kafka-topics-stg
+      - *kafka-topics-stg-ascend
+      - *kafka-topics-stg-old
+      - *kafka-topics-uat
+      - *kafka-topics-uat-ascend
+      - *kafka-topics-uat-old
+      - *kafka-topics-prd
+      - *kafka-topics-prd-ascend
+      - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
+      - keys: [--speedup]
+        values:
+          [--reset-offsets, --all-topics, --execute, --to-latest, --group, $#]
+      - keys: [--delete]
+        values: [--delete, --group, $#]
+
+  - alias: kl
+    program: kafka-log-dirs.sh
+    keywords:
+      - *kafka-topics-local
+      - *kafka-topics-dev
+      - *kafka-topics-dev-ascend
+      - *kafka-topics-dev-old
+      - *kafka-topics-stg
+      - *kafka-topics-stg-ascend
+      - *kafka-topics-stg-old
+      - *kafka-topics-uat
+      - *kafka-topics-uat-ascend
+      - *kafka-topics-uat-old
+      - *kafka-topics-prd
+      - *kafka-topics-prd-ascend
+      - *kafka-topics-prd-old
+      - *kafka-topics-sbx
+      - *kafka-topics-rcn
+      - keys: [--tales]
+        values: [--describe, --topic-list, "trade-processing.tales.status"]
+
+  - alias: kafka-scripts
+    program: docker
+    keywords:
+      - keys: [--stg, --staging]
+        values:
+          [
+            run,
+            -v,
+            ~/.config/kafkacat/stg:/work,
+            -e,
+            BOOTSTRAP_SERVER=$KAFKA_STG_OLD,
+            --entrypoint,
+            bash,
+            -it,
+            confluentinc/cp-kafka:5.4.3,
+          ]
+
+  #############
+  ### Other ###
+  #############
+
+  # Format logs
+  - alias: fl
+    program: sh
+    arguments:
+      - key: -c
+        value: jq -CRr '. as \$line | try fromjson catch \$line' | gsed -e 's/\\\\t/\\t/g' -e 's/\\\\n/\\n/g'
+
+  # Print the root cert for a server
+  - alias: get-ca
+    program: sh
+    arguments:
+      - key: -c
+        value: ""
+        cleared-by: [-c]
+    keywords:
+      - keys: [--url]
+        values:
+          - -c
+          - openssl s_client -showcerts -connect "$#" 2>/dev/null </dev/null | awk 'in_cert { cert = cert "\\n" \$0 } /BEGIN CERT/ { in_cert = 1; cert = \$0 } /END CERT/ { in_cert = 0 } END { print cert }'
+
+  # Print the DNS names for a cert
+  - alias: get-ca-sans
+    program: sh
+    arguments:
+      - key: -c
+        value: ""
+        cleared-by: [-c]
+    keywords:
+      - keys: [--url]
+        values:
+          - -c
+          - openssl s_client -connect "$#" 2>/dev/null </dev/null | openssl x509 -noout -text | grep "Subject Alternative Name" -A2 | grep -Eo "DNS:[a-zA-Z 0-9.*-]*" |  sed "s/DNS://g"
+
+  - alias: a
+    program: awk
+
+    keywords:
+      - keys: [--unique, -u]
+        values: ['!a[\$0]++']
+
+  - alias: theme
+    program: sh
+
+    arguments:
+      - key: -c
+
+    keywords:
+      - keys: [--iterate]
+        values:
+          - |
+            for theme in \$(flavours list | awk -v RS=' ' '!/-light/'); do
+              echo \$theme
+              flavours apply \$theme
+              sleep 1
+            done
+      - keys: [--iterate-random]
+        values:
+          - |
+            for theme in \$(flavours list | awk -v RS=' ' '!/-light/' | sort -R); do
+              echo \$theme
+              flavours apply \$theme
+              sleep 1
+            done
+      - keys: [--iterate-list]
+        values:
+          - |
+            while true; do
+              for theme in $#; do
+                echo \$theme
+                flavours apply \$theme
+                sleep 1
+              done
+            done
+      - keys: [--apply]
+        values: ['flavours apply \$(cat ~/.local/share/flavours/lastscheme)']
+      - keys: [--list]
+        values: ['flavours list | awk -v RS=" " "/[a-z]/ && !/-light/"']
+      - keys: [--show]
+        values:
+          - flavours info "\$(flavours current)" | awk '!a[\$0]++'
+
+  - alias: vesper
+    program: sh
+    arguments:
+      - key: -c
+        value: ""
+        cleared-by: [-c]
+    keywords:
+      - keys: [--up]
+        values:
+          - -c
+          - curl -s 'http://pfix1.apexclearing.local:3000/v1/sessions/statuses.json' | jq -r 'to_entries | .[] | select(.value.is_session_time and .value.logged_on) | .key' | sed 's/FIX.4.2://'
+      - keys: [--down]
+        values:
+          - -c
+          - curl -s 'http://pfix1.apexclearing.local:3000/v1/sessions/statuses.json' | jq -r 'to_entries | .[] | select(.value.is_session_time and (.value.logged_on | not)) | .key'
