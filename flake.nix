@@ -338,6 +338,20 @@
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
         };
 
+        darwinConfigurations.interchanged = withSystem "aarch64-darwin" (
+          ctx @ {
+            config,
+            inputs',
+            system,
+            ...
+          }:
+            inputs.nix-darwin.lib.darwinSystem {
+              specialArgs = specialArgs ctx "darwin" "interchanged";
+              inherit system;
+              modules = darwinModules;
+            }
+        );
+
         darwinConfigurations.YX6MTFK902 = withSystem "aarch64-darwin" (
           ctx @ {
             config,

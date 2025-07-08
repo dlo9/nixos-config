@@ -1,0 +1,62 @@
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib; let
+  user = "david";
+in {
+  graphical.enable = true;
+  developer-tools.enable = true;
+
+  # Used for backwards compatibility, please read the changelog before changing.
+  # $ darwin-rebuild changelog
+  system.stateVersion = 4;
+
+  homebrew = {
+    enable = true;
+
+    brews = [
+      "ollama"
+    ];
+
+    casks = [
+      "docker"
+      "firefox"
+      "flameshot"
+      "kreya"
+      "logseq"
+      "sensiblesidebuttons"
+
+      # Gui for launchctl
+      "launchcontrol"
+    ];
+  };
+
+  # Users
+  system.primaryUser = "david";
+  home-manager.users.${user} = import ./home.nix;
+
+  users.users.${user} = {
+    home = "/Users/${user}";
+    uid = 501;
+    gid = 20;
+    shell = pkgs.fish;
+  };
+
+  # Check current DNS settings with: scutil --dns
+  # This also adds domains as a resolver in /etc/resolver. See:
+  # - https://github.com/suth/mac-traefik-config
+  # - https://vninja.net/2020/02/06/macos-custom-dns-resolvers
+  services.dnsmasq = {
+    enable = true;
+
+    addresses = {
+      "laptop" = "127.0.0.1";
+    };
+  };
+
+  nix.enable = false;
+}

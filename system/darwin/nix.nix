@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -7,7 +8,7 @@ with lib; {
   # Tell the daemon to use system certs, so that all trusted certs are used with fetchers
   launchd.daemons.nix-daemon.serviceConfig.EnvironmentVariables.NIX_CURL_FLAGS = "--cacert /etc/ssl/certs/ca-certificates.crt";
 
-  nix = {
+  nix = mkIf config.nix.enable {
     package = mkDefault pkgs.nix;
 
     optimise = {

@@ -24,7 +24,7 @@
   };
 
   config = {
-    #networking.hostName = hostname;
+    networking.hostName = hostname;
     programs.fish.enable = true;
     environment.shells = [pkgs.fish];
   };
