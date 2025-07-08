@@ -204,6 +204,11 @@ with lib; {
         credential.helper = mkIf isLinux "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
         push.autoSetupRemote = true;
         merge.conflictStyle = "zdiff3";
+
+        # Sign git commits with SSH key
+        gpg.format = "ssh";
+        user.signingkey = "~/.ssh/id_ed25519.pub";
+        commit.gpgsign = true;
       };
     };
   };
