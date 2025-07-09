@@ -14,7 +14,7 @@ services:
       LD_ENABLE_AUTH_PROXY: "True"
       LD_AUTH_PROXY_USERNAME_HEADER: "HTTP_REMOTE_USER"
 
-    restart: unless-stopped
+    restart: always
 
     labels:
       - traefik.enable=true
