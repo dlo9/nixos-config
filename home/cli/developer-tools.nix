@@ -44,6 +44,7 @@ with lib; {
           dlo9.posting # Postman-like clint
           # dlo9.otree # JSON tree viewer
           # dlo9.rainfrog # Postgres TUI
+          dlo9.somo
 
           flashrom
           #noseyparker # Credential scanner
