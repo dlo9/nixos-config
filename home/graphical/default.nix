@@ -61,11 +61,29 @@ with lib; {
           # Map Win to Alt for zelliJ: https://github.com/zellij-org/zellij/issues/2318
           # Use `showkey -a` to get the unicode for alt
           # https://github.com/zellij-org/zellij/blob/f6ec1a13853d25df3412ad9f759ea857719bb2aa/zellij-utils/assets/config/default.kdl#L150
-          keyboard.bindings = map (key: {
-            inherit key;
-            mods = "Super";
-            chars = ''\u001b${key}'';
-          }) (stringToCharacters "niohljk-=[]");
+          keyboard.bindings =
+            (map (key: {
+              inherit key;
+              mods = "Super";
+              chars = ''\u001b${key}'';
+            }) (stringToCharacters "niohljk-=[]"))
+            ++ [
+              {
+                key = "=";
+                mods = "Control";
+                action = "IncreaseFontSize";
+              }
+              {
+                key = "-";
+                mods = "Control";
+                action = "DecreaseFontSize";
+              }
+              {
+                key = "0";
+                mods = "Control";
+                action = "ResetFontSize";
+              }
+            ];
         };
       };
 
