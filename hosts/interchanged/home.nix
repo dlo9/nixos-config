@@ -15,9 +15,12 @@ with lib; {
 
   xdg.configFile."wrap.yaml".source = ./wrap.yaml;
 
+  programs.firefox.enable = true;
+
   home.packages = with pkgs; [
     kubectl
-    #tilt
+    flameshot
+    notion-app
     slack
     awscli2
 
@@ -30,11 +33,6 @@ with lib; {
     protobuf
     #sqlc
 
-    # Kafka
-    #kcat
-    #kafkactl
-    #apacheKafka
-
     # Python
     pyenv
 
@@ -43,20 +41,10 @@ with lib; {
     coreutils-prefixed
     gawk
 
-    # Bazel
-    bazelisk
-    bazel-buildtools
-
     # Other tools
     terraform
-    obsidian
     gh
     #postman
-
-    # Window manager/hotkeys
-    #skhd
-
-    grpcurl
   ];
 
   home.sessionVariables = rec {
@@ -67,8 +55,14 @@ with lib; {
     # HOMEBREW_CURLRC = "1";
     RUST_BACKTRACE = "1";
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
+    SHELL = "${config.programs.fish.package}/bin/fish"; # Fix for tmux
+
     GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
-    SHELL = "${config.programs.fish.package}/bin/fish";
+    J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
+    AWS_REGION = "us-west-2";
+    IX_CLUSTER = "devcore";
+    IX_ENV = "devcore-web";
+    AWS_PROFILE = "ixb-devcore";
   };
 
   home.sessionPath = [

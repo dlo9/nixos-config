@@ -24,10 +24,6 @@ in {
 
     casks = [
       "docker"
-      "firefox"
-      "flameshot"
-      "kreya"
-      "logseq"
       "sensiblesidebuttons"
 
       # Gui for launchctl
@@ -58,5 +54,7 @@ in {
     };
   };
 
+  # Used determinate nix installer
   nix.enable = false;
+  services.tailscale.enable = true;
 }
