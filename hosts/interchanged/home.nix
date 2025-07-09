@@ -203,7 +203,7 @@ with lib; {
     docker-compose = {
       enable = true;
       config = rec {
-        #KeepAlive = true;
+        KeepAlive = true;
         ProcessType = "Interactive";
         EnvironmentVariables = {
           HOME = config.home.homeDirectory;
