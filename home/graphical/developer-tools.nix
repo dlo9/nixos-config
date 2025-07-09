@@ -21,6 +21,7 @@ with lib; {
 
         profiles.default.extensions = with pkgs.vscode-extensions; [
           jnoortheen.nix-ide
+          mkhl.direnv
 
           # Enables SSH into a Nix remote host:
           # https://nixos.wiki/wiki/Visual_Studio_Code#Nix-sourced_VS_Code_to_NixOS_host

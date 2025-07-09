@@ -114,7 +114,13 @@ with lib; {
   };
 
   # https://github.com/NixOS/nixpkgs/issues/330735
-  programs.vscode.package = mkForce pkgs.vscode;
+  programs.vscode = {
+    package = mkForce pkgs.vscode;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      bierner.markdown-mermaid
+      golang.go
+    ];
+  };
 
   home.activation = {
     setWallpaper = ''
