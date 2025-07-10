@@ -204,6 +204,7 @@ with lib; {
         credential.helper = mkIf isLinux "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
         push.autoSetupRemote = true;
         merge.conflictStyle = "zdiff3";
+        "url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
 
         # Sign git commits with SSH key
         gpg.format = "ssh";
