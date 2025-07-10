@@ -109,6 +109,7 @@ with lib; {
         python.disabled = true;
         nodejs.disabled = true;
         golang.disabled = true;
+        aws.disabled = true;
 
         scan_timeout = 10;
         command_timeout = 100;
