@@ -24,4 +24,19 @@
       wvous-tr-corner = 1;
     };
   };
+
+  # Force a public DNS so that tailscale does DOH:
+  # https://tailscale.com/kb/1054/dns#global-nameservers
+  networking.dns = [
+    "9.9.9.9"
+    "149.112.112.112"
+    "2620:fe::fe"
+    "2620:fe::9"
+  ];
+
+  networking.knownNetworkServices = [
+    "Wi-Fi"
+    "Thunderbolt Bridge"
+    "AX88179A"
+  ];
 }
