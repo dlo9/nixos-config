@@ -57,5 +57,7 @@ in {
 
   # Used determinate nix installer
   nix.enable = false;
-  services.tailscale.enable = true;
+
+  # Installed the pkgs instead, since this version doesn't have a GUI
+  #services.tailscale.enable = true;
 }
