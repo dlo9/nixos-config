@@ -123,9 +123,27 @@ with lib; {
   };
 
   home.activation = {
-    setWallpaper = ''
-      /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.wallpapers.default}"'
+    setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      run /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.wallpapers.default}"'
     '';
+
+    # https://github.com/nix-darwin/nix-darwin/issues/518
+    # https://github.com/NUIKit/CGSInternal/blob/master/CGSHotKeys.h
+    # https://stackoverflow.com/questions/21878482/what-do-the-parameter-values-in-applesymbolichotkeys-plist-dict-represent
+    disableHotkeys = let
+      hotkeys = [
+        32 # Disable Mission control
+        33 # Disable Show application windows
+        79 # Move to left space
+        81 # Move to right space
+      ];
+
+      disableKey = key: "run /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add ${toString key} '<dict><key>enabled</key><false/></dict>'";
+      script = lib.concatStringsSep "\n" (map disableKey hotkeys);
+    in
+      lib.hm.dag.entryBefore ["activateSettings"] script;
+
+    activateSettings = lib.hm.dag.entryAfter ["writeBoundary"] "/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u";
   };
 
   home.file = {
