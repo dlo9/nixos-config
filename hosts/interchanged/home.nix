@@ -133,44 +133,6 @@ with lib; {
     ".hushlogin".text = "";
   };
 
-  home.shellAliases = let
-    team = "trade-processing";
-    gitops = "~/code/gitops";
-    app = "${gitops}/deploy/app";
-    afsapi = "${gitops}/deploy/afsapi";
-    infra = "~/code/apexinternal-gitops/kubernetes/infra/team/trade-processing/overlays";
-
-    env-dirs = env: {
-      "${env}" = "pushd ${app}/${env}/${team}";
-      "${env}-afs" = "pushd ${afsapi}/${env}/${team}";
-      "${env}-infra" = "pushd ${infra}/${env}/releases";
-    };
-  in
-    {
-      gitops = "pushd ${gitops}";
-
-      mono = "pushd ~/code/source";
-      tp = "pushd ~/code/trade-processing";
-
-      braggart = "pushd ~/code/braggart";
-      hero = "pushd ~/code/herodotus";
-      hippo = "pushd ~/code/hippocrates";
-
-      rtce = "pushd ~/code/rtce";
-      rtceprod = "pushd ~/code/rtceprod/servers/Gateways/Customer/FBI";
-
-      adhoc = "pushd ~/code/david/adhoc";
-      queries = "pushd ~/code/david/adhoc/queries";
-      g = "pushd ~/g";
-
-      rcn = (env-dirs "rcn").rcn-afs;
-      sbx = (env-dirs "sbx").sbx-afs;
-    }
-    // (env-dirs "dev")
-    // (env-dirs "stg")
-    // (env-dirs "uat")
-    // (env-dirs "prd");
-
   launchd.agents = let
     docker-compose = name: {
       enable = true;
