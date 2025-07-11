@@ -23,9 +23,9 @@
       wvous-tl-corner = 1;
       wvous-tr-corner = 1;
     };
-  };
 
-  system.defaults.WindowManager.EnableStandardClickToShowDesktop = false;
+    WindowManager.EnableStandardClickToShowDesktop = false;
+  };
 
   # Force a public DNS so that tailscale does DOH:
   # https://tailscale.com/kb/1054/dns#global-nameservers
