@@ -25,6 +25,8 @@
     };
   };
 
+  system.defaults.WindowManager.EnableStandardClickToShowDesktop = false;
+
   # Force a public DNS so that tailscale does DOH:
   # https://tailscale.com/kb/1054/dns#global-nameservers
   networking.dns = [
