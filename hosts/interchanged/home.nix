@@ -32,6 +32,7 @@ with lib; {
     go
     protobuf
     #sqlc
+    golangci-lint
 
     # Python
     pyenv
@@ -108,6 +109,24 @@ with lib; {
   };
 
   programs.git.userEmail = "david@interchange.com";
+  programs.git.extraConfig = {
+    init.templatedir = "~/.config/git/template";
+  };
+
+  xdg.configFile = {
+    "git/template/hooks/pre-commit" = {
+      executable = true;
+      text = ''
+        #!/bin/sh
+
+        set -e
+
+        if [ -e .golangci.yml ]; do
+          golangci-lint run
+        done
+      '';
+    };
+  };
 
   programs.ssh = {
     enable = true;
