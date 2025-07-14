@@ -20,10 +20,16 @@ with lib; {
     };
   };
 
+  # Fix issue with cage not disaplaying on startup
+  # https://github.com/NixOS/nixpkgs/issues/229235
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="drm", KERNEL=="card0", TAG+="systemd"
+  '';
+
   # Rotate the screen after cage starts
   systemd.services."cage-tty1" = let
     # Cage has a race condition and fails to start a user session without this
-    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket"];
+    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" "dev-dri-card0.device"];
   in rec {
     requires = requirements;
     after = requirements;
