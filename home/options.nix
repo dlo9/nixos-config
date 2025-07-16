@@ -79,6 +79,13 @@ with builtins; {
           url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/f31fc21f-e6cd-407d-bc72-1a856ab56c75/BRONZE%C2%A9Silke+Hullmann_On+their+way+to+Mars.jpg;
           sha256 = "059zbiw878imjlczn30l91cim4g9q4w0jqysm9ydxk23biyr7sqv";
         };
+
+        # Blocked by cloudflare
+        wr-134-wolf-nebula = fetchurl {
+          name = "";
+          url = https://media.invisioncic.com/r307508/monthly_2024_09/WR134HOO.jpg.6a54efbab22a1e32d98ab035856280ab.jpg;
+          sha256 = "38271ff1945e3c717a29b242919326cd014dea8b99932fa3262adccc622e8f9b";
+        };
       };
     };
   };
