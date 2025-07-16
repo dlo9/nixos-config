@@ -30,6 +30,7 @@ with lib; {
 
     # Golang
     go
+    delve
     protobuf
     #sqlc
     golangci-lint
