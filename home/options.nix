@@ -81,11 +81,11 @@ with builtins; {
         };
 
         # Blocked by cloudflare
-        wr-134-wolf-nebula = fetchurl {
-          name = "";
-          url = https://media.invisioncic.com/r307508/monthly_2024_09/WR134HOO.jpg.6a54efbab22a1e32d98ab035856280ab.jpg;
-          sha256 = "38271ff1945e3c717a29b242919326cd014dea8b99932fa3262adccc622e8f9b";
-        };
+        #wr-134-wolf-nebula = fetchurl {
+        #  name = "";
+        #  url = https://media.invisioncic.com/r307508/monthly_2024_09/WR134HOO.jpg.6a54efbab22a1e32d98ab035856280ab.jpg;
+        #  sha256 = "38271ff1945e3c717a29b242919326cd014dea8b99932fa3262adccc622e8f9b";
+        #};
       };
     };
   };
