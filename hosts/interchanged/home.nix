@@ -32,7 +32,6 @@ with lib; {
     go
     delve
     protobuf
-    #sqlc
     golangci-lint
 
     # Python
@@ -46,7 +45,8 @@ with lib; {
     # Other tools
     terraform
     gh
-    #postman
+    postman
+    hoppscotch
   ];
 
   home.sessionVariables = rec {
