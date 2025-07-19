@@ -12,7 +12,7 @@ with lib; {
       enable = true;
       user = config.home-manager.users.david.home.username;
       remote = "git@github.com:dlo9/trident";
-      path = config.services.klipper.mutableConfigFolder;
+      path = config.services.klipper.configDir;
     };
   };
 }
