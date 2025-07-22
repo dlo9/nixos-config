@@ -10,7 +10,7 @@ age-keys: &everyone # Master key
   - &rpi3 age189fhnxddwst08ug2j644nqd9vtxf2tp2kr3ygmutruayvzt7ss9sd3jf4m
   - &nib age1szk33dt0yyeru746p0elrym3hpc5hr6w6lqz0hd8xhrdt44k3sdqmpx0lk
   - &installer-test age185nwxyqzcghmdq5pjcad8aswgjmujd8pauet0urmum57uxx07ecs7dgt6g
-  - &interchanged age185nwxyqzcghmdq5pjcad8aswgjmujd8pauet0urmum57uxx07ecs7dgt6g
+  - &interchanged age1gslhygf47xw7snk72d0c748yced0j6eld3lm92g6hcue52yq9yusa38rcq
   - &mallow age1h8cp3pwklm5tfcr5udxj7q8yfkfww368f0c4uymzfkzr5r5qpv4q82fkxy
   - &pixie age1zx9kfxfre3zyuazgr4wkrh0gqdudqj3e6gcuts3mr9ly8jkfmctsl9pqnk
   - &trident age1jgc4n5klps48l83gmw7mqmh0x45ss3uvmpe8muys8ag90sf84arqqymclg
