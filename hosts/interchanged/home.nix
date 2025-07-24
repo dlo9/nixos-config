@@ -33,6 +33,7 @@ with lib; {
     delve
     protobuf
     golangci-lint
+    grpcurl
 
     # Python
     pyenv
