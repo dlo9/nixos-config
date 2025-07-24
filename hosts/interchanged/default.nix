@@ -26,9 +26,9 @@ in {
     casks = [
       "docker"
       "sensiblesidebuttons"
-
-      # Gui for launchctl
       "launchcontrol"
+      "notion-calendar"
+      "notion-mail"
     ];
   };
 
