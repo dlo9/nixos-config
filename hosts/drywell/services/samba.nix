@@ -56,6 +56,17 @@ with lib; {
         "valid users" = "+samba";
       };
 
+      michael-backup = {
+        path = "/slow/backups/michael";
+        browseable = "yes";
+        "read only" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "michael";
+        "force group" = "users";
+        "valid users" = "+samba";
+      };
+
       sue = {
         path = "/slow/documents/sue";
         browseable = "yes";
