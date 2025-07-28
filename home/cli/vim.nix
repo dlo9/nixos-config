@@ -9,6 +9,7 @@ with lib; {
   home.sessionVariables = {
     EDITOR = "vim";
     NH_FLAKE = "/etc/nixos"; # For nh
+    PAGER = "less -FRX";
   };
 
   programs.vim = {

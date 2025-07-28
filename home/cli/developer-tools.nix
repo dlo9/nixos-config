@@ -91,6 +91,39 @@ with lib; {
           };
         };
       };
+
+      jujutsu = {
+        enable = true;
+        package = pkgs.unstable.jujutsu;
+        settings = {
+          user = {
+            name = config.programs.git.userName;
+            email = config.programs.git.userEmail;
+          };
+
+          git = {
+            auto-local-bookmark = true;
+            private-commits = "description(glob:'wip:*') | description(glob:'private:*')";
+          };
+
+          revset-aliases = {
+            "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
+          };
+
+          signing = {
+            backend = config.programs.git.extraConfig.gpg.format;
+            key = config.programs.git.extraConfig.user.signingkey;
+            behavior = "own";
+          };
+
+          ui = {
+            # delta, diff-so-fancy, and difftastic are other alternatives
+            # diffnav is great, but only works with diff: https://github.com/dlvhdr/diffnav/issues/28
+            pager = "${pkgs.delta}/bin/delta";
+            diff-formatter = ":git"; # Required by pager
+          };
+        };
+      };
     };
 
     xdg.configFile = mylib.xdgFiles {
