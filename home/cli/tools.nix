@@ -198,6 +198,15 @@ with lib; {
         "*.log"
       ];
 
+      delta = {
+        enable = true;
+        options = {
+          line-numbers = true;
+          hyperlinks = true;
+          side-by-side = true;
+        };
+      };
+
       extraConfig = {
         init.defaultBranch = "main";
         pull.ff = "only";
