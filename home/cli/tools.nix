@@ -10,7 +10,7 @@
 with lib; {
   home = {
     sessionVariables = {
-      PAGER = "bat";
+      PAGER = "bat --style='-header-filename'";
     };
 
     shellAliases = {
