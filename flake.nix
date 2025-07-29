@@ -69,7 +69,7 @@
     };
 
     wrap = {
-      url = "github:dlo9/wrap/0.4.5";
+      url = "github:dlo9/wrap/0.4.6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

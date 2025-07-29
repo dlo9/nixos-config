@@ -1234,16 +1234,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1748374392,
-        "narHash": "sha256-1S+08tqh8RqiFPyA//7TbhphwOWdsewVD9COZmDUnb4=",
+        "lastModified": 1753809841,
+        "narHash": "sha256-J6Fr9VDDQvmpgPGHnQZE/E+nuc5MhokC75j5+IaV/K0=",
         "owner": "dlo9",
         "repo": "wrap",
-        "rev": "bbf3a2b9309adce9e60f84268ffbcb1470ef90f2",
+        "rev": "afeb278d70f276c752cfb86fded9b86425a50ef5",
         "type": "github"
       },
       "original": {
         "owner": "dlo9",
-        "ref": "0.4.5",
+        "ref": "0.4.6",
         "repo": "wrap",
         "type": "github"
       }
