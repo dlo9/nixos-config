@@ -74,7 +74,7 @@ with lib; {
       helix = {
         enable = true;
         settings = {
-          theme = "kanagawa";
+          theme = "bogster";
         };
       };
 
