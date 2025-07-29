@@ -110,6 +110,8 @@ with lib; {
         nodejs.disabled = true;
         golang.disabled = true;
         aws.disabled = true;
+        nix_shell.format = "$symbol ";
+        nix_shell.symbol = "";
 
         scan_timeout = 10;
         command_timeout = 100;
