@@ -124,6 +124,11 @@ with lib; {
 
         # Which package version this source builds
         package.disabled = true;
+
+        # When using jj, we're usually in a detached head state
+        git_branch.only_attached = true;
+        git_commit.disabled = true;
+        git_status.disabled = true;
       };
     };
 
