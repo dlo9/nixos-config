@@ -9,6 +9,10 @@
 }:
 with lib; {
   home = {
+    sessionVariables = {
+      PAGER = "bat";
+    };
+
     shellAliases = {
       # Use modern alternatives to classic unix tools
       # https://github.com/ibraheemdev/modern-unix
