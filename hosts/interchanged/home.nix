@@ -30,7 +30,6 @@ with lib; {
 
     # Golang
     go
-    delve
     protobuf
     golangci-lint
     grpcurl
