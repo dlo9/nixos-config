@@ -106,6 +106,10 @@ with lib; {
             private-commits = "description(glob:'wip:*') | description(glob:'private:*')";
           };
 
+          aliases = {
+            tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+          };
+
           revset-aliases = {
             "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
           };
