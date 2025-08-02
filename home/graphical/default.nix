@@ -99,24 +99,24 @@ with lib; {
     xdg = {
       enable = mkDefault true;
 
-      desktopEntries = with pkgs;
-        optionalAttrs isLinux {
-          qimgv = {
-            name = "qimgv";
-            exec = "qimgv -- %F";
-            mimeType = [
-              "image/jpeg"
-            ];
-          };
-        };
-
       # Default applications
       mimeApps = {
         enable = mkDefault isLinux;
 
-        # See desktop files in /run/current-system/sw/share/applications
+        # See desktop files with:
+        # ls /etc/profiles/per-user/david/share/applications /run/current-system/sw/share/applications
         defaultApplications = {
-          "image/jpeg" = "qimgv.desktop";
+          "image/jpeg" = "pix.desktop";
+          "image/gif" = "pix.desktop";
+          "image/png" = "pix.desktop";
+          "image/svg+xml" = "pix.desktop";
+          "image/tiff" = "pix.desktop";
+          "image/webp" = "pix.desktop";
+          "application/pdf" = "org.pwmt.zathura.desktop";
+          "text/markdown" = "code.desktop";
+          "text/xml" = "code.desktop";
+          "text/csv" = "code.desktop";
+          "text/plain" = "code.desktop";
         };
       };
     };
@@ -194,7 +194,8 @@ with lib; {
           whatsapp-for-linux
 
           # Image viewer
-          loupe
+          #loupe
+          pix
 
           libreoffice
           cameractrls-gtk4
