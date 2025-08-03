@@ -11,7 +11,7 @@
     david = {
       uid = 1000;
       isNormalUser = true;
-      hashedPassword = "$6$8xGwl/pOyfkTn2pB$s2A1K5yORHrtLa.xKkuHIhgzVK.ERZT6IwMLJhDS9kEJYGhWbulm0JUTEckC1ySPoZ9ebTT9Vg/ZC6tBE2RZg.";
+      hashedPassword = "$y$j9T$PcYhxYODK1jqn8tcCRWa1/$XCP99oOMrsQ7xMXzswZ7hypbIXKQ2YNXh2L7vTjteD6";
       createHome = true;
       shell = pkgs.fish;
       extraGroups = [
