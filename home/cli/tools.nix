@@ -90,6 +90,9 @@ with lib; {
         # topgrade # Upgrade all the things
         # lemmeknow # Identify encoded strings
         # oha # HTTP benchmarker
+
+        just
+        nix-output-monitor
       ]
       ++
       # Linux only
