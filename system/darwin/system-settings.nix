@@ -9,7 +9,10 @@
       AppleShowAllFiles = true;
     };
 
-    finder.ShowPathbar = true;
+    finder = {
+      ShowPathbar = true;
+      _FXSortFoldersFirst = true;
+    };
 
     dock = {
       autohide = true;
