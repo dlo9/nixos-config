@@ -8,22 +8,22 @@ alias fmt := format
 format:
     alejandra fmt -q .
 
-rebuild-linux cmd="build":
+rebuild-linux cmd="build" host=hostname:
     sudo -v # Nom has an issue with hiding the sudo message
-    sudo nixos-rebuild {{cmd}} --option fallback true --show-trace |& nom
+    sudo nixos-rebuild --flake ".#{{host}}" {{cmd}} --option fallback true --show-trace |& nom
 
-rebuild-macos cmd="build":
+rebuild-macos cmd="build" host=hostname:
     sudo -v # Nom has an issue with hiding the sudo message
-    sudo darwin-rebuild --flake ".#{{hostname}}" {{cmd}} --option fallback true --option http2 false --show-trace |& nom
+    sudo darwin-rebuild --flake ".#{{host}}" {{cmd}} --option fallback true --option http2 false --show-trace |& nom
 
-rebuild-android cmd="build":
-    nix-on-droid --flake ".#{{hostname}}" {{cmd}} --option fallback true --show-trace |& nom
+rebuild-android cmd="build" host=hostname:
+    nix-on-droid --flake ".#{{host}}" {{cmd}} --option fallback true --show-trace |& nom
 
-build:
-    just "rebuild-{{os()}}" build
+build host=hostname:
+    just "rebuild-{{os()}}" build {{host}}
 
-switch:
-    just "rebuild-{{os()}}" switch
+switch host=hostname:
+    just "rebuild-{{os()}}" switch {{host}}
 
 generate-hardware: && format
     mkdir -p "$(dirname "{{hardware-config}}")"
