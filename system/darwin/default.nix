@@ -13,6 +13,7 @@
     ./system-settings.nix
     ./window-manager.nix
     inputs.home-manager.darwinModules.home-manager
+    inputs.sops-nix.darwinModules.sops
   ];
 
   # Temporary workaround since sops-nix checks a systemd options,

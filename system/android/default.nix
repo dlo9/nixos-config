@@ -8,6 +8,7 @@
   imports = [
     # ./nix.nix
     # inputs.home-manager.darwinModules.home-manager
+    inputs.sops-nix.nixosModules.sops
   ];
 
   # Temporary workaround since sops-nix checks a systemd options,

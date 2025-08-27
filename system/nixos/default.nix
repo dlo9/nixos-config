@@ -20,6 +20,7 @@ with lib; {
     ./users.nix
 
     inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
   ];
 
   boot.initrd.supportedFilesystems.nfs = true;
