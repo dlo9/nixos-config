@@ -43,9 +43,12 @@ deploy host:
         pixie) args="-- --impure" ;;
     esac
 
-    nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#{{host}} $args
+    nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k .#{{host}} $args
 
 deploy-all:
     # https://github.com/serokell/deploy-rs/issues/325#issuecomment-3015838438
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#cuttlefish .#drywell .#pavil .#trident
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#pixie -- --impure
+
+update:
+    nix flake update
