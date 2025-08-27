@@ -212,6 +212,8 @@ with lib; {
           line-numbers = true;
           hyperlinks = true;
           side-by-side = true;
+          plus-style = "syntax #003500";
+          plus-emph-style = "syntax #009900";
         };
       };
 
