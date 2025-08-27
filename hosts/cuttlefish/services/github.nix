@@ -18,11 +18,6 @@ with lib; {
       tokenFile = config.sops.secrets.github-runner.path;
       url = "https://github.com/dlo9/wrap";
 
-      nodeRuntimes = [
-        "node20"
-        "node24"
-      ];
-
       extraPackages = with pkgs; [
         nix
         curl
