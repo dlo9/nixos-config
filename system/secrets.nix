@@ -8,10 +8,6 @@
   ...
 }:
 with lib; {
-  imports = [
-    inputs.sops-nix.nixosModules.sops
-  ];
-
   sops = {
     defaultSopsFile = mkDefault mylib.secrets.hostSops hostname;
     gnupg.sshKeyPaths = mkDefault []; # Disable automatic SSH key import
