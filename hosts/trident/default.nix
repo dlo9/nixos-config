@@ -21,6 +21,7 @@ with lib; {
     services.davfs2.enable = false;
     services.fwupd.enable = false;
     fix-efi.enable = false;
+    documentation.man.enable = false;
 
     system.stateVersion = "24.11";
   };
