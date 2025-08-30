@@ -12,6 +12,11 @@ with lib; {
       enable = true;
       package = pkgs.unstable.github-runner;
 
+      nodeRuntimes = [
+        "node20"
+        "node24"
+      ];
+
       replace = true;
       ephemeral = true;
 
