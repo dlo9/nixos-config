@@ -52,6 +52,7 @@ in {
 
     addresses = {
       "laptop" = "127.0.0.1";
+      "dl.pstmn.io" = "127.0.0.1"; # Block postman download notifications
     };
   };
 
