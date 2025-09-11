@@ -47,9 +47,6 @@ with lib; {
         "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
         "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
       ];
-
-      # To avoid github rate limiting
-      access-tokens = "!include ${config.sops.secrets.nix-access-tokens.path}";
     };
 
     extraOptions = ''
@@ -62,6 +59,9 @@ with lib; {
 
       connect-timeout = 5
       log-lines = 25
+
+      # To avoid github rate limiting
+      !include ${config.sops.secrets.nix-access-tokens.path}
     '';
   };
 }
