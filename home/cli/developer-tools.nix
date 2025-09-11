@@ -108,6 +108,7 @@ with lib; {
 
           aliases = {
             tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+            abandon-empty = ["abandon" "-r" "(empty() & description(exact:'')) ~ root()"];
           };
 
           revset-aliases = {
