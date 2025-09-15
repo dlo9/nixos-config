@@ -45,7 +45,6 @@ with lib; {
           # dlo9.otree # JSON tree viewer
           # dlo9.rainfrog # Postgres TUI
           dlo9.somo
-          (dlo9.rustnet.override { rustPlatform = pkgs.unstable.rustPlatform; })
 
           flashrom
           #noseyparker # Credential scanner
@@ -66,6 +65,7 @@ with lib; {
         # Linux only
         (optionals isLinux [
           isd
+          (dlo9.rustnet.override { rustPlatform = pkgs.unstable.rustPlatform; })
         ]);
     };
 
