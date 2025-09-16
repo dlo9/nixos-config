@@ -53,6 +53,7 @@ in {
     addresses = {
       "laptop" = "127.0.0.1";
       "dl.pstmn.io" = "127.0.0.1"; # Block postman download notifications
+      "desktop-release.notion-static.com" = "127.0.0.1"; # Block notion download notifications
     };
   };
 

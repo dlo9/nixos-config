@@ -62,8 +62,6 @@ with lib; {
     GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
     J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
     AWS_REGION = "us-west-2";
-    IX_CLUSTER = "devcore";
-    IX_ENV = "devcore-web";
     AWS_PROFILE = "ixb-devcore";
   };
 
