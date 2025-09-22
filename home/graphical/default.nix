@@ -235,8 +235,11 @@ with lib; {
       # Screenshots
       flameshot = {
         enable = mkDefault isLinux;
-        package = pkgs.unstable.flameshot.override {
-          enableWlrSupport = true;
+        package = pkgs.unstable.flameshot;
+
+        settings.General = {
+          disabledGrimWarning = true;
+          useGrimAdapter = true;
         };
       };
     };
