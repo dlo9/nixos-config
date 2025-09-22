@@ -41,7 +41,7 @@ in {
     name = "immich";
 
     services = let
-      version = "v1.137.3";
+      version = "v1.142.1";
     in {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${version}";
