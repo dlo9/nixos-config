@@ -20,7 +20,6 @@ with lib; {
   home.packages = with pkgs; [
     kubectl
     flameshot
-    notion-app
     slack
     awscli2
 
