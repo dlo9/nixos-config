@@ -59,9 +59,8 @@ with lib; {
         "fast/home/david/.cache<".local = "week";
         "fast/home/david/code<".local = "week";
         "fast/home/david/Downloads<".local = "week";
-        "fast/nixos/nix<".local = "week";
-
-        "slow/smb/chelsea-backup<".local = "week";
+        "fast/nixos/nix<".local = "day";
+        "fast/nixos/root<".local = "month";
 
         # Small services
         "fast/services<" = {
