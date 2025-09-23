@@ -74,7 +74,7 @@ with lib; {
         "slow/services/deluge/downloads<" = {};
 
         # Container cache
-        "fast/docker<".local = "week";
+        "fast/docker<".local = "day";
         "fast/containerd<".local = "day";
 
         # Unmanaged
