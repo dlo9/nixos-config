@@ -58,9 +58,7 @@
       );
 
       # Return true if the secret is enabled and has exports
-      isEnabled = name: value:
-        (value.enable or false)
-        && (builtins.isAttrs (value.exports or ""));
+      isEnabled = name: value: builtins.isAttrs (value.exports or "");
 
       enabledContents = lib.filterAttrs isEnabled (parseSops sopsFile);
     in
