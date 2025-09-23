@@ -23,6 +23,7 @@ with lib; {
       config.hosts.bitwarden.ssh-key.pub
       config.hosts.pixie.host-ssh-key.pub
       config.hosts.pavil.david-ssh-key.pub
+      config.hosts.interchanged.david-ssh-key.pub
 
       config.hosts.drywell.david-ssh-key.pub # zrepl?
     ];
