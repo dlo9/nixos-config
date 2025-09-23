@@ -40,6 +40,7 @@ with lib; {
     gnused
     coreutils-prefixed
     gawk
+    getopt
 
     # Other tools
     terraform
@@ -60,8 +61,6 @@ with lib; {
 
     GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
     J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
-    AWS_REGION = "us-west-2";
-    AWS_PROFILE = "ixb-devcore";
   };
 
   home.sessionPath = [
