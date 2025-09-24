@@ -61,6 +61,7 @@ with lib; {
         "fast/home/david/Downloads<".local = "week";
         "fast/nixos/nix<".local = "day";
         "fast/nixos/root<".local = "month";
+        "slow/games/steam".local = "week";
 
         # Small services
         "fast/services<" = {
