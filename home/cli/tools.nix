@@ -182,6 +182,20 @@ with lib; {
         flags = {
           mem_as_value = true;
         };
+
+        # Ignore virtual interfaces
+        network.interface_filter = {
+          regex = true;
+          list = [
+            "lo"
+            "veth.*"
+            "ve-.*"
+            "tailscale.*"
+            "docker.*"
+            "flannel.*"
+            "mynet"
+          ];
+        };
       };
     };
 
