@@ -11,14 +11,13 @@ with lib; let
   listenAddresses = ["0.0.0.0"];
   tailscaleDomain = "fairy-koi.ts.net";
 
-  # TODO: Make the available outside this file, so that configs can be adjacent to their services
-  authentikForwardAuth = ''
-    # forward authentication to outpost
+  # TODO: figure out why https doesn't work here
+  auth = ''
     forward_auth http://10.1.0.1:1080 {
-        header_up Host "authentik.sigpanic.com"
-        uri /outpost.goauthentik.io/auth/caddy
+        header_up Host "authelia.sigpanic.com"
+        uri /api/authz/forward-auth
 
-        copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version Remote-User Remote-Groups Remote-Name Remote-Email
+        copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
     }
   '';
 in {
@@ -62,7 +61,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["trident.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
 
             handle_path /stream.html* {
                 reverse_proxy http://trident:1984 {
@@ -88,7 +87,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["beszel.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
             reverse_proxy http://localhost:8090
           '';
         };
@@ -138,7 +137,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["sunshine.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
 
             #reverse_proxy https://winvm.lan:47990 {
             reverse_proxy https://localhost:47990 {
@@ -162,7 +161,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["router.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
             reverse_proxy http://192.168.1.1
           '';
         };
@@ -171,7 +170,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["ttyd.sigpanic.com" "term.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
             reverse_proxy http://localhost:7681
           '';
         };
@@ -188,7 +187,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["netdata.sigpanic.com"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
             reverse_proxy http://localhost:${config.services.netdata.config.web."default port"}
           '';
         };
