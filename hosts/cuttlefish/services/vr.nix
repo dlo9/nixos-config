@@ -15,16 +15,16 @@ with lib; {
 
   programs.envision.enable = true;
 
+  systemd.user.services.wivrn.path = with pkgs; [
+        pulseaudio # For changing volume with wlx-overlay-s
+      ];
+
   services = {
     wivrn = {
       enable = true;
       openFirewall = true;
       defaultRuntime = true;
       autoStart = true;
-
-      extraPackages = with pkgs; [
-        pulseaudio # For changing volume with wlx-overlay-s
-      ];
 
       config = {
         enable = true;
