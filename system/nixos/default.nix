@@ -47,11 +47,11 @@ with lib; {
 
   # Autotune
   # services.bpftune doesn't let me override arguments
-  systemd.services.bpftune = {
-    # Use unstable due to file descriptor leak: https://github.com/oracle/bpftune/issues/102
-    script = "${pkgs.unstable.bpftune}/bin/bpftune -ds";
-    wantedBy = ["multi-user.target"];
-  };
+  #systemd.services.bpftune = {
+  #  # Use unstable due to file descriptor leak: https://github.com/oracle/bpftune/issues/102
+  #  script = "${pkgs.unstable.bpftune}/bin/bpftune -ds";
+  #  wantedBy = ["multi-user.target"];
+  #};
 
   # POSIX shell implementation
   environment.binsh = "${pkgs.dash}/bin/dash";
