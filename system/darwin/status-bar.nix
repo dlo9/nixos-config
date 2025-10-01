@@ -5,7 +5,7 @@
   ...
 }: {
   # Hide menu bar, since spacebar is used instead
-  system.defaults.NSGlobalDomain._HIHideMenuBar = true;
+  system.defaults.NSGlobalDomain._HIHideMenuBar = config.services.spacebar.enable;
 
   services.sketchybar = {
     enable = config.services.aerospace.enable;

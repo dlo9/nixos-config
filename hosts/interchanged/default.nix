@@ -63,4 +63,7 @@ in {
 
   # Installed the pkgs instead, since this version doesn't have a GUI
   #services.tailscale.enable = true;
+
+  # Better for Tahoe
+  services.spacebar.enable = mkForce false;
 }

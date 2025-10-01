@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   system.defaults = {
@@ -34,12 +35,13 @@
   # Color border of active window
   services.jankyborders = {
     enable = true;
+    package = pkgs.unstable.jankyborders; # Tahoe support
     active_color = "gradient(top_right=0xee33ccff,bottom_left=0xee00ff99)";
     inactive_color = "0x00000000";
   };
 
   services.aerospace = {
-    enable = false;
+    enable = lib.mkDefault false;
     package = pkgs.unstable.aerospace;
 
     # TODO:
