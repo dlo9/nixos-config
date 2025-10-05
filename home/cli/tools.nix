@@ -93,6 +93,7 @@ with lib; {
 
         just
         nix-output-monitor
+        dig
       ]
       ++
       # Linux only
