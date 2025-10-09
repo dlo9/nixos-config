@@ -47,6 +47,8 @@ with lib; {
     gh
     postman
     hoppscotch
+
+    claude-code
   ];
 
   home.sessionVariables = rec {
