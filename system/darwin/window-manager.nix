@@ -240,15 +240,7 @@
       # Window rules
       # Show running windows with: yabai -m query --windows
       yabai -m rule --add app="System Settings" manage=off
-      yabai -m rule --add app="Cisco Secure Client" manage=off layer=above
-      yabai -m rule --add app="Cisco AnyConnect Secure Mobility Client" manage=off layer=above
       yabai -m rule --add label=FloatTreeTabConfirmation app="Firefox" title="Close.*tabs?" manage=off
-      yabai -m rule --add label=FloatIntelliJIntro app="IntelliJ IDEA" title="Welcome to IntelliJ IDEA" manage=off
-
-      # Steam popups are especially annoying, and mouse focus doesn't seem to know the window name before acting.
-      # To work around this, mouse foxus is disabled by default until the window is known to not be Steam-related
-      yabai -m rule --add label=FloatSteam app="Steam" manage=off
-      yabai -m rule --add label=FocusAll app!="Steam" mouse_follows_focus=on
 
       # Kill iTunes when I press `play` and forget that my headphones are still connected
       yabai -m signal --add event=window_created app=iTunes title=iTunes action="killall iTunes"
