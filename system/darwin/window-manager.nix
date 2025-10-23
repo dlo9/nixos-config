@@ -227,7 +227,7 @@
       window_origin_display = "focused";
 
       # Spacebar integration
-      external_bar = "all:${config.services.spacebar.config.height}:0";
+      external_bar = "all:${if config.services.spacebar.enable then config.services.spacebar.config.height else "0"}:0";
 
       # Split
       # split_ratio = 0.5;
