@@ -19,7 +19,6 @@ with lib; {
 
   home.packages = with pkgs; [
     kubectl
-    flameshot
     slack
     awscli2
 

@@ -30,6 +30,7 @@ in {
       "notion"
       "notion-calendar"
       "notion-mail"
+      "flameshot"
     ];
   };
 
