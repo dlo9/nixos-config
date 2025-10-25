@@ -9,8 +9,6 @@
 with lib; {
   config = mkIf config.graphical.enable {
     programs = {
-      qutebrowser.enable = mkDefault isLinux;
-
       chromium = {
         enable = mkDefault isLinux;
         package = pkgs.google-chrome;
