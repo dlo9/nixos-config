@@ -6,6 +6,7 @@
   pkgs,
   lib,
   inputs,
+  isLinux,
   ...
 }:
 with lib; {
@@ -22,7 +23,7 @@ with lib; {
   };
 
   services.home-manager.autoExpire = {
-    enable = true;
+    enable = isLinux;
     store.cleanup = true;
     frequency = "daily";
     timestamp = "-7 days";
