@@ -16,6 +16,18 @@ with lib; {
     ./theme.nix
   ];
 
+  nix.gc = {
+    automatic = true;
+    frequency = "daily";
+  };
+
+  services.home-manager.autoExpire = {
+    enable = true;
+    store.cleanup = true;
+    frequency = "daily";
+    timestamp = "-7 days";
+  };
+
   home = {
     sessionPath = [
       "$HOME/.local/bin"
