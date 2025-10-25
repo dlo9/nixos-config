@@ -13,7 +13,7 @@ in {
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
-  system.stateVersion = 4;
+  system.stateVersion = 6;
 
   homebrew = {
     enable = true;
@@ -58,9 +58,6 @@ in {
       #"desktop-release.notion-static.com" = "127.0.0.1"; # Block notion download notifications
     };
   };
-
-  # Used determinate nix installer
-  nix.enable = false;
 
   # Installed the pkgs instead, since this version doesn't have a GUI
   #services.tailscale.enable = true;
