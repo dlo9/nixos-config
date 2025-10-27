@@ -199,6 +199,9 @@ with lib; {
 
           libreoffice
           cameractrls-gtk4
+
+          # Cheapino Keyboard configuration
+          vial
         ])
 
         [

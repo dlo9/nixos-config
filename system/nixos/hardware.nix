@@ -26,6 +26,9 @@ with lib; {
 
     # iostat
     sysstat
+
+    # lsusb
+    usbutils
   ];
 
   # Hard disk health monitoring
@@ -51,4 +54,7 @@ with lib; {
       Enable = mkDefault "Source,Sink,Media,Socket";
     };
   };
+
+  # https://get.vial.today/manual/linux-udev.html
+  hardware.keyboard.qmk.enable = true;
 }
