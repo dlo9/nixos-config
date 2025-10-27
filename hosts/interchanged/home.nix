@@ -19,7 +19,6 @@ with lib; {
 
   home.packages = with pkgs; [
     kubectl
-    slack
     awscli2
 
     # Use a new launcher since spotlight doesn't find nix GUI applications:
