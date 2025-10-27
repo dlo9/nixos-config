@@ -239,8 +239,9 @@
     extraConfig = ''
       # Window rules
       # Show running windows with: yabai -m query --windows
-      yabai -m rule --add app="System Settings" manage=off
+      yabai -m rule --add label=FloatSystemSettings app="System Settings" manage=off
       yabai -m rule --add label=FloatTreeTabConfirmation app="Firefox" title="Close.*tabs?" manage=off
+      yabai -m rule --add label=FloatBitwarden app="Firefox" title="Extension:.*Bitwarden" manage=off
 
       # Kill iTunes when I press `play` and forget that my headphones are still connected
       yabai -m signal --add event=window_created app=iTunes title=iTunes action="killall iTunes"
