@@ -31,6 +31,9 @@ in {
       "notion-calendar"
       "notion-mail"
       "flameshot"
+
+      # Installed here because they expect "helper tools"
+      "slack"
     ];
   };
 
