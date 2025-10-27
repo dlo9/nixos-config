@@ -110,6 +110,15 @@ with lib; {
     init.templatedir = "~/.config/git/template";
   };
 
+  programs.jujutsu.settings = {
+    "--scope" = [
+      {
+        "--when.repositories" = ["~/code/dlo9"];
+        user.email = "github@sigpanic.com";
+      }
+    ];
+  };
+
   xdg.configFile = {
     "git/template/hooks/pre-commit" = {
       executable = true;
