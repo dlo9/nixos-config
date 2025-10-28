@@ -28,8 +28,6 @@ in {
       "sensiblesidebuttons"
       "launchcontrol"
       "notion"
-      "notion-calendar"
-      "notion-mail"
       "flameshot"
 
       # Installed here because they expect "helper tools"
