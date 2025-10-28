@@ -114,6 +114,7 @@ with lib; {
 
           revset-aliases = {
             "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
+            "dangling()" = "all() ~ ::bookmarks()";
           };
 
           signing = {
