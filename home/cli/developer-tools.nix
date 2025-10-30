@@ -61,6 +61,7 @@ with lib; {
 
           lua
           fastmod # Search & replace tool
+          parallel
         ]
         ++
         # Linux only
