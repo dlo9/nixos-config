@@ -60,6 +60,7 @@ with lib; {
           csvlens
 
           lua
+          fastmod # Search & replace tool
         ]
         ++
         # Linux only
