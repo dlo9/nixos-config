@@ -211,7 +211,9 @@ with lib; {
       };
     };
 
-    docker-compose = {
+    docker-compose = let
+      stateDirectory = "${config.home.homeDirectory}/.local/state/docker-compose";
+    in {
       enable = true;
       config = rec {
         KeepAlive = true;
@@ -220,10 +222,10 @@ with lib; {
           HOME = config.home.homeDirectory;
           PATH = concatStringsSep ":" config.home.sessionPath;
         };
-        WorkingDirectory = "${config.home.homeDirectory}/code/nixos-config/hosts/${hostname}/docker-compose";
+        WorkingDirectory = "${config.home.homeDirectory}/code/dlo9/nixos-config/hosts/${hostname}/docker-compose";
         ProgramArguments = ["${WorkingDirectory}/all-docker-compose.sh" "up"];
-        StandardErrorPath = "${WorkingDirectory}/logs/all.stderr.log";
-        StandardOutPath = "${WorkingDirectory}/logs/all.stdout.log";
+        StandardErrorPath = "${stateDirectory}/logs/all.stderr.log";
+        StandardOutPath = "${stateDirectory}/logs/all.stdout.log";
       };
     };
   };

@@ -5,9 +5,11 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
+state_dir="$HOME/.local/state/docker-compose"
+logs_dir="$state_dir/logs"
 
 # Create logs directory if it doesn't exist
-mkdir -p logs
+mkdir -p "$logs_dir"
 
 # Use read with find to process directories
 find . -type d -depth 1 | while read -r d; do
@@ -36,7 +38,7 @@ find . -type d -depth 1 | while read -r d; do
     fi
 
     # Run docker-compose
-    docker compose "$@" >> "../logs/$dirname.stdout.log" 2>> "../logs/$dirname.stderr.log" &
+    docker compose "$@" >> "$logs_dir/$dirname.stdout.log" 2>> "$logs_dir/$dirname.stderr.log" &
     printf "%s\n\n" "Done"
   fi
 
