@@ -5,7 +5,6 @@
   wrapGAppsHook3,
   gobject-introspection,
   gitUpdater,
-  #python-sdbus-networkmanager,
   dlo9,
 }:
 python3.pkgs.buildPythonApplication rec {
@@ -35,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     mpv
     six
     dbus-python
-    dlo9.python-sdbus-networkmanager
+    sdbus-networkmanager
   ];
 
   dontWrapGApps = true;
