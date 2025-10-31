@@ -15,24 +15,22 @@ with lib; {
     user = "pi";
 
     environment = {
-      WLR_LIBINPUT_NO_DEVICES = "1";
+      WLR_LIBINPUT_NO_DEVICES = "1"; # boot up even if no mouse/keyboard connected
       XDG_RUNTIME_DIR = "/run/user/1000";
     };
   };
 
-  # Fix issue with cage not disaplaying on startup
-  # https://github.com/NixOS/nixpkgs/issues/229235
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="drm", KERNEL=="card0", TAG+="systemd"
-  '';
-
   # Rotate the screen after cage starts
   systemd.services."cage-tty1" = let
     # Cage has a race condition and fails to start a user session without this
-    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" "dev-dri-card0.device"];
+    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" "systemd-udev-settle.service"];
   in rec {
     requires = requirements;
     after = requirements;
+
+    # Fix issue with cage not disaplaying on startup. But don't use .device units, since they won't become active if the device is
+    # created before systemd
+    unitConfig.ConditionPathExists = ["/dev/dri/card0"];
 
     serviceConfig = {
       TimeoutStartSec = "10s";
