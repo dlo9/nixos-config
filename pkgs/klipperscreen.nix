@@ -10,14 +10,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
-  version = "0.4.5";
+  version = "0.4.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "KlipperScreen";
     repo = "KlipperScreen";
     rev = "v${version}";
-    hash = "sha256-lKGMz5N4lKSqA614wjJiUfP5fUY+WqFDPxeX/Iyp2TQ=";
+    hash = "sha256-gl3Eg5YYi4H/IU4Njg6+GVdDS5+4q29oytRUWRr2df8=";
   };
 
   nativeBuildInputs = [
