@@ -62,6 +62,7 @@ with lib; {
           lua
           fastmod # Search & replace tool
           parallel
+          unstable.mcat
         ]
         ++
         # Linux only
