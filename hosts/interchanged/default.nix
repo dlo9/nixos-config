@@ -8,6 +8,10 @@
 with lib; let
   user = "david";
 in {
+  imports = [
+    ./remote-build.nix
+  ];
+
   graphical.enable = true;
   developer-tools.enable = true;
 
