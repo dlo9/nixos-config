@@ -32,7 +32,7 @@ in {
     };
 
     # Use cuttlefish as a remote builder
-    buildMachines = [
+    buildMachines = lib.optionals enableSigpanicSubstituter [
       {
         hostName = "nix-serve.sigpanic.com";
         sshUser = "nix-remote";
@@ -55,4 +55,7 @@ in {
 
     settings.substituters = lib.optional enableSigpanicSubstituter "https://nix-serve.sigpanic.com?priority=100";
   };
+
+  # TODO: if enableSigpanicSubstituter
+  #home-manager.users.root.programs.ssh.matchBlocks.nix-serve.addressFamily
 }
