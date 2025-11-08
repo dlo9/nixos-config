@@ -144,5 +144,65 @@ with lib; {
         to = 65535;
       }
     ];
+
+    # Enable remote aarch64 builds
+    home-manager.users.root.home.stateVersion = "25.05";
+    home-manager.users.root.programs.ssh = {
+      enable = true;
+
+      matchBlocks.interchange-linux = {
+        identitiesOnly = true;
+        identityFile = config.sops.secrets.host-ssh-key.path;
+        user = "builder";
+        hostname = "interchanged";
+        port = 31022;
+      };
+
+      matchBlocks.interchange-darwin = {
+        identitiesOnly = true;
+        identityFile = config.sops.secrets.host-ssh-key.path;
+        user = "nix-remote";
+        hostname = "interchanged";
+      };
+    };
+
+    # Test with:
+    #   nix build nixpkgs#hello --builders '@/etc/nix/machines' -L --max-jobs 0 --system aarch64-linux --rebuild
+    #   nix build nixpkgs#hello --builders 'ssh-ng://interchange-linux aarch64-linux' -L --max-jobs 0 --system aarch64-linux --rebuild
+    #   nix build nixpkgs#hello --builders 'ssh-ng://interchange-darwin?remote-program=/nix/var/nix/profiles/default/bin/nix-store aarch64-darwin' -L --max-jobs 0 --system aarch64-darwin --rebuild
+    nix.buildMachines = [
+      {
+        hostName = "interchange-darwin?remote-program=/nix/var/nix/profiles/default/bin/nix-store";
+        #sshUser = "nix-remote";
+        #sshKey = config.sops.secrets.host-ssh-key.path;
+        publicHostKey = builtins.readFile (pkgs.runCommandLocal "base64-key" {} ''
+          printf "%s" '${config.hosts.interchanged.host-ssh-key.pub}' | ${pkgs.coreutils-full}/bin/base64 -w0 > $out
+        '');
+
+        protocol = "ssh";
+
+        systems = [ "aarch64-darwin" ];
+
+        maxJobs = 4;
+        speedFactor = 2;
+        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      }
+
+      {
+        hostName = "interchange-linux";
+
+        # TODO: this doesn't work (maybe because of RSA keys?), currently relying on non-declaritive known-hosts instead
+        # Hard-coded: https://github.com/nix-darwin/nix-darwin/blob/e2b82ebd0f990a5d1b68fcc761b3d6383c86ccfd/modules/nix/linux-builder.nix#L227C26-L227C150
+        #publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=";
+
+        protocol = "ssh-ng";
+
+        systems = [ "aarch64-linux" ];
+
+        maxJobs = 4;
+        speedFactor = 2;
+        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      }
+    ];
   };
 }

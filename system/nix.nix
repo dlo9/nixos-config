@@ -52,6 +52,7 @@ with lib; {
     extraOptions = ''
       experimental-features = nix-command flakes
       accept-flake-config = true
+      builders = @/etc/nix/machines
       builders-use-substitutes = true
       keep-outputs = true
       keep-derivations = true
