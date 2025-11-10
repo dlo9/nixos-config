@@ -43,6 +43,13 @@
       # Hint: need to comment this out when building for the first time
       users.users.builder.openssh.authorizedKeys.keys = config.users.users.nix-remote.openssh.authorizedKeys.keys;
 
+      nixpkgs = {
+        pkgs = import inputs.nixpkgs {
+          system = "aarch64-linux";
+          config.allowUnfree = true;
+        };
+      };
+
       # Disable RSA host key
       #services.openssh.hostKeys = [
       #  {
