@@ -56,7 +56,7 @@ with lib; {
 
         connect-timeout = 5
         log-lines = 25
-        download-buffer-size = 268435456
+        download-buffer-size = ${builtins.toString (512*1024*1024)}
       '';
     };
 
