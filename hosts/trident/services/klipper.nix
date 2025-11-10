@@ -57,6 +57,7 @@ in {
         trusted_clients = [
           "localhost"
           "192.168.0.0/16"
+          "100.64.0.0/10" # Tailscale
         ];
 
         cors_domains = [
