@@ -45,6 +45,7 @@ with lib; {
     gh
     postman
     hoppscotch
+    postgresql
 
     claude-code
   ];
