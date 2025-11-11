@@ -28,7 +28,7 @@ in {
     ];
 
     casks = [
-      "docker"
+      "docker-desktop"
       "sensiblesidebuttons"
       "launchcontrol"
       "notion"
