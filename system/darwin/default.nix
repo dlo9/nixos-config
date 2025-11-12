@@ -28,6 +28,5 @@
     networking.hostName = hostname;
     programs.fish.enable = true;
     environment.shells = [pkgs.fish];
-    programs.nix-index.enable = true;
   };
 }

@@ -22,6 +22,11 @@ with lib; {
     frequency = "daily";
   };
 
+  programs.nix-index = {
+    enable = true;
+    enableFishIntegration = config.programs.fish.enable;
+  };
+
   services.home-manager.autoExpire = {
     enable = isLinux;
     store.cleanup = true;
