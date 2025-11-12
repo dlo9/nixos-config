@@ -22,8 +22,18 @@ with lib; {
     frequency = "daily";
   };
 
+  programs.command-not-found.enable = true;
+
+  # TODO: remove once home-manager is upgraded: https://github.com/nix-community/home-manager/blob/master/modules/programs/command-not-found/default.nix
+  programs.fish.interactiveShellInit = ''
+    function fish_command_not_found
+      # The DB doesn't support darwin, so pretend darwin systems are linux
+      NIX_SYSTEM=(string replace darwin linux "${pkgs.stdenv.hostPlatform.system}") command-not-found $argv
+    end
+  '';
+
   programs.nix-index = {
-    enable = true;
+    enable = false;
     enableFishIntegration = config.programs.fish.enable;
   };
 
