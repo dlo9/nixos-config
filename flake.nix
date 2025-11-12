@@ -24,6 +24,11 @@
     # Available modules: https://github.com/NixOS/nixos-hardware/blob/master/flake.nix
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    flake-programs-sqlite = {
+      url = "github:wamserma/flake-programs-sqlite";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     check_mk_agent = {
       url = "github:BenediktSeidl/nixos-check_mk_agent-overlay";
       inputs.nixpkgs.follows = "nixpkgs";

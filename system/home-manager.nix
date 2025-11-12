@@ -20,6 +20,8 @@ with lib; {
     # users."${user}" = {config, lib, ...}: { // my settings; };
 
     sharedModules = [
+      inputs.flake-programs-sqlite.homeModules.programs-sqlite
+
       {
         # Add nix environment variables to home manager. This is necessary for NIX_LD
         # to work on non-interactive login (e.g., running vscode remotely)
