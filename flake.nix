@@ -29,11 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    check_mk_agent = {
-      url = "github:BenediktSeidl/nixos-check_mk_agent-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Secrets management
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -57,11 +52,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    isd = {
-      url = "github:isd-project/isd/v0.5.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Docker-compose in Nix
     arion = {
       url = "github:hercules-ci/arion";
@@ -78,20 +68,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Disk partitioning
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    mobile-nixos = {
-      url = "github:NixOS/mobile-nixos";
-      flake = false;
     };
 
     # Theming
@@ -184,8 +164,6 @@
             inherit system;
             config.allowUnfree = prev.config.allowUnfree;
           };
-
-          isd = inputs.isd.packages.${system}.isd;
         };
 
         androidModules = [
