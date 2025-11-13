@@ -107,7 +107,7 @@ with lib; {
 
           git = {
             auto-local-bookmark = true;
-            private-commits = "description(glob:'wip:*') | description(glob:'private:*')";
+            private-commits = "description(glob:'private:*')";
           };
 
           aliases = {
