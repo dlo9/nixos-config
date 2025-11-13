@@ -111,8 +111,17 @@ with lib; {
           };
 
           aliases = {
+            # Move the closest bookmark to the previous commit
             tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+
+            # Abandon descriptionless, empty commits
             abandon-empty = ["abandon" "-r" "(empty() & description(exact:'')) ~ root()"];
+
+            # Create a new commit at the beginning of this branch
+            prepend = ["new" "-B" "roots(trunk()..@)"];
+
+            # Fetch and rebase
+            update = ["util" "exec" "--" "sh" "-c" "jj git fetch && jj rebase -b @ -d 'trunk()'"];
           };
 
           revset-aliases = {
