@@ -75,6 +75,8 @@ with lib; {
     programs = {
       zellij.enable = true;
 
+      mergiraf.enable = true;
+
       helix = {
         enable = true;
         settings = {
@@ -140,6 +142,7 @@ with lib; {
             # diffnav is great, but only works with diff: https://github.com/dlvhdr/diffnav/issues/28
             pager = "${pkgs.delta}/bin/delta";
             diff-formatter = ":git"; # Required by pager
+            merge-editor = "mergiraf";
           };
         };
       };
