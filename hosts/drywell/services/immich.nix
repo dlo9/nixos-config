@@ -41,7 +41,7 @@ in {
     name = "immich";
 
     services = let
-      version = "v1.142.1";
+      version = "v2";
     in {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${version}";
@@ -63,6 +63,10 @@ in {
         volumes = ["/slow/media/photos:/usr/src/app/upload"];
         devices = ["/dev/dri:/dev/dri"]; # Quicksync
         restart = "always";
+
+        # Limit CPU usage from OCR
+        deploy.resource.limits.cpus = "1";
+
         depends_on = [
           "redis"
           "machine-learning"
