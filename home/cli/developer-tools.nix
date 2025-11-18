@@ -43,7 +43,6 @@ with lib; {
           dlo9.cy
           posting # Postman-like clint
           otree # JSON tree viewer
-          rainfrog # Postgres TUI
           dlo9.somo
 
           flashrom
