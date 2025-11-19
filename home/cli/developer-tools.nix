@@ -62,6 +62,7 @@ with lib; {
           fastmod # Search & replace tool
           parallel
           unstable.mcat
+          mosh
         ]
         ++
         # Linux only
