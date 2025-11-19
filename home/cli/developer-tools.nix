@@ -108,7 +108,7 @@ with lib; {
 
           git = {
             auto-local-bookmark = true;
-            private-commits = "description(glob:'private:*')";
+            private-commits = "description(glob:'private:*') | bookmarks(glob:'private-*')";
           };
 
           aliases = {
@@ -127,7 +127,12 @@ with lib; {
 
           revset-aliases = {
             "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
+
+            # Commits which aren't part of a bookmark
             "dangling()" = "all() ~ ::bookmarks()";
+
+            # Commits which only exist locally (ignoring empty heads)
+            "local_only()" = "all() ~ ::remote_bookmarks() ~ (heads(all()) & empty())";
           };
 
           signing = {
