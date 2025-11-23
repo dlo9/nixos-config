@@ -9,13 +9,12 @@ with builtins;
 with lib; let
   useACMEHost = "drywell.sigpanic.com";
 
-  authentikForwardAuth = ''
-    # forward authentication to outpost
-    forward_auth https://authentik.sigpanic.com {
-        header_up Host "authentik.sigpanic.com"
-        uri /outpost.goauthentik.io/auth/caddy
+  auth = ''
+    forward_auth https://authelia.sigpanic.com {
+        header_up Host "authelia.sigpanic.com"
+        uri /api/authz/forward-auth
 
-        copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version Remote-User Remote-Groups Remote-Name Remote-Email
+        copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
     }
   '';
 in {
@@ -56,7 +55,7 @@ in {
           inherit useACMEHost;
           serverAliases = ["router.${useACMEHost}"];
           extraConfig = ''
-            ${authentikForwardAuth}
+            ${auth}
             reverse_proxy http://192.168.1.1
           '';
         };
