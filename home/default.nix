@@ -15,6 +15,8 @@ with lib; {
     ./graphical
     ./options.nix
     ./theme.nix
+
+    inputs.flake-programs-sqlite.homeModules.programs-sqlite
   ];
 
   nix.gc = {
