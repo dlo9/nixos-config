@@ -55,12 +55,14 @@ with lib; {
     # https://github.com/nix-community/home-manager/issues/3324
     PATH = "";
 
-    # HOMEBREW_CURLRC = "1";
     RUST_BACKTRACE = "1";
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     SHELL = "${config.programs.fish.package}/bin/fish"; # Fix for tmux
 
-    GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
+    GOPRIVATE = "github.com/interxfi";
+    GONOSUMDB = "gopkg.interchangefi.com";
+    GOPROXY = "https://o5.devcore.zones.interchangefi.com/gopkg,https://proxy.golang.org,direct";
+
     J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
   };
 
