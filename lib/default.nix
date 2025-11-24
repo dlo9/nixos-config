@@ -96,7 +96,7 @@
   };
 
   maintainers.dlo9 = {
-    email = "if_coding@fastmail.com";
+    email = "github@sigpanic.com";
     github = "dlo9";
     githubId = 7187117;
     name = "David Orchard";

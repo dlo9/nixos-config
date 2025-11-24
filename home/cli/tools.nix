@@ -204,7 +204,7 @@ with lib; {
     git = {
       enable = true;
       userName = "David Orchard";
-      userEmail = mkDefault "if_coding@fastmail.com";
+      userEmail = mkDefault "github@sigpanic.com";
 
       lfs.enable = true;
 
