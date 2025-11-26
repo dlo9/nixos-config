@@ -228,6 +228,9 @@ with lib; {
       # Bluetooth controls
       blueman-applet.enable = mkDefault isLinux;
 
+      # Audio controls
+      easyeffects.enable = mkDefault isLinux;
+
       # Enable red-shifted nightime display
       gammastep = {
         enable = mkDefault isLinux;
