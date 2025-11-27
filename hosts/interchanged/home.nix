@@ -116,7 +116,7 @@ with lib; {
   programs.jujutsu.settings = {
     "--scope" = [
       {
-        "--when.repositories" = ["~/code/dlo9"];
+        "--when".repositories = ["~/code/dlo9"];
         user.email = "github@sigpanic.com";
       }
     ];
