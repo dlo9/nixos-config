@@ -60,7 +60,7 @@ with lib; {
     SHELL = "${config.programs.fish.package}/bin/fish"; # Fix for tmux
 
     GOPRIVATE = "github.com/interxfi";
-    GONOSUMDB = "gopkg.interchangefi.com";
+    GONOSUMDB = "github.com/interxfi,gopkg.interchangefi.com";
     GOPROXY = "https://o5.devcore.zones.interchangefi.com/gopkg,https://proxy.golang.org,direct";
 
     J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
