@@ -3,7 +3,7 @@
     # Path types: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#types
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     # Structure
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -36,7 +36,7 @@
 
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -216,6 +216,7 @@
 
         darwinModules = [
           # System modules
+
           ./system
 
           # Host modules

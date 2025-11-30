@@ -74,7 +74,6 @@ with lib; {
 
     programs = {
       zellij.enable = true;
-
       mergiraf.enable = true;
 
       helix = {
@@ -102,10 +101,7 @@ with lib; {
         enable = true;
         package = pkgs.unstable.jujutsu;
         settings = {
-          user = {
-            name = config.programs.git.userName;
-            email = config.programs.git.userEmail;
-          };
+          user = config.programs.git.settings.user;
 
           git = {
             auto-local-bookmark = true;
@@ -137,8 +133,8 @@ with lib; {
           };
 
           signing = {
-            backend = config.programs.git.extraConfig.gpg.format;
-            key = config.programs.git.extraConfig.user.signingkey;
+            backend = config.programs.git.settings.gpg.format;
+            key = config.programs.git.settings.user.signingkey;
             behavior = "own";
           };
 

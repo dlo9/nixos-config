@@ -31,7 +31,7 @@ with lib; {
     hardware.bluetooth.enable = true;
 
     # Could also override systemd's DefaultTimeoutStopSec, but other services seem to behave
-    systemd.extraConfig = "DefaultTimeoutStopSec=10s";
+    systemd.settings.Manager.DefaultTimeoutStopSec = "10s";
 
     nix.distributedBuilds = true;
 

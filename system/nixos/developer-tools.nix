@@ -36,17 +36,6 @@ with lib; {
       qemu = {
         package = pkgs.qemu_kvm;
         swtpm.enable = mkDefault true;
-        ovmf = {
-          enable = mkDefault true;
-          packages = [
-            (pkgs.OVMFFull.override {
-              secureBoot = true;
-              tpmSupport = true;
-              #csmSupport = true;
-            })
-            .fd
-          ];
-        };
       };
     };
   };

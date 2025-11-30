@@ -26,10 +26,4 @@
   ```
 
 # 25.11 Release
-- Look at cloudflare-ddns to replace go-dns
-- Remove system.rebuild.enableNg
-- Look at system.nixos-init.enable
 - Caddy/k8s depend on `acme-{certname}.service`?
-- systemd.extraConfig changed to systemd.settings.Manager
-- systemd.watchdog esttings changed to use systemd.settings.Manager
-- ssh agent removed from gnome-keyring (services.gnome.gcr-ssh-agent.enable)

@@ -43,7 +43,7 @@ with lib; {
     hardware.bluetooth.enable = true;
 
     # Could also override systemd's DefaultTimeoutStopSec, but other services seem to behave
-    systemd.extraConfig = "DefaultTimeoutStopSec=10s";
+    systemd.settings.Manager.DefaultTimeoutStopSec = "10s";
 
     fileSystems."/zfs" = {
       device = "fast/zfs";
@@ -149,6 +149,7 @@ with lib; {
     home-manager.users.root.home.stateVersion = "25.05";
     home-manager.users.root.programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
 
       matchBlocks.interchange-linux = {
         identitiesOnly = true;

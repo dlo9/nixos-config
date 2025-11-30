@@ -108,8 +108,8 @@ with lib; {
     '';
   };
 
-  programs.git.userEmail = "david@interchange.com";
-  programs.git.extraConfig = {
+  programs.git.settings = {
+    user.email = "david@interchange.com";
     init.templatedir = "~/.config/git/template";
   };
 

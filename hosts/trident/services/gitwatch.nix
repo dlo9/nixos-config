@@ -5,7 +5,7 @@
   ...
 }:
 with lib; {
-  home-manager.users.david.programs.git.extraConfig.safe.directory = "/var/lib/moonraker/config";
+  home-manager.users.david.programs.git.settings.safe.directory = "/var/lib/moonraker/config";
 
   services.gitwatch = {
     klipper = {

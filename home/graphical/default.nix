@@ -147,7 +147,7 @@ with lib; {
           #peazip # Broke with 24.05 upgrade
 
           # USB installer
-          ventoy-bin
+          ventoy
 
           # Display tool
           ddcutil
@@ -191,7 +191,7 @@ with lib; {
           bluetuith
 
           #zoom-us
-          whatsapp-for-linux
+          wasistlos
 
           # Image viewer
           #loupe
@@ -207,7 +207,7 @@ with lib; {
         [
           # Fonts
           nerd-fonts.noto
-          noto-fonts-emoji
+          noto-fonts-color-emoji
 
           b612
           open-sans

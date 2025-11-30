@@ -247,9 +247,10 @@ with builtins; {
           };
         };
 
-        gestures = {
-          workspace_swipe = true; # 3-finger swipe
-        };
+        gesture = [
+          "3, horizontal, workspace" # 3-finger swipe to change workspaces
+          "3, vertical, fullscreen, maximize"
+        ];
 
         animation = "global,1,5,default"; # Faster animations
 

@@ -40,7 +40,7 @@ with lib; {
         mtr # Max traceroute
 
         # Modern alternatives with aliases
-        du-dust
+        dust
         duf
         bat
         eza
@@ -203,8 +203,25 @@ with lib; {
     # I don't count this as a developer tool because it's needed for applying nix configs
     git = {
       enable = true;
-      userName = "David Orchard";
-      userEmail = mkDefault "github@sigpanic.com";
+
+      settings = {
+        user = {
+          name = "David Orchard";
+          email = mkDefault "github@sigpanic.com";
+        };
+
+        init.defaultBranch = "main";
+        pull.ff = "only";
+        credential.helper = mkIf isLinux "${pkgs.gitFull}/bin/git-credential-libsecret";
+        push.autoSetupRemote = true;
+        #merge.conflictStyle = "zdiff3"; # Conflicts with mergiraf
+        "url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
+
+        # Sign git commits with SSH key
+        gpg.format = "ssh";
+        user.signingkey = "~/.ssh/id_ed25519.pub";
+        commit.gpgsign = true;
+      };
 
       lfs.enable = true;
 
@@ -220,30 +237,18 @@ with lib; {
         # Logs
         "*.log"
       ];
+    };
 
-      delta = {
-        enable = true;
-        options = {
-          line-numbers = true;
-          hyperlinks = true;
-          side-by-side = true;
-          plus-style = "syntax #003500";
-          plus-emph-style = "syntax #009900";
-        };
-      };
+    delta = {
+      enable = true;
+      enableGitIntegration = true;
 
-      extraConfig = {
-        init.defaultBranch = "main";
-        pull.ff = "only";
-        credential.helper = mkIf isLinux "${pkgs.gitAndTools.gitFull}/bin/git-credential-libsecret";
-        push.autoSetupRemote = true;
-        merge.conflictStyle = "zdiff3";
-        "url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
-
-        # Sign git commits with SSH key
-        gpg.format = "ssh";
-        user.signingkey = "~/.ssh/id_ed25519.pub";
-        commit.gpgsign = true;
+      options = {
+        line-numbers = true;
+        hyperlinks = true;
+        side-by-side = true;
+        plus-style = "syntax #003500";
+        plus-emph-style = "syntax #009900";
       };
     };
   };

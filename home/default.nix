@@ -21,7 +21,7 @@ with lib; {
 
   nix.gc = {
     automatic = true;
-    frequency = "daily";
+    dates = "daily";
   };
 
   programs.command-not-found.enable = true;

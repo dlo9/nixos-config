@@ -49,7 +49,7 @@ with lib; {
     ${pkgs.coreutils}/bin/cat /etc/profile | ${pkgs.babelfish}/bin/babelfish | source
 
     # Launch services on shell start
-    ${config.systemd.user.services.sops-nix.Service.ExecStart}
+    ${lib.concatStringsSep "\n" config.systemd.user.services.sops-nix.Service.ExecStart}
   '';
 
   # SSH

@@ -61,7 +61,7 @@ with lib; {
     fonts = {
       packages = with pkgs; [
         nerd-fonts.noto
-        noto-fonts-emoji
+        noto-fonts-color-emoji
       ];
 
       fontconfig = {
@@ -127,6 +127,7 @@ with lib; {
 
     # Keyring
     services.gnome.gnome-keyring.enable = mkDefault true;
+    services.gnome.gcr-ssh-agent.enable = mkDefault false;
     programs.seahorse.enable = mkDefault true;
     programs.ssh.enableAskPassword = mkDefault (!config.services.desktopManager.plasma6.enable);
   };

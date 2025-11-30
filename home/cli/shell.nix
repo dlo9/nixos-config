@@ -136,6 +136,7 @@ with lib; {
 
     ssh = {
       enable = mkDefault true;
+      enableDefaultConfig = false;
 
       matchBlocks = {
         kvm-cuttlefish.user = "root";
@@ -143,6 +144,20 @@ with lib; {
         cuttlefish.user = "david";
         opnsense.user = "root";
         trident.user = "pi";
+
+        # From default config
+        "*" = {
+          forwardAgent = false;
+          addKeysToAgent = "no";
+          compression = false;
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+          controlMaster = "no";
+          controlPath = "~/.ssh/master-%r@%n:%p";
+          controlPersist = "no";
+        };
       };
     };
   };
