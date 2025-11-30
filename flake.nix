@@ -4,7 +4,6 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixpkgs-previous.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     # Structure
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -156,11 +155,6 @@
           };
 
           master = import inputs.nixpkgs-master {
-            inherit system;
-            config.allowUnfree = prev.config.allowUnfree;
-          };
-
-          previous = import inputs.nixpkgs-previous {
             inherit system;
             config.allowUnfree = prev.config.allowUnfree;
           };

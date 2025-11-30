@@ -609,22 +609,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-previous": {
-      "locked": {
-        "lastModified": 1751274312,
-        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1764384123,
@@ -787,7 +771,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-master": "nixpkgs-master",
-        "nixpkgs-previous": "nixpkgs-previous",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts",
