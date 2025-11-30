@@ -33,6 +33,7 @@ in {
       "launchcontrol"
       "notion"
       "flameshot"
+      "caffeine"
 
       # Installed here because they expect "helper tools"
       "slack"
