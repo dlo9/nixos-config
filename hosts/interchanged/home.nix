@@ -58,10 +58,7 @@ with lib; {
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     SHELL = "${config.programs.fish.package}/bin/fish"; # Fix for tmux
 
-    GOPRIVATE = "github.com/interxfi";
-    GONOSUMDB = "github.com/interxfi,gopkg.interchangefi.com";
-    GOPROXY = "https://o5.devcore.zones.interchangefi.com/gopkg,https://proxy.golang.org,direct";
-
+    GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
     J5_REGISTRY = "https://o5.devcore.zones.interchangefi.com";
   };
 
