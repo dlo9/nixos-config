@@ -3,9 +3,9 @@
   pkgs,
   ...
 }: {
-  #boot.binfmt.emulatedSystems = [
-  #  "aarch64-linux"
-  #];
+  boot.binfmt.emulatedSystems = [
+    "aarch64-linux"
+  ];
 
   services.nix-serve = {
     enable = true;
