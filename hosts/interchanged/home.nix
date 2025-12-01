@@ -43,7 +43,6 @@ with lib; {
     # Other tools
     terraform
     gh
-    postman
     hoppscotch
     postgresql
 

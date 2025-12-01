@@ -37,6 +37,7 @@ in {
 
       # Installed here because they expect "helper tools"
       "slack"
+      "postman"
     ];
   };
 
@@ -60,7 +61,7 @@ in {
 
     addresses = {
       "laptop" = "127.0.0.1";
-      "dl.pstmn.io" = "127.0.0.1"; # Block postman download notifications
+      #"dl.pstmn.io" = "127.0.0.1"; # Block postman download notifications
       #"desktop-release.notion-static.com" = "127.0.0.1"; # Block notion download notifications
     };
   };
