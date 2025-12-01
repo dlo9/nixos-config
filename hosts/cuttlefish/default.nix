@@ -157,6 +157,10 @@ with lib; {
         user = "builder";
         hostname = "interchanged";
         port = 31022;
+
+        extraOptions = {
+          ConnectTimeout = "5";
+        };
       };
 
       matchBlocks.interchange-darwin = {
