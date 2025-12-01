@@ -38,7 +38,7 @@ with lib; {
       vim-yadi
 
       # Remove extra whitespace
-      vim-strip-trailing-whitespace
+      vim-better-whitespace
 
       # Remember last place
       vim-lastplace
