@@ -37,7 +37,6 @@ with lib; {
         # See priority of each cache: curl https://cache.nixos.org/nix-cache-info
         "https://nix-community.cachix.org?priority=50"
         "https://cuda-maintainers.cachix.org?priority=60"
-        "https://cache.flox.dev"
         "https://nix-serve.sigpanic.com?priority=100"
       ];
 
@@ -45,7 +44,6 @@ with lib; {
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
         "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-        "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
       ];
 
       extraOptions = ''
