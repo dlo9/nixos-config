@@ -9,10 +9,6 @@ with lib; {
   # between getty and cage for claiming the VT
   console.enable = false;
 
-  # Seatd is better than logind for headless services
-  services.seatd.enable = true;
-  users.users.david.extraGroups = [ "seat" ];
-
   services.cage = {
     enable = true;
     program = "${pkgs.dlo9.klipperscreen}/bin/KlipperScreen";
@@ -27,7 +23,7 @@ with lib; {
   # Rotate the screen after cage starts
   systemd.services."cage-tty1" = let
     # Cage has a race condition and fails to start a user session without this
-    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" "systemd-udev-settle.service" "seatd.service"];
+    requirements = ["user.slice" "user@1000.service" "systemd-user-sessions.service" "dbus.socket" "systemd-udev-settle.service"];
   in rec {
     requires = requirements;
     after = requirements;
@@ -42,9 +38,6 @@ with lib; {
       # Sometimes cage doesn't start properly and then exists successfully, but we still want it to restart
       Restart = "always";
       RestartForceExitStatus = [ 0 ];
-
-      # Use seatd
-      Environment = [ "LIBSEAT_BACKEND=seatd" ];
 
       ExecStartPost = "-${pkgs.writeShellApplication {
         name = "rotate-display";
