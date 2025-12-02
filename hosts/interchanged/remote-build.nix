@@ -9,17 +9,11 @@
   services.openssh = {
     enable = true;
 
-    # extraConfig = ''
-    #   PermitRootLogin no
-    #   AllowUsers nix-remote
-    # '';
+     extraConfig = ''
+       PermitRootLogin no
+       AllowUsers nix-remote
+     '';
   };
-  
-  # TODO: Move to services.openssh.extraConfig when supported (25.11)
-  environment.etc."ssh/sshd_config.d/100-nix-darwin.conf".text = ''
-    PermitRootLogin no
-    AllowUsers nix-remote
-  '';
 
   system.activationScripts.extraActivation.text = ''
     # Grant SSH access to nix-remote user

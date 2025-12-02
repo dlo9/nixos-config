@@ -12,8 +12,7 @@
 
     # Darwin settings
     nix-darwin = {
-      # url = "github:LnL7/nix-darwin/nix-darwin-25.11"; # TODO: Uncomment once available
-      url = "github:LnL7/nix-darwin";
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

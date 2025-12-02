@@ -431,6 +431,7 @@
       },
       "original": {
         "owner": "LnL7",
+        "ref": "nix-darwin-25.11",
         "repo": "nix-darwin",
         "type": "github"
       }
