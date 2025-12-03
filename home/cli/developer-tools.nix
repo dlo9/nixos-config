@@ -120,6 +120,9 @@ with lib; {
 
             # Fetch and rebase
             update = ["util" "exec" "--" "sh" "-c" "jj git fetch && jj rebase -b @ -d 'trunk()'"];
+
+            # Log all
+            ll = ["log" "-r" "all()"];
           };
 
           revset-aliases = {
