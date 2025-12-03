@@ -37,11 +37,11 @@ with builtins; {
           sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
         };
 
-        valley = fetchurl {
-          name = "elementary-os-7";
-          url = https://raw.githubusercontent.com/elementary/wallpapers/3f36a60cbb9b8b2a37d0bc5129365ac2ac7acf98/backgrounds/Photo%20of%20Valley.jpg;
-          sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
-        };
+        #valley = fetchurl {
+        #  name = "elementary-os-7";
+        #  url = https://raw.githubusercontent.com/elementary/wallpapers/3f36a60cbb9b8b2a37d0bc5129365ac2ac7acf98/backgrounds/Photo%20of%20Valley.jpg;
+        #  sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
+        #};
 
         # Hash keeps changing
         #pink-sunset = fetchurl {
@@ -50,17 +50,17 @@ with builtins; {
         #  sha256 = "0p6z31gh552rk4w99gbvr3hvwadfrv6h97k41qdbb9mxy7wc9brz";
         #};
 
-        mountain-milky-way = fetchurl {
-          name = "mountain-milky-way";
-          url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/10757377-0072-4864-bcf9-17bc4df0d252/GOLD%C2%A9Jake+Mosher_The+Grand+Tetons.jpg;
-          sha256 = "1sri7zmxcck1c11v5sy6dd3ypr7hbrmrqia3sd21rsb9yfallkmg";
-        };
+        #mountain-milky-way = fetchurl {
+        #  name = "mountain-milky-way";
+        #  url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/10757377-0072-4864-bcf9-17bc4df0d252/GOLD%C2%A9Jake+Mosher_The+Grand+Tetons.jpg;
+        #  sha256 = "19l11x94qyc7mqwkrr8l2llimqp7v38ikd66k3pvma0vb3773js3";
+        #};
 
-        mountain-reflection = fetchurl {
-          name = "mountain-reflection";
-          url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/956426d5-8a84-493d-af76-fee19de5a29d/SILVER%C2%A9Beatrice+Wong_Parallel+universe.jpg;
-          sha256 = "173spa2j1fbvgzag3lw3y3sl7zpags4mixrwx7fv0brmp483v8g7";
-        };
+        #mountain-reflection = fetchurl {
+        #  name = "mountain-reflection";
+        #  url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/956426d5-8a84-493d-af76-fee19de5a29d/SILVER%C2%A9Beatrice+Wong_Parallel+universe.jpg;
+        #  sha256 = "173spa2j1fbvgzag3lw3y3sl7zpags4mixrwx7fv0brmp483v8g7";
+        #};
 
         # Blocked by cloudflare
         #wr-134-wolf-nebula = fetchurl {
