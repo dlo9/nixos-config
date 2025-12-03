@@ -63,6 +63,7 @@ with lib; {
           parallel
           unstable.mcat
           mosh
+          jjui
         ]
         ++
         # Linux only
