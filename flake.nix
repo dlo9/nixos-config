@@ -388,7 +388,6 @@
           sshUser = "david";
           user = "root";
           interactiveSudo = true;
-          fastConnection = true;
 
           profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.drywell;
         };
