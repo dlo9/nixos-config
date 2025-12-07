@@ -187,6 +187,8 @@ with lib; {
         # Ignore virtual interfaces
         network.interface_filter = {
           regex = true;
+          whole_word = true;
+
           list = [
             "lo"
             "veth.*"
