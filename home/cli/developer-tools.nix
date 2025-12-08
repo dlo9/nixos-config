@@ -105,7 +105,7 @@ with lib; {
           user = config.programs.git.settings.user;
 
           git = {
-            auto-local-bookmark = true;
+            remotes.origin.auto-track-bookmarks = true;
             private-commits = "description(glob:'private:*') | bookmarks(glob:'private-*')";
           };
 
