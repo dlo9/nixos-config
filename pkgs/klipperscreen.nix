@@ -41,6 +41,14 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  # Patch to disable window decorations for kiosk mode
+  postPatch = ''
+    # Remove window decorations (title bar, close button) for kiosk mode
+    # This adds set_decorated(False) after set_resizable(True) in windowed mode
+    substituteInPlace screen.py \
+      --replace-fail 'self.set_resizable(True)' 'self.set_resizable(True); self.set_decorated(False)'
+  '';
+
   preFixup = ''
     mkdir -p $out/bin
     cp -r . $out/dist
