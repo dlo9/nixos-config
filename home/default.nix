@@ -7,6 +7,7 @@
   lib,
   inputs,
   isLinux,
+  isDarwin,
   ...
 }:
 with lib; {
@@ -41,6 +42,12 @@ with lib; {
   programs.nix-index = {
     enable = false;
     enableFishIntegration = config.programs.fish.enable;
+  };
+
+  # Copy apps on darwin instead of linking
+  targets.darwin = {
+    copyApps.enable = isDarwin;
+    linkApps.enable = false;
   };
 
   services.home-manager.autoExpire = {
