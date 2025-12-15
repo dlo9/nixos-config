@@ -93,6 +93,7 @@ with lib; {
             settings = {
               # See userChrome below
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              "app.update.auto" = false;
             };
 
             # https://gist.github.com/ruanbekker/f800e098936b27c7cf956c56005fe362
