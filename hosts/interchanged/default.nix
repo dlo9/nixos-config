@@ -34,6 +34,7 @@ in {
       "notion"
       "flameshot"
       "caffeine"
+      "google-chrome"
 
       # Installed here because they expect "helper tools"
       "slack"
