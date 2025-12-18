@@ -236,6 +236,9 @@ with lib; {
         # Backups
         "*.old"
 
+        # vscode/golang debugging builds
+        "__debug_bin*"
+
         # Logs
         "*.log"
       ];
