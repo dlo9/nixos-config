@@ -96,24 +96,36 @@ with lib; {
               "app.update.auto" = false;
             };
 
-            # https://gist.github.com/ruanbekker/f800e098936b27c7cf956c56005fe362
+            # https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules
             userChrome = ''
-              #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
-                opacity: 0;
-                pointer-events: none;
-              }
-
-              #main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+              /* Hide the tab bar */
+              #TabsToolbar {
                 visibility: collapse !important;
               }
 
-              #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
-                display: none;
+              /* Hide the title bar but keep window controls */
+              #titlebar {
+                appearance: none !important;
+                height: 0 !important;
               }
 
-              .tab {
-                margin-left: 1px;
-                margin-right: 1px;
+              /* Move window controls into the nav bar */
+              #nav-bar {
+                padding-left: 72px !important; /* Space for the traffic lights */
+              }
+
+              /* Position the window controls in the nav bar area */
+              .titlebar-buttonbox-container {
+                position: fixed !important;
+                left: 0 !important;
+                top: 8px !important; /* Adjust to vertically center */
+                z-index: 1000 !important;
+              }
+
+              /* Ensure window controls remain visible */
+              .titlebar-buttonbox {
+                display: flex !important;
+                visibility: visible !important;
               }
             '';
           };
