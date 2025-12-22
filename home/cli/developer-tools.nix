@@ -64,6 +64,8 @@ with lib; {
           unstable.mcat
           mosh
           jjui
+
+          git-filter-repo
         ]
         ++
         # Linux only
