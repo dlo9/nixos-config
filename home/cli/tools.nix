@@ -216,7 +216,7 @@ with lib; {
         pull.ff = "only";
         credential.helper = mkIf isLinux "${pkgs.gitFull}/bin/git-credential-libsecret";
         push.autoSetupRemote = true;
-        #merge.conflictStyle = "zdiff3"; # Conflicts with mergiraf
+        # merge.conflictStyle = "zdiff3"; # Conflicts with mergiraf
         "url \"ssh://git@github.com/\"".insteadOf = "https://github.com/";
 
         # Sign git commits with SSH key
