@@ -111,7 +111,9 @@ with lib; {
       inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-d>"
 
       " Auto-remove trailing whitespace
+      " https://github.com/ntpeters/vim-better-whitespace/blob/de99b55a6fe8c96a69f9376f16b1d5d627a56e81/plugin/better-whitespace.vim#L19
       let g:strip_whitespace_on_save=1
+      let g:strip_whitespace_confirm=0
 
       """"""""
       "" UI ""
