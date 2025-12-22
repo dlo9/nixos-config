@@ -20,7 +20,7 @@ with lib; {
       copyindent = true;
       hidden = true;
       number = true;
-      relativenumber = true;
+      #relativenumber = true;
       shiftwidth = 2;
       smartcase = true;
       tabstop = 2;
