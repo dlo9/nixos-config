@@ -111,6 +111,8 @@ with lib; {
         bandwhich # Network monitor
         dua # Another disk space utility
         dive # Image layer explorer
+
+        ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
       ]);
   };
 
