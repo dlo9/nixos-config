@@ -51,7 +51,8 @@ with lib; {
         pskRaw = "ext:INTERNET";
         priority = 10;
       };
-      iot.pskRaw = "ext:IOT";
+
+      #iot.pskRaw = "ext:IOT";
       BossAdams.pskRaw = "ext:BOSS_ADAMS";
       "pretty fly for a wifi".pskRaw = "ext:PRETTY_FLY_FOR_A_WIFI";
       "pretty fly for a wifi-5G".pskRaw = "ext:PRETTY_FLY_FOR_A_WIFI";
