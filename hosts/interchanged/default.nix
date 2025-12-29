@@ -35,6 +35,7 @@ in {
       "flameshot"
       "caffeine"
       "google-chrome"
+      "aerial"
 
       # Installed here because they expect "helper tools"
       "slack"
