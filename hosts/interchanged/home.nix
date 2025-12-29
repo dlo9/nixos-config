@@ -45,6 +45,7 @@ with lib; {
     gh
     hoppscotch
     postgresql
+    google-clasp
 
     claude-code
   ];
