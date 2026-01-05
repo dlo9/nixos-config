@@ -15,6 +15,7 @@ with lib; {
 
   home.packages = with pkgs; [
     devenv
+    jujutsu
   ];
 
   # SSH
