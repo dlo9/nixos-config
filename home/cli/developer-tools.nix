@@ -133,10 +133,17 @@ with lib; {
             "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
 
             # Commits which aren't part of a bookmark
-            "dangling()" = "all() ~ ::bookmarks()";
+            "dangling()" = "~::bookmarks()";
 
             # Commits which only exist locally (ignoring empty heads)
-            "local_only()" = "all() ~ ::remote_bookmarks() ~ (heads(all()) & empty())";
+            "local_only()" = "~::remote_bookmarks() ~(heads(all()) & empty())";
+
+            # Commits which were likely left behind test changes:
+            #   - not the current change
+            #   - not on a remote
+            #   - no description
+            #   - no child commits with descriptions
+            "temp()" = "description(exact:'') ~::(~description(exact:'')) ~::remote_bookmarks() ~@";
           };
 
           signing = {
