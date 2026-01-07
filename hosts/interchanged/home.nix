@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   hostname,
+  osConfig,
   ...
 }:
 with lib; {
@@ -201,7 +202,7 @@ with lib; {
     };
 
     autoraise = {
-      enable = true;
+      enable = osConfig.services.aerospace.enable;
       config = {
         KeepAlive = true;
         ProcessType = "Interactive";

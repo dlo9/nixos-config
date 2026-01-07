@@ -207,7 +207,7 @@
       right_padding = 10;
       window_gap = 10;
 
-      #focus_follows_mouse = "autoraise";
+      focus_follows_mouse = "autoraise";
       mouse_follows_focus = "on";
 
       # Mouse actions
