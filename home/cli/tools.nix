@@ -243,6 +243,9 @@ with lib; {
 
         # Logs
         "*.log"
+
+        # Local files
+        "/.claude/settings.local.json"
       ];
     };
 
