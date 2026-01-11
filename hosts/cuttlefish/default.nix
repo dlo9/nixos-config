@@ -95,6 +95,12 @@ with lib; {
     #   ];
     # };
 
+    # Symlink usb adapters so they have consistent device paths
+    services.udev.extraRules = ''
+      SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="20230509135322", SYMLINK+="ttyZigbee"
+      SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", SYMLINK+="ttyThread"
+    '';
+
     boot.blacklistedKernelModules = ["nouveau"];
 
     environment.systemPackages = with pkgs; [
