@@ -8,6 +8,11 @@
 with builtins;
 with lib; {
   config = {
+    hardware.graphics = {
+      enable = mkDefault true;
+      enable32Bit = pkgs.stdenv.isx86_64;
+    };
+
     # Containers
     containers.jellyfin = {
       autoStart = true;
