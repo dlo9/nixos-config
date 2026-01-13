@@ -41,7 +41,7 @@ with lib; {
           dlo9.pvw # Port viewer, pvw -aon
           carl
           dlo9.cy
-          posting # Postman-like clint
+          #posting # Postman-like clint
           otree # JSON tree viewer
           dlo9.somo
 
