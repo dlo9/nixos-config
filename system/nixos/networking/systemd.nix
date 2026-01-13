@@ -39,6 +39,11 @@ with lib; {
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 1024;
           domains = config.services.resolved.domains;
+
+          # Explicitly enable IPv6 Router Advertisement acceptance for SLAAC
+          networkConfig = {
+            IPv6AcceptRA = true;
+          };
         };
 
         "35-wireless" = {
@@ -46,6 +51,11 @@ with lib; {
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 2048; # Prefer wired
           domains = config.services.resolved.domains;
+
+          # Explicitly enable IPv6 Router Advertisement acceptance for SLAAC
+          networkConfig = {
+            IPv6AcceptRA = true;
+          };
         };
       };
     };
