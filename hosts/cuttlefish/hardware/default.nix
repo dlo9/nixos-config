@@ -12,7 +12,6 @@
     common-gpu-intel
     common-hidpi
 
-    #./nvidia.nix
     ./quirks.nix
     ./generated.nix
   ];

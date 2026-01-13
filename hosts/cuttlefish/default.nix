@@ -76,8 +76,6 @@ with lib; {
       SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", SYMLINK+="ttyThread"
     '';
 
-    boot.blacklistedKernelModules = ["nouveau"];
-
     environment.systemPackages = with pkgs; [
       # Intel utilization: intel_gpu_top
       intel-gpu-tools
