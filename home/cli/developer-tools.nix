@@ -22,7 +22,7 @@ with lib; {
 
           nixd # Nix language server
           nix-prefetch
-          unstable.terminaltexteffects
+          terminaltexteffects
 
           wrap
           fselect # Find, but with SQL
@@ -32,8 +32,6 @@ with lib; {
           gh-dash
           unstable.devenv
           gitu # Git TUI
-          # dlo9.pocker # Docker TUI - too many python deps
-          toolong
           tcping-go
 
           dlo9.havn # Port scanner
@@ -41,13 +39,12 @@ with lib; {
           dlo9.pvw # Port viewer, pvw -aon
           carl
           dlo9.cy
-          #posting # Postman-like clint
           otree # JSON tree viewer
-          dlo9.somo
+          somo
 
           flashrom
           #noseyparker # Credential scanner
-          glances # Monitoring utility
+          #glances # Monitoring utility
 
           vulnix # Vulnerability scanner
           glow # Markdown reader
@@ -61,7 +58,7 @@ with lib; {
           lua
           fastmod # Search & replace tool
           parallel
-          unstable.mcat
+          mcat
           mosh
           jjui
 
