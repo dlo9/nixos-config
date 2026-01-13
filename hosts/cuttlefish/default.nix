@@ -35,9 +35,9 @@ with lib; {
       };
     };
 
-    graphical.enable = true;
+    #graphical.enable = true;
+    #gaming.enable = true;
     developer-tools.enable = true;
-    gaming.enable = true;
 
     # Bluetooth
     hardware.bluetooth.enable = true;
