@@ -65,7 +65,6 @@ with lib; {
       clock24 = true;
       keyMode = "vi";
       prefix = "C-b";
-      mouse = true;
 
       historyLimit = 50000;
       aggressiveResize = true;
