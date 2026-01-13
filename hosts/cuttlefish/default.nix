@@ -70,31 +70,6 @@ with lib; {
       initrd.availableKernelModules = ["r8169"];
     };
 
-    # GPUs
-    # See GPUs/sDRM/Render devices with:
-    # drm_info -j | jq 'with_entries(.value |= .driver.desc)'
-    # ls -l /sys/class/drm/renderD*/device/driver
-
-    # Nvidia GPU
-    #services.xserver.videoDrivers = [ "nvidia" ];
-    #hardware.nvidia.nvidiaPersistenced = true;
-
-    # Intel GPU
-    # nixpkgs.config.packageOverrides = pkgs: {
-    #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    # };
-
-    # hardware.graphics = {
-    #   enable = true;
-    #   extraPackages = with pkgs; [
-    #     intel-media-driver
-    #     vaapiIntel
-    #     vaapiVdpau
-    #     libvdpau-va-gl
-    #     intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
-    #   ];
-    # };
-
     # Symlink usb adapters so they have consistent device paths
     services.udev.extraRules = ''
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="20230509135322", SYMLINK+="ttyZigbee"
@@ -108,11 +83,6 @@ with lib; {
       intel-gpu-tools
       kdePackages.krdp
     ];
-
-    # Plasma
-    #services.desktopManager.plasma6.enable = true;
-    # https://github.com/sddm/sddm/issues/1768
-    #users.users.david.shell = pkgs.bash;
 
     # Generate a new (invalid) config: `sudo pwmconfig`
     # View current CPU temp: `sensors | rg -A3 k10temp-pci-00c3 | rg -o '[0-9\.]+°C'`

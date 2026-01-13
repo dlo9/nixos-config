@@ -194,6 +194,13 @@ rm /tmp/wifi_config
 dhcpcd "$NETWORK_INTERFACE"
 ```
 
+### Graphics
+```sh
+# See GPUs/sDRM/Render devices
+nix run nixpkgs#drm_info -- -j | jq 'with_entries(.value |= .driver.desc)'
+ls -l /sys/class/drm/renderD*/device/driver
+```
+
 ### Miscellaneous
 ```sh
 # Reset Time
