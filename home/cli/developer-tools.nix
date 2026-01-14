@@ -155,6 +155,7 @@ with lib; {
             pager = "${pkgs.delta}/bin/delta";
             diff-formatter = ":git"; # Required by pager
             #merge-editor = "mergiraf";
+            diff-editor = ":builtin";
           };
         };
       };
