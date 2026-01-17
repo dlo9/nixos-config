@@ -231,6 +231,8 @@ with lib; {
       # Audio controls
       easyeffects.enable = mkDefault isLinux;
 
+      caffeine.enable = mkDefault isLinux;
+
       # Enable red-shifted nightime display
       gammastep = {
         enable = mkDefault isLinux;
