@@ -19,30 +19,30 @@ with lib; {
         pulseaudio # For changing volume with wlx-overlay-s
       ];
 
-  services = {
-    wivrn = {
-      enable = true;
-      openFirewall = true;
-      defaultRuntime = true;
-      autoStart = true;
+  #services = {
+  #  wivrn = {
+  #    enable = true;
+  #    openFirewall = true;
+  #    defaultRuntime = true;
+  #    autoStart = true;
 
-      config = {
-        enable = true;
+  #    config = {
+  #      enable = true;
 
-        json = {
-          bitrate = 10000000; # 10 MiB
-          encoders = [
-            {
-              encoder = "vaapi";
-              #codec = "av1";
-              codec = "h265";
-              device = "/dev/dri/renderD128";
-            }
-          ];
+  #      json = {
+  #        bitrate = 10000000; # 10 MiB
+  #        encoders = [
+  #          {
+  #            encoder = "vaapi";
+  #            #codec = "av1";
+  #            codec = "h265";
+  #            device = "/dev/dri/renderD128";
+  #          }
+  #        ];
 
-          application = [pkgs.unstable.wlx-overlay-s];
-        };
-      };
-    };
-  };
+  #        application = [pkgs.unstable.wlx-overlay-s];
+  #      };
+  #    };
+  #  };
+  #};
 }
