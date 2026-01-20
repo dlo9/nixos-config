@@ -63,6 +63,8 @@ with lib; {
           jjui
 
           git-filter-repo
+          claude-code
+          claude-monitor
         ]
         ++
         # Linux only

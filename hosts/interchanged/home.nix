@@ -47,8 +47,6 @@ with lib; {
     hoppscotch
     postgresql
     google-clasp
-
-    claude-code
   ];
 
   home.sessionVariables = rec {
