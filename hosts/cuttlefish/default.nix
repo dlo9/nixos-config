@@ -72,7 +72,13 @@ with lib; {
 
     # Symlink usb adapters so they have consistent device paths
     services.udev.extraRules = ''
+      # Sonoff ZBDongle-P
+      #SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="280a19475345ec1199e094fd6f14af06", SYMLINK+="ttyZigbeeP"
+
+      # Sonoff ZBDongle-E
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="20230509135322", SYMLINK+="ttyZigbee"
+
+      # TubesZB
       SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", SYMLINK+="ttyThread"
     '';
 
