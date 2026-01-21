@@ -37,6 +37,9 @@ in {
       "google-chrome"
       "aerial"
 
+      # Backup
+      "kopiaui"
+
       # Installed here because they expect "helper tools"
       "slack"
       "postman"
