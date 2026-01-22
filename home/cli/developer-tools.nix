@@ -11,6 +11,7 @@ with lib; {
     home = {
       sessionPath = [
         "$HOME/.cargo/bin"
+        "$HOME/go/bin"
       ];
 
       packages = with pkgs;
