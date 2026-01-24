@@ -108,22 +108,22 @@ in {
           '';
         };
 
-        nexus = {
-          inherit useACMEHost;
-          serverAliases = ["nexus.sigpanic.com"];
-          extraConfig = ''
-            reverse_proxy http://localhost:${toString config.services.nexus.listenPort}
-          '';
-        };
+        #nexus = {
+        #  inherit useACMEHost;
+        #  serverAliases = ["nexus.sigpanic.com"];
+        #  extraConfig = ''
+        #    reverse_proxy http://localhost:${toString config.services.nexus.listenPort}
+        #  '';
+        #};
 
-        docker = {
-          inherit useACMEHost;
-          serverAliases = ["docker.sigpanic.com"];
-          extraConfig = ''
-            # Nexus Container Registry
-            reverse_proxy http://localhost:8082
-          '';
-        };
+        #docker = {
+        #  inherit useACMEHost;
+        #  serverAliases = ["docker.sigpanic.com"];
+        #  extraConfig = ''
+        #    # Nexus Container Registry
+        #    reverse_proxy http://localhost:8082
+        #  '';
+        #};
 
         nix-serve = {
           inherit useACMEHost;

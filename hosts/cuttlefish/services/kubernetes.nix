@@ -31,10 +31,10 @@ in {
   };
 
   # Wait until pass-though container proxy is running
-  systemd.services.containerd = {
-    requires = ["nexus.service"];
-    after = ["nexus.service"];
-  };
+  #systemd.services.containerd = {
+  #  requires = ["nexus.service"];
+  #  after = ["nexus.service"];
+  #};
 
   # Copy the cluster admin kubeconfig to the admin users's home if it doesn't already exist
   system.activationScripts = {

@@ -19,6 +19,6 @@
     };
 
     # Doesn't work because of auth?
-    virtualisation.docker.daemon.settings.registry-mirrors = ["https://docker.sigpanic.com"];
+    #virtualisation.docker.daemon.settings.registry-mirrors = ["https://docker.sigpanic.com"];
   };
 }

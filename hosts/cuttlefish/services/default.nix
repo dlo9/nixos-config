@@ -9,7 +9,7 @@
     ./jellyfin.nix
     ./kubernetes.nix
     ./netdata.nix
-    ./nexus.nix
+    #./nexus.nix
     ./nfs.nix
     ./nix-serve.nix
     ./samba.nix
