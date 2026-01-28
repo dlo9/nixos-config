@@ -5,10 +5,7 @@
   inputs,
   ...
 }:
-with lib; let
-  masterSshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQy90y+nSJJfVJ4f+SKyg55lhgMTp30+UKlNXWiS3/Q david@bitwarden";
-  hosts = config.hosts.${config.networking.hostName};
-in {
+with lib; {
   imports = [
     ./systemd.nix
     ./vpn.nix
@@ -18,12 +15,6 @@ in {
     ###########################
     ### Authorized SSH Keys ###
     ###########################
-
-    # TODO: for each admin user
-    # users.users.${user}.openssh.authorizedKeys.keys = flatten [
-    #   masterSshKey
-    #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEnaSRCBwX5kziBBeMwHLoS2Pqgl2qY1EvaqT43YWPKq david@pixie"
-    # ];
 
     # Enable the ssh agent
     programs.ssh.startAgent = mkDefault true;
