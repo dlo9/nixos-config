@@ -10,8 +10,20 @@ with lib; {
     inputs.base16.homeManagerModule
   ];
 
-  scheme = "${inputs.base16-atelier}/atelier-seaside.yaml";
-  #scheme = "${inputs.base16-unclaimed}/apathy.yaml";
+
+  home.sessionVariables = {
+    TINTED_TMUX_OPTION_STATUSBAR = "1";
+  };
+
+  home.packages = with pkgs; [
+    tinty
+  ];
+
+  # TODO: try out github.com/nix-community/stylix
+
+  # Available schemes: https://github.com/tinted-theming/schemes
+  scheme.yaml = "${inputs.tinted-theming}/base24/wild-cherry.yaml";
+  scheme.use-ifd = "auto";
 
   programs = {
     vim = {
@@ -20,8 +32,8 @@ with lib; {
       };
 
       plugins = with pkgs.vimPlugins; [
-        base16-vim
-        vim-airline-themes
+        tinted-vim
+      #   vim-airline-themes
       ];
 
       extraConfig = ''
@@ -29,24 +41,46 @@ with lib; {
         "" Theme ""
         """""""""""
 
-        let base16colorspace=256
-        colorscheme base16-${config.scheme.slug}
-        let g:airline_theme='base16_${builtins.replaceStrings ["-"] ["_"] config.scheme.slug}'
+        " https://github.com/tinted-theming/tinted-vim
+        let tinted_background_transparent=1
+        set termguicolors
+        source ~/.local/share/tinted-theming/tinty/base16-vim-colors-file.vim
+
+        " Autoreload
+        set updatetime=10000 " every 10 seconds
+
+        function! CheckThemeFile()
+          let l:theme_file = expand('~/.local/share/tinted-theming/tinty/base16-vim-colors-file.vim')
+          let l:mtime = getftime(l:theme_file)
+          if l:mtime != get(g:, 'theme_mtime', 0)
+              let g:theme_mtime = l:mtime
+              execute 'source' l:theme_file
+              echom "Theme reloaded!"
+          endif
+        endfunction
+
+        augroup ThemeWatch
+            autocmd!
+            autocmd CursorHold,CursorHoldI * call CheckThemeFile()
+        augroup END
       '';
     };
 
     fish.interactiveShellInit = ''
-      # Theme
-      # Babelfish can't handle the official shell theme
-      for f in ${inputs.base16-fish-shell}/functions/__*.fish
-        source $f
-      end
+      #############
+      ### Theme ###
+      #############
 
-      source ${config.scheme inputs.base16-fish-shell}
-      base16-${config.scheme.scheme-slug}
+      # Set theme on startup
+      sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
+
+      # Auto reload with: set -U theme_trigger (date +%s)
+      function reload_theme --on-variable theme_trigger
+        sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
+      end
     '';
 
-    alacritty.settings = importTOML (config.scheme inputs.base16-alacritty);
+    #alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/tinted-terminal-themes-alacritty-file.toml"];
 
     waybar.style = ''
       /*****************/
@@ -102,6 +136,52 @@ with lib; {
   };
 
   xdg.configFile = {
+    "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml { }).generate "tinty-config" {
+      # Initialize with: tinty install && tinty apply base24-wild-cherry
+      shell = "fish -c '{}'";
+      default-scheme = "base24-wild-cherry";
+      preferred-schemes = [
+        "base16-gruvbox-dark"
+        "base16-gruvbox-light"
+        "base16-github-dark"
+        "base24-wild-cherry"
+        "base16-tokyo-night-dark"
+        "base16-woodland"
+        "base16-tomorrow-night"
+        "base16-atelier-seaside"
+        "base16-gigavolt"
+      ];
+      
+      items = [
+        {
+          name = "tinted-shell";
+          path = "https://github.com/tinted-theming/tinted-shell";
+          themes-dir = "scripts";
+          hook = "set -U theme_trigger (date +%s)";
+          supported-systems = [ "base16" "base24" ];
+        }
+        {
+          name = "base16-vim";
+          path = "https://github.com/tinted-theming/base16-vim";
+          themes-dir = "colors";
+          supported-systems = [ "base16" "base24" ];
+        }
+        {
+          name = "tinted-terminal";
+          path = "https://github.com/tinted-theming/tinted-terminal";
+          themes-dir = "themes/alacritty";
+          supported-systems = [ "base16" "base24" ];
+        }
+        {
+          name = "tmux";
+          path = "https://github.com/tinted-theming/tinted-tmux";
+          themes-dir = "colors";
+          hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+          supported-systems = [ "base16" "base24" ];
+        }
+      ];
+    };
+
     "wofi/style.css".text = ''
       *{
         font-family: ${config.font.family};

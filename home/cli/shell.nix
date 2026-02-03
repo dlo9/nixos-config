@@ -69,17 +69,10 @@ with lib; {
       historyLimit = 50000;
       aggressiveResize = true;
       escapeTime = 0;
-      terminal = "screen-256color";
+      terminal = "tmux-256color";
 
       # Spawn a new session when attaching and none exist
       newSession = true;
-
-      plugins = with pkgs.dlo9.tmuxPlugins; [
-        {
-          plugin = tmux-themepack;
-          extraConfig = "set -g @themepack 'powerline/double/purple'";
-        }
-      ];
 
       extraConfig = ''
         # Gapless indexing
@@ -90,6 +83,10 @@ with lib; {
         bind - split-window -v
         unbind '"'
         unbind %
+
+        # Theme
+        set -as terminal-features ",*:RGB"
+        source-file ~/.local/share/tinted-theming/tinty/tmux-colors-file.conf
       '';
     };
 

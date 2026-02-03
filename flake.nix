@@ -75,37 +75,15 @@
 
     # Theming
     # A decent alternative (can generate color from picture): https://git.sr.ht/~misterio/nix-colors
-    base16.url = "github:SenchoPens/base16.nix/v1.1.1";
+    base16.url = "github:SenchoPens/base16.nix/v2.2.1";
 
-    # Main theme
-    # https://github.com/chriskempson/base16#scheme-repositories
-    base16-atelier = {
-      url = "github:atelierbram/base16-atelier-schemes";
-      flake = false;
-    };
-
-    base16-unclaimed = {
-      url = "github:chriskempson/base16-unclaimed-schemes";
+    # Available schemes: https://github.com/tinted-theming/schemes
+    tinted-theming = {
+      url = "github:tinted-theming/schemes";
       flake = false;
     };
 
     # Theme templates
-    # https://github.com/chriskempson/base16#template-repositories
-    base16-shell = {
-      url = "github:chriskempson/base16-shell";
-      flake = false;
-    };
-
-    base16-fish-shell = {
-      url = "github:FabioAntunes/base16-fish-shell";
-      flake = false;
-    };
-
-    base16-alacritty = {
-      url = "github:aarowill/base16-alacritty";
-      flake = false;
-    };
-
     base16-mako = {
       url = "github:Eluminae/base16-mako";
       flake = false;
