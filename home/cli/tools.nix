@@ -11,6 +11,7 @@ with lib; {
   home = {
     sessionVariables = {
       PAGER = "bat --style='-header-filename'";
+      DELTA_PAGER = "bat --style=plain";
     };
 
     shellAliases = {
