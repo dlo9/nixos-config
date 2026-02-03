@@ -202,6 +202,9 @@ with lib; {
 
           # Cheapino Keyboard configuration
           vial
+
+          # Screenshot tool
+          gradia
         ])
 
         [
