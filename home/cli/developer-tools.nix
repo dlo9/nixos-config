@@ -66,6 +66,9 @@ with lib; {
           git-filter-repo
           claude-code
           claude-monitor
+
+          diff-so-fancy
+          difftastic
         ]
         ++
         # Linux only
