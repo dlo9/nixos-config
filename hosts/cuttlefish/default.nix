@@ -166,7 +166,7 @@ with lib; {
 
         protocol = "ssh";
 
-        systems = [ "aarch64-darwin" ];
+        systems = ["aarch64-darwin"];
 
         maxJobs = 4;
         speedFactor = 2;
@@ -182,7 +182,7 @@ with lib; {
 
         protocol = "ssh-ng";
 
-        systems = [ "aarch64-linux" ];
+        systems = ["aarch64-linux"];
 
         maxJobs = 4;
         speedFactor = 2;

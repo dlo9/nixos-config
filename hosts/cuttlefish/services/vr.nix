@@ -16,8 +16,8 @@ with lib; {
   programs.envision.enable = true;
 
   systemd.user.services.wivrn.path = with pkgs; [
-        pulseaudio # For changing volume with wlx-overlay-s
-      ];
+    pulseaudio # For changing volume with wlx-overlay-s
+  ];
 
   #services = {
   #  wivrn = {

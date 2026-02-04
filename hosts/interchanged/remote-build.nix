@@ -9,10 +9,10 @@
   services.openssh = {
     enable = true;
 
-     extraConfig = ''
-       PermitRootLogin no
-       AllowUsers nix-remote
-     '';
+    extraConfig = ''
+      PermitRootLogin no
+      AllowUsers nix-remote
+    '';
   };
 
   system.activationScripts.extraActivation.text = ''
@@ -53,11 +53,11 @@
       #];
     };
 
-    systems = [ "aarch64-linux" ];
+    systems = ["aarch64-linux"];
   };
 
   # Create nix-remote user
-  users.knownUsers = [ config.users.users.nix-remote.name ];
+  users.knownUsers = [config.users.users.nix-remote.name];
   users.users.nix-remote = {
     uid = 404;
     gid = config.users.groups.nix-remote.gid;
@@ -70,7 +70,7 @@
   };
 
   # Create nix-remote group, and allow it to use nix
-  users.knownGroups = [ config.users.groups.nix-remote.name];
+  users.knownGroups = [config.users.groups.nix-remote.name];
   users.groups.nix-remote.gid = 404;
 
   nix.settings.trusted-users = [config.users.groups.nix-remote.name];

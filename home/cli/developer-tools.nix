@@ -74,7 +74,7 @@ with lib; {
         # Linux only
         (optionals isLinux [
           isd
-          (dlo9.rustnet.override { rustPlatform = pkgs.unstable.rustPlatform; })
+          (dlo9.rustnet.override {rustPlatform = pkgs.unstable.rustPlatform;})
         ]);
     };
 

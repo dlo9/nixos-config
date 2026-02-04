@@ -332,17 +332,19 @@
             inputs.nixpkgs.lib.nixosSystem {
               specialArgs = specialArgs ctx "linux" "cuttlefish";
               inherit system;
-              modules = linuxModules ++ [
-                # Can remove this block when this is in a release branch:
-                # https://github.com/NixOS/nixpkgs/issues/434372
-                {
-                  disabledModules = [ "services/continuous-integration/github-runner/options.nix" ];
+              modules =
+                linuxModules
+                ++ [
+                  # Can remove this block when this is in a release branch:
+                  # https://github.com/NixOS/nixpkgs/issues/434372
+                  {
+                    disabledModules = ["services/continuous-integration/github-runner/options.nix"];
 
-                  imports = [
-                    "${inputs.nixpkgs-unstable}/nixos/modules/services/continuous-integration/github-runner/options.nix"
-                  ];
-                }
-              ];
+                    imports = [
+                      "${inputs.nixpkgs-unstable}/nixos/modules/services/continuous-integration/github-runner/options.nix"
+                    ];
+                  }
+                ];
             }
         );
 

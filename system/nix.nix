@@ -53,7 +53,7 @@ with lib; {
       builders-use-substitutes = true
       keep-outputs = true
       keep-derivations = true
-      download-buffer-size = ${builtins.toString (512*1024*1024)}
+      download-buffer-size = ${builtins.toString (512 * 1024 * 1024)}
 
       connect-timeout = 5
       log-lines = 25

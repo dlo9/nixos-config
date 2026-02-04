@@ -10,7 +10,6 @@ with lib; {
     inputs.base16.homeManagerModule
   ];
 
-
   home.sessionVariables = {
     TINTED_TMUX_OPTION_STATUSBAR = "1";
   };
@@ -33,7 +32,7 @@ with lib; {
 
       plugins = with pkgs.vimPlugins; [
         tinted-vim
-      #   vim-airline-themes
+        #   vim-airline-themes
       ];
 
       extraConfig = ''
@@ -136,7 +135,7 @@ with lib; {
   };
 
   xdg.configFile = {
-    "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml { }).generate "tinty-config" {
+    "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
       # Initialize with: tinty install && tinty apply base24-wild-cherry
       shell = "fish -c '{}'";
       default-scheme = "base24-wild-cherry";
@@ -151,33 +150,33 @@ with lib; {
         "base16-atelier-seaside"
         "base16-gigavolt"
       ];
-      
+
       items = [
         {
           name = "tinted-shell";
           path = "https://github.com/tinted-theming/tinted-shell";
           themes-dir = "scripts";
           hook = "set -U theme_trigger (date +%s)";
-          supported-systems = [ "base16" "base24" ];
+          supported-systems = ["base16" "base24"];
         }
         {
           name = "base16-vim";
           path = "https://github.com/tinted-theming/base16-vim";
           themes-dir = "colors";
-          supported-systems = [ "base16" "base24" ];
+          supported-systems = ["base16" "base24"];
         }
         {
           name = "tinted-terminal";
           path = "https://github.com/tinted-theming/tinted-terminal";
           themes-dir = "themes/alacritty";
-          supported-systems = [ "base16" "base24" ];
+          supported-systems = ["base16" "base24"];
         }
         {
           name = "tmux";
           path = "https://github.com/tinted-theming/tinted-tmux";
           themes-dir = "colors";
           hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
-          supported-systems = [ "base16" "base24" ];
+          supported-systems = ["base16" "base24"];
         }
       ];
     };
