@@ -25,43 +25,21 @@ with lib; {
   scheme.use-ifd = "auto";
 
   programs = {
-    vim = {
-      settings = {
-        background = "dark";
-      };
-
+    neovim = {
       plugins = with pkgs.vimPlugins; [
-        tinted-vim
-        #   vim-airline-themes
+        tinted-nvim
       ];
 
-      extraConfig = ''
-        """""""""""
-        "" Theme ""
-        """""""""""
-
-        " https://github.com/tinted-theming/tinted-vim
-        let tinted_background_transparent=1
-        set termguicolors
-        source ~/.local/share/tinted-theming/tinty/base16-vim-colors-file.vim
-
-        " Autoreload
-        set updatetime=10000 " every 10 seconds
-
-        function! CheckThemeFile()
-          let l:theme_file = expand('~/.local/share/tinted-theming/tinty/base16-vim-colors-file.vim')
-          let l:mtime = getftime(l:theme_file)
-          if l:mtime != get(g:, 'theme_mtime', 0)
-              let g:theme_mtime = l:mtime
-              execute 'source' l:theme_file
-              echom "Theme reloaded!"
-          endif
-        endfunction
-
-        augroup ThemeWatch
-            autocmd!
-            autocmd CursorHold,CursorHoldI * call CheckThemeFile()
-        augroup END
+      extraLuaConfig = ''
+        -- Theme
+        -- https://github.com/tinted-theming/tinted-nvim
+        vim.opt.termguicolors = true
+        require('tinted-colorscheme').setup(nil, {
+          supports = {
+            tinty = true,
+            live_reload = true,
+          },
+        })
       '';
     };
 
@@ -79,7 +57,7 @@ with lib; {
       end
     '';
 
-    #alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/tinted-terminal-themes-alacritty-file.toml"];
+    alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/tinted-terminal-themes-alacritty-file.toml"];
 
     waybar.style = ''
       /*****************/
@@ -141,7 +119,6 @@ with lib; {
       default-scheme = "base24-wild-cherry";
       preferred-schemes = [
         "base16-gruvbox-dark"
-        "base16-gruvbox-light"
         "base16-github-dark"
         "base24-wild-cherry"
         "base16-tokyo-night-dark"

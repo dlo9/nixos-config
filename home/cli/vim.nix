@@ -7,258 +7,251 @@
 }:
 with lib; {
   home.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = "nvim";
     NH_FLAKE = "/etc/nixos"; # For nh
   };
 
-  programs.vim = {
+  programs.neovim = {
     enable = true;
-    packageConfigurable = pkgs.vim;
+    viAlias = true;
+    vimAlias = true;
 
-    settings = {
-      background = "dark";
-      copyindent = true;
-      hidden = true;
-      number = true;
-      #relativenumber = true;
-      shiftwidth = 2;
-      smartcase = true;
-      tabstop = 2;
-    };
-
-    plugins = with pkgs.vimPlugins;
-    with pkgs.dlo9.vimPlugins; [
+    plugins = with pkgs.vimPlugins; [
       # Statusline
-      vim-airline
+      {
+        plugin = lualine-nvim;
+        type = "lua";
+        config = ''
+          require('lualine').setup({
+            options = {
+              icons_enabled = true,
+              theme = 'auto',
+            },
+            tabline = {
+              lualine_a = {'buffers'},
+              lualine_z = {'tabs'},
+            },
+          })
+        '';
+      }
 
-      # Auto paste mode
-      vim-bracketed-paste
+      # Auto-detect indentation
+      {
+        plugin = guess-indent-nvim;
+        type = "lua";
+        config = ''
+          require('guess-indent').setup({})
+        '';
+      }
 
-      # Autoindent
-      vim-yadi
+      # Autocomplete
+      {
+        plugin = nvim-cmp;
+        type = "lua";
+        config = ''
+          local cmp = require('cmp')
+          cmp.setup({
+            snippet = {
+              expand = function(args)
+                vim.snippet.expand(args.body)
+              end,
+            },
+            mapping = cmp.mapping.preset.insert({
+              ['<Tab>'] = cmp.mapping.select_next_item(),
+              ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+              ['<CR>'] = cmp.mapping.confirm({ select = false }),
+              ['<C-Space>'] = cmp.mapping.complete(),
+            }),
+            sources = cmp.config.sources({
+              { name = 'nvim_lsp' },
+            }, {
+              { name = 'buffer' },
+              { name = 'path' },
+            }),
+          })
+        '';
+      }
+      cmp-nvim-lsp
+      cmp-buffer
+      cmp-path
 
-      # Remove extra whitespace
-      vim-better-whitespace
+      # LSP (nvim-lspconfig provides lsp/*.lua config files on runtimepath)
+      nvim-lspconfig
 
-      # Remember last place
-      vim-lastplace
+      # Git signs in the gutter
+      {
+        plugin = gitsigns-nvim;
+        type = "lua";
+        config = ''
+          require('gitsigns').setup()
+        '';
+      }
 
-      # Centralize backup/swap/undo files to ~/.vim
-      vim-central
-
-      # Autocomplete plugins
-      coc-nvim # Base
-      coc-git
-      coc-rust-analyzer
-      coc-spell-checker
-      coc-vimlsp
-      coc-yaml
-      coc-go
-      coc-highlight
-      coc-biome # Webby stuff (JS, TS, JSON, HTML, MD, CSS)
-      coc-sh
-      coc-docker
+      # Web devicons (for lualine and other plugins)
+      nvim-web-devicons
     ];
 
-    extraConfig = ''
-      """""""""""""
-      "" Airline ""
-      """""""""""""
+    extraLuaConfig = ''
+      -- LSP: global defaults
+      vim.lsp.config('*', {
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+        root_markers = { '.git' },
+      })
 
-      " Enable top bar
-      let g:airline#extensions#tabline#enabled = 1
+      -- LSP: enable servers (configs provided by nvim-lspconfig lsp/*.lua files)
+      vim.lsp.enable({
+        'rust_analyzer',
+        'gopls',
+        'yamlls',
+        'bashls',
+        'dockerls',
+        'lua_ls',
+        'biome',
+      })
 
-      " Use powerline arrows
-      let g:airline_powerline_fonts = 1
+      -- LSP: keybindings on attach
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(ev)
+          local opts = { buffer = ev.buf }
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+          vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts)
+          vim.keymap.set('v', '<leader>a', vim.lsp.buf.code_action, opts)
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+          vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        end,
+      })
 
-      " Disable whitespace notification due to improper theming
-      let g:airline#extensions#whitespace#enabled = 0
+      -- General
+      vim.opt.history = 80
+      vim.opt.autoread = true
+      vim.opt.background = 'dark'
 
-      """""""""""""
-      "" General ""
-      """""""""""""
+      -- Line numbers
+      vim.opt.number = true
 
-      " Command lines to remember
-      set history=80
+      -- System clipboard for yank/paste in Wayland
+      if vim.env.WAYLAND_DISPLAY and vim.env.WAYLAND_DISPLAY ~= "" then
+        vim.opt.clipboard = 'unnamedplus'
+      end
 
-      " Set to auto read when a file is changed from the outside
-      set autoread
+      -- Spelling
+      vim.opt.spell = true
+      vim.opt.spelllang = { 'en_us' }
 
-      " Use system clipboard for everything
-      "set clipboard=unnamed
+      -- UI
+      vim.opt.scrolloff = 7
+      vim.opt.wildmenu = true
+      vim.opt.ruler = true
+      vim.opt.hidden = true
+      vim.opt.backspace = { 'indent', 'eol', 'start' }
+      vim.opt.whichwrap:append('<,>,h,l')
+      vim.opt.lazyredraw = true
+      vim.opt.magic = true
+      vim.opt.showmatch = true
+      vim.opt.errorbells = false
+      vim.opt.visualbell = false
+      vim.opt.timeoutlen = 500
 
-      " Use system clipboard for yank and paste
-      if $WAYLAND_DIRPLAY != ""
-        noremap  y  "+y
-        noremap  yy  "+yy
-        map  p  "+p
-        map  P  "+P
-      endif
+      -- Search
+      vim.opt.ignorecase = true
+      vim.opt.smartcase = true
+      vim.opt.hlsearch = true
+      vim.opt.incsearch = true
 
-      " Spelling
-      " Leader is `\`, so type `\+a` for spelling help
-      vmap <leader>a <Plug>(coc-codeaction-selected)
-      nmap <leader>a <Plug>(coc-codeaction-selected)
+      -- File encoding
+      vim.opt.encoding = 'utf-8'
+      vim.opt.fileformats = { 'unix', 'dos', 'mac' }
 
-      " Accept autocomplete item. I haven't needed this before, not sure why I do now
-      " Make <CR> to accept selected completion item or notify coc.nvim to format
-      " <C-g>u breaks current undo, please make your own choice.
-      inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      -- Tabs and indentation (fallback; guess-indent overrides per file)
+      vim.opt.expandtab = true
+      vim.opt.shiftwidth = 2
+      vim.opt.softtabstop = 2
+      vim.opt.tabstop = 2
+      vim.opt.smarttab = true
+      vim.opt.copyindent = true
 
-      " Navigate completion list with tab
-      inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
-      inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<C-d>"
+      -- Line wrapping
+      vim.opt.linebreak = true
 
-      " Auto-remove trailing whitespace
-      " https://github.com/ntpeters/vim-better-whitespace/blob/de99b55a6fe8c96a69f9376f16b1d5d627a56e81/plugin/better-whitespace.vim#L19
-      let g:strip_whitespace_on_save=1
-      let g:strip_whitespace_confirm=0
+      -- Persistent undo
+      vim.opt.undofile = true
 
-      """"""""
-      "" UI ""
-      """"""""
+      -- Strip trailing whitespace on save
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*',
+        callback = function()
+          local save = vim.fn.winsaveview()
+          vim.cmd([[%s/\s\+$//e]])
+          vim.fn.winrestview(save)
+        end,
+      })
 
-      " Number of context lines to keep between cursor and top/bottom of window
-      set so=7
+      -- Remember last cursor position
+      vim.api.nvim_create_autocmd('BufReadPost', {
+        pattern = '*',
+        callback = function()
+          local mark = vim.api.nvim_buf_get_mark(0, '"')
+          local line_count = vim.api.nvim_buf_line_count(0)
+          if mark[1] > 0 and mark[1] <= line_count then
+            vim.api.nvim_win_set_cursor(0, mark)
+          end
+        end,
+      })
 
-      " Show available options for command tab completion
-      set wildmenu
+      -- Filetype-specific indentation
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'yaml',
+        callback = function()
+          vim.opt_local.tabstop = 2
+          vim.opt_local.expandtab = true
+          vim.opt_local.shiftwidth = 2
+          vim.opt_local.softtabstop = 2
+        end,
+      })
 
-      "Always show cursor position
-      set ruler
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'python',
+        callback = function()
+          vim.opt_local.tabstop = 4
+          vim.opt_local.expandtab = true
+          vim.opt_local.shiftwidth = 4
+          vim.opt_local.softtabstop = 4
+        end,
+      })
 
-      " A buffer becomes hidden when it is abandoned
-      set hid
+      -- Keymaps: treat long lines as break lines
+      vim.keymap.set("", 'j', 'gj')
+      vim.keymap.set("", 'k', 'gk')
 
-      " Backspace should delete all characters
-      set backspace=indent,eol,start
+      -- Clear search highlight with <leader><CR>
+      vim.keymap.set("", '<leader><CR>', ':noh<CR>', { silent = true })
 
-      " Move to next line when at EOL
-      set whichwrap+=<,>,h,l
+      -- Faster window navigation
+      vim.keymap.set("", '<C-j>', '<C-W>j')
+      vim.keymap.set("", '<C-k>', '<C-W>k')
+      vim.keymap.set("", '<C-h>', '<C-W>h')
+      vim.keymap.set("", '<C-l>', '<C-W>l')
 
-      " Don't redraw while executing macros
-      set lazyredraw
+      -- Close all buffers
+      vim.keymap.set("", '<leader>ba', ':1,1000 bd!<CR>')
 
-      " Use GREP regex characters
-      set magic
-
-      " Show matching brackets when cursor is over them
-      set showmatch
-
-      " No annoying sound on errors
-      set noerrorbells
-      set novisualbell
-      set t_vb=
-      set tm=500
-
-      """"""""""""
-      "" Search ""
-      """"""""""""
-
-      " Ignore case
-      set ignorecase
-
-      " Unless the search contains a capital
-      set smartcase
-
-      " Highlight results
-      set hlsearch
-
-      " Search as you type
-      set incsearch
-
-      """""""""""""""""""
-      "" File encoding ""
-      """""""""""""""""""
-
-      " Set utf8 as standard encoding
-      set encoding=utf8
-
-      " Use Unix as the standard file type
-      set ffs=unix,dos,mac
-
-      """"""""""""""""""""""""""""""""""
-      "" Text, tab and indent related ""
-      """"""""""""""""""""""""""""""""""
-
-      " Try to auto detect and use the indentation of a file when opened.
-      autocmd BufRead * DetectIndent
-
-      " Otherwise use file type specific indentation
-      filetype plugin indent on
-
-      " Set a fallback here in case detection fails and there is no file type
-      " plugin available. You can also omit this, then Vim defaults to tabs.
-      set expandtab shiftwidth=2 softtabstop=2
-
-      " You stay in control of your tabstop setting.
-      set tabstop=2
-
-      " Backspace removes <tabstop> spaces from the start of the line
-      set smarttab
-
-      " Linewrap obeys word boundaries
-      set linebreak
-
-      """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-      " => Moving around, tabs, windows and buffers
-      """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-      " Control+Arrow jumps between words/lines
-      map Od <c-left>
-      map Ob <c-down>
-      map Oa <c-up>
-      map Oc <c-right>
-      map! Od <c-left>
-      map! Ob <c-down>
-      map! Oa <c-up>
-      map! Oc <c-right>
-
-      " Shift-Tab should behave as expected
-      "inoremap <S-Tab> <C-d>
-
-      " TODO: Haven't reviewed past this line
-      " Treat long lines as break lines (useful when moving around in them)
-      " TODO: doesn't seem to work
-      map j gj
-      map k gk
-
-      " Disable highlight when <leader><cr> is pressed
-      " TODO: doesn't seem to work
-      map <silent> <leader><cr> :noh<cr>
-
-      " Faster window jumps
-      map <C-j> <C-W>j
-      map <C-k> <C-W>k
-      map <C-h> <C-W>h
-      map <C-l> <C-W>l
-
-      " Close all the buffers
-      " TODO: doesn't seem to work (map to q!! or qa if it does?)
-      " map <leader>bd :Bclose<cr>
-      map <leader>ba :1,1000 bd!<cr>
-
-      " Useful mappings for managing tabs
-      map <leader>tn :tabnew<cr>
-      map <leader>to :tabonly<cr>
-      map <leader>tc :tabclose<cr>
-      map <leader>tm :tabmove
-
-      " Remember info about open buffers on close
-      " Store up to 1000 lines in each buffer
-      set viminfo^=%,<1000
-
-      """"""""""""""""
-      """ Filetypes ""
-      """"""""""""""""
-
-      autocmd FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
-      autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
+      -- Tab management
+      vim.keymap.set("", '<leader>tn', ':tabnew<CR>')
+      vim.keymap.set("", '<leader>to', ':tabonly<CR>')
+      vim.keymap.set("", '<leader>tc', ':tabclose<CR>')
+      vim.keymap.set("", '<leader>tm', ':tabmove')
     '';
   };
 
   home.packages = with pkgs; [
-    nodejs # For vim plugins
+    # LSP servers
+    rust-analyzer
+    gopls
+    yaml-language-server
+    nodePackages.bash-language-server
+    dockerfile-language-server-nodejs
+    lua-language-server
+    biome
   ];
 }
