@@ -48,16 +48,16 @@ with lib; {
       ### Theme ###
       #############
 
-      # Set theme on startup
+      # Load theme on startup
       sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
 
-      # Auto reload with: set -U theme_trigger (date +%s)
-      function reload_theme --on-variable theme_trigger
+      # Instant reload via universal variable (set by tinty tinted-shell hook)
+      function __reload_theme --on-variable theme_trigger
         sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
       end
     '';
 
-    alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/tinted-terminal-themes-alacritty-file.toml"];
+    alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/artifacts/tinted-terminal-themes-alacritty-file.toml"];
 
     waybar.style = ''
       /*****************/

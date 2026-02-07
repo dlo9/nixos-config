@@ -86,6 +86,7 @@ with lib; {
 
         # Theme
         set -as terminal-features ",*:RGB"
+        set -g allow-passthrough on
         source-file ~/.local/share/tinted-theming/tinty/tmux-colors-file.conf
       '';
     };
