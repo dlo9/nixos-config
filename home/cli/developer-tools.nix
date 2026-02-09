@@ -69,6 +69,7 @@ with lib; {
 
           diff-so-fancy
           difftastic
+          lnav # Log file viewer
         ]
         ++
         # Linux only
