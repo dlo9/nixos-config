@@ -126,6 +126,7 @@ with lib; {
       vim.opt.history = 80
       vim.opt.autoread = true
       vim.opt.background = 'dark'
+      vim.opt.mouse = ""  -- Disable mouse (nvim enables by default), allows terminal link clicking
 
       -- Line numbers
       vim.opt.number = true
