@@ -251,7 +251,7 @@ with lib; {
     gopls
     yaml-language-server
     nodePackages.bash-language-server
-    dockerfile-language-server-nodejs
+    dockerfile-language-server
     lua-language-server
     biome
   ];
