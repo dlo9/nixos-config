@@ -205,6 +205,9 @@ with lib; {
 
           # Screenshot tool
           gradia
+
+          # Networking utils (telnet)
+          inetutils
         ])
 
         [
@@ -221,9 +224,6 @@ with lib; {
           # So that links open in a browser when clicked from other applications
           # (e.g. vscode)
           xdg-utils
-
-          # Networking utils (telnet)
-          inetutils
         ]
       ];
 
