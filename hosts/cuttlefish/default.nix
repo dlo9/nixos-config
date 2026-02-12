@@ -72,14 +72,17 @@ with lib; {
 
     # Symlink usb adapters so they have consistent device paths
     services.udev.extraRules = ''
-      # Sonoff ZBDongle-P
-      #SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="280a19475345ec1199e094fd6f14af06", SYMLINK+="ttyZigbeeP"
+      # Sonoff ZBDongle-P (Old Zigbee Dongle)
+      # SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="280a19475345ec1199e094fd6f14af06", SYMLINK+="ttyZigbeeP"
 
-      # Sonoff ZBDongle-E
+      # Sonoff ZBDongle-E (Zigbee)
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="20230509135322", SYMLINK+="ttyZigbee"
 
+      # Sonoff ZBDongle-E (Thread)
+      SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="f454d86ecc15f0119645b239773d9da9", SYMLINK+="ttyThread"
+
       # TubesZB
-      SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", SYMLINK+="ttyThread"
+      # SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="0001", SYMLINK+="ttyThread"
     '';
 
     environment.systemPackages = with pkgs; [
