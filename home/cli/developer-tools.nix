@@ -65,7 +65,7 @@ with lib; {
 
           git-filter-repo
           claude-code
-          claude-monitor
+          nodejs_24 # Needed for claude code in vscode
 
           diff-so-fancy
           difftastic
