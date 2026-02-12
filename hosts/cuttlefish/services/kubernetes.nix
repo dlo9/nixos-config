@@ -49,13 +49,6 @@ in {
     '';
   };
 
-  # Grant admins access to cluster key
-  # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/services/cluster/kubernetes/default.nix
-  services.certmgr.specs.clusterAdmin.private_key = {
-    group = "wheel";
-    mode = "0640";
-  };
-
   services.kubernetes = {
     roles = ["master" "node"];
     masterAddress = masterHostname;
@@ -144,5 +137,29 @@ in {
   systemd.services.kube-apiserver.unitConfig = {
     Wants = ["etcd.service"];
     After = ["etcd.service"];
+  };
+
+  # Remove `hosts` config from cert requests, since they are often invalid DNS names. This causes
+  # certmgr to renew certs and restart every 30m, which bounces the connection to the apiserver:
+  #  - https://github.com/NixOS/nixpkgs/blob/6c5e707c6b5339359a9a9e215c5e66d6d802fd7a/nixos/modules/services/cluster/kubernetes/pki.nix#L254
+  #  - journalctl -u certmgr --since -1h | rg 'needs refresh' | rg -o '[^ ]*.json' | sort | uniq
+  services.certmgr.specs = (builtins.listToAttrs (builtins.map (name: {
+    inherit name;
+    value = { request.hosts = []; };
+  }) [
+    "addonManager"
+    "apiserverKubeletClient"
+    "controllerManagerClient"
+    "kubeletClient"
+    "kubeProxyClient"
+    "schedulerClient"
+    "serviceAccount"
+  ])) // {
+    # Grant admins access to cluster key
+    # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/services/cluster/kubernetes/default.nix
+    clusterAdmin.private_key = {
+      group = "wheel";
+      mode = "0640";
+    };
   };
 }
