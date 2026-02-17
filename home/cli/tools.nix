@@ -10,7 +10,10 @@
 with lib; {
   home = {
     sessionVariables = {
+      LESS = "-R";  # Enable syntaxt highlighting
       PAGER = "bat --style='-header-filename'";
+      # PAGER = "page -O 30";
+      PAGE_REDIRECTION_PROTECT = "0"; # Without this, page prints a temp directory each time it's ran
       DELTA_PAGER = "bat --style=plain";
     };
 
@@ -95,6 +98,7 @@ with lib; {
         just
         nix-output-monitor
         dig
+        page # Neovim as a pager
       ]
       ++
       # Linux only
@@ -165,6 +169,9 @@ with lib; {
         };
       };
     };
+
+    less.enable = true;
+    lesspipe.enable = true;
 
     direnv = {
       enable = true;
