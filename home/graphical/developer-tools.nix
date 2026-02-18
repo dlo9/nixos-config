@@ -28,6 +28,10 @@ with lib; {
           ms-vscode-remote.remote-ssh
         ];
       };
+
+      zed-editor = {
+        enable = true;
+      };
     };
   };
 }

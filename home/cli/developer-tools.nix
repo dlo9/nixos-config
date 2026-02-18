@@ -64,7 +64,6 @@ with lib; {
           jjui
 
           git-filter-repo
-          claude-code
           nodejs_24 # Needed for claude code in vscode
 
           diff-so-fancy
@@ -76,6 +75,7 @@ with lib; {
         (optionals isLinux [
           isd
           (dlo9.rustnet.override {rustPlatform = pkgs.unstable.rustPlatform;})
+          claude-code
         ]);
     };
 
