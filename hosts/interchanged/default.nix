@@ -35,7 +35,6 @@ in {
       "flameshot"
       "caffeine"
       "google-chrome"
-      "aerial"
       "claude-code"
 
       # Backup
