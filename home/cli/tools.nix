@@ -54,14 +54,9 @@ with lib; {
         procs
         viddy
 
-        # Cheatsheet-like helpers
-        navi
-        fzf # Required for navi
-        cheat
-
         # Terminal recorder
         #vhs # Requires chrome
-        ttyd
+        #ttyd
 
         # Nix utils
         any-nix-shell # Doesn't change the interactive shell when using nix-shell
@@ -79,13 +74,13 @@ with lib; {
         age
         unstable.nix-inspect
         tailspin # Log highlighter
-        sd # Find and replace
         superfile # File explorer
         peco # Interactive filtering
         jnv # JSON interactive filtering
         clipboard-jh # `cb` a clipboard manager
         jc # CLI output to json
         eva # calculator
+        fzf
 
         # To try
         # dblab
@@ -97,7 +92,7 @@ with lib; {
 
         just
         nix-output-monitor
-        dig
+        dig # DNS
         page # Neovim as a pager
       ]
       ++
@@ -115,7 +110,7 @@ with lib; {
 
         bandwhich # Network monitor
         dua # Another disk space utility
-        dive # Image layer explorer
+        #dive # Image layer explorer
 
         ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
       ]);

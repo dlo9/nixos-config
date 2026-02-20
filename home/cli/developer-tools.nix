@@ -28,11 +28,8 @@ with lib; {
           wrap
           fselect # Find, but with SQL
           wiper # Disk usage TUI
-          serpl # CLI find & replace: scooter is another option
 
-          gh-dash
           unstable.devenv
-          gitu # Git TUI
           tcping-go
 
           dlo9.havn # Port scanner
@@ -45,7 +42,6 @@ with lib; {
 
           flashrom
           #noseyparker # Credential scanner
-          #glances # Monitoring utility
 
           vulnix # Vulnerability scanner
           glow # Markdown reader
@@ -56,9 +52,7 @@ with lib; {
           miller
           csvlens
 
-          lua
           fastmod # Search & replace tool
-          parallel
           mcat
           mosh
           jjui

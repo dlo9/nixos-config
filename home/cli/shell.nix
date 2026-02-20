@@ -18,15 +18,9 @@ with lib; {
         set -gu __HM_SESS_VARS_SOURCED $__HM_SESS_VARS_SOURCED
       '';
 
-      interactiveShellInit = let
-        navi-fish = pkgs.runCommandLocal "navi.fish" {} "${pkgs.navi}/bin/navi widget fish > $out";
-      in ''
+      interactiveShellInit = ''
         # Keep fish when using nix-shell
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
-
-        # Cheatsheet
-        # Use Ctrl + G to open
-        source ${navi-fish}
       '';
 
       functions = {
@@ -49,11 +43,6 @@ with lib; {
 
         fork = ''
           eval "$argv & disown > /dev/null"
-        '';
-
-        # TODO: pavil only
-        fix-hdmi-audio = ''
-          amixer -c 0 sset IEC958,1 unmute $argv
         '';
       };
     };

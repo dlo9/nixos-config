@@ -184,13 +184,9 @@ with lib; {
           # Monitor control
           ddcui
 
-          # USB flasher
-          # popsicle
-
           # GUI-ish bluetooth control
           bluetuith
 
-          #zoom-us
           wasistlos
 
           # Image viewer
@@ -215,7 +211,6 @@ with lib; {
           nerd-fonts.noto
           noto-fonts-color-emoji
 
-          b612
           open-sans
 
           # Required for gtk: https://github.com/nix-community/home-manager/issues/3113
