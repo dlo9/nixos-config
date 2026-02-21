@@ -2,14 +2,11 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
-with lib; {
-  imports = [
-    inputs.base16.homeManagerModule
-  ];
-
+with lib; let
+  tintyDataDir = "${config.home.homeDirectory}/.local/share/tinted-theming/tinty";
+in {
   home.sessionVariables = {
     TINTED_TMUX_OPTION_STATUSBAR = "1";
   };
@@ -17,12 +14,6 @@ with lib; {
   home.packages = with pkgs; [
     tinty
   ];
-
-  # TODO: try out github.com/nix-community/stylix
-
-  # Available schemes: https://github.com/tinted-theming/schemes
-  scheme.yaml = "${inputs.tinted-theming}/base24/wild-cherry.yaml";
-  scheme.use-ifd = "auto";
 
   programs = {
     neovim = {
@@ -59,91 +50,46 @@ with lib; {
 
     alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/artifacts/tinted-terminal-themes-alacritty-file.toml"];
 
-    waybar.style = ''
-      /*****************/
-      /***** Theme *****/
-      /*****************/
-
-      ${readFile (config.scheme inputs.base16-waybar)}
+    # Waybar theme: import colors from tinty-generated CSS
+    waybar.style = mkBefore ''
+      @import url("file://${tintyDataDir}/artifacts/base16-waybar-colors-file.css");
     '';
   };
 
   services = {
-    # TODO: removed, have to use mako.settings
-    #mako.extraConfig = readFile (config.scheme inputs.base16-mako);
+    # Mako theme: include colors from tinty-generated config
+    mako.settings = {
+      include = "${tintyDataDir}/artifacts/base16-mako-colors-file.conf";
+    };
   };
 
+  # GTK theme: use FlatColor base theme with tinty colors imported via user CSS
   gtk.theme = {
-    #package = pkgs.vimix-gtk-themes;
-
-    name = "FlatColor-base16";
-    package = let
-      gtk2-theme = config.scheme {
-        templateRepo = inputs.base16-gtk;
-        target = "gtk-2";
-      };
-
-      gtk3-theme = config.scheme {
-        templateRepo = inputs.base16-gtk;
-        target = "gtk-3";
-      };
-    in
-      pkgs.dlo9.flatcolor-gtk-theme.overrideAttrs (oldAttrs: {
-        # Build instructions: https://github.com/tinted-theming/base16-gtk-flatcolor
-        # This builds, but doesn't seem to work very well?
-        postInstall = ''
-          # Base theme info
-          base_theme=FlatColor
-          base_theme_path="$out/share/themes/$base_theme"
-
-          new_theme="$base_theme-base16"
-          new_theme_path="$out/share/themes/$new_theme"
-
-          # Clone and rename theme
-          cp -r "$base_theme_path" "$new_theme_path"
-          grep -Rl "$base_theme" "$new_theme_path" | xargs -n1 sed -i "s/$base_theme/$new_theme/"
-
-          # Rewrite colors into theme files
-          # This is specific to FlatColor, since gtk themes dont standarize base color variables
-          printf "%s\n" 'include "${gtk2-theme}"' "$(sed -E '/.*#[a-fA-F0-9]{6}.*/d' "$base_theme_path/gtk-2.0/gtkrc")" > "$new_theme_path/gtk-2.0/gtkrc"
-          printf "%s\n" '@import url("${gtk3-theme}");' "$(sed '1,10d' "$base_theme_path/gtk-3.0/gtk.css")" > "$new_theme_path/gtk-3.0/gtk.css"
-          printf "%s\n" '@import url("${gtk3-theme}");' "$(sed '1,26d' "$base_theme_path/gtk-3.20/gtk.css")" > "$new_theme_path/gtk-3.20/gtk.css"
-        '';
-      });
+    name = "FlatColor";
+    package = pkgs.dlo9.flatcolor-gtk-theme;
   };
 
-  # Sync tinty repos and apply theme when config changes, without resetting a user-selected theme
+  # Sync tinty repos and apply theme on activation
   home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
     tinty_bin="${pkgs.tinty}/bin/tinty"
     config_file="$HOME/.config/tinted-theming/tinty/config.toml"
     data_dir="$HOME/.local/share/tinted-theming/tinty"
-    hash_file="$data_dir/.nix-activation-hash"
 
     mkdir -p "$data_dir"
 
     if [ -L "$config_file" ]; then
-      config_hash=$(readlink "$config_file")
-      stored_hash=$(cat "$hash_file" 2>/dev/null || echo "")
+      # Always run install - it's idempotent and will skip already-installed items
+      run "$tinty_bin" install
 
-      if [ "$config_hash" != "$stored_hash" ]; then
-        run "$tinty_bin" install
+      # tinty hooks use fish, which may not be in PATH during activation
+      export PATH="${pkgs.fish}/bin:$PATH"
 
-        # tinty hooks use fish, which may not be in PATH during activation
-        export PATH="${pkgs.fish}/bin:$PATH"
-
-        # Re-apply current theme to populate files for new items, or apply default if unset
-        # tinty current outputs the name with surrounding quotes, so strip them
-        current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
-        if [ -n "$current_scheme" ]; then
-          run "$tinty_bin" apply "$current_scheme"
-        else
-          run "$tinty_bin" apply "base24-wild-cherry"
-        fi
-
-        # Only persist the hash outside of dry-run so the next real activation still runs
-        if [[ -z "''${DRY_RUN_CMD:-}" ]]; then
-          echo "$config_hash" > "$hash_file"
-        fi
+      # Re-apply current theme to populate files for new items, or apply default if unset
+      current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
+      if [ -n "$current_scheme" ]; then
+        run "$tinty_bin" apply "$current_scheme"
+      else
+        run "$tinty_bin" apply "base24-wild-cherry"
       fi
     fi
   '';
@@ -164,6 +110,7 @@ with lib; {
       ];
 
       items = [
+        # Shell
         {
           name = "tinted-shell";
           path = "https://github.com/tinted-theming/tinted-shell";
@@ -171,18 +118,21 @@ with lib; {
           hook = "set -U theme_trigger (date +%s)";
           supported-systems = ["base16" "base24"];
         }
+        # Neovim
         {
           name = "base16-vim";
           path = "https://github.com/tinted-theming/base16-vim";
           themes-dir = "colors";
           supported-systems = ["base16" "base24"];
         }
+        # Alacritty
         {
           name = "tinted-terminal";
           path = "https://github.com/tinted-theming/tinted-terminal";
           themes-dir = "themes/alacritty";
           supported-systems = ["base16" "base24"];
         }
+        # Tmux
         {
           name = "tmux";
           path = "https://github.com/tinted-theming/tinted-tmux";
@@ -190,10 +140,48 @@ with lib; {
           hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
           supported-systems = ["base16" "base24"];
         }
+        # Waybar
+        {
+          name = "base16-waybar";
+          path = "https://github.com/mnussbaum/base16-waybar";
+          themes-dir = "colors";
+          revision = "master";
+          hook = "pkill -SIGUSR2 waybar 2>/dev/null";
+          supported-systems = ["base16" "base24"];
+        }
+        # Mako notifications
+        {
+          name = "base16-mako";
+          path = "https://github.com/Eluminae/base16-mako";
+          themes-dir = "colors";
+          revision = "master";
+          hook = "makoctl reload 2>/dev/null";
+          supported-systems = ["base16" "base24"];
+        }
+        # Wofi launcher
+        {
+          name = "base16-wofi";
+          path = "https://git.sr.ht/~knezi/base16-wofi";
+          themes-dir = "themes";
+          revision = "master";
+          # No hook needed - wofi reads CSS on each launch
+          supported-systems = ["base16" "base24"];
+        }
+        # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
+        {
+          name = "base16-gtk";
+          path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
+          themes-dir = "gtk-3";
+          revision = "main";
+          supported-systems = ["base16" "base24"];
+        }
       ];
     };
 
+    # Wofi styles: import colors from tinty-generated CSS
     "wofi/style.css".text = ''
+      @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
       *{
         font-family: ${config.font.family};
         font-size: ${builtins.toString config.font.size}px;
@@ -218,11 +206,11 @@ with lib; {
       #text {
         padding: 5px;
       }
-
-      ${readFile (config.scheme inputs.base16-wofi)}
     '';
 
     "wofi/style.widgets.css".text = ''
+      @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
       *{
         font-family: ${config.font.family};
         font-size: ${builtins.toString config.font.size}px;
@@ -243,8 +231,15 @@ with lib; {
         padding: 5px;
         color: white;
       }
+    '';
 
-      ${readFile (config.scheme inputs.base16-wofi)}
+    # GTK3/4: import tinty-generated colors
+    "gtk-3.0/gtk.css".text = ''
+      @import url("${tintyDataDir}/artifacts/base16-gtk-gtk-3-file.css");
+    '';
+
+    "gtk-4.0/gtk.css".text = ''
+      @import url("${tintyDataDir}/artifacts/base16-gtk-gtk-3-file.css");
     '';
   };
 }

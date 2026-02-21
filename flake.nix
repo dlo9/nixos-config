@@ -72,37 +72,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Theming
-    # A decent alternative (can generate color from picture): https://git.sr.ht/~misterio/nix-colors
-    base16.url = "github:SenchoPens/base16.nix/v2.2.1";
-
-    # Available schemes: https://github.com/tinted-theming/schemes
-    tinted-theming = {
-      url = "github:tinted-theming/schemes";
-      flake = false;
-    };
-
-    # Theme templates
-    base16-mako = {
-      url = "github:Eluminae/base16-mako";
-      flake = false;
-    };
-
-    base16-wofi = {
-      url = "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz";
-      flake = false;
-    };
-
-    base16-waybar = {
-      url = "github:mnussbaum/base16-waybar";
-      flake = false;
-    };
-
-    base16-gtk = {
-      url = "github:tinted-theming/base16-gtk-flatcolor";
-      flake = false;
-    };
   };
 
   outputs = inputs @ {flake-parts, ...}:

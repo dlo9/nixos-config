@@ -22,86 +22,6 @@
         "type": "github"
       }
     },
-    "base16": {
-      "inputs": {
-        "fromYaml": "fromYaml"
-      },
-      "locked": {
-        "lastModified": 1709025227,
-        "narHash": "sha256-KXcORItjYJTdEO/BlBd0Uym1Xa3eBu43uvpFiWjJOdY=",
-        "owner": "SenchoPens",
-        "repo": "base16.nix",
-        "rev": "4e9b16c8b44958bc6bf46d99c3bb1b59c9c9c764",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SenchoPens",
-        "ref": "v2.2.1",
-        "repo": "base16.nix",
-        "type": "github"
-      }
-    },
-    "base16-gtk": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1771120638,
-        "narHash": "sha256-j/7jt23BtrfSGJy0BNEpjrdXoLaAQfc5R3ebMZVKKFs=",
-        "owner": "tinted-theming",
-        "repo": "base16-gtk-flatcolor",
-        "rev": "3f337ebc8d1022598dcff3afcb93e2735e55d091",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tinted-theming",
-        "repo": "base16-gtk-flatcolor",
-        "type": "github"
-      }
-    },
-    "base16-mako": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1584466459,
-        "narHash": "sha256-83csG/gORJlPg9sOlOeWgAH9KYgt+cgrJJNXMuIaVBQ=",
-        "owner": "Eluminae",
-        "repo": "base16-mako",
-        "rev": "f46c99682c03d30f52436741f1902db36738bf06",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Eluminae",
-        "repo": "base16-mako",
-        "type": "github"
-      }
-    },
-    "base16-waybar": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1546831770,
-        "narHash": "sha256-ehb4CLLPJ/SjMz53/inuP9ine2CfIpexp2O1lVHihM0=",
-        "owner": "mnussbaum",
-        "repo": "base16-waybar",
-        "rev": "d2f943b1abb9c9f295e4c6760b7bdfc2125171d2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mnussbaum",
-        "repo": "base16-waybar",
-        "type": "github"
-      }
-    },
-    "base16-wofi": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1595391514,
-        "narHash": "sha256-fwTzuQYD8Ue0DXtTua8ZwDjCdYZm0V5u8Oz/BY711gQ=",
-        "type": "tarball",
-        "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://git.sr.ht/~knezi/base16-wofi/archive/v1.0.tar.gz"
-      }
-    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -298,22 +218,6 @@
         "type": "github"
       }
     },
-    "fromYaml": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1689549921,
-        "narHash": "sha256-iX0pk/uB019TdBGlaJEWvBCfydT6sRq+eDcGPifVsCM=",
-        "owner": "SenchoPens",
-        "repo": "fromYaml",
-        "rev": "11fbbbfb32e3289d3c631e0134a23854e7865c84",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SenchoPens",
-        "repo": "fromYaml",
-        "type": "github"
-      }
-    },
     "haskell-flake": {
       "locked": {
         "lastModified": 1675296942,
@@ -456,11 +360,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1771208521,
-        "narHash": "sha256-X01Q3DgSpjeBpapoGA4rzKOn25qdKxbPnxHeMLNoHTU=",
+        "lastModified": 1771574726,
+        "narHash": "sha256-D1PA3xQv/s4W3lnR9yJFSld8UOLr0a/cBWMQMXS+1Qg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fa56d7d6de78f5a7f997b0ea2bc6efd5868ad9e8",
+        "rev": "c217913993d6c6f6805c3b1a3bda5e639adfde6d",
         "type": "github"
       },
       "original": {
@@ -672,11 +576,6 @@
     "root": {
       "inputs": {
         "arion": "arion",
-        "base16": "base16",
-        "base16-gtk": "base16-gtk",
-        "base16-mako": "base16-mako",
-        "base16-waybar": "base16-waybar",
-        "base16-wofi": "base16-wofi",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "flake-parts": "flake-parts_2",
@@ -694,7 +593,6 @@
         "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts",
         "sops-nix": "sops-nix",
         "terranix": "terranix",
-        "tinted-theming": "tinted-theming",
         "wrap": "wrap"
       }
     },
@@ -811,22 +709,6 @@
       "original": {
         "owner": "terranix",
         "repo": "terranix",
-        "type": "github"
-      }
-    },
-    "tinted-theming": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1771336031,
-        "narHash": "sha256-lOw77YOBM6HNuWcLL4Qugn+vr4RxMKV8FgXqFlnyLIo=",
-        "owner": "tinted-theming",
-        "repo": "schemes",
-        "rev": "7725e097895102ca2949c7a553b54dca0b2e2667",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tinted-theming",
-        "repo": "schemes",
         "type": "github"
       }
     },
