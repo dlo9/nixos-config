@@ -112,9 +112,44 @@ with lib; {
       });
   };
 
+  # Sync tinty repos and apply theme when config changes, without resetting a user-selected theme
+  home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    tinty_bin="${pkgs.tinty}/bin/tinty"
+    config_file="$HOME/.config/tinted-theming/tinty/config.toml"
+    data_dir="$HOME/.local/share/tinted-theming/tinty"
+    hash_file="$data_dir/.nix-activation-hash"
+
+    mkdir -p "$data_dir"
+
+    if [ -L "$config_file" ]; then
+      config_hash=$(readlink "$config_file")
+      stored_hash=$(cat "$hash_file" 2>/dev/null || echo "")
+
+      if [ "$config_hash" != "$stored_hash" ]; then
+        run "$tinty_bin" install
+
+        # tinty hooks use fish, which may not be in PATH during activation
+        export PATH="${pkgs.fish}/bin:$PATH"
+
+        # Re-apply current theme to populate files for new items, or apply default if unset
+        # tinty current outputs the name with surrounding quotes, so strip them
+        current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
+        if [ -n "$current_scheme" ]; then
+          run "$tinty_bin" apply "$current_scheme"
+        else
+          run "$tinty_bin" apply "base24-wild-cherry"
+        fi
+
+        # Only persist the hash outside of dry-run so the next real activation still runs
+        if [[ -z "''${DRY_RUN_CMD:-}" ]]; then
+          echo "$config_hash" > "$hash_file"
+        fi
+      fi
+    fi
+  '';
+
   xdg.configFile = {
     "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
-      # Initialize with: tinty install && tinty apply base24-wild-cherry
       shell = "fish -c '{}'";
       default-scheme = "base24-wild-cherry";
       preferred-schemes = [
