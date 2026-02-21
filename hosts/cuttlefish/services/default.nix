@@ -15,7 +15,6 @@
     ./samba.nix
     ./sunshine.nix
     ./ttyd.nix
-    ./vr.nix
     ./webdav.nix
     ./zrepl.nix
   ];

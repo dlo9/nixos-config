@@ -20,36 +20,8 @@ with lib; {
   };
 
   home.packages = with pkgs; [
-    nvtopPackages.intel # GPU monitoring
     kdash # kubernetes dashboard
   ];
 
-  # wivrn
-  # https://github.com/WiVRn/WiVRn/issues/45#issue-2165564488
-  # xdg.configFile."openxr/1/active_runtime.json".text = ''
-  #   {
-  #     "file_format_version": "1.0.0",
-  #     "runtime": {
-  #         "name": "wivrn",
-  #         "library_path": "${osConfig.services.wivrn.package}/lib/wivrn/libopenxr_wivrn.so"
-  #     }
-  #   }
-  # '';
-
-  # VR
-  xdg.configFile."wlxoverlay/conf.d/pw_fallback.yaml".text = ''
-    capture_method: pw_fallback
-  '';
-
-  xdg.configFile."openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
-
-  xdg.configFile."openvr/openvrpaths.vrpath".text = builtins.toJSON {
-    config = ["${config.xdg.dataHome}/Steam/config"];
-    external_drivers = null;
-    jsonid = "vrpathreg";
-    logs = ["${config.xdg.dataHome}/Steam/logs"];
-    runtime = ["${pkgs.opencomposite}/lib/opencomposite"];
-    version = 1;
-  };
   programs.zed-editor.installRemoteServer = true;
 }
