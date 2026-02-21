@@ -51,4 +51,5 @@ with lib; {
     runtime = ["${pkgs.opencomposite}/lib/opencomposite"];
     version = 1;
   };
+  programs.zed-editor.installRemoteServer = true;
 }
