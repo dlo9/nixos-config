@@ -59,11 +59,11 @@ in {
   services = {
     # Mako theme: include colors from tinty-generated config
     mako.settings = {
-      include = "${tintyDataDir}/artifacts/base16-mako-colors-file.conf";
+      include = "${tintyDataDir}/artifacts/base16-mako-colors-file.config";
     };
   };
 
-  # GTK theme: use FlatColor base theme with tinty colors imported via user CSS
+  # GTK theme - FlatColor with colors from user CSS
   gtk.theme = {
     name = "FlatColor";
     package = pkgs.dlo9.flatcolor-gtk-theme;
@@ -146,7 +146,7 @@ in {
           path = "https://github.com/mnussbaum/base16-waybar";
           themes-dir = "colors";
           revision = "master";
-          hook = "pkill -SIGUSR2 waybar 2>/dev/null";
+          hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
           supported-systems = ["base16" "base24"];
         }
         # Mako notifications
@@ -155,7 +155,7 @@ in {
           path = "https://github.com/Eluminae/base16-mako";
           themes-dir = "colors";
           revision = "master";
-          hook = "makoctl reload 2>/dev/null";
+          hook = "command -v makoctl >/dev/null; and makoctl reload";
           supported-systems = ["base16" "base24"];
         }
         # Wofi launcher
@@ -173,6 +173,9 @@ in {
           path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
           themes-dir = "gtk-3";
           revision = "main";
+          theme-file-extension = "-gtk.css";
+          # Toggle gsettings to trigger GTK apps to reload CSS
+          hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
           supported-systems = ["base16" "base24"];
         }
       ];
@@ -233,13 +236,5 @@ in {
       }
     '';
 
-    # GTK3/4: import tinty-generated colors
-    "gtk-3.0/gtk.css".text = ''
-      @import url("${tintyDataDir}/artifacts/base16-gtk-gtk-3-file.css");
-    '';
-
-    "gtk-4.0/gtk.css".text = ''
-      @import url("${tintyDataDir}/artifacts/base16-gtk-gtk-3-file.css");
-    '';
   };
 }
