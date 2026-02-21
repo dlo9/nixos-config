@@ -73,6 +73,11 @@ with lib; {
         unbind '"'
         unbind %
 
+        # Pass extended key sequences (e.g. Shift+Enter) through to applications
+        # https://github.com/anthropics/claude-code/issues/6072#issuecomment-3878383365
+        set -g extended-keys on
+        bind-key -T root S-Enter send-keys Escape "[13;2u"
+
         # Theme
         set -as terminal-features ",*:RGB"
         set -g allow-passthrough on

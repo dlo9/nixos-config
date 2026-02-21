@@ -68,6 +68,12 @@ with lib; {
               chars = ''\u001b${key}'';
             }) (stringToCharacters "niohljk-=[]"))
             ++ [
+              # Shift+Enter sends Kitty keyboard protocol sequence so terminals can distinguish it from Enter
+              {
+                key = "Return";
+                mods = "Shift";
+                chars = ''\u001b[13;2u'';
+              }
               {
                 key = "=";
                 mods = "Control";
