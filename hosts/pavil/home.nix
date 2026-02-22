@@ -19,6 +19,10 @@ with lib; {
     amdgpu_top
     orca-slicer
     freecad
+
+    # Chameleon Ultra
+    chameleon-cli
+    (nrfutil.override { extensions = ["nrfutil-device"]; })
   ];
 
   # SSH

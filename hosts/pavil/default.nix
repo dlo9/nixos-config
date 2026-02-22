@@ -47,6 +47,9 @@ with lib; {
 
     nix.distributedBuilds = true;
 
+    # Needed for Chameleon Ultra
+    nixpkgs.config.segger-jlink.acceptLicense = true;
+
     # zrepl_switch to new bluetooth devices
     services.pulseaudio.extraConfig = "
       load-module module-switch-on-connect
