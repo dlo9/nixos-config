@@ -36,6 +36,7 @@ in {
       "caffeine"
       "google-chrome"
       "claude-code"
+      "claude"
 
       # Backup
       "kopiaui"
