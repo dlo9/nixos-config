@@ -144,45 +144,45 @@ in {
           hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
           supported-systems = ["base16" "base24"];
         }
-        # Waybar
-        {
-          name = "base16-waybar";
-          path = "https://github.com/mnussbaum/base16-waybar";
-          themes-dir = "colors";
-          revision = "master";
-          hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
-          supported-systems = ["base16" "base24"];
-        }
-        # Mako notifications
-        {
-          name = "base16-mako";
-          path = "https://github.com/Eluminae/base16-mako";
-          themes-dir = "colors";
-          revision = "master";
-          hook = "command -v makoctl >/dev/null; and makoctl reload";
-          supported-systems = ["base16" "base24"];
-        }
-        # Wofi launcher
-        {
-          name = "base16-wofi";
-          path = "https://git.sr.ht/~knezi/base16-wofi";
-          themes-dir = "themes";
-          revision = "master";
-          # No hook needed - wofi reads CSS on each launch
-          supported-systems = ["base16" "base24"];
-        }
-        # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
-        {
-          name = "base16-gtk";
-          path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
-          themes-dir = "gtk-3";
-          revision = "main";
-          theme-file-extension = "-gtk.css";
-          # Toggle gsettings to trigger GTK apps to reload CSS
-          hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
-          supported-systems = ["base16" "base24"];
-        }
-      ];
+      ]
+      # Waybar
+      ++ optional config.programs.waybar.enable {
+        name = "base16-waybar";
+        path = "https://github.com/mnussbaum/base16-waybar";
+        themes-dir = "colors";
+        revision = "master";
+        hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
+        supported-systems = ["base16" "base24"];
+      }
+      # Mako notifications
+      ++ optional config.services.mako.enable {
+        name = "base16-mako";
+        path = "https://github.com/Eluminae/base16-mako";
+        themes-dir = "colors";
+        revision = "master";
+        hook = "command -v makoctl >/dev/null; and makoctl reload";
+        supported-systems = ["base16" "base24"];
+      }
+      # Wofi launcher
+      ++ optional config.programs.wofi.enable {
+        name = "base16-wofi";
+        path = "https://git.sr.ht/~knezi/base16-wofi";
+        themes-dir = "themes";
+        revision = "master";
+        # No hook needed - wofi reads CSS on each launch
+        supported-systems = ["base16" "base24"];
+      }
+      # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
+      ++ optional config.gtk.enable {
+        name = "base16-gtk";
+        path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
+        themes-dir = "gtk-3";
+        revision = "main";
+        theme-file-extension = "-gtk.css";
+        # Toggle gsettings to trigger GTK apps to reload CSS
+        hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
+        supported-systems = ["base16" "base24"];
+      };
     };
 
     # Wofi styles: import colors from tinty-generated CSS
@@ -239,6 +239,5 @@ in {
         color: white;
       }
     '';
-
   };
 }
