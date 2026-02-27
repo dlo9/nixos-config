@@ -78,11 +78,15 @@ in {
     mkdir -p "$data_dir"
 
     if [ -L "$config_file" ]; then
-      # Always run install - it's idempotent and will skip already-installed items
-      run "$tinty_bin" install
+      # Ensure git, fish, and tmux are available (needed on nix-on-droid)
+      export PATH="${pkgs.git}/bin:${pkgs.fish}/bin:${pkgs.tmux}/bin:$PATH"
+      # Ignore global git config that may rewrite HTTPS URLs to SSH
+      export GIT_CONFIG_GLOBAL=/dev/null
+      export GIT_CONFIG_SYSTEM=/dev/null
 
-      # tinty hooks use fish, which may not be in PATH during activation
-      export PATH="${pkgs.fish}/bin:$PATH"
+      # Always run install/update - idempotent and will skip already-installed items
+      run "$tinty_bin" install
+      run "$tinty_bin" update
 
       # Re-apply current theme to populate files for new items, or apply default if unset
       current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
