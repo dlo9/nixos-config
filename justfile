@@ -45,6 +45,22 @@ deploy host:
 
     nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k .#{{host}} $args
 
+bootstrap-pixie:
+    # Make sure to start SSH on the host:
+    # nix run github:dlo9/nixos-config#nix-on-droid-ssh
+
+    # Copy age key to host
+    sops -d --extract '["age-key"]["contents"]' hosts/pixie/secrets.yaml | \
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 8022 \
+        nix-on-droid@google-pixel-6 'cat > ./.config/sops-age-keys.txt'
+
+    # Deploy
+    nix run nixpkgs#deploy-rs -- \
+        --skip-checks --auto-rollback false --magic-rollback false -k \
+        --ssh-opts "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 8022" \
+        --targets .#pixie -- \
+        --impure
+
 deploy-all:
     # https://github.com/serokell/deploy-rs/issues/325#issuecomment-3015838438
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#cuttlefish .#drywell .#pavil .#trident
