@@ -123,7 +123,6 @@
             environment.motd = null;
 
             home-manager = {
-              useUserPackages = false; # TODO
               extraSpecialArgs = {
                 osConfig = config;
               };
@@ -231,7 +230,6 @@
           }:
             inputs.nix-on-droid.lib.nixOnDroidConfiguration {
               extraSpecialArgs = specialArgs ctx "android" "pixie";
-              home-manager-path = inputs.home-manager.outPath;
               modules = androidModules;
 
               pkgs = import inputs.nixpkgs {

@@ -4,7 +4,6 @@
   pkgs,
   isLinux,
   isDarwin,
-  isAndroid,
   mylib,
   ...
 }:
@@ -166,7 +165,7 @@ with lib; {
       };
     };
 
-    less.enable = !isAndroid;
+    less.enable = true;
     lesspipe.enable = true;
 
     direnv = {
