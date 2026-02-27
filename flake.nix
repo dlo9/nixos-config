@@ -249,14 +249,9 @@
         # nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false -k .#pixie -- --impure
         # https://github.com/nix-community/nix-on-droid/wiki/Remote-deploy-with-deploy%E2%80%90rs
         deploy.nodes.pixie = {
-          hostname = "google-pixel-6";
+          hostname = "pixie";
           sshUser = "nix-on-droid";
-          user = "nix-on-droid";
           fastConnection = true;
-          sshOpts = [
-            "-p"
-            "8022"
-          ];
 
           profiles.system.path = activateNixOnDroid self.nixOnDroidConfigurations.pixie;
         };

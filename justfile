@@ -51,13 +51,13 @@ bootstrap-pixie:
 
     # Copy age key to host
     sops -d --extract '["age-key"]["contents"]' hosts/pixie/secrets.yaml | \
-        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 8022 \
-        nix-on-droid@google-pixel-6 'cat > ./.config/sops-age-keys.txt'
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+        pixie 'cat > ./.config/sops-age-keys.txt'
 
     # Deploy
     nix run nixpkgs#deploy-rs -- \
         --skip-checks --auto-rollback false --magic-rollback false -k \
-        --ssh-opts "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 8022" \
+        --ssh-opts "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
         --targets .#pixie -- \
         --impure
 

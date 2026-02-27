@@ -137,6 +137,13 @@ with lib; {
         opnsense.user = "root";
         trident.user = "pi";
 
+        pixie = {
+          identitiesOnly = true;
+          user = "nix-on-droid";
+          hostname = "google-pixel-6";
+          port = 8022;
+        };
+
         # From default config
         "*" = {
           forwardAgent = false;
