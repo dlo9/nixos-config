@@ -27,18 +27,24 @@ with lib; {
 
         # https://github.com/nix-community/nix-on-droid/wiki/Remote-deploy-with-deploy%E2%80%90rs
         "https://nix-on-droid.cachix.org"
+
+        "https://devenv.cachix.org"
+        "https://cachix.cachix.org"
       ];
 
       trusted-substituters = [
         "https://nix-community.cachix.org"
         "https://devenv.cachix.org"
         "https://nix-serve.sigpanic.com"
+        "https://cachix.cachix.org"
       ];
 
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nix-serve.sigpanic.com:fp2dLidIBUYvB1SgcAAfYIaxIvzffQzMJ5nd/jZ+hww="
         "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
+        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+        "cachix.cachix.org-1:eWNHQldwUO7G2VkjpMquieBactivChwwm2rMqPyuDtY="
       ];
     };
 

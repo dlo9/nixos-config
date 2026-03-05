@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   isLinux,
   mylib,
   ...
@@ -29,9 +30,19 @@ with lib; {
           fselect # Find, but with SQL
           wiper # Disk usage TUI
 
-          unstable.devenv
           tcping-go
-
+        ]
+        ++
+        # On linux, use nixpkgs devenv; on darwin, use flake input to avoid boehm-gc conflicts
+        (if isLinux then [
+          unstable.devenv
+        ] else let
+          devenvFlake = builtins.getFlake "github:cachix/devenv/${inputs.devenv.sourceInfo.rev}";
+        in [
+          devenvFlake.packages.${pkgs.stdenv.hostPlatform.system}.devenv
+        ])
+        ++
+        [
           dlo9.havn # Port scanner
           dlo9.cidr
           dlo9.pvw # Port viewer, pvw -aon

@@ -67,6 +67,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    devenv = {
+      url = "github:cachix/devenv/latest";
+    };
+
     # Disk partitioning
     disko = {
       url = "github:nix-community/disko";

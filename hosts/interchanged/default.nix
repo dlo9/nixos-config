@@ -76,4 +76,6 @@ in {
 
   # Better for Tahoe
   services.spacebar.enable = mkForce false;
+
+  nix.settings.trusted-users = ["david"];
 }
