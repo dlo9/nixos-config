@@ -23,7 +23,6 @@ in {
     enable = true;
 
     brews = [
-      "ollama"
       "lunchy" # launchctl wrapper: https://github.com/eddiezane/lunchy
     ];
 
