@@ -111,9 +111,6 @@ with lib; {
           };
 
           aliases = {
-            # Move the closest bookmark to the previous commit
-            tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
-
             # Abandon descriptionless, empty commits
             abandon-empty = ["abandon" "-r" "(empty() & description(exact:'')) ~ root()"];
 
@@ -143,6 +140,8 @@ with lib; {
             #   - no child commits with descriptions
             "temp()" = "description(exact:'') ~::(~description(exact:'')) ~::remote_bookmarks() ~@";
           };
+
+          revsets.bookmark-advance-to = "@-";
 
           signing = {
             backend = config.programs.git.settings.gpg.format;
