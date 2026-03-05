@@ -22,7 +22,7 @@ with lib; {
 
     # Chameleon Ultra
     chameleon-cli
-    (nrfutil.override { extensions = ["nrfutil-device"]; })
+    (nrfutil.override {extensions = ["nrfutil-device"];})
   ];
 
   # SSH

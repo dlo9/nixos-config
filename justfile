@@ -24,6 +24,7 @@ build host=hostname:
 
 switch host=hostname:
     just "rebuild-{{os()}}" switch {{host}}
+    just format
 
 generate-hardware: && format
     mkdir -p "$(dirname "{{hardware-config}}")"
@@ -44,6 +45,7 @@ deploy host:
     esac
 
     nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k .#{{host}} $args
+    just format
 
 bootstrap-pixie:
     # Make sure to start SSH on the host:
@@ -68,3 +70,4 @@ deploy-all:
 
 update:
     nix flake update
+    just format
