@@ -6,10 +6,6 @@
   ...
 }:
 with lib; {
-  nixpkgs.config.permittedInsecurePackages = [
-    "ventoy-1.1.07"
-  ];
-
   nix = {
     registry = {
       nixpkgs-unstable.flake = mkDefault inputs.nixpkgs-unstable;

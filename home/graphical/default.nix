@@ -152,9 +152,6 @@ with lib; {
           nemo
           #peazip # Broke with 24.05 upgrade
 
-          # USB installer
-          ventoy
-
           # Display tool
           ddcutil
 
