@@ -124,7 +124,7 @@
           alt-shift-q = "close";
           alt-k = "exec-and-forget pkill -f aerospace";
 
-          alt-enter = "exec-and-forget ${pkgs.alacritty}/bin/alacritty";
+          alt-enter = "exec-and-forget \"$HOME/Applications/Home Manager Apps/Alacritty.app/Contents/MacOS/alacritty\"";
 
           alt-left = "focus left --ignore-floating --boundaries all-monitors-outer-frame";
           alt-right = "focus right --ignore-floating --boundaries all-monitors-outer-frame";
