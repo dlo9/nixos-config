@@ -7,7 +7,69 @@
   mylib,
   ...
 }:
-with lib; {
+with lib; let
+  jj-sops-diff = pkgs.writeShellApplication {
+    name = "jj-sops-diff";
+    runtimeInputs = with pkgs; [sops delta git gnused];
+    text = ''
+      # jj diff formatter that decrypts ANY sops-encrypted files before diffing
+      # Detects sops files by looking for ENC[AES256_GCM markers and auto-detects file type
+      # Works system-wide: silently skips files that can't be decrypted (missing keys, etc.)
+
+      LEFT="$1"
+      RIGHT="$2"
+
+      # Create writable copies for decryption
+      TMPDIR=$(mktemp -d)
+      trap 'rm -rf "$TMPDIR"' EXIT
+
+      cp -rL "$LEFT" "$TMPDIR/left"
+      cp -rL "$RIGHT" "$TMPDIR/right"
+      chmod -R u+w "$TMPDIR"
+
+      # Decrypt sops files in the copies
+      for side in left right; do
+          dir="$TMPDIR/$side"
+          find "$dir" -type f 2>/dev/null | while read -r file; do
+              # Check if file looks like sops-encrypted
+              if grep -q "ENC\[AES256_GCM" "$file" 2>/dev/null; then
+                  # Detect input type from extension
+                  case "$file" in
+                      *.yaml|*.yml) input_type="yaml" ;;
+                      *.json) input_type="json" ;;
+                      *.env) input_type="dotenv" ;;
+                      *.ini) input_type="ini" ;;
+                      *) input_type="binary" ;;
+                  esac
+
+                  # Attempt decryption
+                  if sops decrypt --input-type "$input_type" --output-type "$input_type" "$file" > "$file.dec" 2>/dev/null; then
+                      mv "$file.dec" "$file"
+                  else
+                      rm -f "$file.dec"
+                  fi
+              fi
+          done
+      done
+
+      # Get terminal width - try multiple methods, default to 200
+      if [[ -n "''${COLUMNS:-}" ]]; then
+          width="$COLUMNS"
+      elif width=$(tput cols 2>/dev/null) && [[ "$width" -gt 80 ]]; then
+          : # tput worked and returned something reasonable
+      else
+          width=200
+      fi
+
+      # Run git diff and pipe to delta, stripping temp paths from diff headers
+      git diff --no-index --no-prefix "$TMPDIR/left" "$TMPDIR/right" | \
+          sed -e 's|^--- .*/left/|--- |' \
+              -e 's|^+++ .*/right/|+++ |' \
+              -e 's|^diff --git .*/left/\([^ ]*\) .*/right/|diff --git \1 |' | \
+          delta --width "$width" || true
+    '';
+  };
+in {
   config = mkIf config.developer-tools.enable {
     home = {
       sessionPath = [
@@ -164,10 +226,8 @@ with lib; {
           };
 
           ui = {
-            # delta, diff-so-fancy, and difftastic are other alternatives
-            # diffnav is great, but only works with diff: https://github.com/dlvhdr/diffnav/issues/28
-            pager = "${pkgs.delta}/bin/delta";
-            diff-formatter = ":git"; # Required by pager
+            # Decrypt sops files before diffing
+            diff-formatter = ["${jj-sops-diff}/bin/jj-sops-diff" "$left" "$right"];
             #merge-editor = "mergiraf";
             diff-editor = ":builtin";
           };
