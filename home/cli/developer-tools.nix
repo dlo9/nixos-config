@@ -145,7 +145,7 @@ in {
         (optionals isLinux [
           isd
           (dlo9.rustnet.override {rustPlatform = pkgs.unstable.rustPlatform;})
-          claude-code
+          unstable.claude-code
         ]);
     };
 
