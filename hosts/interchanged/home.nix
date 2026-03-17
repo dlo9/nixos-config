@@ -27,7 +27,7 @@ with lib; {
     raycast
 
     # Golang
-    go
+    go_latest
     protobuf
     golangci-lint
     grpcurl
