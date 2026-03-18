@@ -28,6 +28,7 @@ with lib; {
 
     # Golang
     go_latest
+    graphviz # For go tool pprof
     protobuf
     golangci-lint
     grpcurl
