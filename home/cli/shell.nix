@@ -78,6 +78,12 @@ with lib; {
         set -g extended-keys on
         bind-key -T root S-Enter send-keys Escape "[13;2u"
 
+        # Pane borders
+        set -g pane-border-lines heavy
+        set -g pane-border-indicators arrows
+        set -g pane-border-status top
+        # set -g pane-border-format ""
+
         # Theme
         set -as terminal-features ",*:RGB"
         set -g allow-passthrough on
