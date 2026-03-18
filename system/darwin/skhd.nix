@@ -44,7 +44,7 @@
       ${modifier} + shift - q : yabai -m window --close
 
       # Terminal
-      ${modifier} - return : "$HOME/Applications/Home Manager Apps/Alacritty.app/Contents/MacOS/alacritty"
+      ${modifier} - return : open -n -a Alacritty
 
       # Resizing
       ${modifier} + ctrl - left : yabai -m window --resize left:-100:0 || yabai -m window --resize right:-100:0
