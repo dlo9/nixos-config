@@ -87,6 +87,27 @@ with lib; {
         '';
       }
 
+      # Gradually show colorcolumn as you approach the limit
+      {
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          name = "deadcolumn-nvim";
+          pname = "deadcolumn-nvim";
+          src = pkgs.fetchFromGitHub {
+            owner = "Bekaboo";
+            repo = "deadcolumn.nvim";
+            rev = "92c86f10bfba2717ca2280e2e759b047135d5288";
+            sha256 = "14k30b58k8gd8918wcf7n03sba89yip52i4fg7wpfv7gjvlsm25r";
+          };
+        };
+        type = "lua";
+        config = ''
+          require('deadcolumn').setup({
+            scope = 'line',
+            blending = { threshold = 0.75 },
+          })
+        '';
+      }
+
       # Web devicons (for lualine and other plugins)
       nvim-web-devicons
     ];
@@ -130,6 +151,12 @@ with lib; {
 
       -- Line numbers
       vim.opt.number = true
+
+      -- Highlight current line
+      vim.opt.cursorline = true
+
+      -- Column guide
+      vim.opt.colorcolumn = '100'
 
       -- System clipboard for yank/paste in Wayland
       if vim.env.WAYLAND_DISPLAY and vim.env.WAYLAND_DISPLAY ~= "" then
