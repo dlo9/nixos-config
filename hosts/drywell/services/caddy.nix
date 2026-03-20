@@ -10,9 +10,9 @@ with lib; let
   useACMEHost = "drywell.sigpanic.com";
 
   auth = ''
-    forward_auth https://authelia.sigpanic.com {
-        header_up Host "authelia.sigpanic.com"
-        uri /api/authz/forward-auth
+    forward_auth https://tinyauth.sigpanic.com {
+        header_up Host "tinyauth.sigpanic.com"
+        uri /api/auth/caddy
 
         copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
     }

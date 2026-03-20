@@ -14,8 +14,8 @@ with lib; let
   # TODO: figure out why https doesn't work here
   auth = ''
     forward_auth http://10.1.0.1:1080 {
-        header_up Host "authelia.sigpanic.com"
-        uri /api/authz/forward-auth
+        header_up Host "tinyauth.sigpanic.com"
+        uri /api/auth/caddy
 
         copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
     }
@@ -73,7 +73,7 @@ in {
 
             handle {
               reverse_proxy http://trident {
-                # Don't pass JWT to fluidd, since it's an authentik token and not moonraker token
+                # Don't pass JWT to fluidd, since it's a forward-auth token and not moonraker token
                 # Rely on moonraker's trusted_proxies instead
                 header_up -Authorization
                 header_up -X-Forwarded-For
