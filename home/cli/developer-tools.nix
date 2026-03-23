@@ -188,7 +188,7 @@ in {
 
           aliases = {
             # Abandon descriptionless, empty commits
-            abandon-empty = ["abandon" "-r" "(empty() & description(exact:'')) ~ root()"];
+            abandon-empty = ["abandon" "-r" "empty() & mutable() & mine() & ~@"];
 
             # Create a new commit at the beginning of this branch
             prepend = ["new" "-B" "roots(trunk()..@)"];
