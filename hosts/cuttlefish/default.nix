@@ -113,9 +113,6 @@ with lib; {
     };
 
     networking.firewall.allowedTCPPorts = [
-      # Authentik: Is this necessary?
-      9000
-
       # Misc testing
       8080
     ];
