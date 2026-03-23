@@ -128,7 +128,7 @@ with lib; {
         set -e
 
         if [ -f ".golangci.yml" ]; then
-          golangci-lint run
+          golangci-lint run --fix
         fi
       '';
     };
