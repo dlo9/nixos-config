@@ -27,7 +27,7 @@ with lib; {
     raycast
 
     # Golang
-    go_latest
+    unstable.go_latest
     graphviz # For go tool pprof
     protobuf
     golangci-lint
