@@ -30,7 +30,7 @@ with lib; {
     unstable.go_latest
     graphviz # For go tool pprof
     protobuf
-    golangci-lint
+    unstable.golangci-lint
     grpcurl
 
     # Python
