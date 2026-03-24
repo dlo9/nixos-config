@@ -170,6 +170,7 @@ with lib; {
 
     direnv = {
       enable = true;
+      package = pkgs.master.direnv;
       nix-direnv.enable = true;
       silent = true;
     };
