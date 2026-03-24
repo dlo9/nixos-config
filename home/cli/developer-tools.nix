@@ -52,11 +52,11 @@ with lib; let
           done
       done
 
-      # Get terminal width - try multiple methods, default to 200
-      if [[ -n "''${COLUMNS:-}" ]]; then
+      # Get terminal width - query the controlling terminal directly
+      if width=$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2) && [[ "$width" -gt 0 ]]; then
+          : # stty worked
+      elif [[ -n "''${COLUMNS:-}" ]]; then
           width="$COLUMNS"
-      elif width=$(tput cols 2>/dev/null) && [[ "$width" -gt 80 ]]; then
-          : # tput worked and returned something reasonable
       else
           width=200
       fi
