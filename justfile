@@ -26,6 +26,10 @@ switch host=hostname:
     just "rebuild-{{os()}}" switch {{host}}
     just format
 
+test host=hostname:
+    just "rebuild-{{os()}}" test {{host}}
+    just format
+
 generate-hardware: && format
     mkdir -p "$(dirname "{{hardware-config}}")"
 
