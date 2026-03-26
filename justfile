@@ -72,6 +72,10 @@ deploy-all:
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#cuttlefish .#drywell .#pavil .#trident
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#pixie -- --impure
 
+vm host=hostname:
+    nixos-rebuild build-vm --flake ".#{{host}}" --show-trace |& nom
+    QEMU_OPTS="-m 4096 -smp 2 -enable-kvm -vga none -device virtio-vga-gl -display gtk,gl=on" ./result/bin/run-{{host}}-vm
+
 update:
     nix flake update
     just format
