@@ -9,8 +9,8 @@
 with lib; {
   imports = [
     ./developer-tools.nix
-    ./eww
     ./hyprland.nix
+    ./plasma.nix
     ./waybar
     ./web.nix
   ];
@@ -226,20 +226,8 @@ with lib; {
       ];
 
     services = {
-      # Bluetooth controls
-      blueman-applet.enable = mkDefault isLinux;
-
       # Audio controls
       easyeffects.enable = mkDefault isLinux;
-
-      caffeine.enable = mkDefault isLinux;
-
-      # Enable red-shifted nightime display
-      gammastep = {
-        enable = mkDefault isLinux;
-        provider = "geoclue2";
-        tray = true;
-      };
 
       # Screenshots
       flameshot = {

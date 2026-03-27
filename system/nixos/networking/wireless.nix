@@ -6,6 +6,7 @@
 with lib; {
   sops.secrets.wireless-env.sopsFile = ./secrets.yaml;
 
+  networking.networkmanager.enable = config.services.desktopManager.plasma6.enable;
   networking.networkmanager.ensureProfiles = {
     # Configure networkmanager secrets
     environmentFiles = [config.sops.secrets.wireless-env.path];

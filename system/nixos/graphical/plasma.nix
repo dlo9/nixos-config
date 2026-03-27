@@ -6,43 +6,31 @@
 }:
 with lib; let
   enabled = config.services.desktopManager.plasma6.enable;
-
-  # https://github.com/sddm/sddm/issues/1768
-  sddm = pkgs.kdePackages.sddm.override {
-    runCommand = (
-      name: env: buildCommand:
-        pkgs.runCommand name env (buildCommand
-          + ''
-            # Replace the link with a real copy
-            mv "$out/share" "$out/share.link"
-            cp -Lr "$out/share.link" "$out/share"
-            rm "$out/share.link"
-
-            for f in $out/bin/*; do
-              wrapProgram "$f" --set SHELL ${pkgs.bash}
-            done
-
-            chmod u+w \
-              $out/share \
-              $out/share/sddm \
-              $out/share/sddm/scripts
-
-            for f in $out/share/sddm/scripts/*; do
-              wrapProgram "$f" --set SHELL ${pkgs.bash}
-            done
-          '')
-    );
-  };
 in {
+  # The Plasma Wayland session startup imports its wrapper environment into
+  # the systemd user manager, overriding environment.d generators. This means
+  # plasmashell doesn't see /run/current-system/sw/share in XDG_DATA_DIRS
+  # and crashes with "starting invalid corona".
+  # Fix: use Plasma's env hook (plasma-workspace/env/*.sh) which is sourced
+  # by startplasma-wayland before importing environment into systemd.
+  environment.etc."xdg/plasma-workspace/env/nixos-xdg.sh" = mkIf enabled {
+    text = ''
+      . /etc/set-environment
+    '';
+  };
+
   services.displayManager = {
     enable = mkDefault enabled;
-    autoLogin.user = mkDefault config.mainAdmin;
+    defaultSession = mkIf enabled (mkDefault "plasma");
+    autoLogin = mkIf enabled {
+      enable = mkDefault true;
+      user = mkDefault config.mainAdmin;
+    };
 
     sddm = {
       enable = mkDefault enabled;
-      wayland.enable = mkDefault enabled; # Use waycheck to check wayland features
+      wayland.enable = mkDefault enabled;
       autoLogin.relogin = mkDefault true;
-      #package = mkForce sddm;
     };
   };
 }

@@ -69,6 +69,7 @@ with lib; {
         curl
         go-task
         pv
+        caligula # Modern dd/pv replacement
         sops
         ouch # zip tool, since p7zip is annoying
         age

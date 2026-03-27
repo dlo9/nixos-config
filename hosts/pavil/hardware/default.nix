@@ -17,7 +17,7 @@
     ./generated.nix
   ];
 
-  services.tlp.enable = true;
+  services.tlp.enable = !config.services.power-profiles-daemon.enable;
 
   # Try out zen kernel
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;

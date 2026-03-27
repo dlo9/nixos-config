@@ -12,11 +12,12 @@ with lib; {
   ];
 
   config = mkIf config.graphical.enable {
-    # Allow hyprlock
-    security.pam.services.hyprlock = {};
+    # Allow hyprlock (not needed under Plasma which has its own lock screen)
+    security.pam.services.hyprlock = mkIf (!config.services.desktopManager.plasma6.enable) {};
 
     # Auto-login since whole-disk encryption is already required
-    services.getty.autologinUser = mkDefault config.mainAdmin;
+    # When Plasma/SDDM is enabled, SDDM handles login instead of getty
+    services.getty.autologinUser = mkIf (!config.services.desktopManager.plasma6.enable) (mkDefault config.mainAdmin);
 
     # Audio
     security.rtkit.enable = true;
@@ -43,15 +44,15 @@ with lib; {
     # Desktop portal
     xdg.portal = {
       enable = mkDefault true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-        xdg-desktop-portal-gtk
-      ];
+      extraPortals = with pkgs;
+        if config.services.desktopManager.plasma6.enable
+        then [xdg-desktop-portal-gtk]
+        else [xdg-desktop-portal-hyprland xdg-desktop-portal-gtk];
 
       # configPackages = with pkgs; [hyprland];
       xdgOpenUsePortal = true;
 
-      config = {
+      config = mkIf (!config.services.desktopManager.plasma6.enable) {
         common.default = ["hyprland" "gtk"];
         preferred.default = ["hyprland" "gtk"];
       };

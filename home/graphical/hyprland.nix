@@ -9,8 +9,14 @@
 }:
 with lib;
 with types;
-with builtins; {
-  config = mkIf (config.graphical.enable && isLinux) {
+with builtins; let
+  plasmaEnabled = osConfig.services.desktopManager.plasma6.enable;
+in {
+  imports = [
+    ./eww
+  ];
+
+  config = mkIf (config.graphical.enable && isLinux && !plasmaEnabled) {
     home.packages = with pkgs; [
       hyprpicker
     ];
@@ -180,7 +186,7 @@ with builtins; {
     wayland.windowManager.hyprland = let
       mod = "ALT";
     in {
-      enable = mkDefault (!osConfig.services.desktopManager.plasma6.enable);
+      enable = mkDefault true;
       plugins = [];
 
       # https://wiki.hyprland.org/Configuring/Variables/
@@ -486,8 +492,21 @@ with builtins; {
     };
 
     services = {
-      # Notifications
-      mako.enable = mkDefault isLinux;
+      # Bluetooth controls (KDE has Bluedevil)
+      blueman-applet.enable = mkDefault true;
+
+      # Caffeine (KDE Powerdevil handles inhibit)
+      caffeine.enable = mkDefault true;
+
+      # Enable red-shifted nightime display (KDE has Night Color)
+      gammastep = {
+        enable = mkDefault true;
+        provider = "geoclue2";
+        tray = true;
+      };
+
+      # Notifications (KDE has its own notification daemon)
+      mako.enable = mkDefault true;
 
       hypridle = {
         enable = true;

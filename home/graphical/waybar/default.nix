@@ -4,6 +4,7 @@
   lib,
   inputs,
   isLinux,
+  osConfig,
   ...
 }:
 with lib; {
@@ -11,7 +12,7 @@ with lib; {
     programs = {
       # System bar
       waybar = {
-        enable = mkDefault isLinux;
+        enable = mkDefault (isLinux && !osConfig.services.desktopManager.plasma6.enable);
 
         # https://github.com/Alexays/Waybar/wiki/Configuration
         # Number formatting: https://fmt.dev/latest/syntax.html#format-specification-mini-language

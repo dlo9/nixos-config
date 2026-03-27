@@ -2,12 +2,11 @@
   config,
   pkgs,
   lib,
-  inputs,
   isLinux,
   ...
 }:
 with lib; {
-  config = mkIf (config.graphical.enable && isLinux) {
+  config = mkIf (config.graphical.enable && isLinux && config.wayland.windowManager.hyprland.enable) {
     programs.eww = {
       enable = true;
       configDir = ./config;
