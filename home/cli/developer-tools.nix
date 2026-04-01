@@ -198,6 +198,8 @@ in {
 
             # Log all
             ll = ["log" "-r" "all()"];
+
+            blame = ["file" "annotate"];
           };
 
           revset-aliases = {
