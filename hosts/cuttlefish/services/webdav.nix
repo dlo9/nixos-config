@@ -30,6 +30,7 @@ with lib; {
           htpasswd = pkgs.writeText "htpasswd" ''
             david:$6$lfXZQaVisXg6Gjqz$1dTcCAbHKnMjk.PJs0EUpSsG773FXma54tqaLGdMbDBmb7v848m/tA.46oI0ProdPd6b7u49U0d6h8Jq7wQK4/
             chelsea:$6$xCwfzfv87NxMTzqM$ZttnXW7GtkV8aeoWMqsuOjhi7RLiIVQtGt13p.0IUXemdN7CpsFrQj3yBGDp9WXYu9u/OXcpVw/FSzbHYZvbE/
+            adam:${config.users.users.adam.hashedPassword}
           '';
         };
 

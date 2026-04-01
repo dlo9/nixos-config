@@ -30,6 +30,15 @@ in {
           extraGroups = ["samba"];
         };
 
+        adam = {
+          uid = 1002;
+          group = "users";
+          isSystemUser = true;
+          hashedPassword = "$6$6.kE5Auur2t0zL6q$GkuAYw80sGVvIFDMAKlCxYwyzTSRqIoA1Ely5DKGy7G5Rt3PJHQBRocmZFv4PhJzsOMix0nm840G71DE1SqJd/";
+          createHome = false;
+          extraGroups = ["samba"];
+        };
+
         media = {
           uid = media-id;
           group = "media";
