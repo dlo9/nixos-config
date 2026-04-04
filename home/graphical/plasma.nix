@@ -11,7 +11,7 @@ with lib; let
 in {
   config = mkIf (plasmaEnabled && config.graphical.enable && isLinux) {
     home.packages = [
-      pkgs.kdePackages.krohnkite
+      pkgs.dlo9.fluid-tile
       pkgs.kdePackages.dolphin
     ];
 
@@ -31,35 +31,14 @@ in {
       };
 
       configFile = {
-        # Enable Krohnkite tiling plugin
-        kwinrc.Plugins.krohnkiteEnabled = true;
+        # Enable fluid-tile tiling plugin
+        kwinrc.Plugins."fluid-tileEnabled" = true;
 
-        # Krohnkite settings
-        "kwinrc"."Script-krohnkite" = {
-          # Float tooltip/popup windows that Krohnkite would otherwise tile
-          floatingClass = "plasmashell,kded5,kded6,polkit,systemsettings";
-
-          binaryTreeLayoutOrder = 1; # BTree as primary layout
-          tileLayoutOrder = 2;
-          monocleLayoutOrder = 3;
-          floatingLayoutOrder = 4;
-
-          # Disable unused layouts
-          threeColumnLayoutOrder = 0;
-          spiralLayoutOrder = 0;
-          quarterLayoutOrder = 0;
-          stackedLayoutOrder = 0;
-          columnsLayoutOrder = 0;
-          spreadLayoutOrder = 0;
-          stairLayoutOrder = 0;
-          cascadeLayoutOrder = 0;
-
-          # Gaps
-          screenGapBetween = 10;
-          screenGapBottom = 10;
-          screenGapLeft = 10;
-          screenGapRight = 10;
-          screenGapTop = 10;
+        # fluid-tile settings
+        "kwinrc"."Script-fluid-tile" = {
+          MaximizeExtend = true;
+          ModalsIgnore = true;
+          LayoutDefault = 2;
         };
 
         # Lock screen settings
@@ -107,23 +86,21 @@ in {
           # Reconfigure KWin
           "Recomposite" = "Alt+Shift+R";
 
-          # Window focus (directional, via Krohnkite)
-          "KrohnkiteFocusDown" = "Alt+Down";
-          "KrohnkiteFocusLeft" = "Alt+Left";
-          "KrohnkiteFocusRight" = "Alt+Right";
-          "KrohnkiteFocusUp" = "Alt+Up";
+          # Window focus (directional, native KWin)
+          "Switch Window Down" = "Alt+Down";
+          "Switch Window Left" = "Alt+Left";
+          "Switch Window Right" = "Alt+Right";
+          "Switch Window Up" = "Alt+Up";
 
-          # Krohnkite: Move/push window
-          "KrohnkiteShiftUp" = "Alt+Shift+Up";
-          "KrohnkiteShiftDown" = "Alt+Shift+Down";
-          "KrohnkiteShiftLeft" = "Alt+Shift+Left";
-          "KrohnkiteShiftRight" = "Alt+Shift+Right";
+          # Move window to tile (native KWin quick tiling)
+          "Custom Quick Tile Window to the Bottom" = "Alt+Shift+Down";
+          "Custom Quick Tile Window to the Top" = "Alt+Shift+Up";
+          "Custom Quick Tile Window to the Left" = "Alt+Shift+Left";
+          "Custom Quick Tile Window to the Right" = "Alt+Shift+Right";
 
-          # Krohnkite: Resize window
-          "KrohnkiteGrowHeight" = "Alt+Ctrl+Down";
-          "KrohnkiteShrinkHeight" = "Alt+Ctrl+Up";
-          "KrohnkiteShrinkWidth" = "Alt+Ctrl+Left";
-          "KrohnkitegrowWidth" = "Alt+Ctrl+Right";
+          # fluid-tile shortcuts
+          "FluidtileToggleWindowBlocklist" = "Alt+Ctrl+F";
+          "FluidtileChangeTileLayout" = "Alt+Ctrl+Shift+F";
 
           # Switch desktops
           "Switch to Desktop 1" = "Alt+1";
@@ -152,11 +129,8 @@ in {
           # Maximize window
           "Window Maximize" = "Alt+F";
 
-          # Toggle floating (Krohnkite)
-          "KrohnkiteToggleFloat" = "Alt+Space";
-
-          # Krohnkite: Rotate layout
-          "KrohnkiteRotate" = "Alt+R";
+          # Toggle floating
+          "Window Quick Tile Toggle" = "Alt+Space";
         };
 
         # Lock session
