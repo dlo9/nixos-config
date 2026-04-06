@@ -34,8 +34,10 @@ in {
       "flameshot"
       "caffeine"
       "google-chrome"
-      "claude-code"
-      "claude"
+
+      # Installed natively
+      # "claude-code"
+      # "claude"
 
       # Backup
       "kopiaui"
