@@ -20,6 +20,9 @@ with lib; {
     };
 
     # Set secrets for the current host
-    secrets = mylib.secrets.sopsSecrets ./secrets.yaml // mylib.secrets.hostSecrets hostname;
+    secrets = let
+      users = builtins.attrNames config.users.users;
+    in
+      mylib.secrets.sopsSecrets {inherit users;} ./secrets.yaml // mylib.secrets.hostSecrets {inherit users;} hostname;
   };
 }

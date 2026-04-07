@@ -64,8 +64,9 @@
     in
       attrToExports enabledContents;
 
-    # Returns secrets from a sops file
-    sopsSecrets = sopsFile: let
+    # Returns secrets from a sops file. If `users` is non-empty, secrets
+    # whose owner doesn't exist in the list are disabled.
+    sopsSecrets = {users ? []}: sopsFile: let
       attrToSecrets = lib.mapAttrs' (
         name: value: {
           inherit name;
@@ -79,17 +80,21 @@
         }
       );
 
+      hasOwner = value: (value.sopsNix or {}) ? owner;
+      ownerExists = value: builtins.elem value.sopsNix.owner users;
+
       # Return true if the secret is enabled and is non-empty
       isEnabled = name: value:
         (value.enable or true)
-        && (value ? contents);
+        && (value ? contents)
+        && (users == [] || !(hasOwner value) || ownerExists value);
 
       enabledContents = lib.filterAttrs isEnabled (parseSops sopsFile);
     in
       attrToSecrets enabledContents;
 
     # Return the secrets for a given host
-    hostSecrets = hostname: sopsSecrets (hostSops hostname);
+    hostSecrets = {users ? []}: hostname: sopsSecrets {inherit users;} (hostSops hostname);
 
     # Return secret exports for all hosts
     hostExports = lib.genAttrs hosts (hostname: sopsExports (hostSops hostname));

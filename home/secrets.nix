@@ -24,6 +24,6 @@ with lib; {
     };
 
     # Set secrets for the current host
-    secrets = mylib.secrets.hostSecrets hostname;
+    secrets = mylib.secrets.hostSecrets {} hostname;
   };
 }
