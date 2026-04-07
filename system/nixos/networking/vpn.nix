@@ -40,6 +40,12 @@ with lib; {
       routingPolicyRules =
         [
           {
+            # Let Tailscale-marked traffic bypass WireGuard
+            Priority = 5;
+            FirewallMark = 524288; # 0x80000 - Tailscale's fwmark
+            Table = "main";
+          }
+          {
             # Route everything else to wireguard
             Priority = 10;
             InvertRule = true;
@@ -55,7 +61,7 @@ with lib; {
             To = to;
           }) [
             # Allow Tailscale
-            "100.64.0.0/10"
+            #"100.64.0.0/10" # Can't use this, since our wg address is in this range
 
             # Allow private ranges
             "10.0.0.0/8"
