@@ -64,6 +64,10 @@ with lib; {
       # Spawn a new session when attaching and none exist
       newSession = true;
 
+      plugins = [
+        pkgs.tmuxPlugins.better-mouse-mode
+      ];
+
       extraConfig = ''
         # Gapless indexing
         set-option -g renumber-windows on
@@ -89,6 +93,9 @@ with lib; {
         set -as terminal-features ",*:RGB"
         set -g allow-passthrough on
         source-file ~/.local/share/tinted-theming/tinty/tmux-colors-file.conf
+
+        # Better mouse mode
+        set -g @emulate-scroll-for-no-mouse-alternate-buffer on
       '';
     };
 
