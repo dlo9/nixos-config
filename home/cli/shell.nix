@@ -55,6 +55,7 @@ with lib; {
       keyMode = "vi";
       prefix = "C-b";
 
+      mouse = true;
       historyLimit = 50000;
       aggressiveResize = true;
       escapeTime = 0;
