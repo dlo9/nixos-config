@@ -68,11 +68,18 @@
     # whose owner doesn't exist in the list are disabled.
     sopsSecrets = {users ? []}: sopsFile: let
       attrToSecrets = lib.mapAttrs' (
-        name: value: {
+        name: value: let
+          sopsNix = value.sopsNix or {};
+          ownerMissing = users != [] && (sopsNix ? owner) && !(builtins.elem sopsNix.owner users);
+        in {
           inherit name;
 
           value =
-            (value.sopsNix or {})
+            (
+              if ownerMissing
+              then builtins.removeAttrs sopsNix ["owner"]
+              else sopsNix
+            )
             // {
               inherit sopsFile;
               key = "${name}/contents";
@@ -80,14 +87,10 @@
         }
       );
 
-      hasOwner = value: (value.sopsNix or {}) ? owner;
-      ownerExists = value: builtins.elem value.sopsNix.owner users;
-
       # Return true if the secret is enabled and is non-empty
       isEnabled = name: value:
         (value.enable or true)
-        && (value ? contents)
-        && (users == [] || !(hasOwner value) || ownerExists value);
+        && (value ? contents);
 
       enabledContents = lib.filterAttrs isEnabled (parseSops sopsFile);
     in
