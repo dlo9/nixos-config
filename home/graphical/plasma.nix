@@ -11,7 +11,7 @@ with lib; let
 in {
   config = mkIf (plasmaEnabled && config.graphical.enable && isLinux) {
     home.packages = [
-      pkgs.dlo9.fluid-tile
+      pkgs.polonium
       pkgs.kdePackages.dolphin
     ];
 
@@ -31,14 +31,29 @@ in {
       };
 
       configFile = {
-        # Enable fluid-tile tiling plugin
-        kwinrc.Plugins."fluid-tileEnabled" = true;
+        # Enable Polonium tiling plugin
+        kwinrc.Plugins.poloniumEnabled = true;
 
-        # fluid-tile settings
-        "kwinrc"."Script-fluid-tile" = {
-          MaximizeExtend = true;
-          ModalsIgnore = true;
-          LayoutDefault = 2;
+        # Polonium settings
+        kwinrc.Polonium = {
+          BorderVisibility = 1; # Show borders
+          Engines = "BTree";
+        };
+
+        # Window decoration: ensure borders are visible
+        kwinrc."org.kde.kdecoration2" = {
+          BorderSize = 2; # Normal borders
+          BorderSizeAuto = false;
+        };
+
+        # Active/inactive window border colors
+        kdeglobals.WM = {
+          activeBackground = "61,174,233";
+          activeForeground = "255,255,255";
+          inactiveBackground = "49,54,59";
+          inactiveForeground = "161,169,177";
+          activeBlend = "61,174,233";
+          inactiveBlend = "49,54,59";
         };
 
         # Lock screen settings
@@ -76,31 +91,64 @@ in {
         "services/Alacritty.desktop"._launch = "Alt+Return";
 
         kwin = {
-          # Close window (clear default Alt+F4)
+          # Close window
           "Window Close" = "Alt+Shift+Q";
-
-          # KRunner (app launcher)
-          # Note: KRunner default is Alt+Space or Alt+F2; we remap to Alt+D
-          # The actual KRunner shortcut is set below
 
           # Reconfigure KWin
           "Recomposite" = "Alt+Shift+R";
 
-          # Window focus (directional, native KWin)
-          "Switch Window Down" = "Alt+Down";
-          "Switch Window Left" = "Alt+Left";
-          "Switch Window Right" = "Alt+Right";
-          "Switch Window Up" = "Alt+Up";
+          # Clear stale Krohnkite shortcuts that conflict
+          "KrohnkiteFocusDown" = "none";
+          "KrohnkiteFocusLeft" = "none";
+          "KrohnkiteFocusRight" = "none";
+          "KrohnkiteFocusUp" = "none";
+          "KrohnkiteFocusNext" = "none";
+          "KrohnkiteFocusPrev" = "none";
+          "KrohnkiteRotate" = "none";
+          "KrohnkiteFloatAll" = "none";
+          "KrohnkiteBTreeLayout" = "none";
+          "KrohnkiteMonocleLayout" = "none";
+          "KrohnkiteSetMaster" = "none";
+          "KrohnkiteIncrease" = "none";
+          "KrohnkiteGrowHeight" = "none";
+          "KrohnkiteShrinkHeight" = "none";
+          "KrohnkiteShrinkWidth" = "none";
+          "KrohnkitegrowWidth" = "none";
+          "KrohnkiteToggleFloat" = "none";
 
-          # Move window to tile (native KWin quick tiling)
-          "Custom Quick Tile Window to the Bottom" = "Alt+Shift+Down";
-          "Custom Quick Tile Window to the Top" = "Alt+Shift+Up";
-          "Custom Quick Tile Window to the Left" = "Alt+Shift+Left";
-          "Custom Quick Tile Window to the Right" = "Alt+Shift+Right";
+          # Clear stale Quick Tile shortcuts that conflict
+          "Custom Quick Tile Window to the Bottom" = "none";
+          "Custom Quick Tile Window to the Left" = "none";
+          "Custom Quick Tile Window to the Right" = "none";
+          "Custom Quick Tile Window to the Top" = "none";
 
-          # fluid-tile shortcuts
-          "FluidtileToggleWindowBlocklist" = "Alt+Ctrl+F";
-          "FluidtileChangeTileLayout" = "Alt+Ctrl+Shift+F";
+          # Clear stale Fluid Tile shortcuts
+          "FluidtileChangeTileLayout" = "none";
+          "FluidtileToggleWindowBlocklist" = "none";
+
+          # Polonium: Focus window (directional)
+          "PoloniumFocusAbove" = "Alt+Up";
+          "PoloniumFocusBelow" = "Alt+Down";
+          "PoloniumFocusLeft" = "Alt+Left";
+          "PoloniumFocusRight" = "Alt+Right";
+
+          # Polonium: Move/Insert window
+          "PoloniumInsertAbove" = "Alt+Shift+Up";
+          "PoloniumInsertBelow" = "Alt+Shift+Down";
+          "PoloniumInsertLeft" = "Alt+Shift+Left";
+          "PoloniumInsertRight" = "Alt+Shift+Right";
+
+          # Clear KWin Switch Window (using Polonium focus instead)
+          "Switch Window Down" = "none";
+          "Switch Window Left" = "none";
+          "Switch Window Right" = "none";
+          "Switch Window Up" = "none";
+
+          # Clear Pack Window (using Polonium insert instead)
+          "Pack Window Down" = "none";
+          "Pack Window Left" = "none";
+          "Pack Window Right" = "none";
+          "Pack Window Up" = "none";
 
           # Switch desktops
           "Switch to Desktop 1" = "Alt+1";
@@ -129,8 +177,11 @@ in {
           # Maximize window
           "Window Maximize" = "Alt+F";
 
-          # Toggle floating
-          "Window Quick Tile Toggle" = "Alt+Space";
+          # Toggle floating (Polonium)
+          "PoloniumFloatingToggle" = "Alt+Space";
+
+          # Polonium resize cycle
+          "PoloniumResizeActiveWindow" = "Alt+R";
         };
 
         # Lock session
