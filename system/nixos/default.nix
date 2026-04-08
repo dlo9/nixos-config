@@ -57,7 +57,7 @@ with lib; {
   environment.binsh = "${pkgs.dash}/bin/dash";
 
   programs.fish.enable = true;
-  programs.fish.package = pkgs.master.fish;
+  programs.fish.package = pkgs.unstable.fish;
   # Fish enables this by default, which results in slow builds:
   # https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365
   documentation.man.generateCaches = false;
