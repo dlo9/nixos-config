@@ -73,7 +73,7 @@ in {
     home = "/Users/${user}";
     uid = 503;
     gid = 20;
-    shell = pkgs.fish;
+    shell = config.programs.fish.package;
   };
 
   # Check current DNS settings with: scutil --dns

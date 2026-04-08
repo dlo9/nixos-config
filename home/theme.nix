@@ -79,7 +79,7 @@ in {
 
     if [ -L "$config_file" ]; then
       # Ensure git, fish, and tmux are available (needed on nix-on-droid)
-      export PATH="${pkgs.git}/bin:${pkgs.fish}/bin:${pkgs.tmux}/bin:$PATH"
+      export PATH="${pkgs.git}/bin:${config.programs.fish.package}/bin:${pkgs.tmux}/bin:$PATH"
       # Ignore global git config that may rewrite HTTPS URLs to SSH
       export GIT_CONFIG_GLOBAL=/dev/null
       export GIT_CONFIG_SYSTEM=/dev/null

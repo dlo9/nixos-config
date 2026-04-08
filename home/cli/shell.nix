@@ -3,12 +3,14 @@
   lib,
   pkgs,
   inputs,
+  osConfig,
   ...
 }:
 with lib; {
   programs = {
     fish = {
       enable = mkDefault true;
+      package = osConfig.programs.fish.package;
 
       shellInit = ''
         # Unexport Homemanager variable

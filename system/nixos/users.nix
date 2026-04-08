@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -13,7 +14,7 @@
       isNormalUser = true;
       hashedPassword = "$y$j9T$PcYhxYODK1jqn8tcCRWa1/$XCP99oOMrsQ7xMXzswZ7hypbIXKQ2YNXh2L7vTjteD6";
       createHome = true;
-      shell = pkgs.fish;
+      shell = config.programs.fish.package;
       extraGroups = [
         "wheel"
         "docker"
