@@ -14,7 +14,7 @@ with lib; {
       PAGER = "bat --style='-header-filename'";
       # PAGER = "page -O 30";
       PAGE_REDIRECTION_PROTECT = "0"; # Without this, page prints a temp directory each time it's ran
-      DELTA_PAGER = "bat --style=plain";
+      DELTA_PAGER = "less -R";
     };
 
     shellAliases = {

@@ -67,7 +67,12 @@ with lib; {
       newSession = true;
 
       plugins = [
-        pkgs.tmuxPlugins.better-mouse-mode
+        {
+          plugin = pkgs.tmuxPlugins.better-mouse-mode;
+          extraConfig = ''
+            set -g @emulate-scroll-for-no-mouse-alternate-buffer on
+          '';
+        }
       ];
 
       extraConfig = ''
@@ -95,9 +100,6 @@ with lib; {
         set -as terminal-features ",*:RGB"
         set -g allow-passthrough on
         source-file ~/.local/share/tinted-theming/tinty/tmux-colors-file.conf
-
-        # Better mouse mode
-        set -g @emulate-scroll-for-no-mouse-alternate-buffer on
       '';
     };
 
