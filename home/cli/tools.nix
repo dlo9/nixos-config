@@ -10,7 +10,7 @@
 with lib; {
   home = {
     sessionVariables = {
-      LESS = "-R -i"; # Enable syntaxt highlighting, smart case search
+      LESS = "-R -i --mouse --wheel-lines=3"; # Enable syntaxt highlighting, smart case search, mouse scrolling
       PAGER = "bat --style='-header-filename'";
       # PAGER = "page -O 30";
       PAGE_REDIRECTION_PROTECT = "0"; # Without this, page prints a temp directory each time it's ran
