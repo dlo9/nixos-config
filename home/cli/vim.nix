@@ -158,10 +158,8 @@ with lib; {
       -- Column guide
       vim.opt.colorcolumn = '100'
 
-      -- System clipboard for yank/paste in Wayland
-      if vim.env.WAYLAND_DISPLAY and vim.env.WAYLAND_DISPLAY ~= "" then
-        vim.opt.clipboard = 'unnamedplus'
-      end
+      -- Use system clipboard for yank/paste so it's shared across vim instances
+      vim.opt.clipboard = 'unnamedplus'
 
       -- Spelling
       vim.opt.spell = true
