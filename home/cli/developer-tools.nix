@@ -150,7 +150,7 @@ in {
     };
 
     programs = {
-      zellij.enable = true;
+      zellij.enable = false;
       mergiraf.enable = true;
 
       helix = {
