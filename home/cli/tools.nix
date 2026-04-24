@@ -172,7 +172,7 @@ with lib; {
       enable = true;
       nix-direnv.enable = true;
       silent = true;
-      package = pkgs.unstable.direnv;
+      package = pkgs.direnv;
     };
 
     zoxide = {

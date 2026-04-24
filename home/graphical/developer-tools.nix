@@ -31,7 +31,7 @@ with lib; {
 
       zed-editor = {
         enable = true;
-        package = pkgs.unstable.zed-editor;
+        package = pkgs.zed-editor;
       };
     };
   };
