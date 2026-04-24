@@ -10,7 +10,7 @@
 with lib; let
   jj-sops-diff = pkgs.writeShellApplication {
     name = "jj-sops-diff";
-    runtimeInputs = with pkgs; [sops delta git gnused];
+    runtimeInputs = with pkgs; [sops difftastic];
     text = ''
       # jj diff formatter that decrypts ANY sops-encrypted files before diffing
       # Detects sops files by looking for ENC[AES256_GCM markers and auto-detects file type
@@ -61,12 +61,7 @@ with lib; let
           width=200
       fi
 
-      # Run git diff and pipe to delta, stripping temp paths from diff headers
-      git diff --no-index --no-prefix "$TMPDIR/left" "$TMPDIR/right" | \
-          sed -e 's|^--- .*/left/|--- |' \
-              -e 's|^+++ .*/right/|+++ |' \
-              -e 's|^diff --git .*/left/\([^ ]*\) .*/right/|diff --git \1 |' | \
-          delta --width "$width" || true
+      difft --color always --width "$width" "$TMPDIR/left" "$TMPDIR/right" || true
     '';
   };
 in {
