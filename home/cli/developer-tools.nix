@@ -61,7 +61,7 @@ with lib; let
           width=200
       fi
 
-      difft --color always --width "$width" "$TMPDIR/left" "$TMPDIR/right" || true
+      difft --color always --display side-by-side-show-both --width "$width" "$TMPDIR/left" "$TMPDIR/right" || true
     '';
   };
 in {
