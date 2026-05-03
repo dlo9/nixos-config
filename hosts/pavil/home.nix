@@ -18,7 +18,7 @@ with lib; {
     nvtopPackages.amd # GPU monitoring
     amdgpu_top
     orca-slicer
-    previous.freecad
+    freecad
 
     # Chameleon Ultra
     chameleon-cli
