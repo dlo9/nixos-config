@@ -33,6 +33,7 @@
 
     config = {
       virtualisation.cores = 4;
+      virtualisation.memorySize = lib.mkForce (2 * 1024); # 2GB
 
       # Hint: need to comment this out when building for the first time
       users.users.builder.openssh.authorizedKeys.keys = config.users.users.nix-remote.openssh.authorizedKeys.keys;
