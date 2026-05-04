@@ -122,6 +122,9 @@ in {
     # Home assistant
     8123
 
+    # Victoria Metrics
+    8428
+
     # Matter
     5540
     8482
