@@ -16,6 +16,7 @@ with lib; {
       interval = {
         Hour = 12;
         Minute = 0;
+        Weekday = 3; # Wednesday
       };
     };
 
@@ -25,6 +26,7 @@ with lib; {
       interval = {
         Hour = 12;
         Minute = 15;
+        Weekday = 3; # Wednesday
       };
 
       # darwin-rebuild --list-generations
