@@ -102,7 +102,8 @@ in {
 
     # Allow swap on host machine
     # Don't inherit DNS from host
-    kubelet.extraOpts = "--fail-swap-on=false --resolv-conf=";
+    # Override default pod capacity (110)
+    kubelet.extraOpts = "--fail-swap-on=false --resolv-conf= --max-pods=150";
 
     # Allow privileged containers
     apiserver.extraOpts = "--allow-privileged";
