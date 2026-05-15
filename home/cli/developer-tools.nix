@@ -52,12 +52,18 @@ with lib; let
           done
       done
 
-      # Get terminal width - query the controlling terminal directly
-      if width=$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2) && [[ "$width" -gt 0 ]]; then
-          : # stty worked
-      elif [[ -n "''${COLUMNS:-}" ]]; then
+      # Detect terminal width from /dev/tty since stdout is piped to jj's pager
+      width=""
+
+      if [[ -r /dev/tty ]]; then
+          width=$(stty size </dev/tty 2>/dev/null | awk '{print $2}')
+      fi
+
+      if ! [[ "$width" =~ ^[1-9][0-9]*$ ]] && [[ -n "''${COLUMNS:-}" ]]; then
           width="$COLUMNS"
-      else
+      fi
+
+      if ! [[ "$width" =~ ^[1-9][0-9]*$ ]]; then
           width=200
       fi
 
