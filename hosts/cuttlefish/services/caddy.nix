@@ -50,10 +50,10 @@ in {
       package = pkgs.caddy.withPlugins {
         plugins = [
           # https://caddyserver.com/docs/modules/http.handlers.replace_response
-          "github.com/caddyserver/replace-response@v0.0.0-20240710174758-f92bc7d0c29d"
+          "github.com/caddyserver/replace-response@v0.0.0-20250618171559-80962887e4c6"
         ];
 
-        hash = "sha256-iOI63PAXULTyMfCsxLTm8ucVJGkOpaskdN6I5TETKW8=";
+        hash = "sha256-akZfBuxGV0hbDtTSSLrTk9vvPGrHqjfYBltaA4OxmqE=";
       };
 
       virtualHosts = {
