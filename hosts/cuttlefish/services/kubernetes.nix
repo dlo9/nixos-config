@@ -53,6 +53,8 @@ in {
     roles = ["master" "node"];
     masterAddress = masterHostname;
 
+    package = pkgs.unstable.kubernetes;
+
     # Refresh kubernetes certificates with:
     # sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets && sudo systemctl restart cfssl; sleep 5; sudo systemctl restart certmgr; sleep 5; sudo systemctl restart kubernetes.slice; sleep 5; sudo chown david /var/lib/kubernetes/secrets/cluster-admin-key.pem
     easyCerts = true;
