@@ -25,7 +25,9 @@ services:
       - traefik.http.routers.dashboard.service=api@internal
 
       # Middleware for authenticating as the "david" user
-      - traefik.http.middlewares.auth-david.headers.customrequestheaders.Remote-User=david
+      - traefik.http.middlewares.auth-david.headers.customrequestheaders.Remote-User=david # Linkding
+      - traefik.http.middlewares.auth-david.headers.customrequestheaders.X-Webauth-User=david # Forgejo
+      - traefik.http.middlewares.auth-david.headers.customrequestheaders.X-Webauth-Fullname=David Orchard # Forgejo
 
 networks:
   shared:

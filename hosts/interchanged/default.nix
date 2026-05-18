@@ -59,6 +59,17 @@ in {
     shell = config.programs.fish.package;
   };
 
+  # macOS only configures 127.0.0.1 on lo0 by default; add 127.0.0.2 so Forgejo
+  # can bind port 22 separately from host sshd.
+  launchd.daemons.lo0-alias-forgejo = {
+    command = "/sbin/ifconfig lo0 alias 127.0.0.2 up";
+    serviceConfig = {
+      RunAtLoad = true;
+      KeepAlive = false;
+      LaunchOnlyOnce = true;
+    };
+  };
+
   # Check current DNS settings with: scutil --dns
   # This also adds domains as a resolver in /etc/resolver. See:
   # - https://github.com/suth/mac-traefik-config
@@ -68,6 +79,8 @@ in {
 
     addresses = {
       "laptop" = "127.0.0.1";
+      # Separate loopback so Forgejo can own port 22 without conflicting with host sshd
+      "git.laptop" = "127.0.0.2";
       #"dl.pstmn.io" = "127.0.0.1"; # Block postman download notifications
       #"desktop-release.notion-static.com" = "127.0.0.1"; # Block notion download notifications
     };
