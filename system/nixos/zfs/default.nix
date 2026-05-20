@@ -32,7 +32,10 @@ with lib; {
       # TODO: only enable when there are ZFS filesystems present
       trim.enable = mkDefault true;
       autoScrub.enable = mkDefault true;
-      autoScrub.interval = "Sun, 02:00";
+
+      # 1st and 3rd sunday of the month
+      # Test with: systemd-analyze calendar --base-time "2026-01-01 00:00 PST" --iterations 3 "Sun *-*-01..07,15..21 02:00"
+      autoScrub.interval = "Sun *-*-01..07,15..21 02:00";
     };
 
     environment.systemPackages = with pkgs; [
