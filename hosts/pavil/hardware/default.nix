@@ -19,6 +19,7 @@
 
   services.tlp.enable = true;
 
-  # Try out zen kernel
-  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+  # Zen kernel
+  boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_zen;
+  boot.zfs.package = pkgs.unstable.zfs;
 }
