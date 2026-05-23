@@ -140,6 +140,8 @@ in {
           diff-so-fancy
           difftastic
           lnav # Log file viewer
+
+          gh
         ]
         ++
         # Linux only
