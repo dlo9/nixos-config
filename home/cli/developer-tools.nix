@@ -186,7 +186,9 @@ in {
           remotes.origin.auto-track-bookmarks = "glob:*";
 
           git = {
-            private-commits = "description(glob:'private:*') | bookmarks(glob:'private-*')";
+            private-commits = let
+              prefixes = concatStringsSep "|" ["private" "wip" "broken"];
+            in "description(regex:'^(${prefixes}):') | bookmarks(regex:'^(${prefixes})-')";
           };
 
           aliases = {
