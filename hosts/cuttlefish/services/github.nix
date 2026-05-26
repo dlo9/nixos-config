@@ -13,7 +13,6 @@ with lib; {
       package = pkgs.unstable.github-runner;
 
       nodeRuntimes = [
-        "node20"
         "node24"
       ];
 
