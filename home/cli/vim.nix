@@ -128,6 +128,7 @@ with lib; {
         'dockerls',
         'lua_ls',
         'biome',
+        'harper_ls',
       })
 
       -- LSP: keybindings on attach
@@ -279,5 +280,6 @@ with lib; {
     dockerfile-language-server
     lua-language-server
     biome
+    harper
   ];
 }
