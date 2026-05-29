@@ -10,6 +10,27 @@ with lib;
 with types;
 with builtins; {
   options = {
+    codesign = {
+      packages = mkOption {
+        type = listOf package;
+        default = [];
+        description = ''
+          Signed packages (mylib.codesign.signPackage results) whose bin/
+          executables to populate in the user signing cache on activation
+          (darwin only).
+        '';
+      };
+
+      bundles = mkOption {
+        type = listOf str;
+        default = [];
+        description = ''
+          Absolute paths to .app bundles to re-sign with the stable codesign
+          cert on activation (darwin only).
+        '';
+      };
+    };
+
     graphical.enable = mkEnableOption "graphical programs" // {default = osConfig.graphical.enable;};
 
     developer-tools.enable = mkEnableOption "developer tools" // {default = osConfig.developer-tools.enable;};

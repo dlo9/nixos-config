@@ -11,14 +11,16 @@
   ...
 }:
 with lib; {
-  imports = [
-    ./cli
-    ./graphical
-    ./options.nix
-    ./theme.nix
+  imports =
+    [
+      ./cli
+      ./graphical
+      ./options.nix
+      ./theme.nix
 
-    inputs.flake-programs-sqlite.homeModules.programs-sqlite
-  ];
+      inputs.flake-programs-sqlite.homeModules.programs-sqlite
+    ]
+    ++ optional isDarwin ./codesign.nix;
 
   nix.gc = {
     automatic = true;

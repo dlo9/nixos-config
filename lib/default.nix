@@ -8,6 +8,9 @@
   fromYAMLString = callPackage ./fromYAMLString.nix {};
   jsonTrace = value: builtins.trace (builtins.toJSON value) value;
 
+  # Runtime code-signing + wrapping for macOS (see ./codesign.nix).
+  codesign = callPackage ./codesign.nix {};
+
   ext = path: lib.last (lib.splitString "." path);
 
   # AttrSet of extention to convertion function

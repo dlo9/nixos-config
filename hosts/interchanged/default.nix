@@ -10,6 +10,7 @@ with lib; let
 in {
   imports = [
     ./remote-build.nix
+    ./codesign.nix
   ];
 
   graphical.enable = true;
