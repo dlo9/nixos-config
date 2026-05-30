@@ -67,6 +67,7 @@ with lib; {
           package = pkgs.unstable.jellyfin;
         };
 
+        networking.resolvconf.enable = false;
         environment.etc."resolv.conf".text = "nameserver 1.1.1.1";
 
         users = {

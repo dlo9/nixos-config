@@ -25,6 +25,7 @@
         "scanner" # Scanning
         "lp" # Printing
         "libvirtd"
+        "wpa_supplicant"
       ];
     };
   };

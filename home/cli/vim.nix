@@ -15,6 +15,8 @@ with lib; {
     enable = true;
     viAlias = true;
     vimAlias = true;
+    withRuby = false;
+    withPython3 = false;
 
     plugins = with pkgs.vimPlugins; [
       # Statusline
@@ -112,7 +114,7 @@ with lib; {
       nvim-web-devicons
     ];
 
-    extraLuaConfig = ''
+    initLua = ''
       -- LSP: global defaults
       vim.lsp.config('*', {
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
@@ -276,7 +278,7 @@ with lib; {
     rust-analyzer
     gopls
     yaml-language-server
-    nodePackages.bash-language-server
+    bash-language-server
     dockerfile-language-server
     lua-language-server
     biome

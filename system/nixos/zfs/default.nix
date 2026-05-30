@@ -22,6 +22,7 @@ with lib; {
 
     boot = {
       zfs.devNodes = mkDefault "/dev/disk/by-id";
+      zfs.forceImportRoot = true; # Not recommended by nixos, but necessary to avoid manual intervention after unclean shutdowns
 
       # Hibernation on ZFS can cause corruption
       # Plus, this doesn't work with randomly encrypted swap

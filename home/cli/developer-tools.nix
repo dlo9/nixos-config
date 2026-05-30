@@ -149,12 +149,18 @@ in {
           isd
           (dlo9.rustnet.override {rustPlatform = pkgs.unstable.rustPlatform;})
           unstable.claude-code
+          android-tools # adb
         ]);
     };
 
     programs = {
       zellij.enable = false;
-      mergiraf.enable = true;
+
+      mergiraf = {
+        enable = true;
+        enableGitIntegration = true;
+        enableJujutsuIntegration = true;
+      };
 
       helix = {
         enable = true;

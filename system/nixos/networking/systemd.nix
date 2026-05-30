@@ -12,16 +12,18 @@ with lib; {
     networking.dhcpcd.enable = mkDefault false;
 
     services.resolved = {
-      domains = ["home.arpa"];
-
-      # Enable Quad9 DNS over TLS
-      dnsovertls = "opportunistic";
-      fallbackDns = [
-        "9.9.9.9"
-        "149.112.112.112"
-        "2620:fe::fe"
-        "2620:fe::9"
-      ];
+      enable = true;
+      settings.Resolve = {
+        # Enable Quad9 DOT
+        DNSOverTLS = "opportunistic";
+        Domains = ["home.arpa"];
+        FallbackDNS = [
+          "9.9.9.9"
+          "149.112.112.112"
+          "2620:fe::fe"
+          "2620:fe::9"
+        ];
+      };
     };
 
     systemd.network = {
@@ -38,7 +40,7 @@ with lib; {
           matchConfig.Name = ["en*" "eth*"];
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 1024;
-          domains = config.services.resolved.domains;
+          domains = config.services.resolved.settings.Resolve.Domains;
 
           # Explicitly enable IPv6 Router Advertisement acceptance for SLAAC
           networkConfig = {
@@ -50,7 +52,7 @@ with lib; {
           name = "wl*";
           DHCP = mkDefault "yes";
           dhcpV4Config.RouteMetric = 2048; # Prefer wired
-          domains = config.services.resolved.domains;
+          domains = config.services.resolved.settings.Resolve.Domains;
 
           # Explicitly enable IPv6 Router Advertisement acceptance for SLAAC
           networkConfig = {

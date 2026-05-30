@@ -190,7 +190,7 @@ with lib; {
           # GUI-ish bluetooth control
           bluetuith
 
-          wasistlos
+          karere # Whatsapp
 
           # Image viewer
           #loupe

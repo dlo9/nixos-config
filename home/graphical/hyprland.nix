@@ -181,6 +181,7 @@ with builtins; {
       mod = "ALT";
     in {
       enable = mkDefault (!osConfig.services.desktopManager.plasma6.enable);
+      configType = "hyprlang";
       plugins = [];
 
       # https://wiki.hyprland.org/Configuring/Variables/

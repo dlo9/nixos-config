@@ -19,8 +19,6 @@ with lib; {
     };
 
     programs = {
-      adb.enable = mkDefault true;
-
       # Allow running unpatched binaries, including vscode-serer
       nix-ld.enable = mkDefault true;
     };

@@ -148,32 +148,32 @@ with lib; {
       enable = mkDefault true;
       enableDefaultConfig = false;
 
-      matchBlocks = {
-        kvm-cuttlefish.user = "root";
-        kvm-drywell.user = "root";
-        cuttlefish.user = "david";
-        opnsense.user = "root";
-        trident.user = "pi";
+      settings = {
+        kvm-cuttlefish.User = "root";
+        kvm-drywell.User = "root";
+        cuttlefish.User = "david";
+        opnsense.User = "root";
+        trident.User = "pi";
 
         pixie = {
-          identitiesOnly = true;
-          user = "nix-on-droid";
-          hostname = "google-pixel-6";
-          port = 8022;
+          IdentitiesOnly = true;
+          User = "nix-on-droid";
+          HostName = "google-pixel-6";
+          Port = 8022;
         };
 
         # From default config
         "*" = {
-          forwardAgent = false;
-          addKeysToAgent = "no";
-          compression = false;
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
-          controlMaster = "no";
-          controlPath = "~/.ssh/master-%r@%n:%p";
-          controlPersist = "no";
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
         };
       };
     };

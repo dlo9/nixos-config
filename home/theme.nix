@@ -21,7 +21,7 @@ in {
         tinted-nvim
       ];
 
-      extraLuaConfig = ''
+      initLua = ''
         -- Theme
         -- https://github.com/tinted-theming/tinted-nvim
         vim.opt.termguicolors = true
@@ -68,6 +68,8 @@ in {
     name = "FlatColor";
     package = pkgs.dlo9.flatcolor-gtk-theme;
   };
+
+  gtk.gtk4.theme = config.gtk.theme;
 
   # Sync tinty repos and apply theme on activation
   home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''

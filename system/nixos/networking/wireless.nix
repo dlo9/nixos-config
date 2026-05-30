@@ -4,7 +4,12 @@
   ...
 }:
 with lib; {
-  sops.secrets.wireless-env.sopsFile = ./secrets.yaml;
+  sops.secrets.wireless-env = {
+    sopsFile = ./secrets.yaml;
+    path = "/etc/wpa_supplicant/secrets";
+    owner = "wpa_supplicant";
+    group = "wpa_supplicant";
+  };
 
   networking.networkmanager.ensureProfiles = {
     # Configure networkmanager secrets
@@ -41,10 +46,11 @@ with lib; {
 
   # Configure wpa_supplicant
   networking.wireless = {
-    enable = mkDefault (!config.networking.networkmanager.enable);
+    enable = mkDefault true;
 
     # Enable wpa_gui
-    userControlled.enable = mkDefault true;
+    userControlled = mkDefault true;
+    allowAuxiliaryImperativeNetworks = mkDefault true;
     secretsFile = config.sops.secrets.wireless-env.path;
     networks = {
       "?" = {

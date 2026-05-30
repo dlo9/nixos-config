@@ -20,7 +20,7 @@ in {
 
         email = "if_coding@fastmail.com";
         dnsProvider = "cloudflare";
-        credentialsFile = config.sops.secrets.cloudflare-dns.path;
+        environmentFile = config.sops.secrets.cloudflare-dns.path;
         extraLegoFlags = [
           # Since my router intercepts and caches DNS traffic, DNS propagation detection
           # for short TTLs doesn't work. Instead, wait 30s for TXT record to propagate.

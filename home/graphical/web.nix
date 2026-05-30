@@ -12,14 +12,11 @@ with lib; {
       chromium = {
         enable = mkDefault isLinux;
         package = pkgs.google-chrome;
-
-        extensions = [
-          {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
-        ];
       };
 
       firefox = {
         enable = mkDefault isLinux;
+        configPath = "${config.xdg.configHome}/mozilla/firefox";
 
         profiles = {
           # Set dev edition profile to the same as default release

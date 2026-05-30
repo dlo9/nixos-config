@@ -8,10 +8,10 @@
 }:
 with lib; {
   config = mkIf (config.graphical.enable && isLinux) {
-    programs.eww = {
-      enable = true;
-      configDir = ./config;
-    };
+    #programs.eww = {
+    #  enable = true;
+    #  configDir = ./config;
+    #};
 
     home.packages = with pkgs; [
       config.programs.eww.package

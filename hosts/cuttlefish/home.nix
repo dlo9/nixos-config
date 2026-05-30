@@ -20,7 +20,7 @@ with lib; {
   };
 
   home.packages = with pkgs; [
-    kdash # kubernetes dashboard
+    #kdash # kubernetes dashboard
   ];
 
   programs.zed-editor.installRemoteServer = true;

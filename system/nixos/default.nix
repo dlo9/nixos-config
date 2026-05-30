@@ -60,14 +60,13 @@ with lib; {
   programs.fish.package = pkgs.unstable.fish;
   # Fish enables this by default, which results in slow builds:
   # https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365
-  documentation.man.generateCaches = false;
+  documentation.man.cache.enable = false;
 
   environment.shells = [config.programs.fish.package];
 
   services.kmscon = {
     enable = false;
     hwRender = true;
-    autologinUser = mkDefault config.mainAdmin;
     fonts = [
       {
         name = config.font.family;

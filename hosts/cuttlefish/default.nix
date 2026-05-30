@@ -131,23 +131,20 @@ with lib; {
       enable = true;
       enableDefaultConfig = false;
 
-      matchBlocks.interchange-linux = {
-        identitiesOnly = true;
-        identityFile = config.sops.secrets.host-ssh-key.path;
-        user = "builder";
-        hostname = "interchanged";
-        port = 31022;
-
-        extraOptions = {
-          ConnectTimeout = "5";
-        };
+      settings.interchange-linux = {
+        IdentitiesOnly = true;
+        IdentityFile = config.sops.secrets.host-ssh-key.path;
+        User = "builder";
+        HostName = "interchanged";
+        Port = 31022;
+        ConnectTimeout = 5;
       };
 
-      matchBlocks.interchange-darwin = {
-        identitiesOnly = true;
-        identityFile = config.sops.secrets.host-ssh-key.path;
-        user = "nix-remote";
-        hostname = "interchanged";
+      settings.interchange-darwin = {
+        IdentitiesOnly = true;
+        IdentityFile = config.sops.secrets.host-ssh-key.path;
+        User = "nix-remote";
+        HostName = "interchanged";
       };
     };
 

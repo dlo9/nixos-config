@@ -32,7 +32,7 @@ with lib; {
     )
   ];
 
-  programs.ssh.matchBlocks."*".user = "david";
+  programs.ssh.settings."*".User = "david";
 
   programs.atuin.settings.daemon.enabled = false;
 
