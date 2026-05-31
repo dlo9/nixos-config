@@ -19,13 +19,17 @@
     ];
 
     systemd = let
-      # Get the config file
-      # We can to use writeStringReferencesToFile instead of manually parsing or else nix complains
-      # about accessing absolute paths during pure evaluation
-      oldWirelessConfig = builtins.head (lib.splitString "\n" (lib.readFile (pkgs.writeStringReferencesToFile config.systemd.services.wpa_supplicant.script)));
-
-      # Wheel doesn't exist in initrd
-      newWirelessConfig = builtins.toFile "wpa_supplicant.conf" (builtins.replaceStrings ["ctrl_interface_group=wheel"] [""] (builtins.readFile oldWirelessConfig));
+      # In 26.05 the wpa_supplicant service script references /etc paths
+      # (/etc/wpa_supplicant/nixos.conf) rather than a /nix/store path, so we
+      # render our own config from environment.etc and rewrite the script's
+      # flags to point at it.
+      # Drop ctrl_interface_group entirely — none of those groups exist in initrd
+      newWirelessConfig = builtins.toFile "wpa_supplicant.conf" (
+        lib.concatStringsSep "\n" (
+          builtins.filter (line: !(lib.hasPrefix "ctrl_interface_group=" line))
+          (lib.splitString "\n" config.environment.etc."wpa_supplicant/nixos.conf".text)
+        )
+      );
     in {
       initrdBin = with pkgs; [
         # Uncomment to debug
@@ -36,15 +40,26 @@
       # https://github.com/NixOS/nixpkgs/issues/309316
       storePaths =
         config.boot.initrd.systemd.services.wpa_supplicant.path
-        ++ (lib.splitString "\n" (lib.readFile (pkgs.writeStringReferencesToFile config.boot.initrd.systemd.services.wpa_supplicant.script)));
+        ++ [newWirelessConfig];
 
       services.wpa_supplicant = {
         wantedBy = ["initrd.target"];
         path = config.systemd.services.wpa_supplicant.path;
 
-        # Replace the old config with our new one
-        # Remove some startup args
-        script = builtins.replaceStrings [oldWirelessConfig "-s -u "] [newWirelessConfig ""] config.systemd.services.wpa_supplicant.script;
+        # Repoint the config flags at our store-resident copy, drop -s/-u
+        script =
+          builtins.replaceStrings
+          [
+            "-c /etc/wpa_supplicant/imperative.conf -I /etc/wpa_supplicant/nixos.conf"
+            "-c /etc/wpa_supplicant/nixos.conf"
+            "-s -u "
+          ]
+          [
+            "-c ${newWirelessConfig}"
+            "-c ${newWirelessConfig}"
+            ""
+          ]
+          config.systemd.services.wpa_supplicant.script;
       };
     };
 
