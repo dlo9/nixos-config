@@ -126,7 +126,7 @@ with lib; {
 
     services.atuin = {
       Unit.Description = "Atuin daemon";
-      Service.ExecStart = "${config.programs.atuin.package}/bin/atuin daemon";
+      Service.ExecStart = "${config.programs.atuin.package}/bin/atuin daemon start";
     };
   };
 
