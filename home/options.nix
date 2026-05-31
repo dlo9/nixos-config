@@ -32,7 +32,7 @@ with builtins; {
         default = spaceman;
 
         spaceman = fetchurl {
-          name = "spaceman";
+          name = "spaceman.jpg";
           url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
           sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
         };

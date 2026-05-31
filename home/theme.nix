@@ -233,8 +233,7 @@ in {
 
       #outer-box {
         margin: 5px;
-        padding:10px;
-        margin-top: -22px;
+        padding: 10px;
       }
 
       #text {

@@ -12,6 +12,7 @@ with lib; {
       # System bar
       waybar = {
         enable = mkDefault isLinux;
+        systemd.enable = mkDefault isLinux;
 
         # https://github.com/Alexays/Waybar/wiki/Configuration
         # Number formatting: https://fmt.dev/latest/syntax.html#format-specification-mini-language
