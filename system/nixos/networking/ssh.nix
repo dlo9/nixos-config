@@ -20,6 +20,16 @@ with lib; {
     programs.ssh.startAgent = mkDefault true;
     security.pam.sshAgentAuth.enable = mkDefault true;
 
+    # Let sudo authenticate via a forwarded ssh-agent (passwordless deploys).
+    # Per-service opt-in is required in addition to the global enable above.
+    security.pam.services.sudo.sshAgentAuth = mkDefault true;
+
+    # Preserve SSH_AUTH_SOCK across sudo so pam_ssh_agent_auth can reach
+    # the forwarded agent.
+    security.sudo.extraConfig = ''
+      Defaults env_keep += "SSH_AUTH_SOCK"
+    '';
+
     services.openssh = {
       enable = mkDefault true;
       settings.PermitRootLogin = "no";

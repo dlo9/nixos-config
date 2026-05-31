@@ -333,7 +333,7 @@
           hostname = "drywell";
           sshUser = "david";
           user = "root";
-          interactiveSudo = true;
+          interactiveSudo = false;
 
           profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.drywell;
         };
@@ -357,7 +357,7 @@
           hostname = "wyse";
           sshUser = "david";
           user = "root";
-          interactiveSudo = true;
+          interactiveSudo = false;
           fastConnection = true;
 
           profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.wyse;
@@ -382,7 +382,7 @@
           hostname = "pavil";
           sshUser = "david";
           user = "root";
-          interactiveSudo = true;
+          interactiveSudo = false;
           fastConnection = true;
 
           profiles.system.path = (deployPkgs "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.pavil;
@@ -462,7 +462,7 @@
           hostname = "trident";
           sshUser = "pi";
           user = "root";
-          interactiveSudo = true;
+          interactiveSudo = false;
           fastConnection = true;
 
           profiles.system.path = (deployPkgs "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.trident;
