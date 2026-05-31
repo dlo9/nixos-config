@@ -20,6 +20,19 @@ with lib; {
     "fbcon=rotate:2"
   ];
 
+  # nixos-hardware's raspberry-pi-4 module defaults to a custom rpi kernel
+  # that no public cache builds, forcing a local rebuild on every deploy.
+  # Mainline supports bcm2711 and is cached by Hydra.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # vc4-drm binds the pixelvalves at boot, but mainline's DT doesn't enable
+  # the DSI panel (no upstream vc4-kms-dsi-7inch overlay), so vc4 drives the
+  # DSI lines with garbage and the panel falls back to test-pattern flashing.
+  # Blacklisting vc4 hands the display back to the closed VC firmware, which
+  # initializes the DSI panel and exposes a simple-framebuffer the kernel
+  # picks up via simpledrm. v3d (GPU compute) is a separate module and stays.
+  boot.blacklistedKernelModules = ["vc4"];
+
   # Force remote builders
   nix.settings.max-jobs = 0;
 
