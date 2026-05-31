@@ -27,6 +27,9 @@ with lib; {
 
   programs.command-not-found.enable = true;
 
+  # Fish enables this by default, which results in slow builds:
+  programs.man.generateCaches = false;
+
   programs.fish.interactiveShellInit = mkAfter ''
     # The command-no-found DB doesn't support darwin, so pretend darwin systems are linux
     # by wrapping fish_command_not_found with a linux NIX_SYSTEM
