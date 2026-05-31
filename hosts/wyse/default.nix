@@ -14,6 +14,8 @@ with lib; {
   ];
 
   config = {
+    home-manager.users.david = import ./home.nix;
+
     users.users.david.openssh.authorizedKeys.keys = [
       config.hosts.bitwarden.ssh-key.pub
       config.hosts.cuttlefish.david-ssh-key.pub
