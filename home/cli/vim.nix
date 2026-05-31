@@ -27,7 +27,7 @@ with lib; {
           require('lualine').setup({
             options = {
               icons_enabled = true,
-              theme = 'auto',
+              theme = 'tinted',
             },
             tabline = {
               lualine_a = {'buffers'},

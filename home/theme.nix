@@ -24,11 +24,11 @@ in {
       initLua = ''
         -- Theme
         -- https://github.com/tinted-theming/tinted-nvim
-        vim.opt.termguicolors = true
-        require('tinted-colorscheme').setup(nil, {
-          supports = {
-            tinty = true,
-            live_reload = true,
+        require('tinted-nvim').setup({
+          selector = {
+            enabled = true,
+            mode = "file",
+            watch = true,
           },
         })
       '';
