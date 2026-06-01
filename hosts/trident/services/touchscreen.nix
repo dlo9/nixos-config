@@ -20,11 +20,7 @@ with lib; {
     program = "${pkgs.writeShellApplication {
       name = "klipperscreen";
 
-      runtimeInputs = with pkgs; [
-        dlo9.klipperscreen
-        wlr-randr
-        jq
-      ];
+      runtimeInputs = [pkgs.dlo9.klipperscreen];
 
       text = ''
         # Wait until the wayland session exists
@@ -34,11 +30,6 @@ with lib; {
 
         # Force GTK to use Wayland backend instead of X11
         export WAYLAND_DISPLAY=wayland-0
-
-        # Rotate the display 180 degrees
-        display="$(wlr-randr --json | jq -r '.[].name')"
-        echo "Rotating display $display"
-        wlr-randr --output "$display" --transform 180
 
         # Start klipperscreen
         KlipperScreen

@@ -15,11 +15,6 @@ with lib; {
     ./generated.nix
   ];
 
-  boot.kernelParams = [
-    # Rotate the kernel console 180 degrees
-    "fbcon=rotate:2"
-  ];
-
   # nixos-hardware's raspberry-pi-4 module defaults to a custom rpi kernel
   # that no public cache builds, forcing a local rebuild on every deploy.
   # Mainline supports bcm2711 and is cached by Hydra.
@@ -32,6 +27,25 @@ with lib; {
   # initializes the DSI panel and exposes a simple-framebuffer the kernel
   # picks up via simpledrm. v3d (GPU compute) is a separate module and stays.
   boot.blacklistedKernelModules = ["vc4"];
+
+  # Mount the VC firmware FAT partition so we can manage config.txt declaratively.
+  fileSystems."/boot/firmware" = {
+    device = "/dev/disk/by-label/FIRMWARE";
+    fsType = "vfat";
+    options = ["nofail"];
+  };
+
+  # The official 7" DSI touchscreen is physically mounted upside-down. Ask the
+  # closed VC firmware to rotate both the panel scan-out and the touch
+  # coordinates 180 degrees, so every layer above (fbcon, simpledrm, wlroots,
+  # KlipperScreen) gets an already-correct framebuffer and untransformed
+  # touches that line up with the display.
+  system.activationScripts.rpi-display-rotate = ''
+    cfg=/boot/firmware/config.txt
+    if [[ -f $cfg ]] && ! ${pkgs.gnugrep}/bin/grep -q '^display_lcd_rotate=2$' "$cfg"; then
+      printf '\n# Managed by NixOS: rotate official 7" DSI touchscreen 180 degrees\ndisplay_lcd_rotate=2\n' >> "$cfg"
+    fi
+  '';
 
   # Force remote builders
   nix.settings.max-jobs = 0;
@@ -53,30 +67,30 @@ with lib; {
     deviceTree = {
       enable = true;
 
+      # display_lcd_rotate=2 rotates the panel scan-out but not the firmware
+      # touch buffer, so touch comes through in raw FT5406 orientation. Invert
+      # both axes here so raspberrypi-ts (via touchscreen_parse_properties)
+      # reports coordinates matching the rotated display.
       overlays = [
         {
-          # This rotates the display and is a modification of:
-          # https://github.com/NixOS/nixos-hardware/blob/8870dcaff63dfc6647fb10648b827e9d40b0a337/raspberry-pi/4/touch-ft5406.nix#L48-L49
-          # Might also be able to rotate this way:
-          # https://www.raspberrypi.com/documentation/accessories/touch-display-2.html#rotate-screen-without-a-desktop
-          name = "rpi-ft5406-overlay-rotate";
+          name = "rpi-ft5406-overlay-invert";
           dtsText = ''
             /dts-v1/;
             /plugin/;
 
             / {
-            	compatible = "brcm,bcm2711";
+              compatible = "brcm,bcm2711";
 
-            	fragment@0 {
-            		target-path = "/soc/firmware";
-            		__overlay__ {
-            			ts: touchscreen {
-            				compatible = "raspberrypi,firmware-ts";
+              fragment@0 {
+                target-path = "/soc/firmware";
+                __overlay__ {
+                  ts: touchscreen {
+                    compatible = "raspberrypi,firmware-ts";
                     touchscreen-inverted-x;
                     touchscreen-inverted-y;
-            			};
-            		};
-            	};
+                  };
+                };
+              };
             };
           '';
         }
