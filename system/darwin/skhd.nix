@@ -73,7 +73,7 @@
       ${modifier} + ctrl - r : yabai -m window --ratio abs:0.5
 
       # Restart yabai
-      ${modifier} + shift - r : pkill yabai; pkill spacebar
+      ${modifier} + shift - r : killall yabai spacebar skhd
 
       # Enable/disable yabai tiling
       ${modifier} + shift - e : if [ "$(yabai -m config layout)" == "bsp" ]; then yabai -m config layout float; else yabai -m config layout bsp; fi
