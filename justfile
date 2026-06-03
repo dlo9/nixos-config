@@ -79,3 +79,12 @@ vm host=hostname:
 update:
     nix flake update
     just format
+
+refresh-k8s-certs:
+    sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets
+    sudo systemctl restart cfssl
+    sleep 5
+    sudo systemctl restart certmgr
+    until [ -f /var/lib/kubernetes/secrets/cluster-admin-key.pem ]; do sleep 1; done
+    sudo systemctl restart kubernetes.slice
+    sudo chown david /var/lib/kubernetes/secrets/cluster-admin-key.pem

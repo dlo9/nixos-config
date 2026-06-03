@@ -55,8 +55,7 @@ in {
 
     package = pkgs.unstable.kubernetes;
 
-    # Refresh kubernetes certificates with:
-    # sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets && sudo systemctl restart cfssl; sleep 5; sudo systemctl restart certmgr; sleep 5; sudo systemctl restart kubernetes.slice; sleep 5; sudo chown david /var/lib/kubernetes/secrets/cluster-admin-key.pem
+    # See justfile for instructions to refresh the self-signed cert
     easyCerts = true;
 
     # Use `hostname.cluster` instead of `cluster.local` since Android can't resolve .local through a VPN
