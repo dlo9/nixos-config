@@ -16,7 +16,7 @@ with lib; {
 
       firefox = {
         enable = mkDefault isLinux;
-        configPath = "${config.xdg.configHome}/mozilla/firefox";
+        configPath = mkIf isLinux "${config.xdg.configHome}/mozilla/firefox";
 
         profiles = {
           # Set dev edition profile to the same as default release
