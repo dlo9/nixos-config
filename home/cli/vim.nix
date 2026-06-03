@@ -89,6 +89,46 @@ with lib; {
         '';
       }
 
+      # Minimap (VSCode/Zed-style preview with git/diagnostic/search marks)
+      {
+        plugin = mini-map;
+        type = "lua";
+        config = ''
+          local map = require('mini.map')
+          map.setup({
+            integrations = {
+              map.gen_integration.builtin_search(),
+              map.gen_integration.gitsigns(),
+              map.gen_integration.diagnostic(),
+            },
+            symbols = {
+              encode = map.gen_encode_symbols.dot('4x2'),
+              scroll_line = '█',
+              scroll_view = '┃',
+            },
+            window = {
+              focusable = false,
+              show_integration_count = false,
+              width = 12,
+              winblend = 25,
+              zindex = 10,
+            },
+          })
+
+          -- Auto-open for normal file buffers
+          vim.api.nvim_create_autocmd({ 'BufWinEnter', 'BufEnter' }, {
+            callback = function()
+              if vim.bo.buftype == "" and vim.api.nvim_buf_get_name(0) ~= "" then
+                map.open()
+              end
+            end,
+          })
+
+          vim.keymap.set('n', '<leader>mm', map.toggle, { desc = 'Toggle minimap' })
+          vim.keymap.set('n', '<leader>mf', map.toggle_focus, { desc = 'Focus minimap' })
+        '';
+      }
+
       # Gradually show colorcolumn as you approach the limit
       {
         plugin = pkgs.vimUtils.buildVimPlugin {
