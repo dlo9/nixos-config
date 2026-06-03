@@ -106,6 +106,16 @@ in {
     # Override default pod capacity (110)
     kubelet.extraOpts = "--fail-swap-on=false --resolv-conf= --max-pods=150";
 
+    # Gracefully terminate pods on reboot/shutdown so they don't linger as `Unknown`
+    # (NodeLost) ghosts and so devices (frigate/home-assistant/immich) are released
+    # cleanly. These are KubeletConfiguration fields (no CLI flag exists); merged into
+    # the generated --config file by the nixpkgs kubelet module. Requires
+    # services.logind InhibitDelayMaxSec >= shutdownGracePeriod (set below).
+    kubelet.extraConfig = {
+      shutdownGracePeriod = "60s"; # total budget to drain pods on shutdown
+      shutdownGracePeriodCriticalPods = "15s"; # subset reserved for critical pods (< total)
+    };
+
     # Allow privileged containers
     apiserver.extraOpts = "--allow-privileged";
   };
@@ -137,6 +147,10 @@ in {
     # Defaults to 128 and causes 'too many open files' error for pods
     "fs.inotify.max_user_instances" = 1024;
   };
+
+  # Give the kubelet's shutdown inhibitor enough time to drain pods before logind
+  # proceeds with shutdown. Must be >= the kubelet shutdownGracePeriod set above.
+  services.logind.settings.Login.InhibitDelayMaxSec = 90;
 
   # Set the proper dependency, otherwise it fails to connect on shutdown and doesn't shutdown quickly
   systemd.services.kube-apiserver.unitConfig = {
