@@ -156,12 +156,6 @@ in {
     programs = {
       zellij.enable = false;
 
-      mergiraf = {
-        enable = true;
-        enableGitIntegration = true;
-        enableJujutsuIntegration = true;
-      };
-
       helix = {
         enable = true;
         settings = {
