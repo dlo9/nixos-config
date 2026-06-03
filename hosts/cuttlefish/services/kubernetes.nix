@@ -144,6 +144,23 @@ in {
     After = ["etcd.service"];
   };
 
+  # Override the cfssl default signing profile to issue long-lived certs (10y instead of 720h/30d).
+  # The upstream pki.nix bakes the cfssl server's own TLS cert at the 30d default and does NOT add
+  # it to certmgr's renewal list, so once it expires the whole renewal chain breaks (no one can
+  # talk to cfssl) and you must wipe /var/lib/cfssl to recover. Long-lived certs sidestep this.
+  #  - https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/cluster/kubernetes/pki.nix
+  services.cfssl.configFile = mkForce (toString (pkgs.writeText "cfssl-config.json" (builtins.toJSON {
+    signing.profiles.default = {
+      usages = ["digital signature"];
+      auth_key = "default";
+      expiry = "87600h";
+    };
+    auth_keys.default = {
+      type = "standard";
+      key = "file:${config.services.cfssl.dataDir}/apitoken.secret";
+    };
+  })));
+
   # Remove `hosts` config from cert requests, since they are often invalid DNS names. This causes
   # certmgr to renew certs and restart every 30m, which bounces the connection to the apiserver:
   #  - https://github.com/NixOS/nixpkgs/blob/6c5e707c6b5339359a9a9e215c5e66d6d802fd7a/nixos/modules/services/cluster/kubernetes/pki.nix#L254
