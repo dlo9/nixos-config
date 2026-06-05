@@ -46,6 +46,13 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    # Pin nixpkgs for nix-on-droid only, to work around a glibc 2.42 / proot
+    # regression that breaks activation with "getting pseudoterminal attributes:
+    # Permission denied". The newer nixpkgs used by every other host can't be used
+    # here until proot-termux is patched upstream.
+    # https://github.com/nix-community/nix-on-droid/issues/495#issuecomment-3900063925
+    nixpkgs-droid.url = "github:NixOS/nixpkgs/88d3861";
+
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -236,7 +243,10 @@
               extraSpecialArgs = specialArgs ctx "android" "pixie";
               modules = androidModules;
 
-              pkgs = import inputs.nixpkgs {
+              # Pinned to work around a glibc 2.42 / proot regression that breaks
+              # activation with "getting pseudoterminal attributes: Permission denied".
+              # https://github.com/nix-community/nix-on-droid/issues/495#issuecomment-3900063925
+              pkgs = import inputs.nixpkgs-droid {
                 inherit system;
 
                 config.allowUnfree = true;
@@ -245,6 +255,12 @@
                   inputs.nix-on-droid.overlays.default
                   (systemOverlay system)
                   inputs.wrap.overlays.default
+
+                  # home-manager 26.05 imports `${pkgs.path}/lib/services/lib.nix` at
+                  # eval time, which the pinned (older) nixpkgs-droid lacks. Point `path`
+                  # at the newer nixpkgs source so that eval-time import resolves; built
+                  # packages still come from nixpkgs-droid's old-glibc set (see issue 495).
+                  (_: _: {path = inputs.nixpkgs;})
                 ];
               };
             }
