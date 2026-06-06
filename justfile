@@ -80,6 +80,10 @@ update:
     nix flake update
     just format
 
+# Generate a package definition from a source URL with nix-init (writes pkgs/<name>.nix)
+add-package url name: && format
+    nix run nixpkgs#nix-init -- --url "{{url}}" "pkgs/{{name}}.nix"
+
 refresh-k8s-certs:
     sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets
     sudo systemctl restart cfssl
