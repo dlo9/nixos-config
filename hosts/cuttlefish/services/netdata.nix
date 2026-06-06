@@ -26,7 +26,7 @@ with lib; {
     '';
 
     services.netdata = {
-      enable = true;
+      enable = false;
 
       package = pkgs.netdataCloud;
 
