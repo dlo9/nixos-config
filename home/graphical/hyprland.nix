@@ -113,7 +113,6 @@ with builtins; {
 
     programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
-        exec Hyprland
         exec start-hyprland
       end
     '';
