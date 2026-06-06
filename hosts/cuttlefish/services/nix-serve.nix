@@ -9,6 +9,7 @@
 
   services.nix-serve = {
     enable = true;
+    package = pkgs.nix-serve-ng;
     port = 5000;
     openFirewall = true;
     secretKeyFile = config.sops.secrets.nix-serve-private-key.path;
