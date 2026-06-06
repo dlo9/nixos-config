@@ -183,7 +183,7 @@ in {
           '';
         };
 
-        netdata = {
+        netdata = mkIf config.services.netdata.enable {
           inherit useACMEHost;
           serverAliases = ["netdata.sigpanic.com"];
           extraConfig = ''

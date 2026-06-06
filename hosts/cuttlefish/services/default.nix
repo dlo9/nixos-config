@@ -8,7 +8,7 @@
     #./iodine.nix
     ./jellyfin.nix
     ./kubernetes.nix
-    ./netdata.nix
+    #./netdata.nix
     #./nexus.nix
     ./nfs.nix
     ./nix-serve.nix
