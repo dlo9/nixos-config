@@ -15,17 +15,20 @@ in {
       environment.RXTXRPT = "yes";
 
       volumes = [
-        "/services/ripe/etc:/var/atlas-probe/etc"
-        "/services/ripe/status:/var/atlas-probe/status"
+        "/services/ripe/etc:/etc/ripe-atlas"
+        "/services/ripe/spool:/var/spool/ripe-atlas"
+        "/services/ripe/run:/run/ripe-atlas"
       ];
 
       extraOptions = [
         "--cap-drop=ALL"
         "--cap-add=CHOWN"
-        "--cap-add=SETUID"
-        "--cap-add=SETGID"
         "--cap-add=DAC_OVERRIDE"
+        "--cap-add=FOWNER"
+        "--cap-add=KILL"
         "--cap-add=NET_RAW"
+        "--cap-add=SETGID"
+        "--cap-add=SETUID"
       ];
     };
   };
