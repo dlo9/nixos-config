@@ -408,8 +408,9 @@ with builtins; {
             # Start the application launcher
             (mkExec "${mod} + D" "${pkgs.wofi}/bin/wofi -c ~/.config/wofi/config -I")
 
-            # Reload (no direct dispatcher in Lua API, fall back to hyprctl)
-            (mkExec "${mod} + SHIFT + R" "hyprctl dispatch forcerendererreload")
+            # Reload the renderer. exec_raw bridges to the classic dispatcher;
+            # under the Lua config Hyprland rejects plain string IPC dispatch.
+            (mkBind "${mod} + SHIFT + R" ''hl.dsp.exec_raw("forcerendererreload")'')
 
             # Lock
             (mkExec "${mod} + SHIFT + L" hyprlock)
@@ -506,7 +507,7 @@ with builtins; {
           general = {
             lock_cmd = "${config.programs.hyprlock.package}/bin/hyprlock";
             before_sleep_cmd = "${config.programs.hyprlock.package}/bin/hyprlock";
-            after_sleep_cmd = "hyprctl dispatch dpms on";
+            after_sleep_cmd = "hyprctl dispatch 'hl.dsp.exec_raw(\"dpms on\")'";
           };
 
           listener = let
@@ -521,8 +522,8 @@ with builtins; {
             {
               # Screen off after 10 minutes
               timeout = minToSec 10;
-              on-timeout = "hyprctl dispatch dpms off";
-              on-resume = "hyprctl dispatch dpms on && brightnessctl -r ";
+              on-timeout = "hyprctl dispatch 'hl.dsp.exec_raw(\"dpms off\")'";
+              on-resume = "hyprctl dispatch 'hl.dsp.exec_raw(\"dpms on\")' && brightnessctl -r ";
             }
 
             {
