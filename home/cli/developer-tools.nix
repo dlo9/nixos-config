@@ -123,7 +123,7 @@ in {
           #noseyparker # Credential scanner
 
           vulnix # Vulnerability scanner
-          glow # Markdown reader
+          mdfried # Markdown reader
           trippy # Network diagnostics
           inxi # Hardware info
 
