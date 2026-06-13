@@ -53,7 +53,7 @@ in {
           "github.com/caddyserver/replace-response@v0.0.0-20250618171559-80962887e4c6"
         ];
 
-        hash = "sha256-akZfBuxGV0hbDtTSSLrTk9vvPGrHqjfYBltaA4OxmqE=";
+        hash = "sha256-0N/bQAM5yT6g9UAteWsfxofGcelmU/NDTroS2oL43Gs=";
       };
 
       virtualHosts = {
