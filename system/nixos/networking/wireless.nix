@@ -24,7 +24,7 @@ with lib; let
     "Menehune House & Cottage".pskRaw = "ext:MENEHUNE";
     BlueWaveHeights.pskRaw = "ext:BLUE_WAVE_HEIGHTS";
     "Mountain House".pskRaw = "ext:MOUNTAIN_HOUSE";
-    "interxfi-guest".pskRaw = "ext:INTERCHANGE";
+    "interxfi".pskRaw = "ext:INTERCHANGE";
   };
 
   # Normalize network attrs so missing fields don't break the NM mapping
