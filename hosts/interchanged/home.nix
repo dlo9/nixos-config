@@ -56,7 +56,6 @@ with lib; {
     PATH = "";
 
     RUST_BACKTRACE = "1";
-    TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     SHELL = "${config.programs.fish.package}/bin/fish"; # Fix for tmux
 
     GOPRIVATE = "github.com/interxfi,gopkg.interchangefi.com";
