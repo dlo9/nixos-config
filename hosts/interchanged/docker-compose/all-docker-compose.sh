@@ -5,13 +5,27 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
-# Wait for the docker engine (colima service) to come up before touching compose
+# `docker` here is the podman wrapper, which talks to the podman machine via its own
+# connection (no DOCKER_HOST needed). Only expose the VM user's uid (= host uid) for
+# the traefik socket-mount path; derived at runtime so nothing is hard-coded.
+export PODMAN_UID="$(id -u)"
+
+# Wait for the docker engine (podman machine) to come up before touching compose
 tries=0
 until docker info >/dev/null 2>&1; do
   tries=$((tries + 1))
   [ "$tries" -gt 60 ] && { echo "docker engine not ready after 120s" >&2; break; }
   sleep 2
 done
+
+# Rootless podman can't bind privileged ports (e.g. traefik's :80) without raising the
+# unprivileged-port floor inside the VM. Idempotent + persisted; re-applied each startup
+# so it survives a machine recreate. No-op when podman isn't the engine.
+if command -v podman >/dev/null 2>&1; then
+  podman machine ssh -- \
+    'echo net.ipv4.ip_unprivileged_port_start=80 | sudo tee /etc/sysctl.d/99-unprivileged-ports.conf >/dev/null && sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80 >/dev/null' \
+    2>/dev/null || true
+fi
 
 state_dir="$HOME/.local/state/docker-compose"
 logs_dir="$state_dir/logs"

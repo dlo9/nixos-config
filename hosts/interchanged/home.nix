@@ -42,8 +42,8 @@ with lib; {
     gawk
     getopt
 
-    docker-client
-    docker-compose
+    (writeShellScriptBin "docker" ''exec ${config.services.podman.package}/bin/podman "$@"'') # Alias podman
+    podman-compose
 
     # Other tools
     terraform
@@ -84,36 +84,16 @@ with lib; {
     "/sbin"
   ];
 
-  programs.docker-cli.enable = true;
-
-  services.colima = {
+  services.podman = {
     enable = true;
-
-    # Use XDG to silence warnings
-    colimaHomeDir = "${config.xdg.configHome}/colima";
-
-    dockerPackage = pkgs.docker-client;
-    profiles.default = {
-      isActive = true;
-      isService = true;
-      setDockerHost = true;
-
-      settings = {
-        cpu = 4;
-        memory = 8;
-        disk = 20;
-        runtime = "docker";
-        vmType = "vz";
-        mountType = "virtiofs";
-        rosetta = true;
-
-        mounts = [
-          {
-            location = "${config.home.homeDirectory}/.local/state/docker-compose";
-            writable = true;
-          }
-        ];
-      };
+    useDefaultMachine = false;
+    machines.podman-machine-default = {
+      cpus = 4;
+      memory = 8192;
+      diskSize = 20;
+      rootful = false;
+      autoStart = true;
+      volumes = ["/Users:/Users"]; # ensure ~/.local/state/docker-compose is visible in the VM
     };
   };
 
@@ -246,7 +226,6 @@ with lib; {
         EnvironmentVariables = {
           HOME = config.home.homeDirectory;
           PATH = concatStringsSep ":" config.home.sessionPath;
-          DOCKER_HOST = config.home.sessionVariables.DOCKER_HOST;
         };
         WorkingDirectory = "${config.home.homeDirectory}/code/dlo9/nixos-config/hosts/${hostname}/docker-compose";
         ProgramArguments = ["${WorkingDirectory}/all-docker-compose.sh" "up"];

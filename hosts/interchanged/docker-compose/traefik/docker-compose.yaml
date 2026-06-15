@@ -12,9 +12,16 @@ services:
     ports:
       - "80:80"
 
+    # The podman socket is SELinux-labeled user_tmp_t inside the Fedora CoreOS VM;
+    # disable label confinement so traefik (container_t) can connect to it.
+    security_opt:
+      - label=disable
+
     volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Rootless podman's docker-compatible socket inside the VM (PODMAN_UID = the VM
+      # user's uid, which mirrors the host uid; set by all-docker-compose.sh / fish).
+      # Traefik's --providers.docker reads it at the container's default /var/run/docker.sock.
+      - /run/user/${PODMAN_UID}/podman/podman.sock:/var/run/docker.sock:ro
 
     restart: always
 
