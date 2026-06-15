@@ -42,6 +42,9 @@ with lib; {
     gawk
     getopt
 
+    docker-client
+    docker-compose
+
     # Other tools
     terraform
     gh
@@ -80,6 +83,39 @@ with lib; {
     "/usr/sbin"
     "/sbin"
   ];
+
+  programs.docker-cli.enable = true;
+
+  services.colima = {
+    enable = true;
+
+    # Use XDG to silence warnings
+    colimaHomeDir = "${config.xdg.configHome}/colima";
+
+    dockerPackage = pkgs.docker-client;
+    profiles.default = {
+      isActive = true;
+      isService = true;
+      setDockerHost = true;
+
+      settings = {
+        cpu = 4;
+        memory = 8;
+        disk = 20;
+        runtime = "docker";
+        vmType = "vz";
+        mountType = "virtiofs";
+        rosetta = true;
+
+        mounts = [
+          {
+            location = "${config.home.homeDirectory}/.local/state/docker-compose";
+            writable = true;
+          }
+        ];
+      };
+    };
+  };
 
   # https://github.com/nix-community/home-manager/issues/5952
   programs.tmux.extraConfig = ''
@@ -135,6 +171,8 @@ with lib; {
 
   programs.ssh = {
     enable = true;
+
+    settings."git.laptop".Port = 2222;
   };
 
   # https://github.com/NixOS/nixpkgs/issues/330735
@@ -175,19 +213,7 @@ with lib; {
     ".hushlogin".text = "";
   };
 
-  launchd.agents = let
-    docker-compose = name: {
-      enable = true;
-      config = {
-        KeepAlive = true;
-        ProcessType = "Interactive";
-        WorkingDirectory = "${config.home.homeDirectory}/Documents/documents/docker-compose/${name}";
-        ProgramArguments = ["/usr/local/bin/docker" "compose" "up"];
-        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/docker-compose/${name}/stderr";
-        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/docker-compose/${name}/stdout";
-      };
-    };
-  in {
+  launchd.agents = {
     raycast = {
       enable = true;
       config = {
@@ -220,6 +246,7 @@ with lib; {
         EnvironmentVariables = {
           HOME = config.home.homeDirectory;
           PATH = concatStringsSep ":" config.home.sessionPath;
+          DOCKER_HOST = config.home.sessionVariables.DOCKER_HOST;
         };
         WorkingDirectory = "${config.home.homeDirectory}/code/dlo9/nixos-config/hosts/${hostname}/docker-compose";
         ProgramArguments = ["${WorkingDirectory}/all-docker-compose.sh" "up"];

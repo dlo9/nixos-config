@@ -5,6 +5,14 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
+# Wait for the docker engine (colima service) to come up before touching compose
+tries=0
+until docker info >/dev/null 2>&1; do
+  tries=$((tries + 1))
+  [ "$tries" -gt 60 ] && { echo "docker engine not ready after 120s" >&2; break; }
+  sleep 2
+done
+
 state_dir="$HOME/.local/state/docker-compose"
 logs_dir="$state_dir/logs"
 
