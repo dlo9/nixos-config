@@ -80,6 +80,11 @@ update:
     nix flake update
     just format
 
+gc:
+    # Run as sudo to collect generations on darwin:
+    # https://github.com/nix-darwin/nix-darwin/issues/237#issuecomment-2032089213
+    sudo nix-collect-garbage -d
+
 # Generate a package definition from a source URL with nix-init (writes pkgs/<name>.nix)
 add-package url name: && format
     nix run nixpkgs#nix-init -- --url "{{url}}" "pkgs/{{name}}.nix"
