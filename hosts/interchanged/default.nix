@@ -22,6 +22,7 @@ in {
 
   homebrew = {
     enable = true;
+    onActivation.cleanup = "uninstall";
 
     brews = [
       "lunchy" # launchctl wrapper: https://github.com/eddiezane/lunchy
