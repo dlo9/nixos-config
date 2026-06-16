@@ -22,26 +22,22 @@ in {
 
   homebrew = {
     enable = true;
-    onActivation.cleanup = "uninstall";
+
+    # Doesn't work, just errors
+    # onActivation.cleanup = "uninstall";
 
     brews = [
       "lunchy" # launchctl wrapper: https://github.com/eddiezane/lunchy
     ];
 
     casks = [
+      # Unpackaged for darwin in nixpkgs
       "sensiblesidebuttons"
       "launchcontrol"
-      "notion"
-      "flameshot"
-      "caffeine"
-      "google-chrome"
-
-      # Installed natively
-      # "claude-code"
-      # "claude"
-
-      # Backup
       "kopiaui"
+
+      # Packaged in nixpkgs, but the nix build has no systray icon on macOS
+      "flameshot"
 
       # Installed here because they expect "helper tools"
       "slack"

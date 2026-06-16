@@ -10,6 +10,7 @@
 }: let
   user = config.system.primaryUser;
   home = "/Users/${user}";
+  hmApps = "${home}/Applications/Home Manager Apps";
 in {
   # Point the launchd agents at the signed wrappers.
   services.yabai.package = lib.mkForce (mylib.codesign.signPackage {
@@ -30,6 +31,9 @@ in {
       config.services.yabai.package
       config.services.skhd.package
     ];
-    bundles = ["${home}/Applications/Home Manager Apps/Alacritty.app"];
+    bundles = [
+      "${hmApps}/Alacritty.app"
+      "${hmApps}/Caffeine.app"
+    ];
   };
 }

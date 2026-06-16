@@ -5,9 +5,19 @@
   inputs,
   hostname,
   osConfig,
+  mylib,
   ...
 }:
-with lib; {
+with lib; let
+  # Re-signed AutoRaise so its Accessibility grant persists across updates
+  # (signed on activation via codesign.packages below). Only used when aerospace
+  # is enabled — yabai does focus-follows-mouse itself, so it's dormant here.
+  autoraisePkg = mylib.codesign.signPackage {
+    package = pkgs.autoraise;
+    identifier = "AutoRaise";
+    home = config.home.homeDirectory;
+  };
+in {
   imports = [
     "${inputs.self}/home"
   ];
@@ -51,6 +61,12 @@ with lib; {
     hoppscotch
     postgresql
     google-clasp
+    notion-app
+    google-chrome
+
+    # GUI apps that need TCC permissions — re-signed with a stable cert on
+    # activation so the grants persist across updates (see codesign.nix).
+    caffeine
   ];
 
   home.sessionVariables = rec {
@@ -193,6 +209,10 @@ with lib; {
     ".hushlogin".text = "";
   };
 
+  # Sign AutoRaise only when it's actually used (aerospace); merges with the
+  # packages declared in codesign.nix.
+  codesign.packages = optional osConfig.services.aerospace.enable autoraisePkg;
+
   launchd.agents = {
     raycast = {
       enable = true;
@@ -210,7 +230,7 @@ with lib; {
       config = {
         KeepAlive = true;
         ProcessType = "Interactive";
-        ProgramArguments = ["${pkgs.autoraise}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" "-mouseDelta=1" "pollMillis=50" "-delay=10" "-stayFocusedBundleIds=com.apple.systempreferences"];
+        ProgramArguments = ["${autoraisePkg}/bin/autoraise" "-altTaskSwitcher=true" "-disableKey=control" "-mouseDelta=1" "pollMillis=50" "-delay=10" "-stayFocusedBundleIds=com.apple.systempreferences"];
         StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stderr";
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/autoraise/stdout";
       };
