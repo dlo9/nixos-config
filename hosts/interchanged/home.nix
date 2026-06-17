@@ -185,6 +185,30 @@ in {
   };
 
   home.activation = {
+    # podman creates the machine with Rosetta enabled (containers.conf default
+    # is `[machine] rosetta=true`) and attaches the Rosetta virtiofs share, but
+    # it never writes the /etc/containers/enable-rosetta marker that gates the
+    # VM's rosetta-activation.service. Without that marker the service is skipped
+    # on every boot, qemu stays the x86_64 binfmt handler.
+    # Create the marker and run the activation. Idempotent and persists in the
+    # VM across reboots, so this only does real work after a machine recreate.
+    podmanRosetta = lib.hm.dag.entryAfter ["writeBoundary" "podmanMachines"] ''
+      export PATH="${lib.makeBinPath [config.services.podman.package pkgs.openssh]}:$PATH"
+      machine="podman-machine-default"
+
+      if podman machine inspect "$machine" >/dev/null 2>&1; then
+        if [ "$(podman machine inspect "$machine" --format '{{.State}}' 2>/dev/null)" != "running" ]; then
+          run podman machine start "$machine" || true
+        fi
+
+        if ! podman machine ssh "$machine" 'test -e /proc/sys/fs/binfmt_misc/rosetta' 2>/dev/null; then
+          echo "Activating Rosetta in podman machine '$machine'"
+          run podman machine ssh "$machine" \
+            'sudo touch /etc/containers/enable-rosetta && sudo systemctl start rosetta-activation.service' || true
+        fi
+      fi
+    '';
+
     setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
       run /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.wallpapers.default}"'
     '';
