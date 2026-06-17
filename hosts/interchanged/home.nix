@@ -119,6 +119,10 @@ in {
     set -g default-shell "$SHELL"
   '';
 
+  programs.fish.interactiveShellInit = ''
+    set -gx DOCKER_HOST "unix://$TMPDIR/podman/podman-machine-default-api.sock"
+  '';
+
   programs.fish.functions = {
     convert-logs-timestamp = ''
       jq '.ts |= (. | tostring [0:10] | tonumber | localtime | strftime("%Y-%m-%dT%H:%M:%S%z"))' $argv
