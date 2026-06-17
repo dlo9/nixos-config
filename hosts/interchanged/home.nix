@@ -26,7 +26,11 @@ in {
 
   xdg.configFile."wrap.yaml".source = ./wrap.yaml;
 
-  programs.firefox.enable = true;
+  # Enable the firefox profile, but get the package from brew
+  programs.firefox = {
+    enable = true;
+    package = null;
+  };
 
   home.packages = with pkgs; [
     kubectl

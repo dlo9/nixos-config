@@ -31,6 +31,10 @@ in {
     ];
 
     casks = [
+      # nix-wrapped firefox doesn't work as a default link opener
+      # because darwin passes the url in a weird way (not as an arg)
+      "firefox"
+
       # Unpackaged for darwin in nixpkgs
       "sensiblesidebuttons"
       "launchcontrol"
