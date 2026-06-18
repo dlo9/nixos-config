@@ -9,13 +9,13 @@ services:
 
     volumes:
       - ${HOME}/.local/state/docker-compose/forgejo/data:/data
-      - /etc/localtime:/etc/localtime:ro
 
     # Publish SSH on 2222 to avoid colliding with the host sshd on 22
     ports:
       - "2222:22"
 
     environment:
+      TZ: America/Los_Angeles
       USER_UID: "1000"
       USER_GID: "1000"
       FORGEJO__service__DISABLE_REGISTRATION: "true"
@@ -25,7 +25,7 @@ services:
       FORGEJO__server__DOMAIN: git.laptop
       FORGEJO__server__ROOT_URL: http://git.laptop/
       FORGEJO__server__SSH_DOMAIN: git.laptop
-      FORGEJO__server__SSH_PORT: "2222" 
+      FORGEJO__server__SSH_PORT: "2222"
       FORGEJO__server__SSH_LISTEN_PORT: "22"
       FORGEJO__repository__ENABLE_PUSH_CREATE_USER: "true"
 
