@@ -57,7 +57,7 @@ in {
     getopt
 
     (writeShellScriptBin "docker" ''exec ${config.services.podman.package}/bin/podman "$@"'') # Alias podman
-    podman-compose
+    docker-compose
 
     # Other tools
     terraform
@@ -275,6 +275,9 @@ in {
       config = rec {
         KeepAlive = true;
         ProcessType = "Interactive";
+        # Give the script's SIGTERM trap time to `docker compose down` every project
+        # before launchd escalates to SIGKILL (default ExitTimeOut is 20s).
+        ExitTimeOut = 90;
         EnvironmentVariables = {
           HOME = config.home.homeDirectory;
           PATH = concatStringsSep ":" config.home.sessionPath;

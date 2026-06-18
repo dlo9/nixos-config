@@ -5,9 +5,8 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
-# `docker` here is the podman wrapper, which talks to the podman machine via its own
-# connection (no DOCKER_HOST needed). Only expose the VM user's uid (= host uid) for
-# the traefik socket-mount path; derived at runtime so nothing is hard-coded.
+# `docker` here is the podman wrapper. Expose the VM user's uid (= host uid) for the
+# traefik socket-mount path; derived at runtime so nothing is hard-coded.
 export PODMAN_UID="$(id -u)"
 
 # Wait for the docker engine (podman machine) to come up before touching compose
@@ -17,6 +16,14 @@ until docker info >/dev/null 2>&1; do
   [ "$tries" -gt 60 ] && { echo "docker engine not ready after 120s" >&2; break; }
   sleep 2
 done
+
+# The Go docker-compose provider (podman's external compose backend) connects via
+# DOCKER_HOST. Under launchd we don't inherit the interactive shell's DOCKER_HOST,
+# and the podman-machine API socket lives under the per-user Darwin temp dir — its
+# path is deterministic via getconf, independent of any inherited (or absent) TMPDIR.
+tmp="$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null)"
+[ -S "${tmp}podman/podman-machine-default-api.sock" ] &&
+  export DOCKER_HOST="unix://${tmp}podman/podman-machine-default-api.sock"
 
 # Rootless podman can't bind privileged ports (e.g. traefik's :80) without raising the
 # unprivileged-port floor inside the VM. Idempotent + persisted; re-applied each startup
@@ -35,6 +42,26 @@ mkdir -p "$logs_dir"
 
 # Create network up-front so startup order doesn't matter
 docker network inspect traefik_shared >/dev/null 2>&1 || docker network create traefik_shared
+
+# Tear down every compose project on stop, so the detached (`up -d`) containers don't
+# outlive the launchd agent. Mirrors the startup loop's project selection.
+teardown() {
+  echo "Stopping compose services..."
+  for d in */; do
+    [ -f "${d}.ignore" ] && continue
+    [ -f "${d}docker-compose.yaml" ] || [ -f "${d}docker-compose.yml" ] || continue
+    name="${d%/}"
+    ( cd "$d" && docker compose down ) >> "$logs_dir/$name.stdout.log" 2>> "$logs_dir/$name.stderr.log"
+    echo "$name: stopped"
+  done
+  echo "All services stopped"
+}
+
+# For the resident `up` flow, tear down on stop (launchd SIGTERM / Ctrl-C). Installed
+# before the loop so a stop mid-startup still cleans up partially-started services.
+if [ "$1" = "up" ]; then
+  trap 'teardown; kill "${sleep_pid:-}" 2>/dev/null; exit 0' TERM INT
+fi
 
 # Use read with find to process directories
 find . -type d -depth 1 | while read -r d; do
@@ -84,4 +111,12 @@ find . -type d -depth 1 | while read -r d; do
 done
 
 echo "All services done"
-sleep 365d
+
+# Stay resident for the `up` flow so the trap (installed above) can fire on stop; wait
+# on a backgrounded sleep so the signal interrupts promptly. Other invocations (e.g.
+# `down`) just exit. launchd's ExitTimeOut must allow time for the teardown.
+if [ "$1" = "up" ]; then
+  sleep 365d &
+  sleep_pid=$!
+  wait "$sleep_pid"
+fi
