@@ -28,6 +28,10 @@ with lib; {
 
   # Timezone sync (uses geoclue below)
   services.tzupdate.enable = true;
+  systemd.services.tzupdate.serviceConfig = {
+    Restart = "on-failure";
+    RestartSec = 30;
+  };
 
   # Location services
   location.provider = "geoclue2";
