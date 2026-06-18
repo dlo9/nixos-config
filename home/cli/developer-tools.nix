@@ -85,7 +85,6 @@ in {
           jq
           shellcheck
 
-          nixd # Nix language server
           nix-prefetch
           terminaltexteffects
 
@@ -94,6 +93,9 @@ in {
           wiper # Disk usage TUI
 
           tcping-go
+
+          # LSPs
+          nil
         ]
         ++
         # On linux, use nixpkgs devenv; on darwin, use flake input to avoid boehm-gc conflicts
@@ -177,6 +179,11 @@ in {
             show_symlink = true;
           };
         };
+      };
+
+      fresh-editor = {
+        enable = true;
+        defaultEditor = false;
       };
 
       jujutsu = {

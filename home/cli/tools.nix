@@ -250,6 +250,9 @@ with lib; {
 
         # Local files
         "/.claude/settings.local.json"
+
+        # Fresh editor state
+        "**/.fresh/windows.json"
       ];
     };
 
