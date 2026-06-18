@@ -1,7 +1,7 @@
 services:
   traefik:
     networks:
-      - shared
+      - traefik_shared
 
     container_name: traefik
 
@@ -27,7 +27,7 @@ services:
 
     labels:
       - traefik.enable=true
-      - traefik.docker.network=shared
+      - traefik.docker.network=traefik_shared
       - traefik.http.routers.dashboard.rule=Host(`traefik.laptop`)
       - traefik.http.routers.dashboard.service=api@internal
 
@@ -36,5 +36,8 @@ services:
       - traefik.http.middlewares.auth-david.headers.customrequestheaders.X-Webauth-User=david # Forgejo
       - traefik.http.middlewares.auth-david.headers.customrequestheaders.X-Webauth-Fullname=David Orchard # Forgejo
 
+# Shared bridge network, created up-front by all-docker-compose.sh so every project
+# (traefik, forgejo, linkding) can join it regardless of startup order.
 networks:
-  shared:
+  traefik_shared:
+    external: true

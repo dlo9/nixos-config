@@ -33,6 +33,9 @@ logs_dir="$state_dir/logs"
 # Create logs directory if it doesn't exist
 mkdir -p "$logs_dir"
 
+# Create network up-front so startup order doesn't matter
+docker network inspect traefik_shared >/dev/null 2>&1 || docker network create traefik_shared
+
 # Use read with find to process directories
 find . -type d -depth 1 | while read -r d; do
   # Extract directory name without path
@@ -59,9 +62,21 @@ find . -type d -depth 1 | while read -r d; do
       fi
     fi
 
-    # Run docker-compose
-    docker compose "$@" >> "$logs_dir/$dirname.stdout.log" 2>> "$logs_dir/$dirname.stderr.log" &
-    printf "%s\n\n" "Done"
+    if [ "$1" = "up" ]; then
+      # Start detached so we get a real exit status; an attached `up` would block
+      # the loop forever. Report failures instead of always printing "Done".
+      if docker compose "$@" -d >> "$logs_dir/$dirname.stdout.log" 2>> "$logs_dir/$dirname.stderr.log"; then
+        printf "%s\n\n" "$dirname: started"
+        # Stream container logs in the background for debugging
+        docker compose logs -f >> "$logs_dir/$dirname.stdout.log" 2>> "$logs_dir/$dirname.stderr.log" &
+      else
+        rc=$?
+        printf "%s\n\n" "$dirname: FAILED (exit $rc) -- see logs/$dirname.stderr.log"
+      fi
+    else
+      docker compose "$@" >> "$logs_dir/$dirname.stdout.log" 2>> "$logs_dir/$dirname.stderr.log"
+      printf "%s: exit %s\n\n" "$dirname" "$?"
+    fi
   fi
 
   # Return to the original directory
