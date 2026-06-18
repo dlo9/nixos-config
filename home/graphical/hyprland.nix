@@ -205,11 +205,27 @@ with builtins; {
           set -e
 
           if [[ $# -ne 1 ]]; then
-            echo "Usage: toggle-setting <option>"
+            echo "Usage: toggle-setting <section>:<option>"
             exit 1
           fi
 
-          hyprctl keyword "$1" "$(hyprctl getoption "$1" | awk 'NR==1 {print xor(1,$2)}')"
+          section="''${1%%:*}"
+          key="''${1#*:}"
+
+          # `hyprctl getoption` prints the value on the first line. Newer
+          # Hyprland reports bools as `bool: true`/`bool: false` (older builds
+          # used `int: 1`), so accept both and flip to the opposite.
+          cur="$(hyprctl getoption "$1" | awk 'NR==1 {print $2}')"
+          if [[ "$cur" == "true" || "$cur" == "1" ]]; then
+            new=false
+          else
+            new=true
+          fi
+
+          # Under the Lua config parser `hyprctl keyword` is rejected
+          # ("keyword can't work with non-legacy parsers"), so apply the change
+          # through `hyprctl eval` against the `hl.config` API instead.
+          hyprctl eval "hl.config({ $section = { $key = $new } })"
         '';
       }}/bin/toggle-setting";
 
