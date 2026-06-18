@@ -121,10 +121,10 @@ in {
           otree # JSON tree viewer
           somo
 
-          flashrom
+          #flashrom
           #noseyparker # Credential scanner
+          #vulnix # Vulnerability scanner
 
-          vulnix # Vulnerability scanner
           mdfried # Markdown reader
           trippy # Network diagnostics
           inxi # Hardware info
@@ -141,7 +141,7 @@ in {
           git-filter-repo
           nodejs_24 # Needed for claude code in vscode
 
-          diff-so-fancy
+          #diff-so-fancy
           difftastic
           lnav # Log file viewer
 

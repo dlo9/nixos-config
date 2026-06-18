@@ -30,8 +30,7 @@ with lib; {
       };
 
       zed-editor = {
-        enable = true;
-        package = pkgs.zed-editor;
+        enable = false;
       };
     };
   };
