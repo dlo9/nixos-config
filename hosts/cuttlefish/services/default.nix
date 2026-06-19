@@ -6,7 +6,6 @@
     ./ddns.nix
     ./github.nix
     #./iodine.nix
-    ./jellyfin.nix
     ./kubernetes.nix
     #./netdata.nix
     #./nexus.nix

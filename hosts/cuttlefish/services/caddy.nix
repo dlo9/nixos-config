@@ -92,14 +92,6 @@ in {
           '';
         };
 
-        jellyfin = {
-          inherit useACMEHost;
-          serverAliases = ["jellyfin.sigpanic.com"];
-          extraConfig = ''
-            reverse_proxy http://jellyfin.containers:8096
-          '';
-        };
-
         webdav = {
           inherit useACMEHost;
           serverAliases = ["webdav.sigpanic.com"];

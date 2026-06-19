@@ -1,11 +1,3 @@
-# Debugging
-```sh
-sudo machinectl shell jellyfin
-sudo journalctl -M jellyfin
-journalctl -u container@jellyfin.service
-To remove state: https://github.com/NixOS/nixpkgs/commit/3877ec5b2ff7436f4962ac0fe3200833cf78cb8b#commitcomment-19100105
-```
-
 # Kubernetes
 
 # Failed to create pod sandbox: rpc error: code = Unknown desc = failed to create containerd container: failed to stat parent: stat /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/10524/fs: no such file or directory
