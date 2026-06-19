@@ -27,7 +27,6 @@ with lib; {
       grep = "rg";
       top = "btm";
       htop = "btm";
-      ping = "gping";
       ps = "procs";
       watch = "viddy";
       z = "cd";
