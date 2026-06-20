@@ -18,10 +18,6 @@ in {
     boot.kernel.sysctl = {
       "net.ipv4.ip_forward" = lib.mkForce 1;
       "net.ipv6.conf.all.forwarding" = lib.mkForce 1;
-
-      # For macvlan
-      "net.ipv4.conf.all.arp_filter" = 1;
-      "net.ipv4.conf.all.rp_filter" = 1;
     };
 
     # Re-assert accept_ra=2 after networkd configures enp39s0: networkd zeroes accept_ra
@@ -46,65 +42,15 @@ in {
             [ "$(cat /sys/class/net/enp39s0/operstate 2>/dev/null)" = up ] && break
             sleep 1
           done
-          
+
           # Re-assert a few times to win the race with networkd's link config.
           for _ in 1 2 3; do echo 2 > "$ra/accept_ra" 2>/dev/null; sleep 2; done
-          
+
           # Toggle IPv6 to solicit an RA now instead of waiting for the next periodic one.
           echo 1 > "$ra/disable_ipv6" 2>/dev/null
           echo 0 > "$ra/disable_ipv6" 2>/dev/null
         '';
       };
     };
-
-    #systemd.network = {
-    #  links = {
-    #    # Randomize MAC of physical links
-    #    "10-host" = {
-    #      matchConfig.Type = "ether";
-    #      linkConfig = {
-    #        MACAddressPolicy = "random";
-    #        NamePolicy = "path";
-    #      };
-    #    };
-    #  };
-
-    #  networks = {
-    #    # Disable DHCP on physical links and add the host's vlan
-    #    "35-wired" = {
-    #      DHCP = "no";
-
-    #      macvlan = [
-    #        "cuttlefish"
-    #      ];
-    #    };
-
-    #    # Disable wireless
-    #    "35-wireless".DHCP = "no";
-
-    #    # Enable DHCP for cuttlefish's vlan
-    #    "40-cuttlefish" = {
-    #      name = "cuttlefish";
-    #      DHCP = "yes";
-    #      dhcpV4Config.Hostname = "cuttlefish";
-    #      domains = config.services.resolved.settings.Resolve.Domains;
-    #    };
-    #  };
-
-    #  netdevs = {
-    #    # Virtual network card for cuttlefish
-    #    "15-cuttlefish" = {
-    #      netdevConfig = {
-    #        Kind = "macvlan";
-    #        Name = "cuttlefish";
-    #        MACAddress = MACs.cuttlefish;
-    #      };
-
-    #      macvlanConfig = {
-    #        Mode = "bridge";
-    #      };
-    #    };
-    #  };
-    #};
   };
 }
