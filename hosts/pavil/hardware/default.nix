@@ -15,6 +15,7 @@
 
     # ./quirks.nix
     ./generated.nix
+    ./datasets.nix
   ];
 
   services.tlp.enable = true;
