@@ -80,5 +80,13 @@ in {
   # Better for Tahoe
   services.spacebar.enable = mkForce false;
 
+  # Enable firewall
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+    allowSigned = true;
+    allowSignedApp = true;
+  };
+
   nix.settings.trusted-users = ["david"];
 }
