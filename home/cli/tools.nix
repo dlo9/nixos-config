@@ -149,7 +149,7 @@ with lib; {
         # inline_height = 25; # https://github.com/atuinsh/atuin/issues/1289
         style = "compact";
         enter_accept = true;
-        filter_mode = "session";
+        filter_mode = "session-preload";
 
         # https://github.com/atuinsh/atuin/issues/952#issuecomment-2163044297
         daemon = {
