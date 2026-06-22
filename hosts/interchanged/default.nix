@@ -88,5 +88,7 @@ in {
     allowSignedApp = true;
   };
 
+  networking.computerName = "David’s MacBook Air";
+
   nix.settings.trusted-users = ["david"];
 }
