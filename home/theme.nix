@@ -6,6 +6,7 @@
 }:
 with lib; let
   tintyDataDir = "${config.home.homeDirectory}/.local/share/tinted-theming/tinty";
+  defaultScheme = "base16-tomorrow-night";
 in {
   home.sessionVariables = {
     TINTED_TMUX_OPTION_STATUSBAR = "1";
@@ -95,7 +96,7 @@ in {
       if [ -n "$current_scheme" ]; then
         run "$tinty_bin" apply "$current_scheme"
       else
-        run "$tinty_bin" apply "base24-wild-cherry"
+        run "$tinty_bin" apply "${defaultScheme}"
       fi
     fi
   '';
@@ -103,7 +104,9 @@ in {
   xdg.configFile = {
     "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
       shell = "fish -c '{}'";
-      default-scheme = "base24-wild-cherry";
+
+      default-scheme = defaultScheme;
+
       preferred-schemes = [
         "base16-gruvbox-dark"
         "base16-github-dark"
