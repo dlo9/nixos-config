@@ -134,6 +134,7 @@ in {
           csvlens
 
           fastmod # Search & replace tool
+          ast-grep # AST search & replace
           mcat
           mosh
           jjui
