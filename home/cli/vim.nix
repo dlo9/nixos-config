@@ -161,6 +161,12 @@ with lib; {
         root_markers = { '.git' },
       })
 
+      -- Make server message-requests non-blocking
+      vim.lsp.handlers['window/showMessageRequest'] = function(_, result)
+        vim.notify(('[lsp] %s'):format(result.message), vim.log.levels.WARN)
+        return vim.NIL
+      end
+
       -- LSP: enable servers (configs provided by nvim-lspconfig lsp/*.lua files)
       vim.lsp.enable({
         'rust_analyzer',
