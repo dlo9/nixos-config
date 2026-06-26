@@ -147,6 +147,10 @@ in {
   boot.kernel.sysctl = {
     # Defaults to 128 and causes 'too many open files' error for pods
     "fs.inotify.max_user_instances" = 1024;
+
+    # Defaults to 120 and causes thread devices to drop off
+    # https://github.com/matter-js/matterjs-server/blob/main/docs/os_requirements.md#stateful-firewalls-host-vm-hypervisor
+    "net.netfilter.nf_conntrack_udp_timeout_stream" = 1800;
   };
 
   # Give the kubelet's shutdown inhibitor enough time to drain pods before logind
