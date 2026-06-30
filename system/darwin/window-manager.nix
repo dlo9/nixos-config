@@ -42,36 +42,32 @@
 
   services.aerospace = {
     enable = lib.mkDefault false;
-    package = pkgs.unstable.aerospace;
-
-    # TODO:
-    # Fullscreen
-    # Dialogs: https://nikitabobko.github.io/AeroSpace/guide#dialog-heuristics
+    package = pkgs.master.aerospace;
 
     settings = {
+      # Disable cmd+H button
       automatically-unhide-macos-hidden-apps = true;
+
+      # Set default layout
       after-startup-command = ["layout tiles"];
-      #on-focus-changed = ["move-mouse window-lazy-center"];
-      exec-on-workspace-change = [
-        "/bin/sh"
-        "-c"
-        "${config.services.sketchybar.package}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
-      ];
+
+      #focus-follows-mouse.enabled = true;
+      on-focus-changed = ["move-mouse window-lazy-center"];
 
       workspace-to-monitor-force-assignment = {
         "1" = "built-in";
-        "9" = ["hdmi" "dp" "DELL P2721Q (1)" "DELL P2721Q (2)" "built-in"];
-        "10" = ["dp" "hdmi" "DELL P2721Q (2)" "DELL P2721Q (1)" "built-in"];
+        #  "9" = ["hdmi" "dp" "DELL P2721Q (1)" "DELL P2721Q (2)" "built-in"];
+        #  "10" = ["dp" "hdmi" "DELL P2721Q (2)" "DELL P2721Q (1)" "built-in"];
       };
 
+      # Set dialogs
       on-window-detected =
         map (app: {
           "if".app-id = app;
           run = "layout floating";
           check-further-callbacks = true;
         }) [
-          "com.apple.systempreferences"
-          "com.cisco.anyconnect.gui"
+          #    "com.apple.systempreferences"
         ];
 
       gaps = let
@@ -91,26 +87,7 @@
         ];
       };
 
-      mode = let
-        change-workspace = "${pkgs.writeShellApplication {
-          name = "change-workspace";
-
-          runtimeInputs = [
-            config.services.aerospace.package
-          ];
-
-          text = ''
-            workspace=$1
-            window_count="$(aerospace list-windows --workspace "$workspace" --count)"
-
-             if [[ "$window_count" -eq 0 ]]; then
-               aerospace summon-workspace "$workspace"
-             else
-               aerospace workspace "$workspace"
-             fi
-          '';
-        }}/bin/change-workspace";
-      in {
+      mode = {
         # Commands: https://nikitabobko.github.io/AeroSpace/commands
         main.binding = {
           alt-h = "layout tiles horizontal";
@@ -122,46 +99,35 @@
           alt-tab = "focus-back-and-forth";
           alt-shift-tab = "workspace-back-and-forth";
           alt-shift-q = "close";
-          alt-k = "exec-and-forget pkill -f aerospace";
+          alt-k = "exec-and-forget killall aerospace";
 
-          alt-enter = "exec-and-forget \"$HOME/Applications/Home Manager Apps/Alacritty.app/Contents/MacOS/alacritty\"";
+          alt-enter = "exec-and-forget open -n -a Alacritty";
 
           alt-left = "focus left --ignore-floating --boundaries all-monitors-outer-frame";
           alt-right = "focus right --ignore-floating --boundaries all-monitors-outer-frame";
           alt-up = "focus up --ignore-floating --boundaries all-monitors-outer-frame";
           alt-down = "focus down --ignore-floating --boundaries all-monitors-outer-frame";
 
-          alt-shift-left = "move left";
-          alt-shift-right = "move right";
-          alt-shift-up = "move up";
-          alt-shift-down = "move down";
+          alt-shift-left = "move --boundaries all-monitors-outer-frame left";
+          alt-shift-right = "move --boundaries all-monitors-outer-frame right";
+          alt-shift-up = "move --boundaries all-monitors-outer-frame up";
+          alt-shift-down = "move --boundaries all-monitors-outer-frame down";
 
           alt-ctrl-left = "move-node-to-monitor left";
           alt-ctrl-right = "move-node-to-monitor right";
           alt-ctrl-up = "move-node-to-monitor up";
           alt-ctrl-down = "move-node-to-monitor down";
 
-          # alt-1 = "workspace 1";
-          # alt-2 = "workspace 2";
-          # alt-3 = "workspace 3";
-          # alt-4 = "workspace 4";
-          # alt-5 = "workspace 5";
-          # alt-6 = "workspace 6";
-          # alt-7 = "workspace 7";
-          # alt-8 = "workspace 8";
-          # alt-9 = "workspace 9";
-          # alt-0 = "workspace 10";
-
-          alt-1 = "exec-and-forget ${change-workspace} 1";
-          alt-2 = "exec-and-forget ${change-workspace} 2";
-          alt-3 = "exec-and-forget ${change-workspace} 3";
-          alt-4 = "exec-and-forget ${change-workspace} 4";
-          alt-5 = "exec-and-forget ${change-workspace} 5";
-          alt-6 = "exec-and-forget ${change-workspace} 6";
-          alt-7 = "exec-and-forget ${change-workspace} 7";
-          alt-8 = "exec-and-forget ${change-workspace} 8";
-          alt-9 = "exec-and-forget ${change-workspace} 9";
-          alt-0 = "exec-and-forget ${change-workspace} 10";
+          alt-1 = "workspace 1";
+          alt-2 = "workspace 2";
+          alt-3 = "workspace 3";
+          alt-4 = "workspace 4";
+          alt-5 = "workspace 5";
+          alt-6 = "workspace 6";
+          alt-7 = "workspace 7";
+          alt-8 = "workspace 8";
+          alt-9 = "workspace 9";
+          alt-0 = "workspace 10";
 
           alt-shift-1 = "move-node-to-workspace 1";
           alt-shift-2 = "move-node-to-workspace 2";

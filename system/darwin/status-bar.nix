@@ -7,15 +7,6 @@
   # Hide menu bar, since spacebar is used instead
   system.defaults.NSGlobalDomain._HIHideMenuBar = config.services.spacebar.enable;
 
-  services.sketchybar = {
-    enable = config.services.aerospace.enable;
-  };
-
-  fonts.packages = with pkgs; [
-    # For application icons
-    sketchybar-app-font
-  ];
-
   launchd.user.agents.spacebar.serviceConfig = lib.mkIf config.services.spacebar.enable {
     StandardErrorPath = "/tmp/spacebar.err.log";
     StandardOutPath = "/tmp/spacebar.out.log";
