@@ -90,6 +90,14 @@ with lib; let
   '';
 in {
   config = mkIf config.graphical.enable {
+    # A `nixos-rebuild switch` reloads waybar via SIGUSR2 (home-manager's
+    # default X-Reload-Triggers + ExecReload for the waybar unit). On a
+    # SIGUSR2 reload waybar doesn't respawn the persistent per-workspace
+    # `custom/ws*` scripts above, so the workspace section goes blank until a
+    # full process restart. Force sd-switch to restart the unit instead.
+    systemd.user.services.waybar.Unit."X-SwitchMethod" =
+      mkIf config.programs.waybar.systemd.enable "restart";
+
     programs = {
       # System bar
       waybar = {
