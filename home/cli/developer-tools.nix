@@ -72,10 +72,10 @@ with lib; let
   };
 in {
   config = mkIf config.developer-tools.enable {
-    # jj merge/split tools, not yet in nixpkgs
+    # jj diff/split tools, not yet in nixpkgs
     eget.packages = [
       "emilien-jegou/oyui"
-      "modem-dev/hunk"
+      "umputun/revdiff"
     ];
 
     home = {
@@ -83,6 +83,9 @@ in {
         "$HOME/.cargo/bin"
         "$HOME/go/bin"
       ];
+
+      # Generated from the current scheme by a tinty hook (see theme.nix)
+      sessionVariables.REVDIFF_THEME = "tinty";
 
       packages = with pkgs;
       # All systems
@@ -221,6 +224,12 @@ in {
             ll = ["log" "-r" "all()"];
 
             blame = ["file" "annotate"];
+
+            # Review TUI: `jj review` (smart default), `jj review main @`, etc.
+            # revdiff resolves jj revisions natively, so it isn't subject to
+            # jj piping diff tool stdout through the pager (it renders on
+            # /dev/tty), and shows the whole changeset with a file tree
+            review = ["util" "exec" "--" "${config.eget.path}/revdiff"];
           };
 
           revset-aliases = {
@@ -250,12 +259,6 @@ in {
               program = "${config.eget.path}/oyui";
               edit-args = ["diff" "$left" "$right"];
             };
-
-            # Decrypt sops files before diffing with difftastic: jj diff --tool difft
-            difft = {
-              program = "${jj-sops-diff}/bin/jj-sops-diff";
-              diff-args = ["$left" "$right"];
-            };
           };
 
           signing = {
@@ -265,10 +268,8 @@ in {
           };
 
           ui = {
-            # Page everything through the hunk TUI, which renders :git diffs
-            # with syntax highlighting and falls back to plain text otherwise
-            pager = ["${config.eget.path}/hunk" "pager"];
-            diff-formatter = ":git";
+            # Decrypt sops files before diffing
+            diff-formatter = ["${jj-sops-diff}/bin/jj-sops-diff" "$left" "$right"];
             #merge-editor = "mergiraf";
             diff-editor = "oyui";
 
