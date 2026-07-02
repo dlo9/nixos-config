@@ -280,11 +280,6 @@ in {
     };
 
     xdg.configFile = mylib.xdgFiles {
-      # https://github.com/modem-dev/hunk
-      "hunk/config.toml" = {
-        vcs = "jj";
-      };
-
       # https://github.com/dlvhdr/gh-dash
       "gh-dash/config.yml" = {
         prSections = [
