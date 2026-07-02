@@ -27,7 +27,6 @@
   config = {
     networking.hostName = hostname;
     programs.fish.enable = true;
-    programs.fish.package = pkgs.unstable.fish;
     environment.shells = [config.programs.fish.package];
   };
 }
