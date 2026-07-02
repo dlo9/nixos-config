@@ -20,7 +20,7 @@
 
   services.tlp.enable = true;
 
-  # Zen kernel
-  boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_zen;
-  boot.zfs.package = pkgs.unstable.zfs;
+  # Zen kernel, frequently breaks zfs module
+  #boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_zen;
+  #boot.zfs.package = pkgs.unstable.zfs;
 }
