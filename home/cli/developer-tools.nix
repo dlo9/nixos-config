@@ -72,6 +72,12 @@ with lib; let
   };
 in {
   config = mkIf config.developer-tools.enable {
+    # jj merge/split tools, not yet in nixpkgs
+    eget.packages = [
+      "emilien-jegou/oyui"
+      "modem-dev/hunk"
+    ];
+
     home = {
       sessionPath = [
         "$HOME/.cargo/bin"
@@ -236,6 +242,22 @@ in {
 
           revsets.bookmark-advance-to = "@-";
 
+          merge-tools = {
+            # Diff editor: jj split/diffedit/commit -i/squash -i --tool oyui.
+            # Editor only: `jj diff --tool oyui` can't work since jj pipes a
+            # diff tool's stdout through the pager, which garbles TUIs
+            oyui = {
+              program = "${config.eget.path}/oyui";
+              edit-args = ["diff" "$left" "$right"];
+            };
+
+            # Decrypt sops files before diffing with difftastic: jj diff --tool difft
+            difft = {
+              program = "${jj-sops-diff}/bin/jj-sops-diff";
+              diff-args = ["$left" "$right"];
+            };
+          };
+
           signing = {
             backend = config.programs.git.settings.gpg.format;
             key = config.programs.git.settings.user.signingkey;
@@ -243,16 +265,26 @@ in {
           };
 
           ui = {
-            # Decrypt sops files before diffing
-            diff-formatter = ["${jj-sops-diff}/bin/jj-sops-diff" "$left" "$right"];
+            # Page everything through the hunk TUI, which renders :git diffs
+            # with syntax highlighting and falls back to plain text otherwise
+            pager = ["${config.eget.path}/hunk" "pager"];
+            diff-formatter = ":git";
             #merge-editor = "mergiraf";
-            diff-editor = ":builtin";
+            diff-editor = "oyui";
+
+            # oyui shows its own help instead of the JJ-INSTRUCTIONS file
+            diff-instructions = false;
           };
         };
       };
     };
 
     xdg.configFile = mylib.xdgFiles {
+      # https://github.com/modem-dev/hunk
+      "hunk/config.toml" = {
+        vcs = "jj";
+      };
+
       # https://github.com/dlvhdr/gh-dash
       "gh-dash/config.yml" = {
         prSections = [

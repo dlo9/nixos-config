@@ -14,6 +14,7 @@ with lib; {
   imports =
     [
       ./cli
+      ./eget.nix
       ./graphical
       ./options.nix
       ./theme.nix
@@ -64,7 +65,6 @@ with lib; {
 
   home = {
     sessionPath = [
-      "$HOME/.local/bin"
       "$HOME/.wrap/shims"
     ];
 

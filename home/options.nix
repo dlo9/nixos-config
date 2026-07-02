@@ -31,6 +31,24 @@ with builtins; {
       };
     };
 
+    eget = {
+      packages = mkOption {
+        type = listOf nonEmptyStr;
+        default = [];
+        description = ''
+          GitHub repos (owner/repo) whose release binaries to install with
+          eget on activation. Binaries are only downloaded when the release
+          is newer than the installed copy.
+        '';
+      };
+
+      path = mkOption {
+        type = nonEmptyStr;
+        default = "${config.home.homeDirectory}/.local/bin";
+        description = "Directory eget installs binaries into; added to the session PATH";
+      };
+    };
+
     graphical.enable = mkEnableOption "graphical programs" // {default = osConfig.graphical.enable;};
 
     developer-tools.enable = mkEnableOption "developer tools" // {default = osConfig.developer-tools.enable;};
