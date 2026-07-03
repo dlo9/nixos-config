@@ -41,7 +41,7 @@ in {
     name = "immich";
 
     services = let
-      version = "v2";
+      version = "v3";
     in {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${version}";
@@ -96,7 +96,7 @@ in {
       };
 
       redis = {
-        image = "redis:6.2-alpine";
+        image = "ghcr.io/valkey-io/valkey:9-alpine";
         environment.TZ = "America/Los_Angeles";
         ports = ["6379"];
       };
