@@ -43,6 +43,9 @@ in {
       # Packaged in nixpkgs, but the nix build has no systray icon on macOS
       "flameshot"
 
+      # nixpkgs notion crashes for unknown reasons
+      "notion"
+
       # Installed here because they expect "helper tools"
       "slack"
       "postman"

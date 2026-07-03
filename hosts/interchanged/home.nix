@@ -65,7 +65,6 @@ in {
     hoppscotch
     postgresql
     google-clasp
-    notion-app
     google-chrome
 
     # GUI apps that need TCC permissions — re-signed with a stable cert on
