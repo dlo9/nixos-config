@@ -47,6 +47,17 @@ with builtins; {
         default = "${config.home.homeDirectory}/.local/bin";
         description = "Directory eget installs binaries into; added to the session PATH";
       };
+
+      assetFilters = mkOption {
+        type = listOf nonEmptyStr;
+        default = ["^.deb" "^.rpm"];
+        description = ''
+          Asset filters applied to every eget package, for releases that
+          publish several equivalent assets per system (a `^` prefix
+          anti-matches). The default skips distro packaging in favour of
+          plain archives.
+        '';
+      };
     };
 
     graphical.enable = mkEnableOption "graphical programs" // {default = osConfig.graphical.enable;};

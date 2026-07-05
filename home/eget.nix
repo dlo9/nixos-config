@@ -7,7 +7,12 @@
   pkgs,
   ...
 }:
-with lib; {
+with lib; let
+  # eget only honours asset_filters in per-repo sections, not [global]
+  egetConfig = (pkgs.formats.toml {}).generate "eget.toml" (
+    genAttrs config.eget.packages (_: {asset_filters = config.eget.assetFilters;})
+  );
+in {
   home.sessionPath = [config.eget.path];
 
   home.activation = mkIf (config.eget.packages != []) {
@@ -15,7 +20,7 @@ with lib; {
       run mkdir -p ${escapeShellArg config.eget.path}
 
       for repo in ${escapeShellArgs config.eget.packages}; do
-        run ${pkgs.eget}/bin/eget "$repo" --to ${escapeShellArg config.eget.path} --upgrade-only \
+        run env EGET_CONFIG=${egetConfig} ${pkgs.eget}/bin/eget "$repo" --to ${escapeShellArg config.eget.path} --upgrade-only \
           || warnEcho "eget: failed to install $repo"
       done
     '';
