@@ -70,6 +70,53 @@ with lib; let
       difft --color always --display side-by-side-show-both --width "$width" "$TMPDIR/left" "$TMPDIR/right" || true
     '';
   };
+
+  # Translates jj-style arguments into revdiff positionals ([base] [against])
+  # so the diff direction matches jj:
+  #   jj review                  working copy changes (revdiff default)
+  #   jj review REV              what REV introduces, like `jj show REV`
+  #   jj review --from X --to Y  like `jj diff` (either side defaults to @)
+  jj-review = pkgs.writeShellApplication {
+    name = "jj-review";
+    text = ''
+      from="" to="" rev=""
+      passthrough=()
+
+      while [ $# -gt 0 ]; do
+        case "$1" in
+          --from) from="''${2:?--from needs a revision}"; shift ;;
+          --from=*) from="''${1#--from=}" ;;
+          --to) to="''${2:?--to needs a revision}"; shift ;;
+          --to=*) to="''${1#--to=}" ;;
+          -*) passthrough+=("$1") ;;
+          *)
+            if [ -n "$rev" ]; then
+              echo "jj review: use --from/--to to compare two revisions" >&2
+              exit 2
+            fi
+            rev="$1"
+            ;;
+        esac
+        shift
+      done
+
+      if [ -n "$rev" ] && { [ -n "$from" ] || [ -n "$to" ]; }; then
+        echo "jj review: pass either a revision or --from/--to, not both" >&2
+        exit 2
+      fi
+
+      if [ -n "$rev" ]; then
+        from="($rev)-"
+        to="$rev"
+      fi
+
+      if [ -n "$from" ] || [ -n "$to" ]; then
+        exec ${config.eget.path}/revdiff "''${from:-@}" "''${to:-@}" "''${passthrough[@]}"
+      fi
+
+      exec ${config.eget.path}/revdiff "''${passthrough[@]}"
+    '';
+  };
 in {
   config = mkIf config.developer-tools.enable {
     # jj diff/split tools, not yet in nixpkgs
@@ -225,11 +272,12 @@ in {
 
             blame = ["file" "annotate"];
 
-            # Review TUI: `jj review` (smart default), `jj review main @`, etc.
+            # Review TUI: `jj review` (smart default), `jj review main`,
+            # `jj review --from X --to Y` (see the jj-review wrapper above).
             # revdiff resolves jj revisions natively, so it isn't subject to
             # jj piping diff tool stdout through the pager (it renders on
             # /dev/tty), and shows the whole changeset with a file tree
-            review = ["util" "exec" "--" "${config.eget.path}/revdiff"];
+            review = ["util" "exec" "--" "${jj-review}/bin/jj-review"];
           };
 
           revset-aliases = {
