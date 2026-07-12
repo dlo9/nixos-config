@@ -306,7 +306,7 @@ with builtins; {
           decoration = {
             rounding = 5;
             dim_inactive = true;
-            dim_strength = 0.4;
+            dim_strength = 0.2;
 
             blur = {
               noise = 0.1;
