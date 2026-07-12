@@ -104,6 +104,18 @@ in {
         enable = mkDefault isLinux;
         systemd.enable = mkDefault isLinux;
 
+        # Waybar <= 0.15.0 freezes permanently when a bar is torn down (output
+        # removed, e.g. on wake from sleep): Custom::~Custom() runs a blocking
+        # waitpid() on the GTK main thread and can race the restart-interval
+        # respawn of the persistent custom/ws* scripts above, waiting forever
+        # on a child that never received its SIGTERM. Bound the wait and
+        # SIGKILL stragglers. Upstream rewrote the module on master (async
+        # LineStream, no waitpid in the destructor) — drop this once the
+        # release after 0.15.0 lands in nixpkgs.
+        package = pkgs.waybar.overrideAttrs (old: {
+          patches = (old.patches or []) ++ [./custom-module-nonblocking-destructor.patch];
+        });
+
         # https://github.com/Alexays/Waybar/wiki/Configuration
         # Number formatting: https://fmt.dev/latest/syntax.html#format-specification-mini-language
         settings = {

@@ -1,0 +1,28 @@
+--- a/src/modules/custom.cpp	2026-07-12 14:38:56.702016329 -0700
++++ b/src/modules/custom.cpp	2026-07-12 14:39:16.344270174 -0700
+@@ -31,7 +31,24 @@
+ waybar::modules::Custom::~Custom() {
+   if (pid_ != -1) {
+     killpg(pid_, SIGTERM);
+-    waitpid(pid_, NULL, 0);
++    // Also signal the child directly: continuousWorker() may have respawned
++    // the script moments ago, and a child that hasn't finished setpgid() yet
++    // is missed by killpg alone.
++    kill(pid_, SIGTERM);
++    // Never block indefinitely here: this destructor runs on the GTK main
++    // thread, and a child that missed the signal would freeze the whole bar.
++    // Give it 250ms to exit, then SIGKILL and give it another 250ms; in the
++    // worst case abandon it as a zombie instead of hanging.
++    for (int i = 0; i < 50; ++i) {
++      if (waitpid(pid_, NULL, WNOHANG) != 0) {
++        break;
++      }
++      if (i == 24) {
++        killpg(pid_, SIGKILL);
++        kill(pid_, SIGKILL);
++      }
++      usleep(10000);
++    }
+     pid_ = -1;
+   }
+ }
