@@ -183,7 +183,7 @@ in {
 
               "custom/displays" = {
                 format = "󰍹 ";
-                on-click = "exec ${pkgs.wdisplays}/bin/wdisplays";
+                on-click = "exec ${pkgs.nwg-displays}/bin/nwg-displays";
                 tooltip = false;
               };
 

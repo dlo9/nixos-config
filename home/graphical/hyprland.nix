@@ -13,6 +13,7 @@ with builtins; {
   config = mkIf (config.graphical.enable && isLinux) {
     home.packages = with pkgs; [
       hyprpicker
+      nwg-displays
     ];
 
     # Tie Wayland-targeted user services (waybar, etc.) to Hyprland's session
@@ -264,6 +265,16 @@ with builtins; {
     in {
       enable = mkDefault (!osConfig.services.desktopManager.plasma6.enable);
       configType = "lua";
+
+      # nwg-displays writes ~/.config/hypr/{monitors,workspaces}.lua on Apply.
+      # extraConfig renders at the end of hyprland.lua, after the static
+      # `monitor` rules below — Hyprland resolves monitor rules last-match-wins,
+      # so the nwg-displays layout overrides them once it exists. pcall keeps a
+      # missing file from erroring the config before the first Apply.
+      extraConfig = ''
+        pcall(require, "monitors")
+        pcall(require, "workspaces")
+      '';
 
       # https://wiki.hypr.land/Configuring/Basics/Variables/
       settings = {
