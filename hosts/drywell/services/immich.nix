@@ -102,11 +102,12 @@ in {
       };
 
       postgres = {
-        image = "ghcr.io/immich-app/postgres:16-vectorchord0.4.3-pgvectors0.2.0";
+        image = "ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1";
         environment.TZ = "America/Los_Angeles";
         env_file = [config.sops.secrets.immich-postgres.path];
         ports = ["5432"];
-        volumes = ["/services/immich/postgres:/var/lib/postgresql/data"];
+        # 18+ images moved PGDATA to a major-version subdir under /var/lib/postgresql
+        volumes = ["/services/immich/postgres:/var/lib/postgresql"];
       };
     };
   };
