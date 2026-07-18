@@ -114,6 +114,11 @@ in {
     kubelet.extraConfig = {
       shutdownGracePeriod = "60s"; # total budget to drain pods on shutdown
       shutdownGracePeriodCriticalPods = "15s"; # subset reserved for critical pods (< total)
+
+      # Tighter rotation than the 10Mi/5 defaults so per-container worst case is
+      # 15Mi, keeping total usage well inside the /var/log/pods tmpfs below
+      containerLogMaxSize = "5Mi";
+      containerLogMaxFiles = 3;
     };
 
     # Allow privileged containers
@@ -143,6 +148,16 @@ in {
     7586
     7587
   ];
+
+  # Keep container logs in RAM: they're a constant stream of small appends that
+  # churn the root dataset (txg commits + snapshot growth) for ~100Mi of data.
+  # Logs don't survive a reboot; `kubectl logs` is unaffected. Cluster-wide usage
+  # stays far below this cap because of the rotation limits set above.
+  fileSystems."/var/log/pods" = {
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = ["size=2G" "mode=0755" "nosuid" "nodev" "noexec"];
+  };
 
   boot.kernel.sysctl = {
     # Defaults to 128 and causes 'too many open files' error for pods
