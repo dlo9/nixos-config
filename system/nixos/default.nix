@@ -79,9 +79,14 @@ with lib; {
   };
 
   services.journald.extraConfig = ''
-    SystemMaxUse=256M    # Maximum total journal size
-    RuntimeMaxUse=128M   # Maximum journal size in temporary storage
-    MaxFileSec=1month    # Maximum time to retain log files
+    # Maximum total journal size
+    SystemMaxUse=500M
+
+    # Maximum journal size in temporary storage
+    RuntimeMaxUse=128M
+
+    # Maximum time to retain log files
+    MaxFileSec=1year
   '';
 
   # This value determines the NixOS release from which the default
