@@ -171,7 +171,6 @@ in {
           dlo9.cidr
           dlo9.pvw # Port viewer, pvw -aon
           carl
-          dlo9.cy
           dlo9.elio # TUI file manager
           dlo9.croft # TUI vscode thing?
           otree # JSON tree viewer
