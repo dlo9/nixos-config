@@ -4,6 +4,7 @@
     ./caddy.nix
     ./certs.nix
     ./ddns.nix
+    ./git-ssh-proxy.nix
     ./github.nix
     #./iodine.nix
     ./kubernetes.nix

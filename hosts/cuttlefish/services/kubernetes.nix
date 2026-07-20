@@ -141,6 +141,9 @@ in {
     # Victoria Metrics
     8428
 
+    # Git SSH proxy (see services/git-ssh-proxy.nix)
+    2222
+
     # Matter
     5540
     5580
