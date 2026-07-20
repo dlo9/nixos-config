@@ -11,9 +11,6 @@
     virtualisation.oci-containers.backend = "docker";
     # environment.etc."cni/net.d".enable = false;
 
-    environment.systemPackages = [pkgs.dlo9.nss-docker];
-    system.nssDatabases.hosts = ["docker"];
-
     virtualisation.containerd.settings = {
       plugins."io.containerd.grpc.v1.cri".registry.config_path = "/etc/containerd/certs.d";
     };
