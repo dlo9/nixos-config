@@ -58,5 +58,34 @@ with lib; {
     networking.firewall.interfaces."br-+".allowedTCPPorts = [
       config.services.gitea-actions-runner.instances.cuttlefish.settings.cache.proxy_port
     ];
+
+    # Run the runner as a static system user instead of the module's default
+    # DynamicUser. DynamicUser mounts the StateDirectory (the job workspace) with
+    # an idmapped, `noexec` mount, which blocks executing freshly built binaries
+    # and composite-action scripts from the workspace on `native` jobs. A static
+    # user's StateDirectory is a plain, exec-capable directory.
+    users.users.gitea-runner = {
+      isSystemUser = true;
+      group = "gitea-runner";
+      home = "/var/lib/gitea-runner";
+    };
+    users.groups.gitea-runner = {};
+
+    systemd.services.gitea-runner-cuttlefish.serviceConfig = {
+      DynamicUser = mkForce false;
+      Group = "gitea-runner";
+
+      # DynamicUser implied this hardening; re-add it explicitly so dropping
+      # DynamicUser doesn't widen the runner's host access. None of these add
+      # noexec to the StateDirectory — that came only from DynamicUser's idmapped
+      # mount, which is now gone. (SupplementaryGroups=docker, set by the module,
+      # is preserved, so container jobs still reach the Docker socket.)
+      ProtectSystem = "strict";
+      ProtectHome = "read-only";
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      RestrictSUIDSGID = true;
+      RemoveIPC = true;
+    };
   };
 }
