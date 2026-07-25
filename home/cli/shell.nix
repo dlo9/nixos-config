@@ -73,6 +73,18 @@ with lib; {
             set -g @emulate-scroll-for-no-mouse-alternate-buffer on
           '';
         }
+        {
+          plugin = pkgs.tmuxPlugins.resurrect;
+          extraConfig = ''
+            # Save pane scrollback too
+            set -g @resurrect-capture-pane-contents 'on'
+
+            # Beyond the built-in defaults (vim, less, htop, ...), restore these with
+            # their arguments. Claude Code's binary is named by version, so match by
+            # substring and resume the pane's most recent conversation
+            set -g @resurrect-processes 'ssh watch "~claude->claude --continue"'
+          '';
+        }
       ];
 
       extraConfig = ''
@@ -100,6 +112,13 @@ with lib; {
         set -as terminal-features ",*:RGB"
         set -g allow-passthrough on
         source-file ~/.local/share/tinted-theming/tinty/tmux-colors-file.conf
+
+        # Autosave sessions for crash recovery. Loaded here instead of via the plugins
+        # list because home-manager loads plugins before extraConfig, and continuum's
+        # autosave hook lives in status-right, which the theme above overwrites
+        set -g @continuum-restore 'on'
+        set -g @continuum-save-interval '5'
+        run-shell ${pkgs.tmuxPlugins.continuum.rtp}
       '';
     };
 
