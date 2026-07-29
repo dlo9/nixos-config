@@ -143,6 +143,7 @@ in {
 
           nix-prefetch
           terminaltexteffects
+          eget
 
           wrap
           fselect # Find, but with SQL
