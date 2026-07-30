@@ -123,6 +123,9 @@ in {
     eget.packages = [
       "emilien-jegou/oyui"
       "umputun/revdiff"
+      "mrjackwills/havn" # Port scanner
+      "allyring/pvw" # Port viewer, pvw -aon
+      "bschaatsbergen/cidr"
     ];
 
     home = {
@@ -168,11 +171,7 @@ in {
           ]
         )
         ++ [
-          dlo9.havn # Port scanner
-          dlo9.cidr
-          dlo9.pvw # Port viewer, pvw -aon
           carl
-          dlo9.elio # TUI file manager
           dlo9.croft # TUI vscode thing?
           otree # JSON tree viewer
           somo
@@ -208,7 +207,7 @@ in {
         # Linux only
         (optionals isLinux [
           isd
-          (dlo9.rustnet.override {rustPlatform = pkgs.unstable.rustPlatform;})
+          rustnet
           unstable.claude-code
           android-tools # adb
         ]);
