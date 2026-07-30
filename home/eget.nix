@@ -20,8 +20,11 @@ in {
       run mkdir -p ${escapeShellArg config.eget.path}
 
       for repo in ${escapeShellArgs config.eget.packages}; do
-        run env EGET_CONFIG=${egetConfig} ${pkgs.eget}/bin/eget "$repo" --to ${escapeShellArg config.eget.path} --upgrade-only \
-          || warnEcho "eget: failed to install $repo"
+        # stdin is closed so that a repo with no asset for this system fails
+        # instead of prompting for a manual selection
+        run env EGET_CONFIG=${egetConfig} ${pkgs.eget}/bin/eget "$repo" --to ${escapeShellArg config.eget.path} \
+          --system ${escapeShellArg config.eget.system} --upgrade-only < /dev/null \
+          || warnEcho "eget: failed to install $repo (no ${config.eget.system} asset?)"
       done
     '';
   };

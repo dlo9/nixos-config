@@ -48,6 +48,16 @@ with builtins; {
         description = "Directory eget installs binaries into; added to the session PATH";
       };
 
+      system = mkOption {
+        type = nonEmptyStr;
+        default = with pkgs.stdenv.hostPlatform.go; "${GOOS}/${GOARCH}";
+        description = ''
+          GOOS/GOARCH pair eget picks release assets for. Defaults to the
+          system nix is building for, rather than the one the eget binary
+          itself was built for. Use "all" to pick assets interactively.
+        '';
+      };
+
       assetFilters = mkOption {
         type = listOf nonEmptyStr;
         default = ["^.deb" "^.rpm"];
