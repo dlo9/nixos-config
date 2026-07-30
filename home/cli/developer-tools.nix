@@ -111,10 +111,10 @@ with lib; let
       fi
 
       if [ -n "$from" ] || [ -n "$to" ]; then
-        exec ${config.eget.path}/revdiff "''${from:-@}" "''${to:-@}" "''${passthrough[@]}"
+        exec ${config.eget.path}/revdiff "''${from:-@}" "''${to:-@}" --compact "''${passthrough[@]}"
       fi
 
-      exec ${config.eget.path}/revdiff "''${passthrough[@]}"
+      exec ${config.eget.path}/revdiff --compact "''${passthrough[@]}"
     '';
   };
 in {
