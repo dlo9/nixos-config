@@ -123,7 +123,6 @@ in {
     eget.packages = [
       "emilien-jegou/oyui"
       "umputun/revdiff"
-      "mrjackwills/havn" # Port scanner
       "allyring/pvw" # Port viewer, pvw -aon
       "bschaatsbergen/cidr"
     ];
@@ -173,6 +172,7 @@ in {
         ++ [
           carl
           dlo9.croft # TUI vscode thing?
+          dlo9.havn # Port scanner
           otree # JSON tree viewer
           somo
 
