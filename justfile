@@ -19,6 +19,19 @@ rebuild-macos cmd="build" host=hostname:
 rebuild-android cmd="build" host=hostname:
     nix-on-droid --flake ".#{{host}}" {{cmd}} --option fallback true --show-trace |& nom
 
+forecast-linux host=hostname:
+    nix run nixpkgs#nix-forecast -- -c ".#nixosConfigurations.{{host}}" --show-missing
+
+forecast-macos host=hostname:
+    nix run nixpkgs#nix-forecast -- -c ".#darwinConfigurations.{{host}}" --show-missing
+
+forecast-android host=hostname:
+    nix run nixpkgs#nix-forecast -- -c ".#nixOnDroidConfigurations.{{host}}" --show-missing
+
+# Shows what would be built/downloaded on the next rebuild
+forecast host=hostname:
+    just "forecast-{{os()}}" {{host}}
+
 build host=hostname:
     just "rebuild-{{os()}}" build {{host}}
 
