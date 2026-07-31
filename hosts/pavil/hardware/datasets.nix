@@ -12,7 +12,7 @@ in {
 
     settings = {
       # Runtime properties written by the zfs-shutdown service, not config.
-      ignoredProperties = ["nixos:*"];
+      ignoredProperties = ["nixos:shutdown-time"];
 
       datasets = let
         # Marker for parent containers that only group children.
@@ -27,16 +27,16 @@ in {
           // {
             compression = "zstd";
             atime = "off";
+            keylocation = "prompt";
+
+            # Enable posix ACLs
             xattr = "sa";
             dnodesize = "auto";
             acltype = "posix";
-            keylocation = "prompt";
           };
 
         # Emergency free space, reserved so the pool can never fully fill
-        "fast/reserved".properties =
-          container
-          // {
+        "fast/reserved".properties = container // {
             refreservation = 50 * GB;
           };
 
@@ -54,45 +54,35 @@ in {
         ### Users Homes ###
         ###################
 
-        "fast/home".properties = {
+        "fast/home".properties = container // {
           mountpoint = "/home";
-          canmount = "off";
         };
+
+        "fast/home/root".properties.mountpoint = "/root";
 
         # Child datasets (.cache, Downloads, code) inherit their mountpoint
         # from this dataset, so only the parent needs an explicit mountpoint.
         "fast/home/david".properties = {
           mountpoint = "/home/david";
-          dnodesize = "auto";
-          acltype = "posix";
+          #dnodesize = "auto";
+          #acltype = "posix";
         };
 
         "fast/home/david/.cache".properties = {};
         "fast/home/david/Downloads".properties = {};
         "fast/home/david/code".properties = {};
 
-        "fast/home/root".properties = {
-          mountpoint = "/root";
-        };
-
         #############
         ### Games ###
         #############
 
-        "fast/games".properties =
-          container
-          // {
-            dnodesize = "auto";
-            acltype = "posix";
+        "fast/games".properties = container // {
+            #dnodesize = "auto";
+            #acltype = "posix";
           };
 
-        "fast/games/lutris".properties = {
-          mountpoint = "/home/david/.local/share/lutris";
-        };
-
-        "fast/games/steam".properties = {
-          mountpoint = "/home/david/.local/share/Steam";
-        };
+        "fast/games/lutris".properties.mountpoint = "/home/david/.local/share/lutris";
+        "fast/games/steam".properties.mountpoint = "/home/david/.local/share/Steam";
       };
     };
   };
