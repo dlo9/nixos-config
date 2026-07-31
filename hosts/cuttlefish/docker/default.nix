@@ -8,6 +8,7 @@
   config = {
     # Can't use podman and k8s at the same time
     # https://github.com/NixOS/nixpkgs/issues/130804
+    virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
     # environment.etc."cni/net.d".enable = false;
 

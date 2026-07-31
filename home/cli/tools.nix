@@ -200,6 +200,7 @@ with lib; {
             "ve-.*"
             "tailscale.*"
             "docker.*"
+            "podman.*"
             "flannel.*"
             "mynet"
           ];
