@@ -155,10 +155,6 @@ with lib; {
           # Display tool
           ddcutil
 
-          #kopia # Backups
-
-          #geekbench_6
-
           # Scanning
           simple-scan
 
@@ -168,15 +164,8 @@ with lib; {
           # HDD info
           smartmontools
 
-          # Notes app
-          #anytype
-          #master.appflowy
-
           # Video player
           mpv
-
-          # PDF viewers
-          kdePackages.okular
 
           # Key tester
           wev
@@ -189,8 +178,6 @@ with lib; {
 
           # GUI-ish bluetooth control
           bluetuith
-
-          karere # Whatsapp
 
           # Image viewer
           #loupe
