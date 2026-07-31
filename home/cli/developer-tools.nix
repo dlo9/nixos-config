@@ -240,6 +240,7 @@ in {
       fresh-editor = {
         enable = true;
         defaultEditor = false;
+        package = pkgs.unstable.fresh-editor;
       };
 
       jujutsu = {
