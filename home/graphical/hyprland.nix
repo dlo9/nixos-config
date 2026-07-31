@@ -112,9 +112,17 @@ with builtins; {
       };
     };
 
+    # start-hyprland is a supervisor: it runs Hyprland, and on an unclean exit
+    # restarts it in safe mode rather than letting the login session end. Its own
+    # log says which path was taken ("Hyprland exit cleanly." vs "Hyprland exit
+    # not-cleanly, restarting"), and that is the only record of why a session
+    # died -- Hyprland's own log just stops. Left on the tty it scrolls away with
+    # the session, so route it to the journal, where it survives the teardown and
+    # lines up with the logind/kernel messages for the same instant:
+    #   journalctl -t hyprland-session
     programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
-        exec start-hyprland
+        exec systemd-cat --identifier=hyprland-session --stderr-priority=warning start-hyprland
       end
     '';
 
