@@ -125,6 +125,7 @@ in {
       "umputun/revdiff"
       "allyring/pvw" # Port viewer, pvw -aon
       "bschaatsbergen/cidr"
+      "eugenioenko/ttt" # IDE
     ];
 
     home = {
@@ -171,7 +172,6 @@ in {
         )
         ++ [
           carl
-          dlo9.croft # TUI vscode thing?
           dlo9.havn # Port scanner
           otree # JSON tree viewer
           somo
