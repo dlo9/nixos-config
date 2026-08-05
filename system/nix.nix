@@ -55,7 +55,7 @@ with lib; {
       keep-outputs = true
       keep-derivations = true
       download-buffer-size = ${builtins.toString (512 * 1024 * 1024)}
-
+      http3 = true
       connect-timeout = 5
       log-lines = 25
 
