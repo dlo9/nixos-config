@@ -9,8 +9,6 @@ with lib; {
   launchd.daemons.nix-daemon.serviceConfig.EnvironmentVariables.NIX_CURL_FLAGS = "--cacert /etc/ssl/certs/ca-certificates.crt";
 
   nix = mkIf config.nix.enable {
-    package = mkDefault pkgs.nix;
-
     optimise = {
       automatic = true;
       interval = {

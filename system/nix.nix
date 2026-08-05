@@ -1,12 +1,15 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
   isLinux,
   ...
 }:
 with lib; {
   nix = {
+    package = pkgs.unstable.nixVersions.latest;
+
     registry = {
       nixpkgs-unstable.flake = mkDefault inputs.nixpkgs-unstable;
       nixpkgs-master.flake = mkDefault inputs.nixpkgs-master;
