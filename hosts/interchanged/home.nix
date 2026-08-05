@@ -123,7 +123,7 @@ in {
   '';
 
   programs.fish.interactiveShellInit = ''
-    set -gx DOCKER_HOST "unix://$TMPDIR/podman/podman-machine-default-api.sock"
+    set -gx DOCKER_HOST "unix://"(getconf DARWIN_USER_TEMP_DIR)"podman/podman-machine-default-api.sock"
   '';
 
   programs.fish.functions = {
