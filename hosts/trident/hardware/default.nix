@@ -53,7 +53,13 @@ with lib; {
   hardware = {
     raspberry-pi."4" = {
       apply-overlays-dtmerge.enable = true;
-      touch-ft5406.enable = true;
+
+      # nixos-hardware's touch-ft5406 overlay hardcodes target-path
+      # "/soc/firmware", which only exists in the downstream rpi device tree.
+      # Mainline moved the firmware node to /firmware/rpi-firmware, so dtmerge
+      # fails the whole build with "invalid target-path". Our overlay below
+      # declares the same touchscreen node, resolved by label instead of path.
+      touch-ft5406.enable = false;
     };
 
     # Examine device tree:
@@ -67,6 +73,11 @@ with lib; {
     deviceTree = {
       enable = true;
 
+      # Attach the firmware-backed FT5406 touchscreen of the official 7" DSI
+      # panel. Targeting the `firmware` label (resolved through the base dtb's
+      # __symbols__) rather than a literal path keeps this working across the
+      # mainline device-tree reshuffles that keep moving the node.
+      #
       # display_lcd_rotate=2 rotates the panel scan-out but not the firmware
       # touch buffer, so touch comes through in raw FT5406 orientation. Invert
       # both axes here so raspberrypi-ts (via touchscreen_parse_properties)
@@ -82,10 +93,24 @@ with lib; {
               compatible = "brcm,bcm2711";
 
               fragment@0 {
-                target-path = "/soc/firmware";
+                target = <&firmware>;
                 __overlay__ {
+                  // Moving the firmware node out of /soc also moved it out
+                  // from under the only dma-ranges in the tree, so DMA
+                  // addresses below it are now untranslated. raspberrypi-ts
+                  // hands the VideoCore a bus address for the touch buffer;
+                  // without the 0xc0000000 alias the firmware writes touch
+                  // reports somewhere the driver never reads, and the input
+                  // device comes up but stays silent. Restore what /soc
+                  // used to provide.
+                  #address-cells = <1>;
+                  #size-cells = <1>;
+                  dma-ranges = <0xc0000000 0x00000000 0x00000000 0x40000000>;
+
                   ts: touchscreen {
                     compatible = "raspberrypi,firmware-ts";
+                    touchscreen-size-x = <800>;
+                    touchscreen-size-y = <480>;
                     touchscreen-inverted-x;
                     touchscreen-inverted-y;
                   };
