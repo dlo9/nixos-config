@@ -36,6 +36,9 @@ with lib; {
     documentation.enable = false;
     documentation.man.enable = false;
 
+    # No containers here anymore (obico was the only one)
+    virtualisation.podman.enable = false;
+
     system.stateVersion = "24.11";
   };
 }
