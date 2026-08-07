@@ -39,8 +39,6 @@ with lib; {
       [
         # Modern alternatives without aliases
         fd # Modern `find` alternative
-        tealdeer # Simple `man` alternative
-        mtr # Max traceroute
 
         # Modern alternatives with aliases
         dust
@@ -53,14 +51,9 @@ with lib; {
         procs
         viddy
 
-        # Terminal recorder
-        #vhs # Requires chrome
-        #ttyd
-
         # Nix utils
         any-nix-shell # Doesn't change the interactive shell when using nix-shell
         alejandra # Formatter
-        nix-diff
         nix-tree
         #nh # Nix cli helper
 
@@ -70,22 +63,6 @@ with lib; {
         sops
         ouch # zip tool, since p7zip is annoying
         age
-        tailspin # Log highlighter
-        superfile # File explorer
-        peco # Interactive filtering
-        jnv # JSON interactive filtering
-        clipboard-jh # `cb` a clipboard manager
-        jc # CLI output to json
-        eva # calculator
-        fzf
-
-        # To try
-        # dblab
-
-        # Good tools, but don't need installed all the time
-        # topgrade # Upgrade all the things
-        # lemmeknow # Identify encoded strings
-        # oha # HTTP benchmarker
 
         just
         nix-output-monitor
@@ -102,14 +79,7 @@ with lib; {
         lsof
         pciutils # lspci
         gptfdisk # Disk partitioning (sgdisk)
-        kmon # Kernel monitor
         iputils # Required by gping
-
-        bandwhich # Network monitor
-        dua # Another disk space utility
-        #dive # Image layer explorer
-
-        ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
       ]);
   };
 

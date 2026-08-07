@@ -319,7 +319,7 @@ with lib; {
     '';
   };
 
-  home.packages = with pkgs; [
+  home.packages = mkIf config.developer-tools.enable (with pkgs; [
     # LSP servers
     rust-analyzer
     gopls
@@ -329,5 +329,5 @@ with lib; {
     lua-language-server
     biome
     harper
-  ];
+  ]);
 }

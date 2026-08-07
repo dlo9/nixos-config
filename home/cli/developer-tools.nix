@@ -144,15 +144,45 @@ in {
           jq
           shellcheck
 
+          # Terminal recorder
+          #vhs # Requires chrome
+          #ttyd
+
+          # Nix utils
           nix-prefetch
+          nix-diff
           terminaltexteffects
           eget
+
+          tealdeer # Simple `man` alternative
+          mtr # Max traceroute
 
           wrap
           fselect # Find, but with SQL
           wiper # Disk usage TUI
 
           tcping-go
+
+          tailspin # Log highlighter
+          superfile # File explorer
+          peco # Interactive filtering
+          jnv # JSON interactive filtering
+          clipboard-jh # `cb` a clipboard manager
+          jc # CLI output to json
+          eva # calculator
+          fzf
+
+          # Good tools, but don't need installed all the time
+          # topgrade # Upgrade all the things
+          # lemmeknow # Identify encoded strings
+          # oha # HTTP benchmarker
+
+          # System utils
+          kmon # Kernel monitor
+          bandwhich # Network monitor
+          dua # Another disk space utility
+          #dive # Image layer explorer
+          ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
 
           # LSPs
           nil
