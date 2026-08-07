@@ -46,9 +46,6 @@ with lib; {
     };
   };
 
-  # Uptime stats
-  services.tuptime.enable = true;
-
   # Autotune
   # services.bpftune doesn't let me override arguments
   #systemd.services.bpftune = {
