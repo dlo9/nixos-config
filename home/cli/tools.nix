@@ -62,16 +62,14 @@ with lib; {
         alejandra # Formatter
         nix-diff
         nix-tree
-        nh # Nix cli helper
+        #nh # Nix cli helper
 
         # Other utils
         curl
-        go-task
         pv
         sops
         ouch # zip tool, since p7zip is annoying
         age
-        unstable.nix-inspect
         tailspin # Log highlighter
         superfile # File explorer
         peco # Interactive filtering
