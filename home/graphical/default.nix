@@ -4,6 +4,7 @@
   lib,
   inputs,
   isLinux,
+  osConfig,
   ...
 }:
 with lib; {
@@ -14,6 +15,8 @@ with lib; {
     ./waybar
     ./web.nix
   ];
+
+  options.graphical.enable = mkEnableOption "graphical programs" // {default = osConfig.graphical.enable;};
 
   config = mkIf config.graphical.enable {
     home.pointerCursor = {

@@ -10,10 +10,11 @@
 with lib; {
   imports =
     [
+      ./features.nix
       ./home-manager.nix
       ./nix.nix
-      ./options.nix
       ./secrets.nix
+      ./theme.nix
     ]
     ++ (optional isDarwin ./darwin)
     ++ (optional isAndroid ./android)

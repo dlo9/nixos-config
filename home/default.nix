@@ -16,7 +16,6 @@ with lib; {
       ./cli
       ./eget.nix
       ./graphical
-      ./options.nix
       ./theme.nix
 
       inputs.flake-programs-sqlite.homeModules.programs-sqlite

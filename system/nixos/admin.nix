@@ -20,5 +20,22 @@ with lib; let
       mapAttrs (k: v: mkMerge v) (foldAttrs (n: a: [n] ++ a) [] attrs)
     );
 in {
+  options = {
+    adminUsers = mkOption {
+      type = types.listOf types.nonEmptyStr;
+      default = [];
+    };
+
+    mainAdmin = mkOption {
+      type = types.nullOr types.nonEmptyStr;
+
+      # Defaults to the first listed admin user
+      default =
+        if ((builtins.length config.adminUsers) == 1)
+        then (builtins.elemAt config.adminUsers 0)
+        else null;
+    };
+  };
+
   config = mkMergeTopLevel ["users" "boot"] (map adminConfig config.adminUsers);
 }

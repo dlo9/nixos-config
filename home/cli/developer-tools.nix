@@ -5,6 +5,7 @@
   inputs,
   isLinux,
   mylib,
+  osConfig,
   ...
 }:
 with lib; let
@@ -118,6 +119,8 @@ with lib; let
     '';
   };
 in {
+  options.developer-tools.enable = mkEnableOption "developer tools" // {default = osConfig.developer-tools.enable;};
+
   config = mkIf config.developer-tools.enable {
     # jj diff/split tools, not yet in nixpkgs
     eget.packages = [

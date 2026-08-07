@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  osConfig,
   ...
 }:
 with lib; let
@@ -103,244 +104,305 @@ with lib; let
     '';
   };
 in {
-  home.sessionVariables = {
-    TINTED_TMUX_OPTION_STATUSBAR = "1";
+  options = {
+    font.family = mkOption {
+      type = types.nonEmptyStr;
+      default = osConfig.font.family;
+    };
+
+    font.size = mkOption {
+      type = types.ints.positive;
+      default = osConfig.font.size;
+    };
+
+    wallpapers = mkOption {
+      type = types.attrsOf types.package;
+      readOnly = true;
+
+      default = rec {
+        default = spaceman;
+
+        spaceman = builtins.fetchurl {
+          name = "spaceman.jpg";
+          url = https://forum.endeavouros.com/uploads/default/original/3X/c/d/cdb27eeb063270f9529fae6e87e16fa350bed357.jpeg;
+          sha256 = "02b892xxwyzzl2xyracnjhhvxvyya4qkwpaq7skn7blg51n56yz2";
+        };
+
+        #valley = fetchurl {
+        #  name = "elementary-os-7";
+        #  url = https://raw.githubusercontent.com/elementary/wallpapers/3f36a60cbb9b8b2a37d0bc5129365ac2ac7acf98/backgrounds/Photo%20of%20Valley.jpg;
+        #  sha256 = "0xvdyg4wa1489h5z6p336v5bk2pi2aj0wpsp2hdc0x6j4zpxma7k";
+        #};
+
+        # Hash keeps changing
+        #pink-sunset = fetchurl {
+        #  name = "pink-sunset";
+        #  url = https://cutewallpaper.org/22/retro-neon-race-4k-wallpapers/285729412.jpg;
+        #  sha256 = "0p6z31gh552rk4w99gbvr3hvwadfrv6h97k41qdbb9mxy7wc9brz";
+        #};
+
+        #mountain-milky-way = fetchurl {
+        #  name = "mountain-milky-way";
+        #  url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/10757377-0072-4864-bcf9-17bc4df0d252/GOLD%C2%A9Jake+Mosher_The+Grand+Tetons.jpg;
+        #  sha256 = "19l11x94qyc7mqwkrr8l2llimqp7v38ikd66k3pvma0vb3773js3";
+        #};
+
+        #mountain-reflection = fetchurl {
+        #  name = "mountain-reflection";
+        #  url = https://images.squarespace-cdn.com/content/v1/5de93a2db580764b4f6963f9/956426d5-8a84-493d-af76-fee19de5a29d/SILVER%C2%A9Beatrice+Wong_Parallel+universe.jpg;
+        #  sha256 = "173spa2j1fbvgzag3lw3y3sl7zpags4mixrwx7fv0brmp483v8g7";
+        #};
+
+        # Blocked by cloudflare
+        #wr-134-wolf-nebula = fetchurl {
+        #  name = "";
+        #  url = https://media.invisioncic.com/r307508/monthly_2024_09/WR134HOO.jpg.6a54efbab22a1e32d98ab035856280ab.jpg;
+        #  sha256 = "38271ff1945e3c717a29b242919326cd014dea8b99932fa3262adccc622e8f9b";
+        #};
+      };
+    };
   };
 
-  home.packages = with pkgs; [
-    tinty
-  ];
+  config = {
+    home.sessionVariables = {
+      TINTED_TMUX_OPTION_STATUSBAR = "1";
+    };
 
-  programs = {
-    neovim = {
-      plugins = with pkgs.vimPlugins; [
-        tinted-nvim
-      ];
+    home.packages = with pkgs; [
+      tinty
+    ];
 
-      initLua = ''
-        -- Theme
-        -- https://github.com/tinted-theming/tinted-nvim
-        require('tinted-nvim').setup({
-          selector = {
-            enabled = true,
-            mode = "file",
-            watch = true,
-          },
-        })
+    programs = {
+      neovim = {
+        plugins = with pkgs.vimPlugins; [
+          tinted-nvim
+        ];
+
+        initLua = ''
+          -- Theme
+          -- https://github.com/tinted-theming/tinted-nvim
+          require('tinted-nvim').setup({
+            selector = {
+              enabled = true,
+              mode = "file",
+              watch = true,
+            },
+          })
+        '';
+      };
+
+      fish.interactiveShellInit = ''
+        #############
+        ### Theme ###
+        #############
+
+        # Load theme on startup
+        sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
+
+        # Instant reload via universal variable (set by tinty tinted-shell hook)
+        function __reload_theme --on-variable theme_trigger
+          sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
+        end
+      '';
+
+      alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/artifacts/tinted-terminal-themes-alacritty-file.toml"];
+
+      # Waybar theme: import colors from tinty-generated CSS
+      waybar.style = mkBefore ''
+        @import url("file://${tintyDataDir}/artifacts/base16-waybar-colors-file.css");
       '';
     };
 
-    fish.interactiveShellInit = ''
-      #############
-      ### Theme ###
-      #############
-
-      # Load theme on startup
-      sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
-
-      # Instant reload via universal variable (set by tinty tinted-shell hook)
-      function __reload_theme --on-variable theme_trigger
-        sh ~/.local/share/tinted-theming/tinty/tinted-shell-scripts-file.sh
-      end
-    '';
-
-    alacritty.settings.general.import = ["~/.local/share/tinted-theming/tinty/artifacts/tinted-terminal-themes-alacritty-file.toml"];
-
-    # Waybar theme: import colors from tinty-generated CSS
-    waybar.style = mkBefore ''
-      @import url("file://${tintyDataDir}/artifacts/base16-waybar-colors-file.css");
-    '';
-  };
-
-  services = {
-    # Mako theme: include colors from tinty-generated config
-    mako.settings = {
-      include = "${tintyDataDir}/artifacts/base16-mako-colors-file.config";
+    services = {
+      # Mako theme: include colors from tinty-generated config
+      mako.settings = {
+        include = "${tintyDataDir}/artifacts/base16-mako-colors-file.config";
+      };
     };
-  };
 
-  # GTK theme - FlatColor with colors from user CSS
-  gtk.theme = {
-    name = "FlatColor";
-    package = pkgs.dlo9.flatcolor-gtk-theme;
-  };
+    # GTK theme - FlatColor with colors from user CSS
+    gtk.theme = {
+      name = "FlatColor";
+      package = pkgs.dlo9.flatcolor-gtk-theme;
+    };
 
-  gtk.gtk4.theme = config.gtk.theme;
+    gtk.gtk4.theme = config.gtk.theme;
 
-  # Sync tinty repos and apply theme on activation
-  home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    tinty_bin="${pkgs.tinty}/bin/tinty"
-    config_file="$HOME/.config/tinted-theming/tinty/config.toml"
-    data_dir="$HOME/.local/share/tinted-theming/tinty"
+    # Sync tinty repos and apply theme on activation
+    home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      tinty_bin="${pkgs.tinty}/bin/tinty"
+      config_file="$HOME/.config/tinted-theming/tinty/config.toml"
+      data_dir="$HOME/.local/share/tinted-theming/tinty"
 
-    mkdir -p "$data_dir"
+      mkdir -p "$data_dir"
 
-    if [ -L "$config_file" ]; then
-      # Ensure git, fish, and tmux are available (needed on nix-on-droid)
-      export PATH="${pkgs.git}/bin:${config.programs.fish.package}/bin:${pkgs.tmux}/bin:$PATH"
-      # Ignore global git config that may rewrite HTTPS URLs to SSH
-      export GIT_CONFIG_GLOBAL=/dev/null
-      export GIT_CONFIG_SYSTEM=/dev/null
+      if [ -L "$config_file" ]; then
+        # Ensure git, fish, and tmux are available (needed on nix-on-droid)
+        export PATH="${pkgs.git}/bin:${config.programs.fish.package}/bin:${pkgs.tmux}/bin:$PATH"
+        # Ignore global git config that may rewrite HTTPS URLs to SSH
+        export GIT_CONFIG_GLOBAL=/dev/null
+        export GIT_CONFIG_SYSTEM=/dev/null
 
-      # Always run install/update - idempotent and will skip already-installed items
-      run "$tinty_bin" install
-      run "$tinty_bin" update
+        # Always run install/update - idempotent and will skip already-installed items
+        run "$tinty_bin" install
+        run "$tinty_bin" update
 
-      # Re-apply current theme to populate files for new items, or apply default if unset
-      current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
-      if [ -n "$current_scheme" ]; then
-        run "$tinty_bin" apply "$current_scheme"
-      else
-        run "$tinty_bin" apply "${defaultScheme}"
+        # Re-apply current theme to populate files for new items, or apply default if unset
+        current_scheme=$("$tinty_bin" current 2>/dev/null | tr -d '"' || echo "")
+        if [ -n "$current_scheme" ]; then
+          run "$tinty_bin" apply "$current_scheme"
+        else
+          run "$tinty_bin" apply "${defaultScheme}"
+        fi
       fi
-    fi
-  '';
+    '';
 
-  xdg.configFile = {
-    "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
-      shell = "fish -c '{}'";
+    xdg.configFile = {
+      "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
+        shell = "fish -c '{}'";
 
-      default-scheme = defaultScheme;
+        default-scheme = defaultScheme;
 
-      # Global hooks, run after every `tinty apply`
-      hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
+        # Global hooks, run after every `tinty apply`
+        hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
 
-      preferred-schemes = [
-        "base16-gruvbox-dark"
-        "base16-github-dark"
-        "base24-wild-cherry"
-        "base16-tokyo-night-dark"
-        "base16-woodland"
-        "base16-tomorrow-night"
-        "base16-atelier-seaside"
-        "base16-gigavolt"
-      ];
+        preferred-schemes = [
+          "base16-gruvbox-dark"
+          "base16-github-dark"
+          "base24-wild-cherry"
+          "base16-tokyo-night-dark"
+          "base16-woodland"
+          "base16-tomorrow-night"
+          "base16-atelier-seaside"
+          "base16-gigavolt"
+        ];
 
-      items =
-        [
-          # Shell
-          {
-            name = "tinted-shell";
-            path = "https://github.com/tinted-theming/tinted-shell";
-            themes-dir = "scripts";
-            hook = "set -U theme_trigger (date +%s)";
-            supported-systems = ["base16" "base24"];
-          }
-          # Neovim
-          {
-            name = "base16-vim";
-            path = "https://github.com/tinted-theming/base16-vim";
+        items =
+          [
+            # Shell
+            {
+              name = "tinted-shell";
+              path = "https://github.com/tinted-theming/tinted-shell";
+              themes-dir = "scripts";
+              hook = "set -U theme_trigger (date +%s)";
+              supported-systems = ["base16" "base24"];
+            }
+            # Neovim
+            {
+              name = "base16-vim";
+              path = "https://github.com/tinted-theming/base16-vim";
+              themes-dir = "colors";
+              supported-systems = ["base16" "base24"];
+            }
+            # Alacritty
+            {
+              name = "tinted-terminal";
+              path = "https://github.com/tinted-theming/tinted-terminal";
+              themes-dir = "themes/alacritty";
+              supported-systems = ["base16" "base24"];
+            }
+            # Tmux
+            {
+              name = "tmux";
+              path = "https://github.com/tinted-theming/tinted-tmux";
+              themes-dir = "colors";
+              hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+              supported-systems = ["base16" "base24"];
+            }
+          ]
+          # Waybar
+          ++ optional config.programs.waybar.enable {
+            name = "base16-waybar";
+            path = "https://github.com/mnussbaum/base16-waybar";
             themes-dir = "colors";
+            revision = "master";
+            hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
             supported-systems = ["base16" "base24"];
           }
-          # Alacritty
-          {
-            name = "tinted-terminal";
-            path = "https://github.com/tinted-theming/tinted-terminal";
-            themes-dir = "themes/alacritty";
-            supported-systems = ["base16" "base24"];
-          }
-          # Tmux
-          {
-            name = "tmux";
-            path = "https://github.com/tinted-theming/tinted-tmux";
+          # Mako notifications
+          ++ optional config.services.mako.enable {
+            name = "base16-mako";
+            path = "https://github.com/Eluminae/base16-mako";
             themes-dir = "colors";
-            hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+            revision = "master";
+            hook = "command -v makoctl >/dev/null; and makoctl reload";
             supported-systems = ["base16" "base24"];
           }
-        ]
-        # Waybar
-        ++ optional config.programs.waybar.enable {
-          name = "base16-waybar";
-          path = "https://github.com/mnussbaum/base16-waybar";
-          themes-dir = "colors";
-          revision = "master";
-          hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
-          supported-systems = ["base16" "base24"];
+          # Wofi launcher
+          ++ optional config.programs.wofi.enable {
+            name = "base16-wofi";
+            path = "https://git.sr.ht/~knezi/base16-wofi";
+            themes-dir = "themes";
+            revision = "master";
+            # No hook needed - wofi reads CSS on each launch
+            supported-systems = ["base16" "base24"];
+          }
+          # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
+          ++ optional config.gtk.enable {
+            name = "base16-gtk";
+            path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
+            themes-dir = "gtk-3";
+            revision = "main";
+            theme-file-extension = "-gtk.css";
+            # Toggle gsettings to trigger GTK apps to reload CSS
+            hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
+            supported-systems = ["base16" "base24"];
+          };
+      };
+
+      # Wofi styles: import colors from tinty-generated CSS
+      "wofi/style.css".text = ''
+        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+        *{
+          font-family: ${config.font.family};
+          font-size: ${builtins.toString config.font.size}px;
         }
-        # Mako notifications
-        ++ optional config.services.mako.enable {
-          name = "base16-mako";
-          path = "https://github.com/Eluminae/base16-mako";
-          themes-dir = "colors";
-          revision = "master";
-          hook = "command -v makoctl >/dev/null; and makoctl reload";
-          supported-systems = ["base16" "base24"];
+
+        window {
+          border: 1px solid;
         }
-        # Wofi launcher
-        ++ optional config.programs.wofi.enable {
-          name = "base16-wofi";
-          path = "https://git.sr.ht/~knezi/base16-wofi";
-          themes-dir = "themes";
-          revision = "master";
-          # No hook needed - wofi reads CSS on each launch
-          supported-systems = ["base16" "base24"];
+
+        #input {
+          margin-bottom: 15px;
+          padding:3px;
+          border-radius: 5px;
+          border:none;
         }
-        # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
-        ++ optional config.gtk.enable {
-          name = "base16-gtk";
-          path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
-          themes-dir = "gtk-3";
-          revision = "main";
-          theme-file-extension = "-gtk.css";
-          # Toggle gsettings to trigger GTK apps to reload CSS
-          hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
-          supported-systems = ["base16" "base24"];
-        };
+
+        #outer-box {
+          margin: 5px;
+          padding:15px;
+        }
+
+        #text {
+          padding: 5px;
+        }
+      '';
+
+      "wofi/style.widgets.css".text = ''
+        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+        *{
+          font-family: ${config.font.family};
+          font-size: ${builtins.toString config.font.size}px;
+        }
+
+        #window {
+          border: 1px solid white;
+          margin: 0px 5px 0px 5px;
+        }
+
+        #outer-box {
+          margin: 5px;
+          padding: 10px;
+        }
+
+        #text {
+          padding: 5px;
+          color: white;
+        }
+      '';
     };
-
-    # Wofi styles: import colors from tinty-generated CSS
-    "wofi/style.css".text = ''
-      @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-      *{
-        font-family: ${config.font.family};
-        font-size: ${builtins.toString config.font.size}px;
-      }
-
-      window {
-        border: 1px solid;
-      }
-
-      #input {
-        margin-bottom: 15px;
-        padding:3px;
-        border-radius: 5px;
-        border:none;
-      }
-
-      #outer-box {
-        margin: 5px;
-        padding:15px;
-      }
-
-      #text {
-        padding: 5px;
-      }
-    '';
-
-    "wofi/style.widgets.css".text = ''
-      @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-      *{
-        font-family: ${config.font.family};
-        font-size: ${builtins.toString config.font.size}px;
-      }
-
-      #window {
-        border: 1px solid white;
-        margin: 0px 5px 0px 5px;
-      }
-
-      #outer-box {
-        margin: 5px;
-        padding: 10px;
-      }
-
-      #text {
-        padding: 5px;
-        color: white;
-      }
-    '';
   };
 }

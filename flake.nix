@@ -128,8 +128,9 @@
 
         androidModules = [
           # System modules
+          ./system/features.nix
           ./system/home-manager.nix
-          ./system/options.nix
+          ./system/theme.nix
           # ./system/secrets.nix
 
           # Host modules

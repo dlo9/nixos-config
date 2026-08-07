@@ -95,6 +95,68 @@ with lib; let
     '';
   }}/bin/wakeup-local-jobs";
 in {
+  options.zrepl = {
+    snapInterval = mkOption {
+      type = types.nonEmptyStr;
+      default = "15m";
+    };
+
+    remote = mkOption {
+      type = types.nullOr types.nonEmptyStr;
+      default = null;
+    };
+
+    retentionPolicies = mkOption {
+      type = types.attrsOf types.nonEmptyStr;
+
+      default = {
+        # Keep up to 1 year
+        year = "1x1h(keep=all) | 23x1h | 30x1d | 11x30d";
+
+        # Keep up to 1 month
+        month = "1x1h(keep=all) | 23x1h | 30x1d";
+
+        # Keep up to 1 week
+        week = "1x1h(keep=all) | 23x1h | 6x1d";
+
+        # Keep up to 1 day
+        day = "1x1h(keep=all) | 23x1h";
+      };
+    };
+
+    filesystems = mkOption {
+      type = types.attrsOf (types.submodule ({
+        name,
+        config,
+        ...
+      }: {
+        options = {
+          name = mkOption {
+            type = types.nonEmptyStr;
+            default = name;
+          };
+
+          local = mkOption {
+            type = types.nullOr types.nonEmptyStr;
+            default = config.both;
+          };
+
+          remote = mkOption {
+            type = types.nullOr types.nonEmptyStr;
+            default = config.both;
+          };
+
+          both = mkOption {
+            type = types.nullOr types.nonEmptyStr;
+            default = "unmanaged";
+          };
+        };
+      }));
+
+      default = {};
+    };
+  };
+
   # ZFS autosnapshot and replication
   config = mkIf enable {
     systemd.services = {
