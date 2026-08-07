@@ -181,14 +181,9 @@ in {
           # oha # HTTP benchmarker
 
           # System utils
-          kmon # Kernel monitor
           bandwhich # Network monitor
           dua # Another disk space utility
           #dive # Image layer explorer
-          ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
-
-          # LSPs
-          nil
         ]
         ++
         # On linux, use nixpkgs devenv; on darwin, use flake input to avoid boehm-gc conflicts
@@ -243,6 +238,8 @@ in {
           rustnet
           unstable.claude-code
           android-tools # adb
+          kmon # Kernel monitor
+          ioztat # zfs realtime stats: ioztat -i 1 -Pzoy -s operations
         ]);
     };
 

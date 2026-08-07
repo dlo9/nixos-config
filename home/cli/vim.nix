@@ -329,5 +329,6 @@ with lib; {
     lua-language-server
     biome
     harper
+    nil
   ]);
 }
