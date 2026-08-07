@@ -18,7 +18,15 @@ with lib; {
   # nixos-hardware's raspberry-pi-4 module defaults to a custom rpi kernel
   # that no public cache builds, forcing a local rebuild on every deploy.
   # Mainline supports bcm2711 and is cached by Hydra.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #
+  # Pinned to a series rather than tracking latest: mainline reshuffles the
+  # bcm2711 device tree between releases and everything below depends on its
+  # layout. 7.1 moved the firmware node out of /soc, which both broke the
+  # dtmerge build and left the touchscreen probing but silent (it landed
+  # outside the only dma-ranges in the tree, so the VideoCore wrote touch
+  # reports where raspberrypi-ts never reads). 6.18 is longterm through
+  # Dec 2028 -- revisit the pin then, not on every flake upgrade.
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
 
   # vc4-drm binds the pixelvalves at boot, but mainline's DT doesn't enable
   # the DSI panel (no upstream vc4-kms-dsi-7inch overlay), so vc4 drives the
@@ -55,10 +63,9 @@ with lib; {
       apply-overlays-dtmerge.enable = true;
 
       # nixos-hardware's touch-ft5406 overlay hardcodes target-path
-      # "/soc/firmware", which only exists in the downstream rpi device tree.
-      # Mainline moved the firmware node to /firmware/rpi-firmware, so dtmerge
-      # fails the whole build with "invalid target-path". Our overlay below
-      # declares the same touchscreen node, resolved by label instead of path.
+      # "/soc/firmware". dtmerge hard-fails the whole build when that path
+      # moves, which is exactly what 7.1 did. Our overlay below supersedes it:
+      # same touchscreen node, plus the axis inversion, resolved by label.
       touch-ft5406.enable = false;
     };
 
@@ -95,18 +102,6 @@ with lib; {
               fragment@0 {
                 target = <&firmware>;
                 __overlay__ {
-                  // Moving the firmware node out of /soc also moved it out
-                  // from under the only dma-ranges in the tree, so DMA
-                  // addresses below it are now untranslated. raspberrypi-ts
-                  // hands the VideoCore a bus address for the touch buffer;
-                  // without the 0xc0000000 alias the firmware writes touch
-                  // reports somewhere the driver never reads, and the input
-                  // device comes up but stays silent. Restore what /soc
-                  // used to provide.
-                  #address-cells = <1>;
-                  #size-cells = <1>;
-                  dma-ranges = <0xc0000000 0x00000000 0x00000000 0x40000000>;
-
                   ts: touchscreen {
                     compatible = "raspberrypi,firmware-ts";
                     touchscreen-size-x = <800>;
