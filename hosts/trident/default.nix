@@ -36,6 +36,9 @@ with lib; {
     documentation.enable = false;
     documentation.man.enable = false;
 
+    # Rarely logged into interactively, and generations are annoying to build
+    programs.fish.generateCompletions = false;
+
     # No containers here anymore (obico was the only one)
     virtualisation.podman.enable = false;
 
