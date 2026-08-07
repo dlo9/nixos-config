@@ -1,12 +1,20 @@
 {
   config,
   pkgs,
+  lib,
   ...
-}: {
-  services.usbmuxd.enable = true;
+}:
+with lib; {
+  options = {
+    ios.enable = mkEnableOption "iOS device support";
+  };
 
-  environment.systemPackages = with pkgs; [
-    libimobiledevice
-    ifuse # optional, to mount using 'ifuse'
-  ];
+  config = mkIf config.ios.enable {
+    services.usbmuxd.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      libimobiledevice
+      ifuse # optional, to mount using 'ifuse'
+    ];
+  };
 }
