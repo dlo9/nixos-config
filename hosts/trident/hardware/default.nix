@@ -92,7 +92,28 @@ with lib; {
             / {
               compatible = "brcm,bcm2711";
 
+              // Mainline hangs the firmware node off a bare /firmware
+              // container that declares no #address-cells. Since
+              // of_bus_default_match() only matches nodes that declare one,
+              // of_match_bus() returns NULL for /firmware and
+              // __of_translate_address() bails out with OF_BAD_ADDR before it
+              // ever reads dma-ranges -- so every DMA translation under the
+              // firmware node fails, whatever dma-ranges says below:
+              //   OF: translation of DMA address(c0000000) to CPU address
+              //       failed node(/firmware/rpi-firmware)
+              // Declaring the cells turns /firmware back into a translatable
+              // bus. They must be <2>/<1> to match the root node, since that
+              // is what sizes the parent-address half of the dma-ranges entry
+              // in fragment@1 (1 child + 2 parent + 1 size cell).
               fragment@0 {
+                target-path = "/firmware";
+                __overlay__ {
+                  #address-cells = <2>;
+                  #size-cells = <1>;
+                };
+              };
+
+              fragment@1 {
                 target = <&firmware>;
                 __overlay__ {
                   // Moving the firmware node out of /soc also moved it out
