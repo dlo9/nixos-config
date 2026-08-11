@@ -152,6 +152,13 @@ in {
     7587
   ];
 
+  # hostNetwork pods are subject to the host firewall, so Traefik (10.1.0.0/16)
+  # can't reach them unless the port is open on the CNI bridge. Scoped to mynet
+  # rather than allowedTCPPorts so the service isn't exposed on the LAN too.
+  networking.firewall.interfaces.mynet.allowedTCPPorts = [
+    291 # LAN Orangutan
+  ];
+
   # Keep container logs in RAM: they're a constant stream of small appends that
   # churn the root dataset (txg commits + snapshot growth) for ~100Mi of data.
   # Logs don't survive a reboot; `kubectl logs` is unaffected. Cluster-wide usage
