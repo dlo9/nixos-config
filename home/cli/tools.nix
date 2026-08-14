@@ -64,7 +64,6 @@ with lib; {
         ouch # zip tool, since p7zip is annoying
         age
 
-        just
         nix-output-monitor
         dig # DNS
         page # Neovim as a pager

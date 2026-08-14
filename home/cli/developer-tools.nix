@@ -230,6 +230,7 @@ in {
           lnav # Log file viewer
 
           gh
+          unstable.just
         ]
         ++
         # Linux only
