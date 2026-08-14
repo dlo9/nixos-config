@@ -1,47 +1,89 @@
+set unstable # user-defined functions are unstable
+set lists # boolean operators
+
 default:
     build-all
 
 hostname := `hostname`
 hardware-config := "hosts/" + hostname + "/hardware/generated.nix"
 
+rebuild_bin := if os() == "android" {
+    "nix-on-droid"
+} else if os() == "linux" {
+    "nixos-rebuild"
+} else if os() == "macos" {
+    "darwin-rebuild"
+} else {
+    error(f"Unsupported OS: {{os()}}")
+}
+
+config_type := if os() == "android" {
+    "nixOnDroidConfigurations"
+} else if os() == "linux" {
+    "nixosConfigurations"
+} else if os() == "macos" {
+    "darwinConfigurations"
+} else {
+    error(f"Unsupported OS: {{os()}}")
+}
+
+default_rebuild_args := if os() == "android" {
+    "--option fallback true --show-trace"
+} else if os() == "linux" {
+    "--option fallback true --show-trace"
+} else if os() == "macos" {
+    "--option fallback true --option http2 false --show-trace"
+} else {
+    error(f"Unsupported OS: {{os()}}")
+}
+
+#################
+### FUNCTIONS ###
+#################
+
+# Determine if the os/command combo requires sudo for rebuilds
+rebuild_sudo(cmd) := if os() != "android" && cmd =~ "^(switch|rollback|test)$" {
+    "sudo"
+}
+
+# Returns the config type (nixosConfigurations, darwinConfigurations, nixOnDroidConfigurations) for a given host
+config_type(host) := shell('''
+    nix eval --impure --json --expr '
+        let
+        f = builtins.getFlake (toString ./.);
+        types = [ "nixosConfigurations" "darwinConfigurations" "nixOnDroidConfigurations" ];
+        in builtins.listToAttrs (builtins.concatMap (t:
+            if f ? ${t}
+            then map (n: { name = n; value = t; }) (builtins.attrNames f.${t})
+            else []
+        ) types)
+    ' | jq -r --arg n "$1" '.[$n] // empty'
+''', host)
+
+deploy_args(host) := if host == "pixie" {
+    "--impure"
+}
+
+###############
+### RECIPES ###
+###############
+
+_restrict_to_host host:
+    @if [[ "{{hostname}}" != "{{host}}" ]]; then echo "Only supported on {{host}}"; exit 1; fi
+
 alias fmt := format
 format:
     alejandra fmt -q .
 
-rebuild-linux cmd="build" host=hostname:
-    sudo -v # Nom has an issue with hiding the sudo message
-    sudo nixos-rebuild --flake ".#{{host}}" {{cmd}} --option fallback true --show-trace |& nom
-
-rebuild-macos cmd="build" host=hostname:
-    sudo -v # Nom has an issue with hiding the sudo message
-    sudo darwin-rebuild --flake ".#{{host}}" {{cmd}} --option fallback true --option http2 false --show-trace |& nom
-
-rebuild-android cmd="build" host=hostname:
-    nix-on-droid --flake ".#{{host}}" {{cmd}} --option fallback true --show-trace |& nom
-
-forecast-linux host=hostname:
-    nix run nixpkgs#nix-forecast -- -c ".#nixosConfigurations.{{host}}" --show-missing
-
-forecast-macos host=hostname:
-    nix run nixpkgs#nix-forecast -- -c ".#darwinConfigurations.{{host}}" --show-missing
-
-forecast-android host=hostname:
-    nix run nixpkgs#nix-forecast -- -c ".#nixOnDroidConfigurations.{{host}}" --show-missing
-
-# Shows what would be built/downloaded on the next rebuild
 forecast host=hostname:
-    just "forecast-{{os()}}" {{host}}
+    nix run nixpkgs#nix-forecast -- -c ".#{{config_type(host)}}.{{host}}" --show-missing
 
-build host=hostname:
-    just "rebuild-{{os()}}" build {{host}}
+rebuild cmd="build" host=hostname:
+    {{rebuild_sudo(cmd)}} {{rebuild_bin}} --flake ".#{{host}}" {{cmd}} {{default_rebuild_args}} |& nom
 
-switch host=hostname:
-    just "rebuild-{{os()}}" switch {{host}}
-    just format
-
-test host=hostname:
-    just "rebuild-{{os()}}" test {{host}}
-    just format
+build host=hostname: (rebuild "build" host)
+switch host=hostname: (rebuild "switch" host)
+test host=hostname: (rebuild "test" host)
 
 generate-hardware: && format
     mkdir -p "$(dirname "{{hardware-config}}")"
@@ -54,15 +96,8 @@ generate-hardware: && format
         scripts/maintenance/process-hardware-config.awk > "{{hardware-config}}"
 
 # Does a remote deployment
-deploy host:
-    #!/bin/sh
-
-    case "{{host}}" in
-        pixie) args="-- --impure" ;;
-    esac
-
-    nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k .#{{host}} $args
-    just format
+deploy host: format
+    nix run nixpkgs#deploy-rs -- --skip-checks --auto-rollback false --magic-rollback false -k .#{{host}} -- {{deploy_args(host)}}
 
 bootstrap-pixie:
     # Make sure to start SSH on the host:
@@ -89,9 +124,8 @@ vm host=hostname:
     nixos-rebuild build-vm --flake ".#{{host}}" --show-trace |& nom
     QEMU_OPTS="-m 4096 -smp 2 -enable-kvm -vga none -device virtio-vga-gl -display gtk,gl=on" ./result/bin/run-{{host}}-vm
 
-update:
+update: && format
     nix flake update
-    just format
 
 gc:
     # Run as sudo to collect generations on darwin:
@@ -102,7 +136,7 @@ gc:
 add-package url name: && format
     nix run nixpkgs#nix-init -- --url "{{url}}" "pkgs/{{name}}.nix"
 
-refresh-k8s-certs:
+refresh-k8s-certs: (_restrict_to_host "cuttlefish")
     sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets
     sudo systemctl restart cfssl
     sleep 5
