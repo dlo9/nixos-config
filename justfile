@@ -68,7 +68,8 @@ deploy_args(host) := if host == "pixie" {
 ### RECIPES ###
 ###############
 
-_restrict_to_host host:
+[private]
+restrict_to_host host:
     @if [[ "{{hostname}}" != "{{host}}" ]]; then echo "Only supported on {{host}}"; exit 1; fi
 
 alias fmt := format
@@ -85,6 +86,7 @@ build host=hostname: (rebuild "build" host)
 switch host=hostname: (rebuild "switch" host)
 test host=hostname: (rebuild "test" host)
 
+[linux]
 generate-hardware: && format
     mkdir -p "$(dirname "{{hardware-config}}")"
 
@@ -120,6 +122,7 @@ deploy-all:
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#cuttlefish .#drywell .#pavil .#trident
     nix run github:serokell/deploy-rs/5829cec -- --skip-checks --auto-rollback false --magic-rollback false -k --targets .#pixie -- --impure
 
+[linux]
 vm host=hostname:
     nixos-rebuild build-vm --flake ".#{{host}}" --show-trace |& nom
     QEMU_OPTS="-m 4096 -smp 2 -enable-kvm -vga none -device virtio-vga-gl -display gtk,gl=on" ./result/bin/run-{{host}}-vm
@@ -136,7 +139,8 @@ gc:
 add-package url name: && format
     nix run nixpkgs#nix-init -- --url "{{url}}" "pkgs/{{name}}.nix"
 
-refresh-k8s-certs: (_restrict_to_host "cuttlefish")
+[linux]
+refresh-k8s-certs: (restrict_to_host "cuttlefish")
     sudo rm -rf /var/lib/cfssl /var/lib/kubernetes/secrets
     sudo systemctl restart cfssl
     sleep 5
