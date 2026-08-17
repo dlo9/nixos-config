@@ -177,7 +177,7 @@ with lib; {
         'lua_ls',
         'biome',
         'harper_ls',
-        'just',
+        --'just',
       })
 
       -- LSP: keybindings on attach
