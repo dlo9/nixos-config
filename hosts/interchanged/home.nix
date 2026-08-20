@@ -41,10 +41,10 @@ in {
     raycast
 
     # Golang
-    unstable.go_latest
+    master.go_latest
     graphviz # For go tool pprof
     protobuf
-    unstable.golangci-lint
+    master.golangci-lint
     grpcurl
 
     # Python
