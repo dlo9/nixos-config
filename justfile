@@ -41,9 +41,10 @@ default_rebuild_args := if os() == "android" {
 ### FUNCTIONS ###
 #################
 
-# Determine if the os/command combo requires sudo for rebuilds
+# Determine if the os/command combo requires sudo for rebuilds.
+# Run sudo -v separately, because nom hides the sudo password prompt
 rebuild_sudo(cmd) := if os() != "android" && cmd =~ "^(switch|rollback|test)$" {
-    "sudo"
+    "sudo -v && sudo"
 }
 
 # Returns the config type (nixosConfigurations, darwinConfigurations, nixOnDroidConfigurations) for a given host
