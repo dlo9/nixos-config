@@ -66,6 +66,7 @@ in {
     postgresql
     google-clasp
     google-chrome
+    zstd
 
     # GUI apps that need TCC permissions — re-signed with a stable cert on
     # activation so the grants persist across updates (see codesign.nix).
