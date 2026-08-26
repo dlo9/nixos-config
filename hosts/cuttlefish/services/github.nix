@@ -10,10 +10,7 @@ with lib; let
   # Personal accounts can't share self-hosted runners across repos, so we
   # register one ephemeral runner per repo. All run on cuttlefish.
   repos = [
-    "wrap"
-    "k8s"
     "cuttlefish"
-    "resume"
   ];
 
   mkRunner = repo: {
