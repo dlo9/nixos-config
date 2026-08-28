@@ -362,6 +362,8 @@ in {
     xdg.configFile = mylib.xdgFiles {
       # https://github.com/dlvhdr/gh-dash
       "gh-dash/config.yml" = {
+        defaults.prApproveComment = "";
+
         prSections = [
           {
             title = "My Pull Requests";
@@ -370,11 +372,21 @@ in {
           }
           {
             title = "Needs My Review";
-            filters = "is:open review-requested:@me -team-review-requested:apex-fintech-solutions/engineering";
+            filters = "is:open review-requested:@me -reviewed-by:@me";
           }
           {
             title = "Involved";
             filters = "is:open involves:@me - author:@me";
+          }
+          {
+            title = "No review";
+            filters = builtins.concatStringsSep " " [
+              "org:interxfi"
+              "state:open"
+              "draft:false"
+              "review:none"
+              "sort:updated-desc"
+            ];
           }
         ];
       };
