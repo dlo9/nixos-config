@@ -330,6 +330,18 @@ in {
 
           revsets.bookmark-advance-to = "@-";
 
+          templates = {
+            # The bookmark name used with `git push -c`.
+            # Attempts to parse the ticket from the given changeset,
+            # otherwise uses the default template
+            git_push_bookmark = ''
+              coalesce(
+                description.match(regex:"^PRD-[0-9]+"),
+                "push-" ++ change_id.short()
+              )
+            '';
+          };
+
           merge-tools = {
             # Diff editor: jj split/diffedit/commit -i/squash -i --tool oyui.
             # Editor only: `jj diff --tool oyui` can't work since jj pipes a
