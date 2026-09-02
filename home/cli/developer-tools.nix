@@ -284,7 +284,7 @@ in {
 
           git = {
             private-commits = let
-              prefixes = concatStringsSep "|" ["private" "wip" "broken"];
+              prefixes = concatStringsSep "|" ["private" "wip" "broken" "megamerge" "mm"];
             in "description(regex:'^(${prefixes}):') | bookmarks(regex:'^(${prefixes})-')";
           };
 
@@ -312,13 +312,15 @@ in {
 
             # Megamerge workflow
             # `jj stack <revset>` to include specific revs
-            stack = ["rebase" "--after" "trunk()" "--before" "closest_merge(@)" "--revision"];
+            stack = ["rebase" "--after" "trunk()" "--before" "bookmarks('mm')" "--revision"];
 
             # `jj stage` to include the whole stack after the megamerge
-            stage = ["stack" "closest_merge(@)+:: ~ empty()"];
+            stage = ["stack" "bookmarks('mm')+:: ~ empty()"];
 
             # `jj restack` to rebase your changes onto `trunk()`
-            restack = ["rebase" "--onto" "trunk()" "--source" "roots(trunk()..) & mutable()" "--simplify-parents"];
+            restack = ["rebase" "--source" "roots(trunk()..) & mutable() & mine()" "--onto" "trunk()" "--simplify-parents"];
+
+            new-mm = ["util" "exec" "--" "sh" "-c" "jj new 'exactly(bookmarks(mm), 1)' 2>/dev/null || jj new 'heads(mutable()) & mine() & ~empty()' && jj bookmark create mm"];
           };
 
           revset-aliases = {
