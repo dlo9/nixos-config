@@ -309,6 +309,16 @@ in {
             # jj piping diff tool stdout through the pager (it renders on
             # /dev/tty), and shows the whole changeset with a file tree
             review = ["util" "exec" "--" "${jj-review}/bin/jj-review"];
+
+            # Megamerge workflow
+            # `jj stack <revset>` to include specific revs
+            stack = ["rebase" "--after" "trunk()" "--before" "closest_merge(@)" "--revision"];
+
+            # `jj stage` to include the whole stack after the megamerge
+            stage = ["stack" "closest_merge(@)+:: ~ empty()"];
+
+            # `jj restack` to rebase your changes onto `trunk()`
+            restack = ["rebase" "--onto" "trunk()" "--source" "roots(trunk()..) & mutable()" "--simplify-parents"];
           };
 
           revset-aliases = {
@@ -326,6 +336,9 @@ in {
             #   - no description
             #   - no child commits with descriptions
             "temp()" = "description(exact:'') ~::(~description(exact:'')) ~::remote_bookmarks() ~@";
+
+            # Megamerge workflow: https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
+            "closest_merge(to)" = "heads(::to & merges())";
           };
 
           revsets.bookmark-advance-to = "@-";
