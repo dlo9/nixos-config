@@ -280,7 +280,7 @@ in {
         settings = {
           user = config.programs.git.settings.user;
 
-          remotes.origin.auto-track-bookmarks = "glob:*";
+          remotes.origin.auto-track-created-bookmarks = "*";
 
           git = {
             private-commits = let
