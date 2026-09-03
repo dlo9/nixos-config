@@ -320,7 +320,11 @@ in {
             # `jj restack` to rebase your changes onto `trunk()`
             restack = ["rebase" "--source" "roots(trunk()..) & mutable() & mine()" "--onto" "trunk()" "--simplify-parents"];
 
+            # Create a new change on top of the megamerge
             new-mm = ["util" "exec" "--" "sh" "-c" "jj new 'exactly(bookmarks(mm), 1)' 2>/dev/null || jj new 'heads(mutable()) & mine() & ~empty()' && jj bookmark create mm"];
+
+            # Create a new change before the megamerge
+            new-mm-middle = ["new" "-B" "bookmarks('mm')" "-A" "trunk()"];
           };
 
           revset-aliases = {
