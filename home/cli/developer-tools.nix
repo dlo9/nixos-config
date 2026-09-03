@@ -283,9 +283,7 @@ in {
           remotes.origin.auto-track-created-bookmarks = "*";
 
           git = {
-            private-commits = let
-              prefixes = concatStringsSep "|" ["private" "wip" "broken" "megamerge" "mm"];
-            in "description(regex:'^(${prefixes}):') | bookmarks(regex:'^(${prefixes})-')";
+            private-commits = "private()";
           };
 
           aliases = {
@@ -300,6 +298,9 @@ in {
 
             # Log all
             ll = ["log" "-r" "all()"];
+
+            # Log the current tips
+            lt = ["log" "-r" "tips()"];
 
             blame = ["file" "annotate"];
 
@@ -333,8 +334,8 @@ in {
           revset-aliases = {
             "summary()" = "@ | ancestors(remote_bookmarks().., 2) | trunk()";
 
-            # Commits which aren't part of a bookmark
-            "dangling()" = "~::bookmarks()";
+            # Commits which aren't part bookmark, tag, megamerge, or the current empty change
+            "dangling()" = "~::(bookmarks() | remote_bookmarks() | tags() | mm()) & ~(@ & empty())";
 
             # Commits which only exist locally (ignoring empty heads)
             "local_only()" = "~::remote_bookmarks() ~(heads(all()) & empty())";
@@ -349,8 +350,28 @@ in {
             # Megamerge workflow: https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
             "closest_merge(to)" = "heads(::to & merges())";
 
+            # Returns all commits in the branch containing `to`
+            "branch(to)" = "heads(forks() & ::to)..to | to::heads(merges()- & to::)";
+
             # Megamerge commit
-            "mm()" = "empty() & description('MEGAMERGE\n')";
+            "mm()" = ''description(exact:"MEGAMERGE\n")'';
+
+            # Commits needing to be moved into a megamerge
+            "non_mm()" = "mutable() ~::mm() ~(@ & empty())";
+
+            # Mutable branch heads
+            "tips()" = "heads(mutable() ~empty() ~mm())";
+
+            # Mutable unlabeled branch heads
+            "dangling_tips()" = "tips() & ~bookmarks()";
+
+            "private()" = let
+              prefixes = concatStringsSep "|" ["private" "wip" "broken" "tmp" "temp" "draft" "todo" "fixme" "test"];
+              separators = "[:/_-]";
+
+              # example: "private-foo", "broken/bar", "david/WIP/fix"
+              regex = "regex:'(?i)^(david${separators})?(${prefixes})${separators}'";
+            in "description(${regex}) | bookmarks(${regex}) | mm()";
           };
 
           revsets.bookmark-advance-to = "@-";
