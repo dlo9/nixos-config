@@ -312,19 +312,22 @@ in {
 
             # Megamerge workflow
             # `jj stack <revset>` to include specific revs
-            stack = ["rebase" "--after" "trunk()" "--before" "bookmarks('mm')" "--revision"];
+            stack = ["rebase" "--after" "trunk()" "--before" "mm()" "--revision"];
 
             # `jj stage` to include the whole stack after the megamerge
-            stage = ["stack" "bookmarks('mm')+:: ~ empty()"];
+            stage = ["stack" "mm()+:: ~ empty()"];
 
             # `jj restack` to rebase your changes onto `trunk()`
             restack = ["rebase" "--source" "roots(trunk()..) & mutable() & mine()" "--onto" "trunk()" "--simplify-parents"];
 
+            # Create the megamerge commit if it doesn't exist
+            create-mm = ["util" "exec" "--" "sh" "-c" "jj log -r 'exactly(mm(), 1)' 2>/dev/null 1>&2 || jj new --no-edit -m 'MEGAMERGE' 'heads(mutable()) & mine() & ~empty()'"];
+
             # Create a new change on top of the megamerge
-            new-mm = ["util" "exec" "--" "sh" "-c" "jj new 'exactly(bookmarks(mm), 1)' 2>/dev/null || jj new 'heads(mutable()) & mine() & ~empty()' && jj bookmark create mm"];
+            new-mm = ["new" "-A" "mm()"];
 
             # Create a new change before the megamerge
-            new-mm-middle = ["new" "-B" "bookmarks('mm')" "-A" "trunk()"];
+            new-mm-middle = ["new" "-B" "mm()" "-A" "trunk()"];
           };
 
           revset-aliases = {
@@ -345,6 +348,9 @@ in {
 
             # Megamerge workflow: https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
             "closest_merge(to)" = "heads(::to & merges())";
+
+            # Megamerge commit
+            "mm()" = "empty() & description('MEGAMERGE\n')";
           };
 
           revsets.bookmark-advance-to = "@-";
