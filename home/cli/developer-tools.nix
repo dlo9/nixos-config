@@ -231,6 +231,9 @@ in {
 
           gh
           unstable.just
+
+          # Make nicer scripts
+          gum
         ]
         ++
         # Linux only
