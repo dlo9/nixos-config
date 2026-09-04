@@ -129,6 +129,7 @@ in {
       "allyring/pvw" # Port viewer, pvw -aon
       "bschaatsbergen/cidr"
       "eugenioenko/ttt" # IDE
+      "yutat23/lsoff" # Port viewer
     ];
 
     home = {
