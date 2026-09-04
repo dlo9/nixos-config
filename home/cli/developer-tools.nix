@@ -298,7 +298,7 @@ in {
             prepend = ["new" "-B" "roots(trunk()..@)"];
 
             # Fetch and rebase
-            update = ["util" "exec" "--" "sh" "-c" "jj git fetch && jj rebase -b @ -d 'trunk()'"];
+            update = ["util" "exec" "--" "sh" "-c" "jj git fetch && jj rebase-mine"];
 
             # Log all
             ll = ["log" "-r" "all()"];
@@ -333,6 +333,9 @@ in {
 
             # Create a new change before the megamerge
             new-mm-middle = ["new" "-B" "mm()" "-A" "trunk()"];
+
+            # Rebase all my branches
+            rebase-mine = ["rebase" "-b" "mutable() & mine()" "-d" "trunk()"];
           };
 
           revset-aliases = {
