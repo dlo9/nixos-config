@@ -271,6 +271,40 @@ in {
       @import url("dank-colors.css");
     '';
 
+    # Qt theming, DMS-driven. Nothing here has ever configured Qt, so this is
+    # purely additive -- with DMS off it stays unset and Qt apps keep their
+    # built-in palette, exactly as before.
+    #
+    # matugen already writes ~/.local/share/color-schemes/DankMatugen.colors on
+    # every theme change, and DMS points qt6ct at it with `custom_palette=true`
+    # + `color_scheme_path=` (share/quickshell/dms/scripts/qt.sh). That script
+    # is gated on `command -v qt6ct` and exits 1 when it finds neither qtct
+    # tool, which is the whole reason "Apply Qt Colors" reported failure -- the
+    # palette itself was being generated correctly all along.
+    #
+    # platformTheme.name takes a free-form string as well as the documented
+    # enum, so naming it "qt6ct" yields QT_QPA_PLATFORMTHEME=qt6ct. The "qtct"
+    # preset would instead yield qt5ct (home-manager maps it that way), which
+    # is wrong here twice over: qtbase 6.11 has no QT_QPA_PLATFORMTHEME_QT6
+    # fallback to pick up the Qt6 side, and DMS's icon theme picker warns
+    # unless it sees exactly "qt6ct" or "gtk3".
+    #
+    # qt5ct is deliberately left out -- with the variable set to qt6ct, Qt5 apps
+    # ignore it regardless, so installing it would only add a config file that
+    # nothing reads.
+    #
+    # qt6ct.conf itself stays unmanaged: DMS edits it in place with sed, which
+    # a home-manager store symlink would defeat. Same reasoning as
+    # DankMaterialShell/settings.json in home/graphical/dms.nix.
+    qt = mkIf config.dms.enable {
+      enable = true;
+
+      platformTheme = {
+        name = "qt6ct";
+        package = pkgs.qt6Packages.qt6ct;
+      };
+    };
+
     # Sync tinty repos and apply theme on activation
     home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
       tinty_bin="${pkgs.tinty}/bin/tinty"
