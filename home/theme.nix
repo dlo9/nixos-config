@@ -436,6 +436,23 @@ in {
       # Wofi styles: import colors from tinty-generated CSS. Wofi is replaced
       # by DMS's spotlight launcher when the shell is enabled, which leaves
       # these stylesheets with nothing to style.
+      # Let activation overwrite these rather than refusing to switch.
+      #
+      # DMS's "Apply GTK Colors" button (scripts/gtk.sh) replaces
+      # gtk-3.0/gtk.css with its own relative symlink to dank-colors.css. That
+      # leaves a symlink home-manager doesn't own, and its collision check only
+      # falls back to backupFileExtension for regular files -- the backup branch
+      # is guarded on `! -L "$targetPath"` -- so a stray symlink skips straight
+      # to "would be clobbered" and aborts the whole activation.
+      #
+      # Overwriting is safe here precisely because the declarative import above
+      # says the same thing the button does, so nothing is lost by reasserting
+      # it. Without this, one press of a button in the settings UI wedges every
+      # subsequent nixos-rebuild until the symlink is removed by hand.
+      // optionalAttrs config.dms.enable {
+        "gtk-3.0/gtk.css".force = true;
+        "gtk-4.0/gtk.css".force = true;
+      }
       // optionalAttrs config.programs.wofi.enable {
         "wofi/style.css".text = ''
           @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
