@@ -220,13 +220,56 @@ in {
       };
     };
 
-    # GTK theme - FlatColor with colors from user CSS
-    gtk.theme = {
-      name = "FlatColor";
-      package = pkgs.dlo9.flatcolor-gtk-theme;
-    };
+    # GTK theme. The theme is only ever a carrier for a palette here, and which
+    # palette wins depends on who is driving:
+    #
+    #  - Without DMS: FlatColor, whose colors come from the base16-gtk-flatcolor
+    #    stylesheet tinty writes into ~/.config/gtk-{3,4}.0/gtk.css (the item
+    #    below). GTK4 reads gtk-theme-name but ignores it, so the theme has to
+    #    be pulled in from user CSS -- that's what gtk4.theme does.
+    #
+    #  - With DMS: matugen regenerates ~/.config/gtk-{3,4}.0/dank-colors.css on
+    #    every theme change. It defines the libadwaita color names
+    #    (window_bg_color, accent_bg_color, headerbar_bg_color, ...) and nothing
+    #    else, so it needs a theme that maps those onto GTK3 widgets -- adw-gtk3,
+    #    which is exactly what upstream's settings UI tells you to install before
+    #    applying GTK colors. GTK4/libadwaita apps need no theme at all: they
+    #    take the @define-color overrides straight from user CSS, so gtk4.theme
+    #    stays unset rather than importing adw-gtk3's 400K libadwaita restyle on
+    #    top of the one libadwaita already applies.
+    gtk.theme =
+      if config.dms.enable
+      then {
+        name = "adw-gtk3-dark";
+        package = pkgs.adw-gtk3;
+      }
+      else {
+        name = "FlatColor";
+        package = pkgs.dlo9.flatcolor-gtk-theme;
+      };
 
-    gtk.gtk4.theme = config.gtk.theme;
+    gtk.gtk4.theme =
+      if config.dms.enable
+      then null
+      else config.gtk.theme;
+
+    # Upstream exposes this as a one-shot "Apply GTK Colors" button that
+    # symlinks gtk-3.0/gtk.css to dank-colors.css and prepends an @import to
+    # gtk-4.0/gtk.css (share/quickshell/dms/scripts/gtk.sh). Declaring the
+    # import instead means the wiring survives a fresh checkout and never has to
+    # be clicked; the button stays idempotent if it ever is.
+    #
+    # dank-colors.css lands next to these files, so the relative URL resolves.
+    # DMS runs matugen on startup as well as on every theme change, so it's
+    # there after the first login; before that GTK just warns about the missing
+    # import and falls back to the theme's own colors.
+    gtk.gtk3.extraCss = mkIf config.dms.enable ''
+      @import url("dank-colors.css");
+    '';
+
+    gtk.gtk4.extraCss = mkIf config.dms.enable ''
+      @import url("dank-colors.css");
+    '';
 
     # Sync tinty repos and apply theme on activation
     home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -338,8 +381,13 @@ in {
               # No hook needed - wofi reads CSS on each launch
               supported-systems = ["base16" "base24"];
             }
-            # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
-            ++ optional config.gtk.enable {
+            # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css).
+            # Dropped under DMS: the hook copies over the same gtk.css that
+            # matugen's dank-colors.css is imported from, so the two would race
+            # on every `tinty apply`. (The gtk-4.0 copy already loses that race
+            # -- home-manager owns that path, so the cp fails and the `and`
+            # chain never reaches the dconf reload.)
+            ++ optional (config.gtk.enable && !config.dms.enable) {
               name = "base16-gtk";
               path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
               themes-dir = "gtk-3";

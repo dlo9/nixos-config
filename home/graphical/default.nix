@@ -134,6 +134,12 @@ with lib; {
     gtk = {
       enable = mkDefault isLinux;
 
+      # Stays in nix under DMS. Its icon theme picker defaults to "System
+      # Default", which defers to gtk-icon-theme-name below; picking a real one
+      # there sed's gtk-3.0/settings.ini in place, and since home-manager owns
+      # that path as a store symlink, GNU sed would replace the symlink with a
+      # regular file and the next activation would back it up and relink.
+      # Change the theme here instead.
       iconTheme = {
         #package = pkgs.vimix-icon-theme;
         #name = "Vimix";
