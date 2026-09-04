@@ -50,6 +50,25 @@ with lib; {
     # changes.
     services.upower.enable = mkDefault true;
 
+    # DMS's Go daemon opens /dev/input/event* directly to watch for the Caps
+    # Lock LED -- it's what drives Modules/OSD/CapsLockOSD.qml and the
+    # CapsLockIndicator bar widget, and it's the only thing the evdev manager
+    # is used for. Without the group it logs "Failed to initialize evdev
+    # manager: insufficient permissions to access input devices" at startup and
+    # both go quiet; upstream's own message for the same case is "Could not add
+    # %s to input group (Caps Lock OSD will be unavailable)". `dms setup` does
+    # this imperatively with usermod, which is the non-declarative path.
+    #
+    # Note this grants read access to every input device, so anything running
+    # as this user can read keystrokes system-wide, not just its own window's.
+    # That's the standing cost of the OSD.
+    # Guarded on the whole attrset rather than the value: mkIf defers its
+    # content, but an attribute *name* of ${null} would throw before it got
+    # there.
+    users.users = mkIf (config.mainAdmin != null) {
+      ${config.mainAdmin}.extraGroups = ["input"];
+    };
+
     # The lock screen authenticates against /etc/pam.d/dankshell when it exists
     # and silently falls back to `login` otherwise (Modules/Lock/Pam.qml). Give
     # it its own service so lockscreen auth can diverge from console login.
