@@ -33,6 +33,23 @@ with lib; {
     # the widget is the only thing lost.
     services.power-profiles-daemon.enable = mkIf config.services.tlp.enable (mkForce false);
 
+    # Battery state comes from UPower over DBus and nowhere else
+    # (Services/BatteryService.qml imports Quickshell.Services.UPower), so
+    # without the daemon `batteries` is empty and the shell believes it's on a
+    # desktop. Waybar never needed this -- its battery module reads
+    # /sys/class/power_supply directly -- which is why nothing here enabled it
+    # before. The upstream dms-shell module doesn't pull it in either, though it
+    # does pull in power-profiles-daemon; that daemon owns
+    # org.freedesktop.UPower.PowerProfiles, which is a confusingly-named
+    # neighbour of UPower rather than UPower itself.
+    #
+    # Two things break quietly without it beyond the missing charge level:
+    # IdleService gates its battery timeouts on `batteryAvailable`, so the AC
+    # timeouts apply on battery too, and BatteryService's automatic
+    # ac/batteryProfileName switching hangs off a plugged-in state that never
+    # changes.
+    services.upower.enable = mkDefault true;
+
     # The lock screen authenticates against /etc/pam.d/dankshell when it exists
     # and silently falls back to `login` otherwise (Modules/Lock/Pam.qml). Give
     # it its own service so lockscreen auth can diverge from console login.
