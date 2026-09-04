@@ -10,6 +10,7 @@
 with lib; {
   imports = [
     ./developer-tools.nix
+    ./dms.nix
     ./eww
     ./hyprland.nix
     ./waybar
@@ -216,17 +217,22 @@ with lib; {
       ];
 
     services = {
-      # Bluetooth controls
-      blueman-applet.enable = mkDefault isLinux;
+      # Bluetooth controls. DMS pairs and manages devices from its control
+      # center (Services/BluetoothService.qml).
+      blueman-applet.enable = mkDefault (isLinux && !config.dms.enable);
 
-      # Audio controls
+      # Audio controls. Not replaced by DMS: this is the EQ/effects pipeline,
+      # not a volume applet.
       easyeffects.enable = mkDefault isLinux;
 
-      caffeine.enable = mkDefault isLinux;
+      # Idle inhibit. DMS exposes the same thing over `dms ipc call inhibit`
+      # and as a control center toggle its idle timers respect.
+      caffeine.enable = mkDefault (isLinux && !config.dms.enable);
 
-      # Enable red-shifted nightime display
+      # Enable red-shifted nightime display. DMS has an equivalent night mode
+      # with time- and location-based automation (Settings/GammaControlTab.qml).
       gammastep = {
-        enable = mkDefault isLinux;
+        enable = mkDefault (isLinux && !config.dms.enable);
         provider = "geoclue2";
         tray = true;
       };

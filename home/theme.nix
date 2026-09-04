@@ -257,152 +257,156 @@ in {
       fi
     '';
 
-    xdg.configFile = {
-      "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
-        shell = "fish -c '{}'";
+    xdg.configFile =
+      {
+        "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
+          shell = "fish -c '{}'";
 
-        default-scheme = defaultScheme;
+          default-scheme = defaultScheme;
 
-        # Global hooks, run after every `tinty apply`
-        hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
+          # Global hooks, run after every `tinty apply`
+          hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
 
-        preferred-schemes = [
-          "base16-gruvbox-dark"
-          "base16-github-dark"
-          "base24-wild-cherry"
-          "base16-tokyo-night-dark"
-          "base16-woodland"
-          "base16-tomorrow-night"
-          "base16-atelier-seaside"
-          "base16-gigavolt"
-        ];
+          preferred-schemes = [
+            "base16-gruvbox-dark"
+            "base16-github-dark"
+            "base24-wild-cherry"
+            "base16-tokyo-night-dark"
+            "base16-woodland"
+            "base16-tomorrow-night"
+            "base16-atelier-seaside"
+            "base16-gigavolt"
+          ];
 
-        items =
-          [
-            # Shell
-            {
-              name = "tinted-shell";
-              path = "https://github.com/tinted-theming/tinted-shell";
-              themes-dir = "scripts";
-              hook = "set -U theme_trigger (date +%s)";
-              supported-systems = ["base16" "base24"];
-            }
-            # Neovim
-            {
-              name = "base16-vim";
-              path = "https://github.com/tinted-theming/base16-vim";
+          items =
+            [
+              # Shell
+              {
+                name = "tinted-shell";
+                path = "https://github.com/tinted-theming/tinted-shell";
+                themes-dir = "scripts";
+                hook = "set -U theme_trigger (date +%s)";
+                supported-systems = ["base16" "base24"];
+              }
+              # Neovim
+              {
+                name = "base16-vim";
+                path = "https://github.com/tinted-theming/base16-vim";
+                themes-dir = "colors";
+                supported-systems = ["base16" "base24"];
+              }
+              # Alacritty
+              {
+                name = "tinted-terminal";
+                path = "https://github.com/tinted-theming/tinted-terminal";
+                themes-dir = "themes/alacritty";
+                supported-systems = ["base16" "base24"];
+              }
+              # Tmux
+              {
+                name = "tmux";
+                path = "https://github.com/tinted-theming/tinted-tmux";
+                themes-dir = "colors";
+                hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+                supported-systems = ["base16" "base24"];
+              }
+            ]
+            # Waybar
+            ++ optional config.programs.waybar.enable {
+              name = "base16-waybar";
+              path = "https://github.com/mnussbaum/base16-waybar";
               themes-dir = "colors";
+              revision = "master";
+              hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
               supported-systems = ["base16" "base24"];
             }
-            # Alacritty
-            {
-              name = "tinted-terminal";
-              path = "https://github.com/tinted-theming/tinted-terminal";
-              themes-dir = "themes/alacritty";
-              supported-systems = ["base16" "base24"];
-            }
-            # Tmux
-            {
-              name = "tmux";
-              path = "https://github.com/tinted-theming/tinted-tmux";
+            # Mako notifications
+            ++ optional config.services.mako.enable {
+              name = "base16-mako";
+              path = "https://github.com/Eluminae/base16-mako";
               themes-dir = "colors";
-              hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+              revision = "master";
+              hook = "command -v makoctl >/dev/null; and makoctl reload";
               supported-systems = ["base16" "base24"];
             }
-          ]
-          # Waybar
-          ++ optional config.programs.waybar.enable {
-            name = "base16-waybar";
-            path = "https://github.com/mnussbaum/base16-waybar";
-            themes-dir = "colors";
-            revision = "master";
-            hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
-            supported-systems = ["base16" "base24"];
+            # Wofi launcher
+            ++ optional config.programs.wofi.enable {
+              name = "base16-wofi";
+              path = "https://git.sr.ht/~knezi/base16-wofi";
+              themes-dir = "themes";
+              revision = "master";
+              # No hook needed - wofi reads CSS on each launch
+              supported-systems = ["base16" "base24"];
+            }
+            # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
+            ++ optional config.gtk.enable {
+              name = "base16-gtk";
+              path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
+              themes-dir = "gtk-3";
+              revision = "main";
+              theme-file-extension = "-gtk.css";
+              # Toggle gsettings to trigger GTK apps to reload CSS
+              hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
+              supported-systems = ["base16" "base24"];
+            };
+        };
+      }
+      # Wofi styles: import colors from tinty-generated CSS. Wofi is replaced
+      # by DMS's spotlight launcher when the shell is enabled, which leaves
+      # these stylesheets with nothing to style.
+      // optionalAttrs config.programs.wofi.enable {
+        "wofi/style.css".text = ''
+          @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+          *{
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
           }
-          # Mako notifications
-          ++ optional config.services.mako.enable {
-            name = "base16-mako";
-            path = "https://github.com/Eluminae/base16-mako";
-            themes-dir = "colors";
-            revision = "master";
-            hook = "command -v makoctl >/dev/null; and makoctl reload";
-            supported-systems = ["base16" "base24"];
+
+          window {
+            border: 1px solid;
           }
-          # Wofi launcher
-          ++ optional config.programs.wofi.enable {
-            name = "base16-wofi";
-            path = "https://git.sr.ht/~knezi/base16-wofi";
-            themes-dir = "themes";
-            revision = "master";
-            # No hook needed - wofi reads CSS on each launch
-            supported-systems = ["base16" "base24"];
+
+          #input {
+            margin-bottom: 15px;
+            padding:3px;
+            border-radius: 5px;
+            border:none;
           }
-          # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
-          ++ optional config.gtk.enable {
-            name = "base16-gtk";
-            path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
-            themes-dir = "gtk-3";
-            revision = "main";
-            theme-file-extension = "-gtk.css";
-            # Toggle gsettings to trigger GTK apps to reload CSS
-            hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
-            supported-systems = ["base16" "base24"];
-          };
+
+          #outer-box {
+            margin: 5px;
+            padding:15px;
+          }
+
+          #text {
+            padding: 5px;
+          }
+        '';
+
+        "wofi/style.widgets.css".text = ''
+          @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+          *{
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
+          }
+
+          #window {
+            border: 1px solid white;
+            margin: 0px 5px 0px 5px;
+          }
+
+          #outer-box {
+            margin: 5px;
+            padding: 10px;
+          }
+
+          #text {
+            padding: 5px;
+            color: white;
+          }
+        '';
       };
-
-      # Wofi styles: import colors from tinty-generated CSS
-      "wofi/style.css".text = ''
-        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-        *{
-          font-family: ${config.font.family};
-          font-size: ${builtins.toString config.font.size}px;
-        }
-
-        window {
-          border: 1px solid;
-        }
-
-        #input {
-          margin-bottom: 15px;
-          padding:3px;
-          border-radius: 5px;
-          border:none;
-        }
-
-        #outer-box {
-          margin: 5px;
-          padding:15px;
-        }
-
-        #text {
-          padding: 5px;
-        }
-      '';
-
-      "wofi/style.widgets.css".text = ''
-        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-        *{
-          font-family: ${config.font.family};
-          font-size: ${builtins.toString config.font.size}px;
-        }
-
-        #window {
-          border: 1px solid white;
-          margin: 0px 5px 0px 5px;
-        }
-
-        #outer-box {
-          margin: 5px;
-          padding: 10px;
-        }
-
-        #text {
-          padding: 5px;
-          color: white;
-        }
-      '';
-    };
   };
 }

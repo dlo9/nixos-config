@@ -89,7 +89,11 @@ with lib; let
     }
   '';
 in {
-  config = mkIf config.graphical.enable {
+  # Superseded by DMS's DankBar when `dms.enable` is set: it covers the same
+  # modules (workspaces, clock, media, network, audio, battery, tray, weather)
+  # without the Lua-dispatch workaround above, since it talks to Hyprland over
+  # its own IPC rather than shelling out to hyprctl.
+  config = mkIf (config.graphical.enable && !config.dms.enable) {
     # A `nixos-rebuild switch` reloads waybar via SIGUSR2 (home-manager's
     # default X-Reload-Triggers + ExecReload for the waybar unit). On a
     # SIGUSR2 reload waybar doesn't respawn the persistent per-workspace
