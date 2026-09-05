@@ -130,6 +130,7 @@ in {
       "bschaatsbergen/cidr"
       "eugenioenko/ttt" # IDE
       "yutat23/lsoff" # Port viewer
+      "AS-FOSS/mandible" # Docs viewer
     ];
 
     home = {
