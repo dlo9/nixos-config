@@ -150,9 +150,6 @@ with lib; {
           # Clipboard helper
           wl-clipboard
 
-          # For debugging themes
-          pkgs.dlo9.lxappearance-xwayland
-
           # File manager
           nemo
           #peazip # Broke with 24.05 upgrade
