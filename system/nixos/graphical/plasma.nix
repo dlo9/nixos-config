@@ -35,7 +35,13 @@ with lib; let
   };
 in {
   services.displayManager = {
-    enable = mkDefault enabled;
+    # Only claim the display-manager slot when plasma is on: an unconditional
+    # `mkDefault false` collides with greetd's `mkDefault true` -- same
+    # priority, so an eval error rather than an override.
+    enable = mkIf enabled (mkDefault true);
+
+    # Unconditional: the DMS greeter turns this into greetd's
+    # `initial_session`, which keeps boot going straight to the desktop.
     autoLogin.user = mkDefault config.mainAdmin;
 
     sddm = {

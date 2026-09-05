@@ -18,7 +18,9 @@
     ./datasets.nix
   ];
 
-  services.tlp.enable = true;
+  # power-profiles-daemon instead, so DMS's power profile widget works. The two
+  # are mutually exclusive; ppd comes on by default from programs.dms-shell.
+  services.tlp.enable = false;
 
   # Zen kernel, frequently breaks zfs module
   #boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_zen;

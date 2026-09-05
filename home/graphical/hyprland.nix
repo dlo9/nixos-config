@@ -11,10 +11,15 @@ with lib;
 with types;
 with builtins; {
   config = mkIf (config.graphical.enable && isLinux) {
-    home.packages = with pkgs; [
-      hyprpicker
-      nwg-displays
-    ];
+    home.packages = with pkgs;
+      [
+        # Monitor layout editor. Kept under DMS, whose display config writes
+        # classic `monitor=` syntax the Lua config parser can't consume;
+        # nwg-displays writes the monitors.lua `require`d below.
+        nwg-displays
+      ]
+      # Colour picker: DMS has one on `dms ipc call color-picker toggle`.
+      ++ optional (!config.dms.enable) hyprpicker;
 
     # Tie Wayland-targeted user services (waybar, etc.) to Hyprland's session
     # target so they only start once Hyprland's env (HYPRLAND_INSTANCE_SIGNATURE,
@@ -38,10 +43,13 @@ with builtins; {
     #   Install.WantedBy = ["graphical-session.target"];
     # };
 
-    programs.wofi.enable = true;
+    # Launcher. Replaced by DMS's spotlight.
+    programs.wofi.enable = !config.dms.enable;
 
+    # Lock screen. Replaced by DMS's. Settings stay defined either way so
+    # flipping `dms.enable` off restores a working hyprlock.
     programs.hyprlock = {
-      enable = true;
+      enable = !config.dms.enable;
       settings = {
         "$font" = "NotoSansM Nerd Font Mono";
 
@@ -120,7 +128,9 @@ with builtins; {
     # the session, so route it to the journal, where it survives the teardown and
     # lines up with the logind/kernel messages for the same instant:
     #   journalctl -t hyprland-session
-    programs.fish.loginShellInit = optionalString config.wayland.windowManager.hyprland.enable ''
+    # Skipped under the DMS greeter: greetd owns tty1 and launches
+    # start-hyprland itself, so this would be a second, competing launch.
+    programs.fish.loginShellInit = optionalString (config.wayland.windowManager.hyprland.enable && !osConfig.dms.greeter.enable) ''
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]
         exec systemd-cat --identifier=hyprland-session --stderr-priority=warning start-hyprland
       end
@@ -146,8 +156,8 @@ with builtins; {
         };
       };
 
-      configFile = {
-        # Set wallpaper
+      configFile = mkIf (!config.dms.enable) {
+        # Set wallpaper. DMS draws its own and derives its palette from it.
         "hypr/hyprpaper.conf".text = ''
           ipc = off
           splash = false
@@ -205,6 +215,16 @@ with builtins; {
       playerctl = "${pkgs.playerctl}/bin/playerctl";
       brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
       hyprlock = "${config.programs.hyprlock.package}/bin/hyprlock";
+
+      # The DMS CLI ships inside dms-shell; pkgs.dms is an unrelated DLNA server.
+      dms = "${osConfig.programs.dms-shell.package}/bin/dms";
+
+      # Route anything the shell owns through DMS's IPC -- that's what makes
+      # its OSDs appear -- and drive the underlying tool directly otherwise.
+      dmsOr = target: fn: fallback:
+        if config.dms.enable
+        then "${dms} ipc call ${target} ${fn}"
+        else fallback;
 
       toggle-setting = "${pkgs.writeShellApplication {
         name = "toggle-setting";
@@ -413,17 +433,43 @@ with builtins; {
         ];
 
         # Autostart on session start. See https://wiki.hypr.land/Configuring/Basics/Autostart/
-        on = {
+        # The status bar is instead a systemd unit tied to hyprland-session.target.
+        on = let
+          autostart =
+            [
+              {
+                cmd = "polkit-agent";
+                note = "Authentication agent";
+              }
+              {
+                cmd = "${pkgs.dex}/bin/dex -a -s /etc/xdg/autostart/:~/.config/autostart/";
+                note = "Desktop entries";
+              }
+            ]
+            ++ optionals (!config.dms.enable) [
+              {
+                cmd = "${config.services.mako.package}/bin/mako";
+                note = "Notifications";
+              }
+              {
+                cmd = "${pkgs.copyq}/bin/copyq";
+                note = "Clipboard manager";
+              }
+              {
+                cmd = "${pkgs.hyprpaper}/bin/hyprpaper";
+                note = "Wallpaper";
+              }
+            ];
+        in {
           _args = [
             "hyprland.start"
             (mkLuaInline ''
               function()
-                hl.exec_cmd(${builtins.toJSON "${config.services.mako.package}/bin/mako"}) -- Notifications
-                hl.exec_cmd("polkit-agent") -- Authentication agent
-                hl.exec_cmd(${builtins.toJSON "${pkgs.copyq}/bin/copyq"}) -- Clipboard manager
-                hl.exec_cmd(${builtins.toJSON "${pkgs.dex}/bin/dex -a -s /etc/xdg/autostart/:~/.config/autostart/"}) -- Desktop entries
-                -- Status bar is managed via programs.waybar.systemd, tied to hyprland-session.target
-                hl.exec_cmd(${builtins.toJSON "${pkgs.hyprpaper}/bin/hyprpaper"}) -- Wallpaper
+              ${concatMapStringsSep "\n" ({
+                cmd,
+                note,
+              }: "  hl.exec_cmd(${builtins.toJSON cmd}) -- ${note}")
+              autostart}
               end'')
           ];
         };
@@ -435,20 +481,20 @@ with builtins; {
             (mkExec "${mod} + RETURN" "alacritty")
 
             # Open the power menu
-            (mkExec "${mod} + SHIFT + E" "${pkgs.callPackage ./waybar/power.nix {}}/bin/power.sh")
+            (mkExec "${mod} + SHIFT + E" (dmsOr "powermenu" "toggle" "${pkgs.callPackage ./waybar/power.nix {}}/bin/power.sh"))
 
             # Close the focused window
             (mkBind "${mod} + SHIFT + Q" "hl.dsp.window.close()")
 
             # Start the application launcher
-            (mkExec "${mod} + D" "${pkgs.wofi}/bin/wofi -c ~/.config/wofi/config -I")
+            (mkExec "${mod} + D" (dmsOr "spotlight" "toggle" "${pkgs.wofi}/bin/wofi -c ~/.config/wofi/config -I"))
 
             # Reload the renderer. exec_raw bridges to the classic dispatcher;
             # under the Lua config Hyprland rejects plain string IPC dispatch.
             (mkBind "${mod} + SHIFT + R" ''hl.dsp.exec_raw("forcerendererreload")'')
 
             # Lock
-            (mkExec "${mod} + SHIFT + L" hyprlock)
+            (mkExec "${mod} + SHIFT + L" (dmsOr "lock" "lock" hyprlock))
 
             # Toggle dimming
             (mkExec "${mod} + SHIFT + D" "${toggle-setting} decoration:dim_inactive")
@@ -466,35 +512,36 @@ with builtins; {
             (mkBind "${mod} + P" ''hl.dsp.submap("passthrough")'')
 
             # Media keys: repeating, work on lock screen
-            (mkExecFlags "XF86AudioRaiseVolume" "${wpctl} set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+" {
+            (mkExecFlags "XF86AudioRaiseVolume" (dmsOr "audio" "increment 5" "${wpctl} set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+") {
               repeating = true;
               locked = true;
             })
-            (mkExecFlags "XF86AudioLowerVolume" "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-" {
+            (mkExecFlags "XF86AudioLowerVolume" (dmsOr "audio" "decrement 5" "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-") {
               repeating = true;
               locked = true;
             })
 
-            # Brightness: repeating, work on lock screen
-            (mkExecFlags "XF86MonBrightnessUp" "${brightnessctl} -c backlight set +5%" {
+            # Brightness: repeating, work on lock screen. DMS's second argument
+            # is the device; "" means its default backlight.
+            (mkExecFlags "XF86MonBrightnessUp" (dmsOr "brightness" ''increment 5 ""'' "${brightnessctl} -c backlight set +5%") {
               repeating = true;
               locked = true;
             })
-            (mkExecFlags "XF86MonBrightnessDown" "${brightnessctl} -c backlight set 5%-" {
+            (mkExecFlags "XF86MonBrightnessDown" (dmsOr "brightness" ''decrement 5 ""'' "${brightnessctl} -c backlight set 5%-") {
               repeating = true;
               locked = true;
             })
 
             # Mute / mic mute / media transport, work on lock screen
-            (mkExecFlags "XF86AudioMute" "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle" {locked = true;})
-            (mkExecFlags "XF86AudioMicMute" "${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle" {locked = true;})
-            (mkExecFlags "XF86AudioPlay" "${playerctl} play" {locked = true;})
-            (mkExecFlags "XF86AudioPause" "${playerctl} pause" {locked = true;})
-            (mkExecFlags "XF86AudioNext" "${playerctl} next" {locked = true;})
-            (mkExecFlags "XF86AudioPrev" "${playerctl} previous" {locked = true;})
+            (mkExecFlags "XF86AudioMute" (dmsOr "audio" "mute" "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle") {locked = true;})
+            (mkExecFlags "XF86AudioMicMute" (dmsOr "audio" "micmute" "${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle") {locked = true;})
+            (mkExecFlags "XF86AudioPlay" (dmsOr "mpris" "playPause" "${playerctl} play") {locked = true;})
+            (mkExecFlags "XF86AudioPause" (dmsOr "mpris" "playPause" "${playerctl} pause") {locked = true;})
+            (mkExecFlags "XF86AudioNext" (dmsOr "mpris" "next" "${playerctl} next") {locked = true;})
+            (mkExecFlags "XF86AudioPrev" (dmsOr "mpris" "previous" "${playerctl} previous") {locked = true;})
 
             # Lock on lid close. Find switch names with: `hyprctl devices -j`
-            (mkExecFlags "switch:Lid Switch" hyprlock {locked = true;})
+            (mkExecFlags "switch:Lid Switch" (dmsOr "lock" "lock" hyprlock) {locked = true;})
 
             # TODO:
             # Splitting
@@ -504,6 +551,36 @@ with builtins; {
             # Idle inhibit
             # Monitor directions & sizes
             # Theme
+          ]
+          # Surfaces that only exist under DMS. `dms ipc call <target>` with no
+          # function lists what a target accepts while the shell is running.
+          ++ optionals config.dms.enable [
+            # Clipboard history (replaces copyq)
+            (mkExec "${mod} + V" (dmsOr "clipboard" "toggle" null))
+
+            # Notification center
+            (mkExec "${mod} + N" (dmsOr "notifications" "toggle" null))
+
+            # Scratchpad notes
+            (mkExec "${mod} + SHIFT + N" (dmsOr "notepad" "toggle" null))
+
+            # Control center: network, bluetooth, audio, night mode, inhibit
+            (mkExec "${mod} + C" (dmsOr "control-center" "toggle" null))
+
+            # Window overview
+            (mkExec "${mod} + TAB" (dmsOr "hypr" "toggleOverview" null))
+
+            # Process list (replaces the waybar cpu/memory click-throughs)
+            (mkExec "${mod} + M" (dmsOr "processlist" "focusOrToggle" null))
+
+            # Shell settings
+            (mkExec "${mod} + comma" (dmsOr "settings" "focusOrToggle" null))
+
+            # Keybind cheatsheet, read out of the running Hyprland config
+            (mkExec "${mod} + SHIFT + slash" (dmsOr "keybinds" "toggle hyprland" null))
+
+            # Colour picker (replaces hyprpicker)
+            (mkExec "${mod} + SHIFT + P" (dmsOr "color-picker" "toggle" null))
           ]
           ++ directionBinds
           ++ workspaceBinds;
@@ -532,11 +609,14 @@ with builtins; {
     };
 
     services = {
-      # Notifications
-      mako.enable = mkDefault isLinux;
+      # Notifications. DMS has its own server; the two would fight over the
+      # org.freedesktop.Notifications bus name.
+      mako.enable = mkDefault (isLinux && !config.dms.enable);
 
+      # Idle management. DMS covers the same ground from its own settings; see
+      # `dms.settings` in ./dms.nix to pin those declaratively.
       hypridle = {
-        enable = true;
+        enable = !config.dms.enable;
 
         settings = {
           general = {

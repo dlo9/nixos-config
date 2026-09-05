@@ -220,13 +220,64 @@ in {
       };
     };
 
-    # GTK theme - FlatColor with colors from user CSS
-    gtk.theme = {
-      name = "FlatColor";
-      package = pkgs.dlo9.flatcolor-gtk-theme;
-    };
+    # GTK theme. The theme is only ever a carrier for a palette here:
+    #
+    #  - Without DMS: FlatColor, colored by the base16-gtk-flatcolor stylesheet
+    #    tinty writes into ~/.config/gtk-{3,4}.0/gtk.css (the item below). GTK4
+    #    ignores gtk-theme-name, so gtk4.theme pulls it in from user CSS.
+    #
+    #  - With DMS: matugen's dank-colors.css defines the libadwaita color names
+    #    and nothing else, so GTK3 needs adw-gtk3 to map those onto widgets.
+    #    GTK4/libadwaita apps read the @define-colors directly, so gtk4.theme
+    #    stays unset rather than layering adw-gtk3 on top of libadwaita.
+    gtk.theme =
+      if config.dms.enable
+      then {
+        name = "adw-gtk3-dark";
+        package = pkgs.adw-gtk3;
+      }
+      else {
+        name = "FlatColor";
+        package = pkgs.dlo9.flatcolor-gtk-theme;
+      };
 
-    gtk.gtk4.theme = config.gtk.theme;
+    gtk.gtk4.theme =
+      if config.dms.enable
+      then null
+      else config.gtk.theme;
+
+    # Declares what DMS's one-shot "Apply GTK Colors" button would do, so the
+    # wiring survives a fresh checkout. matugen writes dank-colors.css next to
+    # these files on startup and on every theme change; until it exists GTK
+    # warns and falls back to the theme's own colors.
+    gtk.gtk3.extraCss = mkIf config.dms.enable ''
+      @import url("dank-colors.css");
+    '';
+
+    gtk.gtk4.extraCss = mkIf config.dms.enable ''
+      @import url("dank-colors.css");
+    '';
+
+    # Qt theming, DMS-driven: DMS points qt6ct at the palette matugen writes,
+    # but its script is gated on `command -v qt6ct` and reports failure without
+    # it. Nothing else here configures Qt, so this is purely additive.
+    #
+    # The name is the literal "qt6ct", not the documented "qtct" preset:
+    # home-manager maps that to QT_QPA_PLATFORMTHEME=qt5ct, and qtbase 6.11 has
+    # no QT_QPA_PLATFORMTHEME_QT6 fallback to pick up the Qt6 side. DMS's icon
+    # theme picker also warns unless it sees exactly "qt6ct" or "gtk3". qt5ct
+    # is left out since Qt5 apps ignore the variable at this value anyway.
+    #
+    # qt6ct.conf itself stays unmanaged: DMS sed's it in place, which a store
+    # symlink would defeat. Same as settings.json in home/graphical/dms.nix.
+    qt = mkIf config.dms.enable {
+      enable = true;
+
+      platformTheme = {
+        name = "qt6ct";
+        package = pkgs.qt6Packages.qt6ct;
+      };
+    };
 
     # Sync tinty repos and apply theme on activation
     home.activation.tinty = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -257,152 +308,165 @@ in {
       fi
     '';
 
-    xdg.configFile = {
-      "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
-        shell = "fish -c '{}'";
+    xdg.configFile =
+      {
+        "tinted-theming/tinty/config.toml".source = (pkgs.formats.toml {}).generate "tinty-config" {
+          shell = "fish -c '{}'";
 
-        default-scheme = defaultScheme;
+          default-scheme = defaultScheme;
 
-        # Global hooks, run after every `tinty apply`
-        hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
+          # Global hooks, run after every `tinty apply`
+          hooks = optional config.developer-tools.enable "${revdiff-tinty-theme}/bin/revdiff-tinty-theme";
 
-        preferred-schemes = [
-          "base16-gruvbox-dark"
-          "base16-github-dark"
-          "base24-wild-cherry"
-          "base16-tokyo-night-dark"
-          "base16-woodland"
-          "base16-tomorrow-night"
-          "base16-atelier-seaside"
-          "base16-gigavolt"
-        ];
+          preferred-schemes = [
+            "base16-gruvbox-dark"
+            "base16-github-dark"
+            "base24-wild-cherry"
+            "base16-tokyo-night-dark"
+            "base16-woodland"
+            "base16-tomorrow-night"
+            "base16-atelier-seaside"
+            "base16-gigavolt"
+          ];
 
-        items =
-          [
-            # Shell
-            {
-              name = "tinted-shell";
-              path = "https://github.com/tinted-theming/tinted-shell";
-              themes-dir = "scripts";
-              hook = "set -U theme_trigger (date +%s)";
-              supported-systems = ["base16" "base24"];
-            }
-            # Neovim
-            {
-              name = "base16-vim";
-              path = "https://github.com/tinted-theming/base16-vim";
+          items =
+            [
+              # Shell
+              {
+                name = "tinted-shell";
+                path = "https://github.com/tinted-theming/tinted-shell";
+                themes-dir = "scripts";
+                hook = "set -U theme_trigger (date +%s)";
+                supported-systems = ["base16" "base24"];
+              }
+              # Neovim
+              {
+                name = "base16-vim";
+                path = "https://github.com/tinted-theming/base16-vim";
+                themes-dir = "colors";
+                supported-systems = ["base16" "base24"];
+              }
+              # Alacritty
+              {
+                name = "tinted-terminal";
+                path = "https://github.com/tinted-theming/tinted-terminal";
+                themes-dir = "themes/alacritty";
+                supported-systems = ["base16" "base24"];
+              }
+              # Tmux
+              {
+                name = "tmux";
+                path = "https://github.com/tinted-theming/tinted-tmux";
+                themes-dir = "colors";
+                hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+                supported-systems = ["base16" "base24"];
+              }
+            ]
+            # Waybar
+            ++ optional config.programs.waybar.enable {
+              name = "base16-waybar";
+              path = "https://github.com/mnussbaum/base16-waybar";
               themes-dir = "colors";
+              revision = "master";
+              hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
               supported-systems = ["base16" "base24"];
             }
-            # Alacritty
-            {
-              name = "tinted-terminal";
-              path = "https://github.com/tinted-theming/tinted-terminal";
-              themes-dir = "themes/alacritty";
-              supported-systems = ["base16" "base24"];
-            }
-            # Tmux
-            {
-              name = "tmux";
-              path = "https://github.com/tinted-theming/tinted-tmux";
+            # Mako notifications
+            ++ optional config.services.mako.enable {
+              name = "base16-mako";
+              path = "https://github.com/Eluminae/base16-mako";
               themes-dir = "colors";
-              hook = ''tmux source-file "$TINTY_THEME_FILE_PATH" 2>/dev/null'';
+              revision = "master";
+              hook = "command -v makoctl >/dev/null; and makoctl reload";
               supported-systems = ["base16" "base24"];
             }
-          ]
-          # Waybar
-          ++ optional config.programs.waybar.enable {
-            name = "base16-waybar";
-            path = "https://github.com/mnussbaum/base16-waybar";
-            themes-dir = "colors";
-            revision = "master";
-            hook = "command -v waybar >/dev/null; and pkill waybar; and waybar &; disown";
-            supported-systems = ["base16" "base24"];
+            # Wofi launcher
+            ++ optional config.programs.wofi.enable {
+              name = "base16-wofi";
+              path = "https://git.sr.ht/~knezi/base16-wofi";
+              themes-dir = "themes";
+              revision = "master";
+              # No hook needed - wofi reads CSS on each launch
+              supported-systems = ["base16" "base24"];
+            }
+            # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css).
+            # Dropped under DMS: the hook overwrites the same gtk.css that
+            # imports matugen's dank-colors.css.
+            ++ optional (config.gtk.enable && !config.dms.enable) {
+              name = "base16-gtk";
+              path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
+              themes-dir = "gtk-3";
+              revision = "main";
+              theme-file-extension = "-gtk.css";
+              # Toggle gsettings to trigger GTK apps to reload CSS
+              hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
+              supported-systems = ["base16" "base24"];
+            };
+        };
+      }
+      # Let activation overwrite these rather than refuse to switch: DMS's
+      # "Apply GTK Colors" button replaces gtk.css with a symlink home-manager
+      # doesn't own, and its collision check only backs up regular files, so one
+      # press would wedge every subsequent rebuild. Safe because the
+      # declarative import above says the same thing the button does.
+      // optionalAttrs config.dms.enable {
+        "gtk-3.0/gtk.css".force = true;
+        "gtk-4.0/gtk.css".force = true;
+      }
+      # Wofi styles: import colors from tinty-generated CSS.
+      // optionalAttrs config.programs.wofi.enable {
+        "wofi/style.css".text = ''
+          @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+          *{
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
           }
-          # Mako notifications
-          ++ optional config.services.mako.enable {
-            name = "base16-mako";
-            path = "https://github.com/Eluminae/base16-mako";
-            themes-dir = "colors";
-            revision = "master";
-            hook = "command -v makoctl >/dev/null; and makoctl reload";
-            supported-systems = ["base16" "base24"];
+
+          window {
+            border: 1px solid;
           }
-          # Wofi launcher
-          ++ optional config.programs.wofi.enable {
-            name = "base16-wofi";
-            path = "https://git.sr.ht/~knezi/base16-wofi";
-            themes-dir = "themes";
-            revision = "master";
-            # No hook needed - wofi reads CSS on each launch
-            supported-systems = ["base16" "base24"];
+
+          #input {
+            margin-bottom: 15px;
+            padding:3px;
+            border-radius: 5px;
+            border:none;
           }
-          # GTK3/4 theme colors (imported via ~/.config/gtk-{3,4}.0/gtk.css)
-          ++ optional config.gtk.enable {
-            name = "base16-gtk";
-            path = "https://github.com/tinted-theming/base16-gtk-flatcolor";
-            themes-dir = "gtk-3";
-            revision = "main";
-            theme-file-extension = "-gtk.css";
-            # Toggle gsettings to trigger GTK apps to reload CSS
-            hook = "test -f \"$TINTY_THEME_FILE_PATH\"; and mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-3.0/gtk.css; and cp \"$TINTY_THEME_FILE_PATH\" ~/.config/gtk-4.0/gtk.css; and command -v dconf >/dev/null; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-light'\"; and sleep 0.1; and dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\"";
-            supported-systems = ["base16" "base24"];
-          };
+
+          #outer-box {
+            margin: 5px;
+            padding:15px;
+          }
+
+          #text {
+            padding: 5px;
+          }
+        '';
+
+        "wofi/style.widgets.css".text = ''
+          @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
+
+          *{
+            font-family: ${config.font.family};
+            font-size: ${builtins.toString config.font.size}px;
+          }
+
+          #window {
+            border: 1px solid white;
+            margin: 0px 5px 0px 5px;
+          }
+
+          #outer-box {
+            margin: 5px;
+            padding: 10px;
+          }
+
+          #text {
+            padding: 5px;
+            color: white;
+          }
+        '';
       };
-
-      # Wofi styles: import colors from tinty-generated CSS
-      "wofi/style.css".text = ''
-        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-        *{
-          font-family: ${config.font.family};
-          font-size: ${builtins.toString config.font.size}px;
-        }
-
-        window {
-          border: 1px solid;
-        }
-
-        #input {
-          margin-bottom: 15px;
-          padding:3px;
-          border-radius: 5px;
-          border:none;
-        }
-
-        #outer-box {
-          margin: 5px;
-          padding:15px;
-        }
-
-        #text {
-          padding: 5px;
-        }
-      '';
-
-      "wofi/style.widgets.css".text = ''
-        @import url("${tintyDataDir}/artifacts/base16-wofi-themes-file.css");
-
-        *{
-          font-family: ${config.font.family};
-          font-size: ${builtins.toString config.font.size}px;
-        }
-
-        #window {
-          border: 1px solid white;
-          margin: 0px 5px 0px 5px;
-        }
-
-        #outer-box {
-          margin: 5px;
-          padding: 10px;
-        }
-
-        #text {
-          padding: 5px;
-          color: white;
-        }
-      '';
-    };
   };
 }

@@ -6,6 +6,14 @@
 with lib; {
   services.tailscale.enable = mkDefault true;
 
+  # Both interfaces belong to networkd (wg0 via the netdev below, tailscale0
+  # via nixpkgs' 50-tailscale). Keep NetworkManager off them where it's
+  # enabled; inert where it isn't.
+  networking.networkmanager.unmanaged = [
+    "interface-name:wg0"
+    "interface-name:tailscale0"
+  ];
+
   # sops.secrets.tailscale-auth-key = {
   #   sopsFile = config.secrets.hostSecretsFile;
   # };

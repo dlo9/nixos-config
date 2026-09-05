@@ -10,6 +10,7 @@
 with lib; {
   imports = [
     ./developer-tools.nix
+    ./dms.nix
     ./eww
     ./hyprland.nix
     ./waybar
@@ -133,6 +134,9 @@ with lib; {
     gtk = {
       enable = mkDefault isLinux;
 
+      # Set here rather than in DMS's icon picker: that sed's
+      # gtk-3.0/settings.ini in place, replacing home-manager's store symlink
+      # with a regular file.
       iconTheme = {
         #package = pkgs.vimix-icon-theme;
         #name = "Vimix";
@@ -216,17 +220,18 @@ with lib; {
       ];
 
     services = {
-      # Bluetooth controls
-      blueman-applet.enable = mkDefault isLinux;
+      # Bluetooth controls. Replaced by DMS's control center.
+      blueman-applet.enable = mkDefault (isLinux && !config.dms.enable);
 
-      # Audio controls
+      # Audio EQ/effects pipeline, not a volume applet, so DMS doesn't cover it.
       easyeffects.enable = mkDefault isLinux;
 
-      caffeine.enable = mkDefault isLinux;
+      # Idle inhibit. DMS exposes this over `dms ipc call inhibit`.
+      caffeine.enable = mkDefault (isLinux && !config.dms.enable);
 
-      # Enable red-shifted nightime display
+      # Enable red-shifted nightime display. DMS has an equivalent night mode.
       gammastep = {
-        enable = mkDefault isLinux;
+        enable = mkDefault (isLinux && !config.dms.enable);
         provider = "geoclue2";
         tray = true;
       };

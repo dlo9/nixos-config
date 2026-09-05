@@ -58,6 +58,12 @@ with lib; {
     # Plasma
     services.desktopManager.plasma6.enable = false;
 
+    # DMS's wifi support is NetworkManager or iwd only; with wpa_supplicant it
+    # falls back to a networkd backend that refuses every wifi operation.
+    # system/nixos/networking/wireless.nix routes the same sops-backed SSIDs to
+    # whichever backend is enabled, so the credentials are untouched.
+    networking.networkmanager.enable = true;
+
     zrepl = {
       remote = "cuttlefish.fairy-koi.ts.net:1111";
 
