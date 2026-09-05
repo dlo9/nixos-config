@@ -13,9 +13,6 @@ with lib; {
   ];
 
   config = mkIf config.graphical.enable {
-    # Allow hyprlock. DMS brings its own lock screen; see ./dms.nix.
-    security.pam.services.hyprlock = mkIf (!config.dms.enable) {};
-
     # Auto-login since whole-disk encryption is already required
     services.getty.autologinUser = mkDefault config.mainAdmin;
 

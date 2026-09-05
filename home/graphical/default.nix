@@ -11,9 +11,7 @@ with lib; {
   imports = [
     ./developer-tools.nix
     ./dms.nix
-    ./eww
     ./hyprland.nix
-    ./waybar
     ./web.nix
   ];
 
@@ -220,21 +218,8 @@ with lib; {
       ];
 
     services = {
-      # Bluetooth controls. Replaced by DMS's control center.
-      blueman-applet.enable = mkDefault (isLinux && !config.dms.enable);
-
       # Audio EQ/effects pipeline, not a volume applet, so DMS doesn't cover it.
       easyeffects.enable = mkDefault isLinux;
-
-      # Idle inhibit. DMS exposes this over `dms ipc call inhibit`.
-      caffeine.enable = mkDefault (isLinux && !config.dms.enable);
-
-      # Enable red-shifted nightime display. DMS has an equivalent night mode.
-      gammastep = {
-        enable = mkDefault (isLinux && !config.dms.enable);
-        provider = "geoclue2";
-        tray = true;
-      };
 
       # Screenshots
       flameshot = {

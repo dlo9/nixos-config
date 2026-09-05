@@ -35,16 +35,7 @@ with lib; {
 
   # Location services
   location.provider = "geoclue2";
-  services.geoclue2 = {
-    enable = mkDefault true;
-
-    appConfig = {
-      "gammastep" = {
-        isAllowed = true;
-        isSystem = false;
-      };
-    };
-  };
+  services.geoclue2.enable = mkDefault true;
 
   # Autotune
   # services.bpftune doesn't let me override arguments

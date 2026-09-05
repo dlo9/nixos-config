@@ -3,15 +3,10 @@
   pkgs,
   lib,
   isLinux,
-  osConfig,
   ...
 }:
 with lib; {
   options.dms = {
-    enable =
-      mkEnableOption "DankMaterialShell"
-      // {default = osConfig.dms.enable;};
-
     settings = mkOption {
       type = types.attrs;
       default = {};
@@ -37,7 +32,7 @@ with lib; {
     };
   };
 
-  config = mkIf (config.dms.enable && isLinux) {
+  config = mkIf (config.graphical.enable && isLinux) {
     xdg.configFile."DankMaterialShell/settings.json" = mkIf (config.dms.settings != {}) {
       source = (pkgs.formats.json {}).generate "dms-settings.json" config.dms.settings;
     };

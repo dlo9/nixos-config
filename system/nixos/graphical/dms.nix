@@ -4,7 +4,7 @@
   ...
 }:
 with lib; {
-  config = mkIf (config.graphical.enable && config.dms.enable) {
+  config = mkIf config.graphical.enable {
     # DankMaterialShell: a Quickshell desktop shell. `pkgs.dms` is an unrelated
     # DLNA media server; the shell and its CLI are `pkgs.dms-shell`.
     #
