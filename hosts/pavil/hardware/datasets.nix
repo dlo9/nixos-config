@@ -36,7 +36,9 @@ in {
           };
 
         # Emergency free space, reserved so the pool can never fully fill
-        "fast/reserved".properties = container // {
+        "fast/reserved".properties =
+          container
+          // {
             refreservation = 50 * GB;
           };
 
@@ -54,9 +56,11 @@ in {
         ### Users Homes ###
         ###################
 
-        "fast/home".properties = container // {
-          mountpoint = "/home";
-        };
+        "fast/home".properties =
+          container
+          // {
+            mountpoint = "/home";
+          };
 
         "fast/home/root".properties.mountpoint = "/root";
 
@@ -76,7 +80,9 @@ in {
         ### Games ###
         #############
 
-        "fast/games".properties = container // {
+        "fast/games".properties =
+          container
+          // {
             #dnodesize = "auto";
             #acltype = "posix";
           };

@@ -329,6 +329,7 @@ with builtins; {
 
             # Lock
             (mkExec "${mod} + SHIFT + L" (ipc "lock" "lock"))
+            (mkExec "SUPER + CTRL + Q" (ipc "lock" "lock"))
 
             # Toggle dimming
             (mkExec "${mod} + SHIFT + D" "${toggle-setting} decoration:dim_inactive")
