@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; {
@@ -13,6 +14,8 @@ with lib; {
     # in home/graphical/hyprland.nix.
     programs.dms-shell = {
       enable = true;
+
+      package = pkgs.unstable.dms-shell;
 
       # Not the default graphical-session.target: the shell needs
       # HYPRLAND_INSTANCE_SIGNATURE and WAYLAND_DISPLAY in the user environment
