@@ -67,8 +67,11 @@ in {
     systemd.network = {
       enable = mkDefault true;
 
-      # Only block boot until a single interface comes online
+      # Only block boot until a single interface comes online. Under NM there's
+      # nothing to wait for, and timeout = 0 waits forever, wedging
+      # network-online.target; NetworkManager-wait-online covers it there.
       wait-online = {
+        enable = mkDefault (!useNM);
         timeout = 0;
         anyInterface = mkDefault true;
       };
