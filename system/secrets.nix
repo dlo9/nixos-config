@@ -21,7 +21,7 @@ with lib; {
 
     # Set secrets for the current host
     secrets = let
-      users = builtins.attrNames config.users.users;
+      users = map (u: u.name) (builtins.attrValues config.users.users);
     in
       mylib.secrets.sopsSecrets {inherit users;} ./secrets.yaml // mylib.secrets.hostSecrets {inherit users;} hostname;
   };
