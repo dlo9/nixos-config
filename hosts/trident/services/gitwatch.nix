@@ -11,7 +11,7 @@ with lib; {
     klipper = {
       enable = true;
       user = config.home-manager.users.david.home.username;
-      remote = "git@github.com:dlo9/trident";
+      remote = "ssh://git@git.sigpanic.com:2222/david/trident.git";
       path = config.services.klipper.configDir;
     };
   };
